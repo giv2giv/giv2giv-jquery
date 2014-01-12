@@ -1,0 +1,251 @@
+
+Create donor
+curl -X POST -H "Content-Type: application/json" -d '{ "email":"email@domain.com","password":"password","name":"donor name" }' http://localhost:3000/api/donors.json
+
+jQuery.ajax({
+  url: '/api/donors.json',
+  method: 'POST',
+  data: {
+    email: $email,
+    password: $password,
+    name: "Donor Name"
+  },
+  success: function(data) {
+# Response: {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Authenticate
+curl -X POST -H "Content-Type: application/json" -d '{"email":"email@domain.com","password":"password"}' http://localhost:3000/api/sessions/create.json
+
+jQuery.ajax({
+  url: '/api/sessions/create.json',
+  method: 'POST',
+  data: {
+    email: $email,
+    password: $password
+  },
+  success: function(data) {
+#Response: {"session":{"created_at":"2013-09-24T04:35:36Z","session_id":1,"token":"l6M4VWVgiVFhT4IbgSkYwA","updated_at":"2013-09-24T04:35:36Z"}}
+
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Create (stripe) payment account
+curl -X POST -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA' -d '{"processor": "stripe", "stripeToken":"tok_102dPs2mGsIlOBKnRLRez6VK"}' http://localhost:3000/api/donors/payment_accounts.json
+
+jQuery.ajax({
+  url: '/api/donors/payment_accounts.json',
+  method: 'POST',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+    processor: 'stripe',
+    stripeToken: $stripeToken
+  },
+  success: function(data) {
+#Response: {"payment_account":{"created_at":"2013-09-24T04:40:15Z","donor_id":1,"id":1,"processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_2d3jQymPJ1qWWR","updated_at":"2013-09-24T04:40:15Z"}}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Get payment accounts
+curl -X GET -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA' http://localhost:3000/api/donors/payment_accounts.json
+
+jQuery.ajax({
+  url: '/api/donors/payment_accounts.json',
+  method: 'GET',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+  },
+  success: function(data) {
+#Response: [{"payment_account":{"created_at":"2013-09-24T04:40:15Z","donor_id":1,"id":1,"processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_2d3jQymPJ1qWWR","updated_at":"2013-09-24T04:40:15Z"}}]
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+Get my subscriptions
+curl -X GET -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA' http://localhost:3000/api/donors/subscriptions.json
+
+jQuery.ajax({
+  url: '/api/donors/subscriptions.json',
+  method: 'GET',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+
+  },
+  success: function(data) {
+#Response: [[{"sub_33CxugWVGTDVYi":{"endowment_id":12,"endowment_name":"Michael Endowment","endowment_donation_amount":450.0,"charities":[{"charity":{"active":"true","activity_code":"0.0","address":"524 W 4TH AVE","city":"ANCHORAGE","classification_code":"1.0","created_at":"2013-12-03T19:21:36Z","description":null,"ein":30382080,"email":null,"id":6236,"name":"ALASKA VETERANS MUSEUM","ntee_code":"A54","state":"AK","subsection_code":"3.0","updated_at":"2013-12-03T19:21:36Z","website":null,"zip":"99501-2212"}},{"charity":{"active":"true","activity_code":"907000000.0","address":"9191 OLD SEWARD HWY STE 9","city":"ANCHORAGE","classification_code":"1.0","created_at":"2013-12-03T19:21:39Z","description":null,"ein":611438414,"email":null,"id":6448,"name":"AMVETS","ntee_code":"","state":"AK","subsection_code":"19.0","updated_at":"2013-12-03T19:21:39Z","website":null,"zip":"99515-2032"}}],"endowment_donor_count":0,"endowment_donor_total_donations":0.0,"endowment_total_donations":0.0,"endowment_donor_current_balance":0.0,"endowment_total_balance":0.0,"total_granted_by_donor":[],"total_granted_from_endowment":[]}}],[{"sub_33CxugWVGTDVYi":{"endowment_id":12,"endowment_name":"Michael Endowment","endowment_donation_amount":300.0,"charities":[{"charity":{"active":"true","activity_code":"0.0","address":"524 W 4TH AVE","city":"ANCHORAGE","classification_code":"1.0","created_at":"2013-12-03T19:21:36Z","description":null,"ein":30382080,"email":null,"id":6236,"name":"ALASKA VETERANS MUSEUM","ntee_code":"A54","state":"AK","subsection_code":"3.0","updated_at":"2013-12-03T19:21:36Z","website":null,"zip":"99501-2212"}},{"charity":{"active":"true","activity_code":"907000000.0","address":"9191 OLD SEWARD HWY STE 9","city":"ANCHORAGE","classification_code":"1.0","created_at":"2013-12-03T19:21:39Z","description":null,"ein":611438414,"email":null,"id":6448,"name":"AMVETS","ntee_code":"","state":"AK","subsection_code":"19.0","updated_at":"2013-12-03T19:21:39Z","website":null,"zip":"99515-2032"}}],"endowment_donor_count":0,"endowment_donor_total_donations":0.0,"endowment_total_donations":0.0,"endowment_donor_current_balance":0.0,"endowment_total_balance":0.0,"total_granted_by_donor":[],"total_granted_from_endowment":[]}}],[{"sub_33CxugWVGTDVYi":{"endowment_id":13,"endowment_name":"The \"Happy Family Endowment\"","endowment_donation_amount":360.0,"charities":[{"charity":{"active":"true","activity_code":"994380000.0","address":"480 W TUDOR RD","city":"ANCHORAGE","classification_code":"2.0","created_at":"2013-12-03T19:21:25Z","description":null,"ein":920161891,"email":null,"id":5545,"name":"AASC HOUSING I INC","ntee_code":"L20","state":"AK","subsection_code":"3.0","updated_at":"2013-12-03T19:21:25Z","website":null,"zip":"99503-6614"}},{"charity":{"active":"false","activity_code":"602000000.0","address":"1 METROPLEX DR STE 500","city":"BIRMINGHAM","classification_code":"1.0","created_at":"2013-12-03T19:24:22Z","description":null,"ein":721374097,"email":null,"id":17036,"name":"FEATHERINGILL FOUNDATION","ntee_code":"T20Z","state":"AL","subsection_code":"3.0","updated_at":"2013-12-03T19:24:22Z","website":null,"zip":"35209-7801"}},{"charity":{"active":"true","activity_code":"0.0","address":"1501 OLD SHELL RD","city":"MOBILE","classification_code":"7.0","created_at":"2013-12-03T19:25:21Z","description":null,"ein":630515440,"email":null,"id":21363,"name":"MCGILL TOOLEN HIGH SCHOOL","ntee_code":"","state":"AL","subsection_code":"3.0","updated_at":"2013-12-03T19:25:21Z","website":null,"zip":"36604-2226"}}],"endowment_donor_count":0,"endowment_donor_total_donations":0.0,"endowment_total_donations":0.0,"endowment_donor_current_balance":0.0,"endowment_total_balance":0.0,"total_granted_by_donor":[],"total_granted_from_endowment":[]}}]]
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Create endowment
+curl -X POST -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA' -d '{"name":"Build Houses","visibility":"public", "description":"Your description","minimum_donation_amount":"1","charity_id":"1,24,6,4,3"}' http://localhost:3000/api/endowment.json
+
+jQuery.ajax({
+  url: '/api/endowment.json',
+  method: 'POST',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+    name: $endowmentName,
+    visibility: "public" || "private",
+    description: $endowmentDescription,
+    minimum_donation_amount: $minimum_donation_amount,
+    charity_ids: "comma,separated,list"
+  },
+  success: function(data) {
+#Response: {"endowment":{"created_at":"2013-11-16T13:33:47Z","description":"Your description","donor_id":1,"visibility":"public","id":1,"minimum_donation_amount":1.0,"name":"Build 2 Houses","updated_at":"2013-11-16T13:33:47Z","charities":[{"active":"true","id":1,"name":"1103 MARKET STREET FOUNDATION"},{"active":"false","id":3,"name":"1916 FOUNDATION"},{"active":"true","id":4,"name":"1ST LEGION PROVISIONAL ARMY OF CONFEDERATE STATES"},{"active":"false","id":6,"name":"214 PHILANTHROPIC FOUNDATION INC"},{"active":"true","id":24,"name":"A FATHERS HEART MINISTRIES INC"}]}}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Search endowments
+curl -X GET -H "Content-Type: application/json" -d '{"page":"1", "per_page":"10", "query":"Rescue"}' http://localhost:3000/api/endowment.json
+jQuery.ajax({
+  url: '/api/endowment.json',
+  method: 'GET',
+  data: {
+    page: '1',
+    per_page: '10',
+    query: 'search string'
+  },
+  success: function(data) {
+#Response: {"endowments":[{"id":1,"created_at":"2013-12-21T08:59:22Z","updated_at":"2013-12-21T08:59:22Z","name":"Build Houses","description":"Your description","visibility":"public","my_balances":{"my_donations_count":"0.0","my_donations_amount":"0.0","my_grants_amount":"0.0","my_balance_pre_investment":"0.0","my_investment_gainloss":"0.0","my_investment_gainloss_percentage":"0.0","my_endowment_balance":"0.0"},"global_balances":{"endowment_donor_count":0,"endowment_donations_count":0,"endowment_donations":0.0,"endowment_transaction_fees":0.0,"endowment_fees":"0.0","endowment_grants":"0.0","endowment_balance":0.0},"charities":[{"charity":{"active":"true","activity_code":"0.0","address":"1103 N MARKET ST","city":"WILMINGTON","classification_code":"1.0","created_at":"2013-12-07T03:46:45Z","description":null,"ein":"202783473","email":null,"id":1,"name":"1103 MARKET STREET FOUNDATION","ntee_code":"A80","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:45Z","website":null,"zip":"19801-1223"}},{"charity":{"active":"false","activity_code":"0.0","address":"PO BOX 115","city":"MONTCHANIN","classification_code":"1.0","created_at":"2013-12-07T03:46:45Z","description":null,"ein":"273330508","email":null,"id":3,"name":"1916 FOUNDATION","ntee_code":"T20","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:45Z","website":null,"zip":"19710-0115"}},{"charity":{"active":"true","activity_code":"0.0","address":"22922 E TRAP POND RD","city":"GEORGETOWN","classification_code":"1.0","created_at":"2013-12-07T03:46:46Z","description":null,"ein":"223634861","email":null,"id":4,"name":"1ST LEGION PROVISIONAL ARMY OF CONFEDERATE STATES","ntee_code":"A84","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:46Z","website":null,"zip":"19947-4728"}},{"charity":{"active":"false","activity_code":"0.0","address":"FOUNDATION SOURCE 501 SILVERSIDE RD","city":"WILMINGTON","classification_code":"1.0","created_at":"2013-12-07T03:46:46Z","description":null,"ein":"274000348","email":null,"id":6,"name":"214 PHILANTHROPIC FOUNDATION INC","ntee_code":"T22","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:46Z","website":null,"zip":"19809-0000"}},{"charity":{"active":"true","activity_code":"0.0","address":"11391 CHIPMANS POND RD","city":"LAUREL","classification_code":"2.0","created_at":"2013-12-07T03:46:46Z","description":null,"ein":"274333359","email":null,"id":24,"name":"A FATHERS HEART MINISTRIES INC","ntee_code":"X99","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:46Z","website":null,"zip":"19956-3521"}}]}]}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Get endowment details
+curl -X GET -H "Content-Type: application/json" -H 'Authorization: Token token=seQQzOwBCkfAA4TtuE7DvA' -d '' http://localhost:3000/api/endowment/20.json
+
+jQuery.ajax({
+  url: '/api/endowment/{endowment_id}.json',
+  method: 'GET',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+  },
+  success: function(data) {
+#Response: {"endowment":{"id":1,"created_at":"2013-12-21T08:59:22Z","updated_at":"2013-12-21T08:59:22Z","name":"Build Houses","description":"Your description","visibility":"public","my_balances":{"my_donations_count":"0.0","my_donations_amount":"0.0","my_grants_amount":"0.0","my_balance_pre_investment":"0.0","my_investment_gainloss":"0.0","my_investment_gainloss_percentage":"0.0","my_endowment_balance":"0.0"},"global_balances":{"endowment_donor_count":0,"endowment_donations_count":0,"endowment_donations":0.0,"endowment_transaction_fees":0.0,"endowment_fees":"0.0","endowment_grants":"0.0","endowment_balance":0.0},"charities":[{"charity":{"active":"true","activity_code":"0.0","address":"1103 N MARKET ST","city":"WILMINGTON","classification_code":"1.0","created_at":"2013-12-07T03:46:45Z","description":null,"ein":"202783473","email":null,"id":1,"name":"1103 MARKET STREET FOUNDATION","ntee_code":"A80","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:45Z","website":null,"zip":"19801-1223"}},{"charity":{"active":"false","activity_code":"0.0","address":"PO BOX 115","city":"MONTCHANIN","classification_code":"1.0","created_at":"2013-12-07T03:46:45Z","description":null,"ein":"273330508","email":null,"id":3,"name":"1916 FOUNDATION","ntee_code":"T20","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:45Z","website":null,"zip":"19710-0115"}},{"charity":{"active":"true","activity_code":"0.0","address":"22922 E TRAP POND RD","city":"GEORGETOWN","classification_code":"1.0","created_at":"2013-12-07T03:46:46Z","description":null,"ein":"223634861","email":null,"id":4,"name":"1ST LEGION PROVISIONAL ARMY OF CONFEDERATE STATES","ntee_code":"A84","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:46Z","website":null,"zip":"19947-4728"}},{"charity":{"active":"false","activity_code":"0.0","address":"FOUNDATION SOURCE 501 SILVERSIDE RD","city":"WILMINGTON","classification_code":"1.0","created_at":"2013-12-07T03:46:46Z","description":null,"ein":"274000348","email":null,"id":6,"name":"214 PHILANTHROPIC FOUNDATION INC","ntee_code":"T22","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:46Z","website":null,"zip":"19809-0000"}},{"charity":{"active":"true","activity_code":"0.0","address":"11391 CHIPMANS POND RD","city":"LAUREL","classification_code":"2.0","created_at":"2013-12-07T03:46:46Z","description":null,"ein":"274333359","email":null,"id":24,"name":"A FATHERS HEART MINISTRIES INC","ntee_code":"X99","state":"DE","subsection_code":"3.0","updated_at":"2013-12-07T03:46:46Z","website":null,"zip":"19956-3521"}}]}}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Subscribe to endowment
+curl -X POST -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA' -d '{"amount":"5", "endowment_id":"1"}' http://localhost:3000/api/donors/payment_accounts/1/donate_subscription.json
+
+jQuery.ajax({
+  url: '/api/donors/payment_accounts/{payment_account_id}/donate_subscription.json',
+  method: 'POST',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+    amount: '5',
+    endowment_id: $endowment_id
+  },
+  success: function(data) {
+#Response: {"donation":{"amount":5.0,"endowment_id":1,"created_at":"2013-09-24T04:56:48Z","id":1,"payment_account_id":1,"transaction_id":null,"transaction_processor":"stripe","transaction_type":"subscription","updated_at":"2013-09-24T04:56:48Z"}}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Stop subscription to endowment  # This one is weird - use subscription_id not payment_account_id
+curl -X GET -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA'  http://localhost:3000/api/donors/payment_accounts/1/cancel_subscription.json
+
+jQuery.ajax({
+  url: '/api/donors/payment_accounts/{subscription_id}/cancel_subscription.json',
+  method: 'GET',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+  },
+  success: function(data) {
+#Response: {"id":"su_102bnk2mGsIlOBKnkLysKB6V","plan":{"id":"1","interval":"month","name":"Pay Permonth","amount":500,"currency":"usd","object":"plan","livemode":false,"interval_count":1,"trial_period_days":null},"object":"subscription","start":1379707483,"status":"canceled","customer":"cus_2bnkfxPZws93SD","cancel_at_period_end":false,"current_period_start":1379707483,"current_period_end":1382299483,"ended_at":1379723435,"trial_start":null,"trial_end":null,"canceled_at":1379723435,"quantity":1,"application_fee_percent":null}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Get donations (for statement)
+curl -X GET -H "Content-Type: application/json" -H 'Authorization: Token token=6MyKLFF_11ab8WrthtAT5Q' -d '{"endowment_id":"1", "start_date":"2013-10-15", "end_date":"2015-10-17"}' http://localhost:3000/api/donors/endowments.json
+
+jQuery.ajax({
+  url: '/api/donors/endowments.json',
+  method: 'GET',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+    endowment_id: $endowment_id
+    start_date: "2013-01-01",
+    end_date: "2013-12-31" 
+  },
+  success: function(data) {
+#Response: {"donations":[{"donation":{"created_at":"2013-12-01T01:52:34Z","donor_id":6,"endowment_id":11,"gross_amount":333.0,"id":3,"net_amount":323.043,"payment_account_id":2,"shares_added":"0.00323043","transaction_fees":9.957,"updated_at":"2013-12-01T01:52:34Z"}}],"total":333.0}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
+
+Logout
+curl -X POST -H "Content-Type: application/json" -H 'Authorization: Token token=l6M4VWVgiVFhT4IbgSkYwA' -d '' http://localhost:3000/api/sessions/destroy.json
+
+jQuery.ajax({
+  url: '/api/sessions/destroy.json',
+  method: 'POST',
+  headers: {
+    'Authentication' : 'Token token=' + token
+  },
+  data: {
+  },
+  success: function(data) {
+#Response: {"message":"Successfuly remove your session"}
+  },
+  error: function (data, statusCode) {
+  }
+});
+
+
