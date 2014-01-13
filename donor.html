@@ -212,11 +212,27 @@
                       </form>
                     </div>
                     <div class="tab-pane" id="payment">
-                      <div id="no_payment_accounts_card" class="span12">
+                      <div id="payment_accounts_card" clas="span12 hide">
+                        <table id="payment_accounts_table" class="table">
+                          <thead>
+                            <tr>
+                              <th>Card Type</th>
+                              <th>Last Four Digits</th>
+                              <th>Expiration Date</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody></tbody>
+                        </table>
+                        <p><a class="btn btn-success" data-toggle="modal" href="#add_payment_modal">Add Payment Account</a></p>
+                      </div>
+                      <div id="no_payment_accounts_card" class="span12 hide">
                         <h3>You haven't added any payment accounts yet.</h3>
+                        <p><a class="btn btn-success" data-toggle="modal" href="#add_payment_modal">Add Payment Account</a></p>
                       </div>
                     </div>
                     <div class="tab-pane" id="statement">
+                      <form id="donor_statement_form" method="post" class="form-horizontal">
                        <div class="control-group">
                           <label class="control-label" for="donor_statement_year">Statement Year</label>
                           <div class="controls">
@@ -225,6 +241,12 @@
                             </select>
                           </div>
                         </div>
+                        <div class="control-group">
+                          <div class="controls">
+                            <button type="submit" class="btn btn-success">Display Statement</button>
+                          </div>
+                        </div>
+                      </form
                     </div>
                   </div>
                 </div>
@@ -241,13 +263,55 @@
 
     </div><!--/.fluid-container-->
 
+    <!-- Modals -->
+    <!-- Add Payment Modal -->
+    <div id="add_payment_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Add Payment Account</h3>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="add_payment_form" class="form-horizontal">
+          <span class="payment-errors"></span>
+          <div class="control-group">
+            <label class="control-label" for="add_card_number">Card Number</label>
+            <div class="controls">
+              <input type="text" data-stripe="number"/>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="add_card_cvc">CVC</label>
+            <div class="controls">
+              <input type="text" data-stripe="cvc"/>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="add_card_exp">Expiration (MM/YYYY)</label>
+            <div class="controls">
+              <input type="text" data-stripe="exp-month" class="span2"/>
+              <input type="text" data-stripe="exp-year" class="span2"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="add_account_btn" class="btn btn-success">Add Account</button>
+      </div>
+      <div class="modal-footer">
+        <h4>** giv2giv never sees or stores your card information.</h4>
+      
+      </div>
+    </div>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script src="js/signals.min.js"></script>
     <script src="js/crossroads.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.payment.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.history.js"></script>
     <script src="js/jquery.bootstrap-growl.min.js"></script>

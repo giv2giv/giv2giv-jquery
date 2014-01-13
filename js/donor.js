@@ -1,6 +1,52 @@
+// donor.js
+// functions we'll use more than once
+function fetchPaymentAccounts() {
+	// Get Payment Accounts
+	$.ajax({
+	  url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
+	  method: 'GET',
+	  data: {},
+	  success: function(data) {
+	  	// Clear old data & hide things
+			$("#payment_accounts_table").find('tbody:last').html("");
+			$("#no_payment_accounts_card").addClass("hide");
+			$("payment_accounts_card").addClass("hide");
+	  	if(data.length == 0) {
+	  		// Show "Add Payment Account Card"
+	  		$("#no_payment_accounts_card").removeClass("hide");
+	  	} else {
+	  		// Loop through accounts & create payment accounts table
+				$.each(data, function(k, v) {
+					// for the love of god man make this prettier!
+					var x = v[0];
+					var y = Object.keys(x);
+					var z = x[y[0]];
+					var cards = z.cards[0];
+					var cardz = cards[0];
+					var card_x = Object.keys(cardz);
+					var card = cardz[card_x[0]];
+					// Create table row & append
+					var $row = $("#payment_accounts_table").find('tbody:last').append('<tr></tr>');
+					$row.append("<td>"+card.type+"</td>");
+					$row.append("<td>"+card.last4+"</td>");
+					$row.append("<td>"+card.exp_month+"/"+card.exp_year+"</td>");
+					$row.append("<td>Actions</td>");
+				});
+				$("#payment_accounts_card").removeClass("hide");
+			}
+	  },
+	  failure: function(data) {
+	  	console.log(data);
+	  }
+	});
+}
+
 $(function() {
 	// Set Stripe Key
-	Stripe.setPublishableKey('pk_test_d678rStKUyF2lNTZ3MfuOoHy');
+	var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
+	var stripe_secret_key = '';
+
+	Stripe.setPublishableKey(stripe_pub_key);
 
 	// Check Login
 	if($.cookie('session')) {
@@ -43,20 +89,7 @@ $(function() {
 	});
 
 	// Get Payment Accounts
-	$.ajax({
-	  url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
-	  method: 'GET',
-	  data: {},
-	  success: function(data) {
-	  	if(data.length == 0) {
-	  		// Show "Add Payment Account Card"
-	  		$("#no_payment_accounts_card").removeClass("hide");
-	  	}
-	  },
-	  failure: function(data) {
-	  	console.log(data);
-	  }
-	});
+	fetchPaymentAccounts();
 
 	// Get Donor Statement
 	var statement_start_date = new Date($("#donor_statement_year").val(),0,1);
@@ -99,7 +132,7 @@ $(function() {
 
 		$.ajax({
 			url: "https://api.giv2giv.org/api/donors.json",
-			type: "POST",
+			type: "PUT",
 			data: payload,
 			contentType: "application/json",
 			dataType:"json",
@@ -114,6 +147,90 @@ $(function() {
 		e.preventDefault();
 	});
 
+  // stripe
+  // stripe handler
+	var stripeResponseHandler = function(status, response) {
+    var $form = $('#add_payment_form');
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+    	$("#add_account_btn").prop('disabled', false);
+    	console.log(response.error);
+    } else {
+      // token contains id, last4, and card type
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      // and add token to g2g
+			console.log(response);
+			var payment = {};
+			payment['processor'] = "stripe";
+			payment['stripeToken'] = response.id;
+			var payload = JSON.stringify(payment);
+
+			$.ajax({
+				url: "https://api.giv2giv.org/api/donors/payment_accounts.json",
+				type: "POST",
+				data: payload,
+				contentType: "application/json",
+				dataType:"json",
+				success: function (data) {
+					// Success
+					// Hide Modal
+    			$("#add_payment_modal").modal('hide');
+					// Clear Form
+					$("#add_payment_form")[0].reset();
+    			$("#add_account_btn").prop('disabled', false);
+    			// Reload Payment Accounts
+    			fetchPaymentAccounts();
+				},
+				fail: function(data) {
+					var res = JSON.parse(data.responseText);
+						console.log("[error]: " + res.message);
+				}
+			});
+    }
+  };
+
+
+	//$('[data-numeric]').payment('restrictNumeric');
+  $('.cc-number').payment('formatCardNumber');
+  $('.cc-exp').payment('formatCardExpiry');
+  $('.cc-cvc').payment('formatCardCVC');
+
+  // Add account button
+  $('#add_account_btn').on("click", function(e) {
+  	$("#add_payment_form").submit();
+  	e.preventDefault();
+  });
+
+  $('#add_payment_form').submit(function(e) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $("#add_account_btn").prop('disabled', true);
+
+    // $('input').removeClass('invalid');
+    // $('.validation').removeClass('passed failed');
+
+    //var cardType = $.payment.cardType($('.cc-number').val());
+
+    // $('.cc-number').toggleClass('invalid', !$.payment.validateCardNumber($('.cc-number').val()));
+    // $('.cc-exp').toggleClass('invalid', !$.payment.validateCardExpiry($('.cc-exp').payment('cardExpiryVal')));
+    // $('.cc-cvc').toggleClass('invalid', !$.payment.validateCardCVC($('.cc-cvc').val(), cardType));
+
+    // if ( $('input.invalid').length ) {
+    //   $('.validation').addClass('failed');
+    // } else {
+    //   $('.validation').addClass('passed');
+    // }
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    e.preventDefault();
+  });
 
 
 

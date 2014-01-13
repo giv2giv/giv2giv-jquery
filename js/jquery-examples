@@ -73,11 +73,15 @@ jQuery.ajax({
   data: {
   },
   success: function(data) {
-#Response: [{"payment_account":{"created_at":"2013-09-24T04:40:15Z","donor_id":1,"id":1,"processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_2d3jQymPJ1qWWR","updated_at":"2013-09-24T04:40:15Z"}}]
+#Response: [[{"2":{"created_at":"2014-01-13T03:25:56Z","updated_at":"2014-01-13T03:25:56Z","processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_3IcbRuQFxCH3rD","cards":[[{"card_3IcbrHAsiQdQ1M":{"type":"Visa","last4":"4242","exp_month":12,"exp_year":12}}]]}}],[{"3":{"created_at":"2014-01-13T03:33:58Z","updated_at":"2014-01-13T03:33:58Z","processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_3IcjdibDP0HZA2","cards":[[{"card_3Icj9RHeXm1R5s":{"type":"Visa","last4":"4242","exp_month":12,"exp_year":12}}]]}}],[{"4":{"created_at":"2014-01-13T03:47:48Z","updated_at":"2014-01-13T03:47:48Z","processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_3Icxwz4deWTEyD","cards":[[{"card_3Icxq4Dc0V3k8s":{"type":"Visa","last4":"4242","exp_month":12,"exp_year":12}}]]}}],[{"5":{"created_at":"2014-01-13T03:52:32Z","updated_at":"2014-01-13T03:52:32Z","processor":"stripe","requires_reauth":false,"stripe_cust_id":"cus_3Id2VC49FVKxUv","cards":[[{"card_3Id2Au2q23KWHA":{"type":"Visa","last4":"4242","exp_month":12,"exp_year":12}}]]}}]]
+
   },
   error: function (data, statusCode) {
   }
 });
+
+    
+
 
 
 Get my subscriptions

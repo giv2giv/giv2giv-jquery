@@ -42,6 +42,15 @@ $(function() {
 	  }
 	});
 
+	// Search with typeahead
+	$('.typeahead').typeahead([
+		{
+			name: 'endowments',
+	    remote: 'https://api.giv2giv.org/api/endowment.json?query=%QUERY'
+		}
+	]);
+
+
 	//Search endowments (or "featured")
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/endowment.json',
