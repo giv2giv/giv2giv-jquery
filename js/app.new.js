@@ -40,7 +40,10 @@ var WebUI = function() {
 		// Title is set in Load Page
 		// Hide Login Panel
 		$("#login-panel").addClass("hide");
-		
+		// Clean up form here.
+		$("#signin-email").val("");
+		$("#signin-password").val("");
+
 		// Callback
 		if(typeof callback === "function") {
     	// Call it, since we have confirmed it is callable
@@ -67,10 +70,7 @@ var WebUI = function() {
 		 		});
 		 		// Set Cookie
 		 		$.cookie('session', data.session.session.token);
-			  
-			  // Clean up form here.
-			  $("#signin-email").val("");
-			  $("#signin-password").val("");
+			 	hideLogin();
 			  startApplication();
 			},
 			error: function(data) {
