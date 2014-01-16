@@ -18,6 +18,35 @@ log = function () {
   }
 }
 
+// Bootstrap Growl Helpers
+// Growl Error
+function growlError(message) {
+	$.bootstrapGrowl(message, {
+	  ele: 'body', // which element to append to
+	  type: 'error', // (null, 'info', 'error', 'success')
+	  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+	  align: 'right', // ('left', 'right', or 'center')
+	  width: 'auto', // (integer, or 'auto')
+	  delay: 5000,
+	  allow_dismiss: true,
+	  stackup_spacing: 10 // spacing between consecutively stacked growls.
+	});
+}
+
+// Growl Success
+function growlSuccess(message) {
+	$.bootstrapGrowl(message, {
+	  ele: 'body', // which element to append to
+	  type: 'success', // (null, 'info', 'error', 'success')
+	  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
+	  align: 'right', // ('left', 'right', or 'center')
+	  width: 'auto', // (integer, or 'auto')
+	  delay: 5000,
+	  allow_dismiss: true,
+	  stackup_spacing: 10 // spacing between consecutively stacked growls.
+	});
+}
+
 // Main Application
 var WebUI = function() {
 	// Login Bits

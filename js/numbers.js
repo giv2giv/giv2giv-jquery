@@ -38,6 +38,7 @@ function fetchStats(callback) {
   	$("#giv2giv-total-grants").text(giv2giv_total_grants);
 	}).fail(function(data) {
 	  	log(data);
+	  	growlError("Opps! An error occured while loading the Numbers.");
 	}).always(function() {
   	// Callbacks
 		if(typeof callback === "function") {

@@ -23,7 +23,7 @@ function onStart() {
 }
 
 // Functions
-// Fetch Payment Accounts
+// Fetch Payment Accounts0
 function fetchPaymentAccounts(callback) {
 	// Get Payment Accounts
 	$.ajax({
@@ -41,13 +41,13 @@ function fetchPaymentAccounts(callback) {
   		// Loop through accounts & create payment accounts table
 			$.each(data, function(k, v) {
 				// for the love of god man make this prettier!
-				var x = v[0];
-				var y = Object.keys(x);
-				var z = x[y[0]];
-				var cards = z.cards[0];
-				var cardz = cards[0];
-				var card_x = Object.keys(cardz);
-				var card = cardz[card_x[0]];
+				var i = v[0];
+				var ii = Object.keys(i);
+				var iii = i[ii[0]];
+				var c = iii.cards[0];
+				var cc = c[0];
+				var ccc = Object.keys(cc);
+				var card = cc[ccc[0]];
 				// Create table row & append
 				var $row = $("#payment-accounts-table").find('tbody:last').append('<tr></tr>');
 				$row.append("<td>"+card.type+"</td>");
@@ -59,6 +59,7 @@ function fetchPaymentAccounts(callback) {
 		}
 	}).fail(function(data) {
 	  log(data);
+	  growlError("Opps! An error occured while loading your Payment Accounts.");
 	}).always(function() {
   	// Callbacks
 		if(typeof callback === "function") {
@@ -84,6 +85,7 @@ function fetchDonorProfile(callback) {
   	$("#donor-profile-phone").val(data.donor.phone);
 	}).fail(function(data) {
 	  log(data);
+	  growlError("Opps! An error occured while loading your Donor Profile.");
 	}).always(function() {
   	// Callbacks
 		if(typeof callback === "function") {
