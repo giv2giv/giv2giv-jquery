@@ -144,6 +144,8 @@ var WebUI = function() {
 	var endApplication = function(message, callback) {
 		// @todo - End our session
 		// @todo - Fix history bug here
+		// Line below "fixs" history bug, but isn't ideal.
+		location.reload();
 		// Clear existing data in Application Container
 		$.removeCookie('session');
 		$("#app-panel").html("");
