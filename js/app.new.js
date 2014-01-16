@@ -83,6 +83,24 @@ var WebUI = function() {
 		e.preventDefault();
 	});
 
+	// Handle Logout Button
+	$("#logout-btn").on("click", function(e) {
+		log("WebUI: Logout.");
+		$.ajax({
+			url: "https://api.giv2giv.org/api/sessions/destroy.json",
+			type: "POST",
+			contentType: "application/json",
+			dataType:"json",
+			success: function (data) {
+		 		// Delete Cookie
+		 		$.removeCookie('session');
+			  // Reload Page. Ensures everything is clear & gets around History bug /elegantly/
+			  location.reload();
+			}
+		});
+		e.preventDefault();
+	});
+	
 	// Application Bits
 	// Display Application
 	var displayApplication = function(callback) {
@@ -141,24 +159,25 @@ var WebUI = function() {
 	};
 
 	// End Application
-	var endApplication = function(message, callback) {
-		// @todo - End our session
-		// @todo - Fix history bug here
-		// Line below "fixs" history bug, but isn't ideal.
-		location.reload();
-		// Clear existing data in Application Container
-		$.removeCookie('session');
-		$("#app-panel").html("");
-		$('#app-panel').addClass('hide');
-		$('#app-nav').addClass('hide');
-		$('#login-panel').removeClass('hide');
+	// @note - Not used yet/ever.
+	// var endApplication = function(message, callback) {
+	// 	// @todo - End our session
+	// 	// @todo - Fix history bug here
+	// 	// Line below "fixs" history bug, but isn't ideal.
+	// 	location.reload();
+	// 	// Clear existing data in Application Container
+	// 	$.removeCookie('session');
+	// 	$("#app-panel").html("");
+	// 	$('#app-panel').addClass('hide');
+	// 	$('#app-nav').addClass('hide');
+	// 	$('#login-panel').removeClass('hide');
 		
-		// Callback
-		if(typeof callback === "function") {
-    	// Call it, since we have confirmed it is callable
-      callback();
-    }
-	};
+	// 	// Callback
+	// 	if(typeof callback === "function") {
+ //    	// Call it, since we have confirmed it is callable
+ //      callback();
+ //    }
+	// };
 
 	// Start Loading
   var startLoad = function() {
@@ -177,22 +196,14 @@ var WebUI = function() {
 	var router = function(callback) {
 		log("WebUI: Starting router.");
 		History.Adapter.bind(window,'statechange',function() {
+			log("History: Event occured!")
 			crossroads.parse(document.location.pathname);
   	});
 
-		// Handle Logout Button
-		$("#logout-btn").on("click", function(e) {
-			log("WebUI: Logout.");
-			endApplication(function() {
-				displayLogin();
-			});
-			e.preventDefault();
-		});
-
-		// Handle Nav Bar Clicks
+		// Handle Nav Bar Clicks woof
 		$(".nav-link a").on("click", function(e) {
 			if(!$(this).parent().hasClass("active")) {
-				History.pushState(null, 'Loading...', $(this).attr('href'));
+				History.pushState(null, document.title, $(this).attr('href'));
 			}
 			e.preventDefault();
 		});
