@@ -26,21 +26,23 @@ function fetchSubscribedEndowments(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors/subscriptions.json',
 	  method: 'GET',
-	  success: function(data) {
-	  	log(data);
-	  	// did we get anything
-	  	if(data.length == 0) {
-	  		// Display not found card
-	  		$("#sub-not-found-card").removeClass('hide');
-	  	} else {
-	  		// Parse Results Here
-	  	}
-	  	// Callback
-			if(typeof callback === "function") {
-	    	// Call it, since we have confirmed it is callable
-	      callback();
-	    }
-	  }
+	}).done(function(data) {
+  	log(data);
+  	// did we get anything
+  	if(data.length == 0) {
+  		// Display not found card
+  		$("#sub-not-found-card").removeClass('hide');
+  	} else {
+  		// Parse Results Here
+  	}
+	}).fail(function(data) {
+	  log(data);
+	}).always(function(data) {
+		// Callbacks
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	});
 }
 
@@ -52,20 +54,22 @@ function fetchFeaturedEndowments(callback) {
 	  data: {
 	    page: '1',
 	    per_page: '10'
-	  },
-	  success: function(data) {
-	  	if(data.message == "Not found") {
-	  		// Display not found card
-	  		$("#featured-not-found-card").removeClass('hide');
-	  	} else {
-	  		// Display results
-	  		log(data);
-	  	}
-	  	// Callback
-			if(typeof callback === "function") {
-	    	// Call it, since we have confirmed it is callable
-	      callback();
-	    }
 	  }
+	}).done(function(data) {
+  	if(data.message == "Not found") {
+  		// Display not found card
+  		$("#featured-not-found-card").removeClass('hide');
+  	} else {
+  		// Display results
+  		log(data);
+  	}
+  }).fail(function(data) {
+  	log(data);
+	}).always(function() {
+		// Callbacks
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	});
 }

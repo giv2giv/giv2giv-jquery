@@ -29,49 +29,42 @@ function fetchPaymentAccounts(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
 	  method: 'GET',
-	  data: {},
-	  success: function(data) {
-	  	// Clear old data & hide things
-			$("#payment-accounts-table").find('tbody:last').html("");
-			$("#no-payment-accounts-card").addClass("hide");
-			$("#payment-accounts-card").addClass("hide");
-	  	if(data.length == 0) {
-	  		// Show "Add Payment Account Card"
-	  		$("#no-payment-accounts-card").removeClass("hide");
-	  	} else {
-	  		// Loop through accounts & create payment accounts table
-				$.each(data, function(k, v) {
-					// for the love of god man make this prettier!
-					var x = v[0];
-					var y = Object.keys(x);
-					var z = x[y[0]];
-					var cards = z.cards[0];
-					var cardz = cards[0];
-					var card_x = Object.keys(cardz);
-					var card = cardz[card_x[0]];
-					// Create table row & append
-					var $row = $("#payment-accounts-table").find('tbody:last').append('<tr></tr>');
-					$row.append("<td>"+card.type+"</td>");
-					$row.append("<td>"+card.last4+"</td>");
-					$row.append("<td>"+card.exp_month+"/"+card.exp_year+"</td>");
-					$row.append("<td>Actions Go Here</td>");
-				});
-				$("#payment-accounts-card").removeClass("hide");
-			}
-			// Callback
-			if(typeof callback === "function") {
-	    	// Call it, since we have confirmed it is callable
-	      callback();
-	    }
-	  },
-	  failure: function(data) {
-	  	log(data);
-	  	// Callbacks
-			if(typeof callback === "function") {
-	    	// Call it, since we have confirmed it is callable
-	      callback();
-	    }
-	  }
+	}).done(function(data) {
+  	// Clear old data & hide things
+		$("#payment-accounts-table").find('tbody:last').html("");
+		$("#no-payment-accounts-card").addClass("hide");
+		$("#payment-accounts-card").addClass("hide");
+  	if(data.length == 0) {
+  		// Show "Add Payment Account Card"
+  		$("#no-payment-accounts-card").removeClass("hide");
+  	} else {
+  		// Loop through accounts & create payment accounts table
+			$.each(data, function(k, v) {
+				// for the love of god man make this prettier!
+				var x = v[0];
+				var y = Object.keys(x);
+				var z = x[y[0]];
+				var cards = z.cards[0];
+				var cardz = cards[0];
+				var card_x = Object.keys(cardz);
+				var card = cardz[card_x[0]];
+				// Create table row & append
+				var $row = $("#payment-accounts-table").find('tbody:last').append('<tr></tr>');
+				$row.append("<td>"+card.type+"</td>");
+				$row.append("<td>"+card.last4+"</td>");
+				$row.append("<td>"+card.exp_month+"/"+card.exp_year+"</td>");
+				$row.append("<td>Actions Go Here</td>");
+			});
+			$("#payment-accounts-card").removeClass("hide");
+		}
+	}).fail(function(data) {
+	  log(data);
+	}).always(function() {
+  	// Callbacks
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	});
 }
 
@@ -79,31 +72,24 @@ function fetchPaymentAccounts(callback) {
 function fetchDonorProfile(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors.json',
-	  method: 'GET',
-	  data: {},
-	  success: function(data) {
-	  	// fill out profile form
-	  	$("#donor-profile-email").val(data.donor.email);
-	  	$("#donor-profile-name").val(data.donor.name);
-	  	$("#donor-profile-address").val(data.donor.address);
-	  	$("#donor-profile-city").val(data.donor.city);
-	  	$("#donor-profile-state").val(data.donor.state);
-	  	$("#donor-profile-zip").val(data.donor.zip);
-	  	$("#donor-profile-phone").val(data.donor.phone);
-	  	// Callbacks
-			if(typeof callback === "function") {
-	    	// Call it, since we have confirmed it is callable
-	      callback();
-	    }
-	  },
-	  failure: function(data) {
-	  	log(data);
-	  	// Callbacks
-			if(typeof callback === "function") {
-	    	// Call it, since we have confirmed it is callable
-	      callback();
-	    }
-	  }
+	  method: 'GET'
+	}).done(function(data) {
+  	// fill out profile form
+  	$("#donor-profile-email").val(data.donor.email);
+  	$("#donor-profile-name").val(data.donor.name);
+  	$("#donor-profile-address").val(data.donor.address);
+  	$("#donor-profile-city").val(data.donor.city);
+  	$("#donor-profile-state").val(data.donor.state);
+  	$("#donor-profile-zip").val(data.donor.zip);
+  	$("#donor-profile-phone").val(data.donor.phone);
+	}).fail(function(data) {
+	  log(data);
+	}).always(function() {
+  	// Callbacks
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	});
 }
 
@@ -142,12 +128,12 @@ function loadUI() {
 			data: payload,
 			contentType: "application/json",
 			dataType:"json",
-			success: function (data) {
+			done: function (data) {
 				log("Success!");
 			},
 			fail: function(data) {
 				var res = JSON.parse(data.responseText);
-					log("[error]: " + res.message);
+				log("[error]: " + res.message);
 			}
 		});
 		e.preventDefault();
@@ -181,7 +167,7 @@ var stripeResponseHandler = function(status, response) {
 			data: payload,
 			contentType: "application/json",
 			dataType:"json",
-			success: function (data) {
+			done: function (data) {
 				// Success
 				// Hide Modal
   			$("#add-payment-modal").modal('hide');

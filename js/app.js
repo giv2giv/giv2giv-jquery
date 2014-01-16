@@ -1,39 +1,71 @@
-/*
- * Giv2Giv Application
- * Michael Thomas - 01/06/2014
- */
+// WebUI Application
+// Michael Thomas, 2014
 
-var G2G = function() {
-	// Start Loading Indicator
-	var startLoad = function() {
-		$('#logo').hide(0, function () {
-			$('#loading').show();
-		});
+// Setup Stripe
+var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
+Stripe.setPublishableKey(stripe_pub_key);
+
+// Awesome Logging
+// Only display console log output in debug mode, else nothing.
+// @todo - Send serious logs to server?
+var debug = true;
+
+log = function () {
+  if (debug && console && typeof console.log === 'function') {
+    for (var i = 0, ii = arguments.length; i < ii; i++) {
+      console.log(arguments[i]);
+    }
+  }
+}
+
+// Main Application
+var WebUI = function() {
+	// Login Bits
+	// Display the login screen.
+	var displayLogin = function(callback) {
+		// Hide Header
+		$("#app-nav").addClass("hide");
+		// Set Title
+		document.title = "giv2giv - Login";
+		// Show Login Panel
+		$("#login-panel").removeClass("hide");
+
+		// Callback
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	};
 
-	// Stop Loading Indicator
-	var stopLoad = function() {
-		$('#loading').hide(0, function () {
-			$('#logo').show();
-		});
+	// Hide the login screen
+	var hideLogin = function(callback) {
+		// Show Header
+		$("#app-nav").removeClass("hide");
+		// Title is set in Load Page
+		// Hide Login Panel
+		$("#login-panel").addClass("hide");
+		// Clean up form here.
+		$("#signin-email").val("");
+		$("#signin-password").val("");
+
+		// Callback
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	};
 
-	// Display Login
-	var displayLogin = function() {
-		// For now, just redirect to index.html
-		window.location.href = "index.html";
-	};
-
-	// Start application
-	var startApplication = function() {
-		// For now, redirect to app.html
-		window.location.href = "dashboard.html";
-	};
+	// Logo Reload
+	$("#logo-main").on("click", function(e) {
+		console.log("Eh?");
+		History.replaceState(null, '', window.location.pathname);
+		e.preventDefault();
+	});
 
 	// Login Form
-	$("#login-form").on("submit", function(e) {
+	$("#login-frm").on("submit", function(e) {
 		// Build Payload
-		var payload = JSON.stringify({ "email" : $("#signin_email").val(), "password" : $("#signin_password").val() });
+		var payload = JSON.stringify({ "email" : $("#signin-email").val(), "password" : $("#signin-password").val() });
 		$.ajax({
 			url: "https://api.giv2giv.org/api/sessions/create.json",
 			type: "POST",
@@ -41,169 +73,229 @@ var G2G = function() {
 			contentType: "application/json",
 			dataType:"json",
 			success: function (data) {
-				// Setup Session & Cookie
-				console.log(data);
 				$.ajaxSetup({
 		 			beforeSend: function(xhr, settings) {
-			 			xhr.setRequestHeader("Authorization", "Token " + data.session.session.token);
+			 			xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
 		  		}
 		 		});
 		 		// Set Cookie
 		 		$.cookie('session', data.session.session.token);
-			  
-			  // Clean up form here.
-			  $("#signin_email").val("");
-			  $("#signin_password").val("");
 			  startApplication();
 			},
-			fail: function(data) {
+			error: function(data) {
 				var res = JSON.parse(data.responseText);
-				console.log(data);
 				if(res.message == "unauthorized") {
-					console.log("Bad login");
-					$.bootstrapGrowl("Incorrect username or password.");
+					$("#login-message").html("Incorrect Email or Password");
 				} else {
-					console.log("[error]: " + res.message);
+					log("WebUI: Login Error - " + res.message);
 				}
 			}
 		});
 		e.preventDefault();
 	});
 
-	// Registration Form
-	$("#register-form").on("submit", function(e) {
-	// Build Payload
-		var registerPayload = JSON.stringify({ "name" : $("#signup_name").val(), "email" : $("#signup_email").val(), "password" : $("#signup_password").val() });
-		
+	// Handle Logout Button
+	$("#logout-btn").on("click", function(e) {
+		log("WebUI: Logout.");
 		$.ajax({
-			url: "https://api.giv2giv.org/api/donors.json",
+			url: "https://api.giv2giv.org/api/sessions/destroy.json",
 			type: "POST",
-			data: registerPayload,
 			contentType: "application/json",
 			dataType:"json",
 			success: function (data) {
-				// Perform login
-				var loginPayload = JSON.stringify({ "name" : $("#signup_name").val(), "email" : $("#signup_email").val(), "password" : $("#signup_password").val() });
-
-				$.ajax({
-					url: "https://api.giv2giv.org/api/sessions/create.json",
-					type: "POST",
-					data: loginPayload,
-					contentType: "application/json",
-					dataType:"json",
-					success: function (data) {
-						// Setup Session & Cookie
-						console.log(data);
-						$.ajaxSetup({
-				 			beforeSend: function(xhr, settings) {
-					 			xhr.setRequestHeader("Authorization", "Token " + data.session.session.token);
-				  		}
-				 		});
-				 		// Set Cookie
-				 		$.cookie('session', data.session.session.token);
-					  
-					  // Clean up form here.
-					  $("#email").val("");
-					  $("#password").val("");
-					  startApplication();
-					},
-					fail: function(data) {
-						var res = JSON.parse(data.responseText);
-						console.log(res);
-					}
-				});
-
-				// Setup Session & Cookie
-				console.log(data);
-				$.ajaxSetup({
-		 			beforeSend: function(xhr, settings) {
-			 			xhr.setRequestHeader("Authorization", "Token " + data.session.session.token);
-		  			}
-				});
-		 		// Set Cookie
-		 		$.cookie('session', data.session.session.token);
-				  
-				// Clean up form here.
-				$("#signup_name").val("");
-				$("#signup_email").val("");
-				$("#signup_password").val("");
-				startApplication();
-			},
-			fail: function(data) {
-				var res = JSON.parse(data.responseText);
-				console.log(res);
-				$.bootstrapGrowl(res);
+		 		// Delete Cookie
+		 		$.removeCookie('session');
+			  // Reload Page. Ensures everything is clear & gets around History bug /elegantly/
+			  location.reload();
 			}
 		});
 		e.preventDefault();
-
 	});
 
-	// Reset Password Form
-	$("#reset-password-form").on("submit", function(e) {
-		// Build Payload
-		var payload = JSON.stringify({ "email" : $("#reset-email").val() });
-		$.post("https://api.giv2giv.org/api/donors/forgot_password.json", payload, function (data) {
-		  $("#reset-email").val("");
-			$.bootstrapGrowl(data.message);
-		}).fail(function(data) {
-			var res = JSON.parse(data.responseText);
-			$.bootstrapGrowl(res.message);
-		});
-	  e.preventDefault();
-	});
+	// Application Bits
+	// Display Application
+	var displayApplication = function(callback) {
+		// Show App Panel
+		$("#app-panel").removeClass("hide");
+		// Show App Nav
+		$("#app-nav").removeClass("hide");
+		// Callback
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
+	};
 
-	// Logout Button
-	$("#logout-btn").on("click", function(e) {
-		// unset cookie
-		$.removeCookie('session');
-		window.location.href = "index.html";
-		e.preventDefault();
-	});
+	// Start Application
+	// This is only loaded on full page refresh or first visit
+	var startApplication = function(callback) {
+		log("WebUI: Started Application");
+		if($.cookie('session') == undefined) {
+			log("WebUI: No Session Cookie found, displaying Login.");
+			displayLogin();
+			stopLoad();
+		} else {
+			// We have a session cookie, set header & see if it's valid
+			log("WebUI: Session Cookie found, checking session.");
+			// Set Header
+			$.ajaxSetup({
+ 				beforeSend: function(xhr, settings) {
+	 				xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
+				}
+			});
+			// Get Donor Info (and check session as a result)
+			$.get("https://api.giv2giv.org/api/donors.json").success(function(data) {
+				log("WebUI: Valid session, loading application.");
+				log("WebUI: Initial Page " + window.location.pathname);
+				// Load Current URL
+				History.replaceState(null, 'Loading...', window.location.pathname);
+				// Set Donor Name
+				$("#donor-name").html(data.donor.name);
+				hideLogin();
+				// Display Application
+				displayApplication();
+			}).error(function(data) {
+				if(data.statusText == "Unauthorized") {
+					log("WebUI: Invalid session, resetting cookie & displaying Login.");
+					displayLogin();
+					stopLoad();
+				}
+			});
+		}
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
+	};
 
-	// Tooltips
-	$('a[data-toggle="tooltip"]').tooltip();
-
-	// Not needed until pretty ajaxyismness
-	// // Setup UI Routing
-	// var routing = function() {
-	// 	// History.js adapter
-	// 	History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
- //      // Get current url and parse it
- //      crossroads.parse(History.getState().hash);
- //    });
-
-	// 	// Dashboard Route
-	// 	crossroads.addRoute('/', function() {
-	// 		console.log("Loading Dashboard");
-	// 		// Now this is where magic happens.
-			
-	// 	});
-
-	// 	// Clients Route
-	// 	crossroads.addRoute('client', function() {
- //    	console.log("Loading Clients");
- //    	loadPage('/ui/client');
-	// 	});
-
-	// 	function loadPage(url, callback) {
-	// 		console.log("Loading Page: " + url);
-	// 		$.get(url, function (data) {
-	// 				$("#application-body").html(data);
-	// 				stopLoad();
-	// 			}).fail(function(data) {
-	// 				stopLoad();
-	// 				console.log("Failed to load page.");
-	// 			if(callback != undefined)
-	// 				callback();
-	// 		});
-	// 	}
+	// End Application
+	// @note - Not used yet/ever.
+	// var endApplication = function(message, callback) {
+	// 	// @todo - End our session
+	// 	// @todo - Fix history bug here
+	// 	// Line below "fixs" history bug, but isn't ideal.
+	// 	location.reload();
+	// 	// Clear existing data in Application Container
+	// 	$.removeCookie('session');
+	// 	$("#app-panel").html("");
+	// 	$('#app-panel').addClass('hide');
+	// 	$('#app-nav').addClass('hide');
+	// 	$('#login-panel').removeClass('hide');
+		
+	// 	// Callback
+	// 	if(typeof callback === "function") {
+ //    	// Call it, since we have confirmed it is callable
+ //      callback();
+ //    }
 	// };
 
+	// Start Loading
+  var startLoad = function() {
+  	log("WebUI: Start Loader");
+    $('#loading').removeClass("hide");
+  };
+
+  // Stop Loading
+  var stopLoad = function() {
+  	log("WebUI: Stop Loader");
+    $('#loading').addClass("hide");
+  };
+
+  // Setup App Router
+  // Note: Sub routing (like /endowments/1) handled in modules.
+	var router = function(callback) {
+		log("WebUI: Starting router.");
+		History.Adapter.bind(window,'statechange',function() {
+			log("History: Event occured!")
+			crossroads.parse(document.location.pathname);
+  	});
+
+		// Handle Nav Bar Clicks woof
+		$(".nav-link a").on("click", function(e) {
+			if(!$(this).parent().hasClass("active")) {
+				History.pushState(null, document.title, $(this).attr('href'));
+			}
+			e.preventDefault();
+		});
+
+		// Routes
+		// Dashboard Route
+		crossroads.addRoute('/', function() {
+			startLoad();
+			loadPage('/ui/endowments.html', function() {
+				// Remove old active tabs
+				$(".nav-link").siblings().removeClass("active");
+				History.replaceState(null, 'giv2giv - Endowments', '/');
+				EndowmentsUI.start.dispatch();
+				// Set Nav Tab
+				$("#endowments-nav").addClass("active");
+			});
+		});
+
+		crossroads.addRoute('/donor', function() {
+			startLoad();
+			loadPage('/ui/donor.html', function() {
+				$(".nav-link").siblings().removeClass("active");
+				History.replaceState(null, 'giv2giv - Donor', '/donor');
+				// Load JS
+				DonorUI.start.dispatch();
+				// Set Nav Tab
+				$("#donor-nav").addClass("active");
+			});
+		});
+
+		crossroads.addRoute('/numbers', function() {
+			startLoad();
+			loadPage('/ui/numbers.html', function() {
+				$(".nav-link").siblings().removeClass("active");
+				History.replaceState(null, 'giv2giv - Numbers', '/numbers');
+				NumbersUI.start.dispatch();
+				// Set Nav Tab
+				$("#numbers-nav").addClass("active");
+			});
+		});
+
+		// Callbacks
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
+	};
+
+	// Load HTML Page
+	function loadPage(url, callback) {
+		log("WebUI: Loading Page HTML: " + url);
+		$.get(url, function (data) {
+			log("WebUI: Loaded page.")
+			$("#app-panel").html(data);
+			reloadUI();
+		}).fail(function(data) {
+			log("WebUI: Failed to load page.");
+		});
+
+		// Callback
+		if(typeof callback === "function") {
+  		// Call it, since we have confirmed it is callable
+    	callback();
+  	}
+	}
+
+	// Reload UI
+	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
+	function reloadUI() {
+		// Initialize tabs
+		$('[data-toggle="tabs"] a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
+	}
+
+  // Finally expose bits
 	return {
 		init: function () {
-			// routing();
-			// startApplication();
+			// History Adapter
+			log("WebUI: Init Start");
+			router(function() {
+				startApplication();
+				log("WebUI: Init Complete");
+			});
 		}, startLoad: function () {
 			startLoad();
 		}, stopLoad: function () {
@@ -212,9 +304,9 @@ var G2G = function() {
 			showAlert(type, message, timeout);
 		}
 	};
-}();
+} ();
 
-/* Initialize WebApp when page loads */
+// DOM Loaded
 $(function() {
-	G2G.init();
+	WebUI.init();
 });
