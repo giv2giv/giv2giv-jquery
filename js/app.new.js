@@ -1,6 +1,10 @@
 // WebUI Application
 // Michael Thomas, 2014
 
+// Setup Stripe
+var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
+Stripe.setPublishableKey(stripe_pub_key);
+
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @todo - Send serious logs to server?
@@ -51,6 +55,13 @@ var WebUI = function() {
     }
 	};
 
+	// Logo Reload
+	$("#logo-main").on("click", function(e) {
+		console.log("Eh?");
+		History.replaceState(null, '', window.location.pathname);
+		e.preventDefault();
+	});
+
 	// Login Form
 	$("#login-frm").on("submit", function(e) {
 		// Build Payload
@@ -100,7 +111,7 @@ var WebUI = function() {
 		});
 		e.preventDefault();
 	});
-	
+
 	// Application Bits
 	// Display Application
 	var displayApplication = function(callback) {
@@ -227,7 +238,8 @@ var WebUI = function() {
 			loadPage('/ui/donor.html', function() {
 				$(".nav-link").siblings().removeClass("active");
 				History.replaceState(null, 'giv2giv - Donor', '/donor');
-				stopLoad();
+				// Load JS
+				DonorUI.start.dispatch();
 				// Set Nav Tab
 				$("#donor-nav").addClass("active");
 			});
@@ -238,7 +250,7 @@ var WebUI = function() {
 			loadPage('/ui/numbers.html', function() {
 				$(".nav-link").siblings().removeClass("active");
 				History.replaceState(null, 'giv2giv - Numbers', '/numbers');
-				stopLoad();
+				NumbersUI.start.dispatch();
 				// Set Nav Tab
 				$("#numbers-nav").addClass("active");
 			});
