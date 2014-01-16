@@ -44,7 +44,7 @@ function fetchSubscribedEndowments(callback) {
   			// Start Body & Name
   			var body = "<div class='info'><div class='title'>"+sub.endowment_name+"</div>";
   			// Donation Amount
-  			body += "<div class='desc'>Donation Amount: <strong>$"+sub.endowment_donation_amount+" ("+sub.endowment_donation_type+")</strong></div>";
+  			body += "<div class='desc'>Donation Amount: <strong>$"+sub.endowment_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.endowment_donation_type+")</strong></div>";
   			// # of Donors
   			if(sub.endowment_donor_count == 1) {
   				var donor_string = "donor";
@@ -53,10 +53,10 @@ function fetchSubscribedEndowments(callback) {
   			}
   			body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> "+donor_string+".</div>";
   			// Donor Balance
-  			body += "<div class='desc'>My Balance: <strong>$"+sub.endowment_donor_current_balance+"</strong>.</div>";
+  			body += "<div class='desc'>My Balance: <strong>$"+sub.endowment_donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
   			body += "<div class='desc'><strong>"+sub.endowment_donor_total_donations+"</strong> donations.</div>";
   			// Endowment Balance & Donations
-  			body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance+"</strong>.</div>";
+  			body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
   			body += "<div class='desc'><strong>"+sub.endowment_total_donations+"</strong> total donations.</div>";
   			// Action Buttons
   			var actions = "<div class='bottom'><button class='btn btn-success'>More Details</button> <button class='btn btn-danger'>Unsubscribe</button></div>";
