@@ -55,7 +55,6 @@ var WebUI = function() {
 	$("#login-frm").on("submit", function(e) {
 		// Build Payload
 		var payload = JSON.stringify({ "email" : $("#signin-email").val(), "password" : $("#signin-password").val() });
-		log(payload);
 		$.ajax({
 			url: "https://api.giv2giv.org/api/sessions/create.json",
 			type: "POST",
@@ -70,7 +69,6 @@ var WebUI = function() {
 		 		});
 		 		// Set Cookie
 		 		$.cookie('session', data.session.session.token);
-			 	hideLogin();
 			  startApplication();
 			},
 			error: function(data) {
@@ -113,7 +111,6 @@ var WebUI = function() {
 			// Set Header
 			$.ajaxSetup({
  				beforeSend: function(xhr, settings) {
- 					log($.cookie('session'));
 	 				xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
 				}
 			});
@@ -121,15 +118,14 @@ var WebUI = function() {
 			$.get("https://api.giv2giv.org/api/donors.json").success(function(data) {
 				// Load Dashboard (routing)
 				log("WebUI: Valid session, loading application.");
-				log("WebUI: Parsing page " + window.location.pathname);
-				
-				crossroads.parse(window.location.pathname);
+				log("WebUI: Initial Page " + window.location.pathname);
+				// Load Current URL
+				History.replaceState(null, 'Loading...', window.location.pathname);
 				// Set Donor Name
 				$("#donor-name").html(data.donor.name);
+				hideLogin();
 				// Display Application
-				displayApplication(function() {
-					stopLoad();
-				});
+				displayApplication();
 			}).error(function(data) {
 				if(data.statusText == "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Login.");
@@ -146,12 +142,15 @@ var WebUI = function() {
 
 	// End Application
 	var endApplication = function(message, callback) {
-		message = typeof message !== 'undefined' ? message : "";
+		// @todo - End our session
+		// @todo - Fix history bug here
 		// Clear existing data in Application Container
+		$.removeCookie('session');
 		$("#app-panel").html("");
 		$('#app-panel').addClass('hide');
+		$('#app-nav').addClass('hide');
 		$('#login-panel').removeClass('hide');
-
+		
 		// Callback
 		if(typeof callback === "function") {
     	// Call it, since we have confirmed it is callable
@@ -162,65 +161,91 @@ var WebUI = function() {
 	// Start Loading
   var startLoad = function() {
   	log("WebUI: Start Loader");
-    $('.logo-loading').show();
+    $('#loading').removeClass("hide");
   };
 
   // Stop Loading
   var stopLoad = function() {
   	log("WebUI: Stop Loader");
-    $('.logo-loading').hide();
+    $('#loading').addClass("hide");
   };
 
   // Setup App Router
   // Note: Sub routing (like /endowments/1) handled in modules.
-	var router = function() {
+	var router = function(callback) {
 		log("WebUI: Starting router.");
-		// Handle Nav Bar Clicks
-		$(".nav li a").on("click", function(e) {
-			crossroads.parse($(this).attr("href"));
+		History.Adapter.bind(window,'statechange',function() {
+			crossroads.parse(document.location.pathname);
+  	});
+
+		// Handle Logout Button
+		$("#logout-btn").on("click", function(e) {
+			log("WebUI: Logout.");
+			endApplication(function() {
+				displayLogin();
+			});
 			e.preventDefault();
 		});
 
+		// Handle Nav Bar Clicks
+		$(".nav-link a").on("click", function(e) {
+			if(!$(this).parent().hasClass("active")) {
+				History.pushState(null, 'Loading...', $(this).attr('href'));
+			}
+			e.preventDefault();
+		});
+
+		// Routes
 		// Dashboard Route
 		crossroads.addRoute('/', function() {
-			log("WebUI: Loading Dashboard");
+			startLoad();
 			loadPage('/ui/dashboard.html', function() {
-				// Execute Dashboard Module
-				History.pushState(null, 'giv2giv - Dashboard', '/');
+				// Remove old active tabs
+				$(".nav-link").siblings().removeClass("active");
+				History.replaceState(null, 'giv2giv - Dashboard', '/');
+				stopLoad();
+				// Set Nav Tab
+				$("#endowments-nav").addClass("active");
 			});
 		});
 
-		// Dashboard Route
 		crossroads.addRoute('/donor', function() {
-			log("WebUI: Loading Donor");
+			startLoad();
 			loadPage('/ui/donor.html', function() {
-				// Execute Donor Module
-				DonorUI.init();
-				History.pushState(null, 'giv2giv - Donor', '/donor');
+				$(".nav-link").siblings().removeClass("active");
+				History.replaceState(null, 'giv2giv - Donor', '/donor');
+				stopLoad();
+				// Set Nav Tab
+				$("#donor-nav").addClass("active");
 			});
 		});
 
-		// Dashboard Route
 		crossroads.addRoute('/numbers', function() {
-			log("WebUI: Loading Numbers");
+			startLoad();
 			loadPage('/ui/numbers.html', function() {
-				// Execute Numbers Module
-				History.pushState(null, 'giv2giv - Numbers', '/numbers');
+				$(".nav-link").siblings().removeClass("active");
+				History.replaceState(null, 'giv2giv - Numbers', '/numbers');
+				stopLoad();
+				// Set Nav Tab
+				$("#numbers-nav").addClass("active");
 			});
 		});
 
-		// Log all routes
-		crossroads.routed.add(log, console);
+		// Callbacks
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
 	};
 
 	// Load HTML Page
 	function loadPage(url, callback) {
 		log("WebUI: Loading Page HTML: " + url);
 		$.get(url, function (data) {
+			log("WebUI: Loaded page.")
 			$("#app-panel").html(data);
-			stopLoad();
+			reloadUI();
 		}).fail(function(data) {
-			stopLoad();
 			log("WebUI: Failed to load page.");
 		});
 
@@ -231,11 +256,22 @@ var WebUI = function() {
   	}
 	}
 
+	// Reload UI
+	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
+	function reloadUI() {
+		// Initialize tabs
+		$('[data-toggle="tabs"] a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
+	}
+
   // Finally expose bits
 	return {
 		init: function () {
-			router();
-			startApplication();
+			// History Adapter
+			log("WebUI: Init Start");
+			router(function() {
+				startApplication();
+				log("WebUI: Init Complete");
+			});
 		}, startLoad: function () {
 			startLoad();
 		}, stopLoad: function () {

@@ -75,7 +75,6 @@ var DonorUI = function() {
 
 	// Load UI
 	var ui = function() {
-		log("Woot");
 		// Add account button
   	$('#add-account-btn').on("click", function(e) {
   		$("#add-payment-frm").submit();

@@ -1,5 +1,8 @@
+$(function() {
+
 // submit for statement form
-$("#donor_statement_form").on("submit", function(e) {
+$("#donor_statement_button").on("click", function(e) {
+
 	// Get our statement.html & turn into something we can use
 	$.get('statement.html', function(data) {
 		// success, create object
@@ -14,20 +17,20 @@ $("#donor_statement_form").on("submit", function(e) {
 			dataType:"json",
 
 		  success: function(response) {
-				// need to do response.donations.each
+				
 				// response looks like: {"donations":[{"donation":{"created_at":"2013-12-01T01:52:34Z","donor_id":6,"endowment_id":11,"gross_amount":333.0,"id":3,"net_amount":323.043,"payment_account_id":2,"shares_added":"0.00323043","transaction_fees":9.957,"updated_at":"2013-12-01T01:52:34Z"}}],"total":333.0}
-	    	// dummy data
-	    	var donations = [{ date: 'funDate', description: "funDescription", amount: "funAmount" }];
-	    	// access our statement dom & loop table
-	    	$.each(donations, function(k, v) {
-	    		var $row = $statement.find('tbody:last').append('<tr></tr>');
-	    		// console.log($row);
-	    		// And now each bit for our row
-	    		//var $col = $statement.find('tr:last').append('<td>' + v + '</td>');
-	    	 
-	    		
+	    	 	
+	    	$.each(response.donations, function(k, v) {
+	    		var $row = $statement.find('tbody:last').append('<tr></tr>');		
+					// And now each bit for our row
+					var $col = $statement.find('tr:last').append('<td>' + v.donation.created_at + '</td>');
+					var $col = $statement.find('tr:last').append('<td>Endowment_id: ' + v.donation.endowment_id + '</td>');
+					var $col = $statement.find('tr:last').append('<td>' + v.donation.gross_amount + '</td>');
 
 	    	});
+
+	    	$statement.find('#statement-total').html("<span>Total:</span>" + response.total);
+
 	    	// and open new window/render
 	    	var popup = window.open();
 	    	var html = $('<html>').append($statement).html();
@@ -43,7 +46,9 @@ $("#donor_statement_form").on("submit", function(e) {
 	});
 	// display statement.html
 	e.preventDefault();
+
 });
+
 
 // $.("#statement-print").on("click", function(e) {
     
@@ -51,7 +56,7 @@ $("#donor_statement_form").on("submit", function(e) {
 
 // });
 
-$(function() {
+
 	
   $('#donor_statement_year').on("change", function(e) {
   	
