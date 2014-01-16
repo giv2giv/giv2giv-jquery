@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>giv2giv &middot; Statement</title>
+      <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="">
+
+    <!-- Le styles -->
+      <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+      <link href="css/bootplus.css" rel="stylesheet">
+      <link href="css/statement.css" rel="stylesheet">
+      <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .hero-unit {
+          padding: 60px;
+      }
+      @media (max-width: 980px) {
+        /* Enable use of floated navbar text */
+        .navbar-text.pull-right {
+          float: none;
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+      </style>
+      <link href="css/bootplus-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+
+
+    <!-- template for statement rows -->
+		<script id="donation-row-template" type="text/x-jquery-tmpl">
+      <tr>
+
+      </tr>
+    </script>
+
+
+   </head>
+
+  <body>
+
+    <section id="main">
+        
+        <div id="main-content">
+
+            <div id="statement-toolbar" class="btn-toolbar">
+            	<div class="control-group">
+                  <label class="control-label" for="donor_statement_year">Statement Year</label>
+                  <div class="controls">
+                    <select id="donor_statement_year">
+                      <option value="2014" selected="selected">2014</option> 
+                  	</select>
+                  </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="statement-print" class="btn">
+                        <i class="icol-printer"></i> Print statement
+                    </button>
+                </div>
+            </div>
+
+            <div class="statement paper-stack">
+                <div class="statement-header clearfix">
+                    <div class="statement-logo">
+                        <img src="/images/giv2giv.org.png" alt="">
+                    </div>
+                    <div class="statement-company">
+                        giv2giv, Incorporated<br>
+                        190 Doe Hill Drive<br>
+                        Churchville, VA 24421<br>
+                    </div>
+                </div>
+                <div class="statement-sub clearfix">
+                    <div class="statement-to">
+                        <span class="statement-caption">Donor:</span>
+                        VampireFactory, Ltd.<br>
+                        847, Neverland<br>
+                        South Pole, 4918<br>
+                        +999 5781 5354
+                    </div>
+                    <div class="statement-info">
+                        <span class="statement-caption">statement</span>
+                        <ul>
+                            <li>statement ID: <span>GNF-53123</span></li>
+                            <li>statement Date: <span>October 25, 2012</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="statement-content clearfix">
+                    <table id="statement-table" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Donation Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                    <div class="statement-total">
+                        <span>Total:</span> $6,600.00
+                    </div>
+                </div>
+            </div>
+
+        </div>
+      </section>
+
+  </body>
+</html>

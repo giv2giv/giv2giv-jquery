@@ -1,5 +1,8 @@
-// donor.js
-// functions we'll use more than once
+// Donor UI
+// Michael Thomas, 2014
+
+// Functions
+// Fetch Payment Accounts
 function fetchPaymentAccounts() {
 	// Get Payment Accounts
 	$.ajax({
@@ -36,36 +39,13 @@ function fetchPaymentAccounts() {
 			}
 	  },
 	  failure: function(data) {
-	  	console.log(data);
+	  	log(data);
 	  }
 	});
 }
 
-$(function() {
-	// Set Stripe Key
-	var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
-	var stripe_secret_key = '';
-
-	Stripe.setPublishableKey(stripe_pub_key);
-
-	// Check Login
-	if($.cookie('session')) {
-		$.ajaxSetup({
- 			beforeSend: function(xhr, settings) {
-	 			xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
-			}
-		});
-	} else {
-		window.location.href = "index.html";
-	}
-
-	// Load Tabs
-	$('#donorTabs a').click(function (e) {
-	  e.preventDefault();
-	  $(this).tab('show');
-	});
-
-	// Get Donor Profile
+// Fetch Donor Profile
+function fetchDonorProfile() {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors.json',
 	  method: 'GET',
@@ -83,155 +63,130 @@ $(function() {
 	  	$("#donor_profile_phone").val(data.donor.phone);
 	  },
 	  failure: function(data) {
-	  	console.log(data);
+	  	log(data);
 	  	window.location.href = "index.html";
 	  }
 	});
+}
 
+var DonorUI = function() {
 	// Get Payment Accounts
 	fetchPaymentAccounts();
 
-	// Get Donor Statement
-	var statement_start_date = new Date($("#donor_statement_year").val(),0,1);
-	var statement_end_date = new Date($("#donor_statement_year").val(),11,31);
-	var pretty_start_date = statement_start_date.getFullYear() + "-" + statement_start_date.getMonth() + "-" + statement_start_date.getDate();
-	var pretty_end_date = statement_end_date.getFullYear() + "-" + statement_end_date.getMonth() + "-" + statement_end_date.getDate();
+	// Load UI
+	var ui = function() {
+		log("Woot");
+		// Add account button
+  	$('#add-account-btn').on("click", function(e) {
+  		$("#add-payment-frm").submit();
+  		e.preventDefault();
+  	});
 
-	$.ajax({
-	  url: 'https://api.giv2giv.org/api/donors/donations.json',
-	  method: 'GET',
-	  data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
-		contentType: "application/json",
-		dataType:"json",
+	  $('#add-payment-frm').on("submit", function(e) {
+	    var $form = $(this);
+	   	// Disable the submit button to prevent repeated clicks
+	    $("#add-account-btn").prop('disabled', true);
+	    Stripe.card.createToken($form, stripeResponseHandler);
+	    e.preventDefault();
+	  });
 
-	  success: function(data) {
-			console.log(data)
-			// need to do data.donations.each
-			// response looks like: {"donations":[{"donation":{"created_at":"2013-12-01T01:52:34Z","donor_id":6,"endowment_id":11,"gross_amount":333.0,"id":3,"net_amount":323.043,"payment_account_id":2,"shares_added":"0.00323043","transaction_fees":9.957,"updated_at":"2013-12-01T01:52:34Z"}}],"total":333.0}
-
-	  },
-	  failure: function(data) {
-	  	console.log(data);
-	  	window.location.href = "index.html";
-	  }
-	});
-
-
-	// Update Donor Profile
-	$("#donor_profile_form").on("submit", function(e) {
-		// Setup payload
-		var donor = {};
-		donor['name'] = $("#donor_profile_name").val();
-		donor['email'] = $("#donor_profile_email").val();
-		donor['address'] = $("#donor_profile_addresss").val();
-		donor['city'] = $("#donor_profile_city").val();
-		donor['state'] = $("#donor_profile_state").val();
-		donor['zip'] = $("#donor_profile_zip").val();
-		donor['phone'] = $("#donor_profile_phone").val();
-		var payload = JSON.stringify(donor);
-
-		$.ajax({
-			url: "https://api.giv2giv.org/api/donors.json",
-			type: "PUT",
-			data: payload,
-			contentType: "application/json",
-			dataType:"json",
-			success: function (data) {
-				console.log("Success!");
-			},
-			fail: function(data) {
-				var res = JSON.parse(data.responseText);
-					console.log("[error]: " + res.message);
-			}
+		// Load Tabs
+		$('#donor-tabs li a').on("click", function (e) {
+		  e.preventDefault();
+		  console.log("Wooof");
+		  $(this).tab('show');
+		  e.preventDefault();
 		});
-		e.preventDefault();
-	});
 
-  // stripe
-  // stripe handler
-	var stripeResponseHandler = function(status, response) {
-    var $form = $('#add_payment_form');
-
-    if (response.error) {
-      // Show the errors on the form
-      $form.find('.payment-errors').text(response.error.message);
-    	$("#add_account_btn").prop('disabled', false);
-    	console.log(response.error);
-    } else {
-      // token contains id, last4, and card type
-      var token = response.id;
-      // Insert the token into the form so it gets submitted to the server
-      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-      // and add token to g2g
-			console.log(response);
-			var payment = {};
-			payment['processor'] = "stripe";
-			payment['stripeToken'] = response.id;
-			var payload = JSON.stringify(payment);
+		// Update Donor Profile
+		$("#donor-profile-frm").on("submit", function(e) {
+			// Setup payload
+			var donor = {};
+			donor['name'] = $("#donor_profile_name").val();
+			donor['email'] = $("#donor_profile_email").val();
+			donor['address'] = $("#donor_profile_addresss").val();
+			donor['city'] = $("#donor_profile_city").val();
+			donor['state'] = $("#donor_profile_state").val();
+			donor['zip'] = $("#donor_profile_zip").val();
+			donor['phone'] = $("#donor_profile_phone").val();
+			var payload = JSON.stringify(donor);
 
 			$.ajax({
-				url: "https://api.giv2giv.org/api/donors/payment_accounts.json",
-				type: "POST",
+				url: "https://api.giv2giv.org/api/donors.json",
+				type: "PUT",
 				data: payload,
 				contentType: "application/json",
 				dataType:"json",
 				success: function (data) {
-					// Success
-					// Hide Modal
-    			$("#add_payment_modal").modal('hide');
-					// Clear Form
-					$("#add_payment_form")[0].reset();
-    			$("#add_account_btn").prop('disabled', false);
-    			// Reload Payment Accounts
-    			fetchPaymentAccounts();
+					log("Success!");
 				},
 				fail: function(data) {
 					var res = JSON.parse(data.responseText);
-						console.log("[error]: " + res.message);
+						log("[error]: " + res.message);
 				}
 			});
+			e.preventDefault();
+		});
+	};
+
+  // Stripe
+  var stripe = function() {
+  	// Set Stripe Key
+		var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
+		Stripe.setPublishableKey(stripe_pub_key);
+  	
+  	// Response Handler
+		var stripeResponseHandler = function(status, response) {
+    	var $form = $('#add_payment_form');
+
+    	if (response.error) {
+	      // Show the errors on the form
+	      $form.find('.payment-errors').text(response.error.message);
+	    	$("#add-account-btn").prop('disabled', false);
+	    	log(response.error);
+	    } else {
+	      // token contains id, last4, and card type
+	      var token = response.id;
+	      // Insert the token into the form so it gets submitted to the server
+	      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+	      // and add token to g2g
+				log(response);
+				var payment = {};
+				payment['processor'] = "stripe";
+				payment['stripeToken'] = response.id;
+				var payload = JSON.stringify(payment);
+
+				$.ajax({
+					url: "https://api.giv2giv.org/api/donors/payment_accounts.json",
+					type: "POST",
+					data: payload,
+					contentType: "application/json",
+					dataType:"json",
+					success: function (data) {
+						// Success
+						// Hide Modal
+	    			$("#add-payment-modal").modal('hide');
+						// Clear Form
+						$("#add-payment-form")[0].reset();
+	    			$("#add-account-btn").prop('disabled', false);
+	    			// Reload Payment Accounts
+	    			fetchPaymentAccounts();
+					},
+					fail: function(data) {
+						var res = JSON.parse(data.responseText);
+							log("[error]: " + res.message);
+					}
+				});
+    	}
     }
   };
 
-
-	//$('[data-numeric]').payment('restrictNumeric');
-  $('.cc-number').payment('formatCardNumber');
-  $('.cc-exp').payment('formatCardExpiry');
-  $('.cc-cvc').payment('formatCardCVC');
-
-  // Add account button
-  $('#add_account_btn').on("click", function(e) {
-  	$("#add_payment_form").submit();
-  	e.preventDefault();
-  });
-
-  $('#add_payment_form').submit(function(e) {
-    var $form = $(this);
-
-    // Disable the submit button to prevent repeated clicks
-    $("#add_account_btn").prop('disabled', true);
-
-    // $('input').removeClass('invalid');
-    // $('.validation').removeClass('passed failed');
-
-    //var cardType = $.payment.cardType($('.cc-number').val());
-
-    // $('.cc-number').toggleClass('invalid', !$.payment.validateCardNumber($('.cc-number').val()));
-    // $('.cc-exp').toggleClass('invalid', !$.payment.validateCardExpiry($('.cc-exp').payment('cardExpiryVal')));
-    // $('.cc-cvc').toggleClass('invalid', !$.payment.validateCardCVC($('.cc-cvc').val(), cardType));
-
-    // if ( $('input.invalid').length ) {
-    //   $('.validation').addClass('failed');
-    // } else {
-    //   $('.validation').addClass('passed');
-    // }
-
-    Stripe.card.createToken($form, stripeResponseHandler);
-
-    // Prevent the form from submitting with the default action
-    e.preventDefault();
-  });
-
-
-
-});
+	return {
+		init: function () {
+			// Methods
+			log("DonorUI: Start");
+			ui();
+			stripe();
+		}
+	};
+}();

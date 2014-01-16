@@ -154,7 +154,7 @@ var G2G = function() {
 	});
 
 	// Logout Button
-	$("#logout_btn").on("click", function(e) {
+	$("#logout-btn").on("click", function(e) {
 		// unset cookie
 		$.removeCookie('session');
 		window.location.href = "index.html";
