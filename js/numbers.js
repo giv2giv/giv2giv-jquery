@@ -1,4 +1,4 @@
-// Donor UI
+// Numbers UI
 // Michael Thomas, 2014
 
 // Signal Hook
@@ -9,10 +9,10 @@ var NumbersUI = {
 // Add Listener
 NumbersUI.start.add(onStart);
 
-// (Re)Start Donor UI
+// (Re)Start Numbers UI
 function onStart() {
 	WebUI.startLoad();
-	// Load Donor Profile
+	// Load Stats
 	fetchStats(function() {
 		WebUI.stopLoad();
 	});

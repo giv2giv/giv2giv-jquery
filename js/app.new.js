@@ -227,7 +227,7 @@ var WebUI = function() {
 				// Remove old active tabs
 				$(".nav-link").siblings().removeClass("active");
 				History.replaceState(null, 'giv2giv - Dashboard', '/');
-				stopLoad();
+				EndowmentsUI.start.dispatch();
 				// Set Nav Tab
 				$("#endowments-nav").addClass("active");
 			});

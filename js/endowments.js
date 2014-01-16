@@ -1,57 +1,51 @@
-$(function() {
-	// Check Login
-	if($.cookie('session')) {
-		$.ajaxSetup({
- 			beforeSend: function(xhr, settings) {
-	 			xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
-			}
+// Endowments UI
+// Michael Thomas, 2014
+
+// Signal Hook
+var EndowmentsUI = {
+	start : new signals.Signal() 
+};
+
+// Add Listener
+EndowmentsUI.start.add(onStart);
+
+// (Re)Start Endowments UI
+function onStart() {
+	WebUI.startLoad();
+	// Load Featured Endowments
+	fetchFeaturedEndowments(function() {
+		// Fetch Subscribed Endowments
+		fetchSubscribedEndowments(function() {
+			WebUI.stopLoad();
 		});
-	} else {
-		window.location.href = "index.html";
-	}
-
-	// Get Donor Name
-	$.ajax({
-	  url: 'https://api.giv2giv.org/api/donors.json',
-	  method: 'GET',
-	  data: {},
-	  success: function(data) {
-	  	// put donor name in nav bar
-	  	$("#donor_name").html(data.donor.name);
-	  },
-	  failure: function(data) {
-	  	console.log(data);
-	  	window.location.href = "index.html";
-	  }
 	});
+}
 
-	// Get my subscribed endowments
+// Get Subscribed Endowments
+function fetchSubscribedEndowments(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors/subscriptions.json',
 	  method: 'GET',
-	  data: {},
 	  success: function(data) {
-	  	console.log(data);
+	  	log(data);
 	  	// did we get anything
 	  	if(data.length == 0) {
 	  		// Display not found card
-	  		$("#my_not_found_card").removeClass('hide');
+	  		$("#sub-not-found-card").removeClass('hide');
 	  	} else {
-
+	  		// Parse Results Here
 	  	}
+	  	// Callback
+			if(typeof callback === "function") {
+	    	// Call it, since we have confirmed it is callable
+	      callback();
+	    }
 	  }
 	});
+}
 
-	// Search with typeahead
-	$('.typeahead').typeahead([
-		{
-			name: 'endowments',
-	    remote: 'https://api.giv2giv.org/api/endowment.json?query=%QUERY'
-		}
-	]);
-
-
-	//Search endowments (or "featured")
+// Get Featured Endowments
+function fetchFeaturedEndowments(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/endowment.json',
 	  method: 'GET',
@@ -60,14 +54,18 @@ $(function() {
 	    per_page: '10'
 	  },
 	  success: function(data) {
-	  	console.log(data);
-	  	// did we get anything
 	  	if(data.message == "Not found") {
 	  		// Display not found card
-	  		$("#not_found_card").removeClass('hide');
+	  		$("#featured-not-found-card").removeClass('hide');
 	  	} else {
-
+	  		// Display results
+	  		log(data);
 	  	}
+	  	// Callback
+			if(typeof callback === "function") {
+	    	// Call it, since we have confirmed it is callable
+	      callback();
+	    }
 	  }
 	});
-});
+}
