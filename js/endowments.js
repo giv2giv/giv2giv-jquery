@@ -43,6 +43,8 @@ function fetchSubscribedEndowments(callback) {
   			// Now Build A Card
   			// Start Body & Name
   			var body = "<div class='info'><div class='title'>"+sub.endowment_name+"</div>";
+        // Description
+        body += "<p><em>"+sub.endowment_description+"</em></p>";
   			// Donation Amount
   			body += "<div class='desc'>Donation Amount: <strong>$"+sub.endowment_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.endowment_donation_type+")</strong></div>";
   			// # of Donors
@@ -51,19 +53,23 @@ function fetchSubscribedEndowments(callback) {
   			} else {
   				var donor_string = "donors";
   			}
+        // Endowment Balance
+        body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
   			body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> "+donor_string+".</div>";
   			// Donor Balance
   			body += "<div class='desc'>My Balance: <strong>$"+sub.endowment_donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
   			body += "<div class='desc'><strong>"+sub.endowment_donor_total_donations+"</strong> donations.</div>";
   			// Endowment Balance & Donations
-  			body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
   			body += "<div class='desc'><strong>"+sub.endowment_total_donations+"</strong> total donations.</div>";
   			// Action Buttons
   			var actions = "<div class='bottom'><button class='btn btn-success'>More Details</button> <button class='btn btn-danger'>Unsubscribe</button></div>";
-  			var card_html = "<div class='span3'><div class='card hovercard'>"+body+"</div>"+actions+"</div></div>";
+  			var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
   			// Add the Card
-  			var $card = $("#sub-endowments").append(card_html);
+  			$("#sub-endowments").append(card_html);
   		});
+      // Finally Add the Create Endowment Card
+      var card = "<div class='span3'><div class='card add-endowment'></div></div>";
+      $("sub-endowments").append(card);
   	}
 	}).fail(function(data) {
 	  log(data);
@@ -91,8 +97,36 @@ function fetchFeaturedEndowments(callback) {
   		// Display not found card
   		$("#featured-not-found-card").removeClass('hide');
   	} else {
-  		// Display results
-  		log(data);
+      // Parse Results Here
+      var endowments = data.endowments;
+      $.each(endowments, function(k, v) {
+        // Now build a card
+        var sub = v;
+        var body = "<div class='info'><div class='title'>"+sub.name+"</div>";
+        // Description
+        body += "<p><em>"+sub.description+"</em></p>";
+        // Donation Amount
+        body += "<div class='desc'>Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
+        // # of Donors
+        if(sub.endowment_donor_count == 1) {
+          var donor_string = "donor";
+        } else {
+          var donor_string = "donors";
+        }
+        // Endowment Balance
+        body += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
+        body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> "+donor_string+".</div>";
+        // Donor Balance
+        body += "<div class='desc'>My Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
+        body += "<div class='desc'><strong>"+sub.my_balances.my_donations_count+"</strong> donations.</div>";
+        // Endowment Balance & Donations
+        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donations+"</strong> total donations.</div>";
+        // Action Buttons
+        var actions = "<div class='bottom'><button class='btn btn-success'>More Details</button> <button class='btn btn-danger'>Unsubscribe</button></div>";
+        var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
+        // Add the Card
+        var $card = $("#featured-endowments").append(card_html);
+      });
   	}
   }).fail(function(data) {
   	log(data);

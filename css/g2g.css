@@ -35,12 +35,6 @@ body {
   }
 }
 
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
 #wrap > .container {
   padding-top: 60px;
 }
@@ -50,4 +44,177 @@ body {
 
 code {
   font-size: 80%;
+}
+
+/* CSS Overrides */
+.navbar .brand {
+  display: block;
+  float: left;
+  padding: 7px 10px 7px;
+  margin-left: -20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #737373;
+  text-shadow: 0 1px 0 #ffffff;
+}
+
+.navbar .loading-brand {
+  display: block;
+  float: left;
+  padding: 12px 20px 12px;
+  margin-left: -20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #737373;
+  text-shadow: 0 1px 0 #ffffff;
+}
+
+.navbar-search {
+  position: relative;
+  float: left;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.navbar-search .search-query {
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-family: Roboto, arial, sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 1;
+}
+
+/* Endowment Cards */
+.card.endowment {
+  position: relative;
+  padding-top: 0;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.card.endowment .info {
+  padding: 4px 8px 10px;
+}
+
+.card.endowment .info .title {
+  text-align: center;
+  margin-bottom: 4px;
+  font-size: 24px;
+  line-height: 1;
+  color: #262626;
+  vertical-align: middle;
+}
+
+.card.endowment .info .desc {
+  text-align: left;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 20px;
+  color: #737373;
+  text-overflow: ellipsis;
+}
+
+.card.endowment .bottom {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Add Endowment Cards */
+.card.add-endowment {
+  position: relative;
+  padding-top: 0;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.card.add-endowment .info {
+  padding: 4px 8px 10px;
+}
+
+.card.add-endowment .info .title {
+  text-align: center;
+  margin-bottom: 4px;
+  font-size: 24px;
+  line-height: 1;
+  color: #262626;
+  vertical-align: middle;
+}
+
+.card.add-endowment .info .desc {
+  text-align: left;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 20px;
+  color: #737373;
+  text-overflow: ellipsis;
+}
+
+/* typeahead.js */
+.twitter-typeahead .tt-query {
+  margin-bottom: 0;
+}
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+  color: #fff;
+}
+
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+/* Responsiveness */
+@media (min-width: 1200px) {
+  .card.endowment {
+    width: 300px;
+  }
+  .card.endowment .info .title {
+    font-size: 24px;
+  }
+}
+@media (min-width: 980px) and (max-width: 1199px) {
+  .card.endowment {
+    width: 240px;
+  }
+  .card.endowment .info .title {
+    font-size: 20px;
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  .card.endowment {
+    width: 180px;
+  }
+  .card.endowment .info .title {
+    font-size: 20px;
+  }
 }

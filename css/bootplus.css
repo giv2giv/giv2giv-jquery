@@ -3886,17 +3886,6 @@ input[type="submit"].btn.btn-mini {
   overflow: visible;
 }
 
-.navbar .brand {
-  display: block;
-  float: left;
-  padding: 12px 20px 12px;
-  margin-left: -20px;
-  font-size: 20px;
-  font-weight: 200;
-  color: #737373;
-  text-shadow: 0 1px 0 #ffffff;
-}
-
 .navbar .brand:hover,
 .navbar .brand:focus {
   text-decoration: none;
@@ -3982,25 +3971,6 @@ input[type="submit"].btn.btn-mini {
 .navbar-form .input-append input,
 .navbar-form .input-prepend input {
   margin-top: 0;
-}
-
-.navbar-search {
-  position: relative;
-  float: left;
-  margin-top: 7px;
-  margin-bottom: 0;
-}
-
-.navbar-search .search-query {
-  padding: 4px 14px;
-  margin-bottom: 0;
-  font-family: Roboto, arial, sans-serif;
-  font-size: 13px;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-border-radius: 15px;
-     -moz-border-radius: 15px;
-          border-radius: 15px;
 }
 
 .navbar-static-top {

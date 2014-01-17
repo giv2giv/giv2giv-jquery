@@ -143,12 +143,32 @@ function loadUI() {
 
 	// Statement Rendering Handlers
 	$("#donor-statement-button").on("click", function(e) {
+
+//    {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
+
 		// Get statement HTML
 		var popup = window.open();
 		$.get('ui/statement.html', function(data) {
 			// Parse HTML into Object
 			var $statement = $($.parseHTML(data));
 			// Now we need to get our statement data
+
+			// Get donor info
+			$.ajax({
+			  url: 'https://api.giv2giv.org/api/donors.json',
+			  method: 'GET',
+			  data: {},
+				contentType: "application/json",
+				dataType:"json"}).success(function(response) {
+					var donor_info = "Donor: <br />": response.donor.name + "<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip
+					$statement.find('#statement-donor-info').html(donor_info);
+		   	}).fail(function(data) {
+		    	// Close Window
+		    	popup.close();
+		    	growlError('Opps! There was an error loading your Statement.');
+		   });
+
+		  // Get donation info
 			$.ajax({
 			  url: 'https://api.giv2giv.org/api/donors/donations.json',
 			  method: 'GET',
@@ -163,6 +183,7 @@ function loadUI() {
 						var $col = $statement.find('tr:last').append('<td>' + v.donation.gross_amount + '</td>');
 					});
 					$statement.find('#statement-total').html("<span>Total:</span>" + response.total);
+					$statement.find('#statement-date-insert').html(response.timestamp);
 					// Open in new Window
 		    	var html = $('<html>').append($statement).html();
 		    	popup.document.write(html);

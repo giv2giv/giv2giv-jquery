@@ -91,6 +91,40 @@ var WebUI = function() {
 		e.preventDefault();
 	});
 
+	// Endowment Search
+	$('#endowment-search').typeahead({
+		remote: {
+			name: 'endowments',
+			url: "https://api.giv2giv.org/api/endowment.json?page=1&per_page=5&query=%QUERY",
+			filter: function(response) {
+				var results = [];
+				log(response);
+				$.each(response.endowments, function(key, value) {
+					var endowment = new Object();
+					log(value);
+					endowment['id'] = value.id;
+					endowment['value'] = value.name;
+					endowment['desc'] = value.description;
+					results.push(endowment);
+				});
+				return results;
+			},
+			maxParallelRequests: 1,
+			rateLimitWait: 500
+		},
+		template: [                                                                 
+  		'<p>{{value}} - {{desc}}</p>'                         
+		],
+		engine: Hogan,
+		limit: 5
+	}).on('typeahead:selected', function(obj, datum, name) {
+ 		console.log(obj);
+ 		console.log(datum);
+ 		console.log(name);
+ 		// Go to Endowment
+ 		History.pushState(null, document.title, "/endowment/" + datum.id);
+	});
+
 	// Login Form
 	$("#login-frm").on("submit", function(e) {
 		// Build Payload
@@ -261,6 +295,15 @@ var WebUI = function() {
 			});
 		});
 
+		// Endowment Details Route
+		crossroads.addRoute('/endowment/{id}', function(id) {
+			startLoad();
+			alert("Loaded endowment " + id);
+			History.replaceState(null, 'giv2giv - Endowment ' + id, '/endowment/'+id);
+			stopLoad();
+		});
+
+		// Donor Route
 		crossroads.addRoute('/donor', function() {
 			startLoad();
 			loadPage('/ui/donor.html', function() {
@@ -273,6 +316,7 @@ var WebUI = function() {
 			});
 		});
 
+		// Numbers Route
 		crossroads.addRoute('/numbers', function() {
 			startLoad();
 			loadPage('/ui/numbers.html', function() {
