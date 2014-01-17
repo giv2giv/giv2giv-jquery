@@ -1,10 +1,6 @@
 // WebUI Application
 // Michael Thomas, 2014
 
-// Setup Stripe
-var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
-Stripe.setPublishableKey(stripe_pub_key);
-
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @todo - Send serious logs to server?
@@ -16,35 +12,6 @@ log = function () {
       console.log(arguments[i]);
     }
   }
-}
-
-// Bootstrap Growl Helpers
-// Growl Error
-function growlError(message) {
-	$.bootstrapGrowl(message, {
-	  ele: 'body', // which element to append to
-	  type: 'error', // (null, 'info', 'error', 'success')
-	  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
-	  align: 'right', // ('left', 'right', or 'center')
-	  width: 'auto', // (integer, or 'auto')
-	  delay: 5000,
-	  allow_dismiss: true,
-	  stackup_spacing: 10 // spacing between consecutively stacked growls.
-	});
-}
-
-// Growl Success
-function growlSuccess(message) {
-	$.bootstrapGrowl(message, {
-	  ele: 'body', // which element to append to
-	  type: 'success', // (null, 'info', 'error', 'success')
-	  offset: {from: 'top', amount: 20}, // 'top', or 'bottom'
-	  align: 'right', // ('left', 'right', or 'center')
-	  width: 'auto', // (integer, or 'auto')
-	  delay: 5000,
-	  allow_dismiss: true,
-	  stackup_spacing: 10 // spacing between consecutively stacked growls.
-	});
 }
 
 // Main Application
@@ -84,13 +51,6 @@ var WebUI = function() {
     }
 	};
 
-	// Logo Reload
-	$("#logo-main").on("click", function(e) {
-		console.log("Eh?");
-		History.replaceState(null, '', window.location.pathname);
-		e.preventDefault();
-	});
-
 	// Login Form
 	$("#login-frm").on("submit", function(e) {
 		// Build Payload
@@ -118,24 +78,6 @@ var WebUI = function() {
 				} else {
 					log("WebUI: Login Error - " + res.message);
 				}
-			}
-		});
-		e.preventDefault();
-	});
-
-	// Handle Logout Button
-	$("#logout-btn").on("click", function(e) {
-		log("WebUI: Logout.");
-		$.ajax({
-			url: "https://api.giv2giv.org/api/sessions/destroy.json",
-			type: "POST",
-			contentType: "application/json",
-			dataType:"json",
-			success: function (data) {
-		 		// Delete Cookie
-		 		$.removeCookie('session');
-			  // Reload Page. Ensures everything is clear & gets around History bug /elegantly/
-			  location.pathname = '/';
 			}
 		});
 		e.preventDefault();
@@ -174,6 +116,7 @@ var WebUI = function() {
 			});
 			// Get Donor Info (and check session as a result)
 			$.get("https://api.giv2giv.org/api/donors.json").success(function(data) {
+				// Load Dashboard (routing)
 				log("WebUI: Valid session, loading application.");
 				log("WebUI: Initial Page " + window.location.pathname);
 				// Load Current URL
@@ -198,25 +141,24 @@ var WebUI = function() {
 	};
 
 	// End Application
-	// @note - Not used yet/ever.
-	// var endApplication = function(message, callback) {
-	// 	// @todo - End our session
-	// 	// @todo - Fix history bug here
-	// 	// Line below "fixs" history bug, but isn't ideal.
-	// 	location.reload();
-	// 	// Clear existing data in Application Container
-	// 	$.removeCookie('session');
-	// 	$("#app-panel").html("");
-	// 	$('#app-panel').addClass('hide');
-	// 	$('#app-nav').addClass('hide');
-	// 	$('#login-panel').removeClass('hide');
+	var endApplication = function(message, callback) {
+		// @todo - End our session
+		// @todo - Fix history bug here
+		// Line below "fixs" history bug, but isn't ideal.
+		location.reload();
+		// Clear existing data in Application Container
+		$.removeCookie('session');
+		$("#app-panel").html("");
+		$('#app-panel').addClass('hide');
+		$('#app-nav').addClass('hide');
+		$('#login-panel').removeClass('hide');
 		
-	// 	// Callback
-	// 	if(typeof callback === "function") {
- //    	// Call it, since we have confirmed it is callable
- //      callback();
- //    }
-	// };
+		// Callback
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
+	};
 
 	// Start Loading
   var startLoad = function() {
@@ -239,6 +181,15 @@ var WebUI = function() {
 			crossroads.parse(document.location.pathname);
   	});
 
+		// Handle Logout Button
+		$("#logout-btn").on("click", function(e) {
+			log("WebUI: Logout.");
+			endApplication(function() {
+				displayLogin();
+			});
+			e.preventDefault();
+		});
+
 		// Handle Nav Bar Clicks woof
 		$(".nav-link a").on("click", function(e) {
 			if(!$(this).parent().hasClass("active")) {
@@ -251,11 +202,11 @@ var WebUI = function() {
 		// Dashboard Route
 		crossroads.addRoute('/', function() {
 			startLoad();
-			loadPage('/ui/endowments.html', function() {
+			loadPage('/ui/dashboard.html', function() {
 				// Remove old active tabs
 				$(".nav-link").siblings().removeClass("active");
-				History.replaceState(null, 'giv2giv - Endowments', '/');
-				EndowmentsUI.start.dispatch();
+				History.replaceState(null, 'giv2giv - Dashboard', '/');
+				stopLoad();
 				// Set Nav Tab
 				$("#endowments-nav").addClass("active");
 			});
@@ -266,8 +217,7 @@ var WebUI = function() {
 			loadPage('/ui/donor.html', function() {
 				$(".nav-link").siblings().removeClass("active");
 				History.replaceState(null, 'giv2giv - Donor', '/donor');
-				// Load JS
-				DonorUI.start.dispatch();
+				stopLoad();
 				// Set Nav Tab
 				$("#donor-nav").addClass("active");
 			});
@@ -278,7 +228,7 @@ var WebUI = function() {
 			loadPage('/ui/numbers.html', function() {
 				$(".nav-link").siblings().removeClass("active");
 				History.replaceState(null, 'giv2giv - Numbers', '/numbers');
-				NumbersUI.start.dispatch();
+				stopLoad();
 				// Set Nav Tab
 				$("#numbers-nav").addClass("active");
 			});
