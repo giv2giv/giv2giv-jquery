@@ -4,6 +4,7 @@
 html,
 body {
   height: 100%;
+  background: url(/images/grid.png);
   /* The html and body elements cannot have any padding or margin. */
 }
 
