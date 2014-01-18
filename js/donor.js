@@ -160,7 +160,7 @@ function loadUI() {
 			  data: {},
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
-					var donor_info = "Donor: <br />": response.donor.name + "<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip
+					var donor_info = "Donor: <br />" + response.donor.name + "(" + response.donor.email + ")<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip
 					$statement.find('#statement-donor-info').html(donor_info);
 		   	}).fail(function(data) {
 		    	// Close Window
@@ -182,8 +182,10 @@ function loadUI() {
 						var $col = $statement.find('tr:last').append('<td>Endowment_id: ' + v.donation.endowment_id + '</td>');
 						var $col = $statement.find('tr:last').append('<td>' + v.donation.gross_amount + '</td>');
 					});
-					$statement.find('#statement-total').html("<span>Total:</span>" + response.total);
-					$statement.find('#statement-date-insert').html(response.timestamp);
+					$statement.find('#statement-total').html("<span>Total: " + response.total + "</span>");
+					timestamp = new Date(response.timestamp * 1000);
+					pretty_timestamp = dateFormat(timestamp, "dddd, mmmm dS, yyyy, UTC:h:MM:ss TT Z");
+					$statement.find('#statement-date-insert').html(pretty_timestamp);
 					// Open in new Window
 		    	var html = $('<html>').append($statement).html();
 		    	popup.document.write(html);
