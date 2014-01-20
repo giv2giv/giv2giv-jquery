@@ -86,8 +86,8 @@ var WebUI = function() {
 
 	// Logo Reload
 	$("#logo-main").on("click", function(e) {
-		console.log("Eh?");
-		History.replaceState(null, '', window.location.pathname);
+		crossroads.resetState();
+		crossroads.parse(window.location.pathname);
 		e.preventDefault();
 	});
 
@@ -211,7 +211,7 @@ var WebUI = function() {
 				log("WebUI: Valid session, loading application.");
 				log("WebUI: Initial Page " + window.location.pathname);
 				// Load Current URL
-				History.replaceState(null, 'Loading...', window.location.pathname);
+				crossroads.parse(window.location.pathname);
 				// Set Donor Name
 				$("#donor-name").html(data.donor.name);
 				hideLogin();
@@ -268,15 +268,11 @@ var WebUI = function() {
   // Note: Sub routing (like /endowments/1) handled in modules.
 	var router = function(callback) {
 		log("WebUI: Starting router.");
-		History.Adapter.bind(window,'statechange',function() {
-			log("History: Event occured!")
-			crossroads.parse(document.location.pathname);
-  	});
 
 		// Handle Nav Bar Clicks woof
 		$(".nav-link a").on("click", function(e) {
 			if(!$(this).parent().hasClass("active")) {
-				History.pushState(null, document.title, $(this).attr('href'));
+				crossroads.parse($(this).attr('href'));
 			}
 			e.preventDefault();
 		});
@@ -344,13 +340,13 @@ var WebUI = function() {
 			reloadUI();
 		}).fail(function(data) {
 			log("WebUI: Failed to load page.");
+		}).always(function(data) {
+			// Callback
+			if(typeof callback === "function") {
+	  		// Call it, since we have confirmed it is callable
+	    	callback();
+	  	}
 		});
-
-		// Callback
-		if(typeof callback === "function") {
-  		// Call it, since we have confirmed it is callable
-    	callback();
-  	}
 	}
 
 	// Reload UI
