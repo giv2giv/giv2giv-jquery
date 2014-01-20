@@ -16,9 +16,46 @@ function onStart() {
 	fetchFeaturedEndowments(function() {
 		// Fetch Subscribed Endowments
 		fetchSubscribedEndowments(function() {
+      endowmentSelectors();
 			WebUI.stopLoad();
 		});
 	});
+}
+
+// Reload jQuery Selectors
+function endowmentSelectors() {
+  log("EndowmentsUI: Selectors");
+  $("#add-endowment-modal-save-and-continue").on("click", function(e) {
+    // Payload
+    var payload = {};
+    payload['name'] = $("#add-endowment-modal #endowment-name").val();
+    payload['minimum_donation_amount'] = $("#add-endowment-modal #endowment-min-donation").val();
+    payload['visibility'] = 'public';
+    if($("#add-endowment-modal #endowment-description").val().length > 0) {
+      payload['description'] = $("#add-endowment-modal #endowment-description").val();
+    }
+    var request_payload = JSON.stringify(payload);
+    // Submit & Wait
+    $.ajax({
+      url: 'https://api.giv2giv.org/api/endowment.json',
+      type: "POST",
+      data: request_payload,
+      contentType: "application/json",
+      dataType: "json"
+    }).done(function(data) {
+      log(data);
+    }).fail(function(data) {  
+      log(data.responseText);
+    });
+  });
+
+  $("#add-endowment").on("click", function(e) {
+    // Clean & Show Modal
+    $("#add-endowment-modal #endowment-name").val("");
+    $("#add-endowment-modal #endowment-desc").val("");
+    $("#add-endowment-modal").modal('show');
+    e.preventDefault();
+  });
 }
 
 // Get Subscribed Endowments
@@ -68,8 +105,13 @@ function fetchSubscribedEndowments(callback) {
   			$("#sub-endowments").append(card_html);
   		});
       // Finally Add the Create Endowment Card
-      var card = "<div class='span3'><div class='card add-endowment'></div></div>";
-      $("sub-endowments").append(card);
+      // Header
+      var add_body = "<div class='info'><div class='title'>Create New Endowment</div>";
+      // Description
+      add_body += "<p><em>Ready to make a difference?</em></p>";
+      add_body += "<div class='bottom'><button id='add-endowment' class='btn btn-success'>Create Endowment</button></div>";
+      var card = "<div class='span3'><div class='card endowment'>"+add_body+"</div></div>";
+      $("#sub-endowments").append(card);
   	}
 	}).fail(function(data) {
 	  log(data);

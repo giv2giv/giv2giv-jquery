@@ -30,3 +30,37 @@
     </div><!--/row-->
   </div><!--/span-->
 </div><!--/row-->
+
+<!-- Modals -->
+<div id="add-endowment-modal" class="modal hide">
+  <div class="modal-header">
+    <h3>Create New Endowment</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="endowment-name">Name</label>
+        <div class="controls">
+          <input type="text" id="endowment-name" placeholder="Endowment Name">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="endowment-min-donation">Minimum Donation Amount</label>
+        <div class="controls">
+          <input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="endowment-description">Description</label>
+        <div class="controls">
+            <textarea id="endowment-description" rows="3"></textarea>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+    <button id="add-endowment-modal-save-and-continue" class="btn btn-success">Save & Continue</a>
+  </div>
+</div>
