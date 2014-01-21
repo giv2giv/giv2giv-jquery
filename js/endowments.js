@@ -25,12 +25,14 @@ function onStart() {
 // Reload jQuery Selectors
 function endowmentSelectors() {
   log("EndowmentsUI: Selectors");
+
   $("#add-endowment-modal-save-and-continue").on("click", function(e) {
     // Payload
     var payload = {};
     payload['name'] = $("#add-endowment-modal #endowment-name").val();
     payload['minimum_donation_amount'] = $("#add-endowment-modal #endowment-min-donation").val();
-    payload['visibility'] = 'public';
+    payload['visibility'] = $("#add-endowment-modal input[name='visibility-radios']:checked").val();
+
     if($("#add-endowment-modal #endowment-description").val().length > 0) {
       payload['description'] = $("#add-endowment-modal #endowment-description").val();
     }
@@ -44,6 +46,8 @@ function endowmentSelectors() {
       dataType: "json"
     }).done(function(data) {
       log(data);
+      // Show Next Panel
+
     }).fail(function(data) {  
       log(data.responseText);
     });
@@ -137,6 +141,7 @@ function fetchFeaturedEndowments(callback) {
 	}).done(function(data) {
   	if(data.message == "Not found") {
   		// Display not found card
+      // @todo - Take out of row & add via code here - Spans won't fill page otherwise.
   		$("#featured-not-found-card").removeClass('hide');
   	} else {
       // Parse Results Here

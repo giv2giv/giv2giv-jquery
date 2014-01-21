@@ -37,27 +37,41 @@
     <h3>Create New Endowment</h3>
   </div>
   <div class="modal-body">
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label" for="endowment-name">Name</label>
-        <div class="controls">
-          <input type="text" id="endowment-name" placeholder="Endowment Name">
+    <div id="add-endowment-step-one">
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label" for="endowment-name">Name</label>
+          <div class="controls">
+            <input type="text" id="endowment-name" placeholder="Endowment Name">
+          </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="endowment-min-donation">Minimum Donation Amount</label>
-        <div class="controls">
-          <input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount">
+        <div class="control-group">
+          <label class="control-label" for="endowment-min-donation">Minimum Donation Amount</label>
+          <div class="controls">
+            <input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount">
+          </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="endowment-description">Description</label>
-        <div class="controls">
-            <textarea id="endowment-description" rows="3"></textarea>
+        <div class="control-group">
+          <label class="control-label" for="endowment-min-donation">Visibility</label>
+          <div class="controls">
+            <label class="radio">
+              <input type="radio" name="visibility-radios" id="public-radio" value="public" checked>
+              Public - Everyone on giv2giv can see and participate in this endowment.
+            </label>
+            <label class="radio">
+              <input type="radio" name="visibility-radios" id="private-radio" value="private">
+              Private - Only I can see and participate in this endowment.
+            </label>
+          </div>
         </div>
-      </div>
-
-    </form>
+        <div class="control-group">
+          <label class="control-label" for="endowment-description">Description</label>
+          <div class="controls">
+              <textarea id="endowment-description" rows="3"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
