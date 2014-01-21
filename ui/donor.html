@@ -5,7 +5,7 @@
       <div class="span12">
         <div class="card">
           <div class="card-heading simple">
-            <ul class="nav nav-tabs" data-toggle="tabs">
+            <ul class="nav nav-pills" data-toggle="tabs">
               <li class="active"><a href="#profile">Profile</a></li>
               <li><a href="#payment">Payment Accounts</a></li>
               <li><a href="#statement">Statement</a></li>
@@ -207,6 +207,18 @@
   </div>
   <div class="modal-footer">
     <h4><strong>* giv2giv never sees or stores your card information.</strong></h4>
-  
+  </div>
+</div>
+<!-- Remove Card Modal -->
+<div id="remove-payment-modal" class="modal hide">
+  <div class="modal-header">
+    <h3>Confirm Removal</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you would like to delete the payment account that ends in <strong id="remove-card-last-four"></strong>?</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+    <a href="#" id="confirm-payment-removal" data-id="" class="btn btn-success">Yes</a>
   </div>
 </div>

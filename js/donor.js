@@ -15,10 +15,11 @@ function onStart() {
 	// Load Donor Profile
 	fetchDonorProfile(function() {
 		// Load Payment Accounts
-		fetchPaymentAccounts();
-		// Load UI
-		loadUI();
-		WebUI.stopLoad();
+		fetchPaymentAccounts(function () {
+			// Load UI
+			loadUI();
+			WebUI.stopLoad();
+		});
 	});
 }
 
@@ -30,6 +31,7 @@ function fetchPaymentAccounts(callback) {
 	  url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
 	  method: 'GET',
 	}).done(function(data) {
+		log(data);
   	// Clear old data & hide things
 		$("#payment-accounts-table").find('tbody:last').html("");
 		$("#no-payment-accounts-card").addClass("hide");
@@ -53,12 +55,14 @@ function fetchPaymentAccounts(callback) {
 				$row.append("<td>"+card.type+"</td>");
 				$row.append("<td>"+card.last4+"</td>");
 				$row.append("<td>"+card.exp_month+"/"+card.exp_year+"</td>");
-				$row.append("<td>Actions Go Here</td>");
+				// Actions
+				// var actions = "<button data-id='' class='btn btn-primary'>Edit</button>";
+				var actions = "<button data-id='"+ii+"' data-last-four='"+card.last4+"' class='btn btn-danger remove-account-btn'>Remove</button>";
+				$row.append("<td>"+actions+"</td>");
 			});
 			$("#payment-accounts-card").removeClass("hide");
 		}
 	}).fail(function(data) {
-	  log(data);
 	  growlError("Opps! An error occured while loading your Payment Accounts.");
 	}).always(function() {
   	// Callbacks
@@ -97,6 +101,33 @@ function fetchDonorProfile(callback) {
 
 // Load UI
 function loadUI() {
+	// Remove Account Button
+	$('.remove-account-btn').on("click", function(e) {
+		// Clear old Modal Data
+		$("#remove-payment-modal #remove-card-last-four").html("");
+		$("#remove-payment-modal #confirm-payment-removal").attr("data-id", "");
+		// Set new Data
+		$("#remove-payment-modal #remove-card-last-four").html($(this).attr("data-last-four"));
+		$("#remove-payment-modal #confirm-payment-removal").attr("data-id", $(this).attr("data-id"));
+		// Show Modal
+		$("#remove-payment-modal").modal("show");
+	});
+
+	// Confirm Remove Account Button
+	$("#confirm-payment-removal").on("click", function(e) {
+		$.ajax({
+		  url: 'https://api.giv2giv.org/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
+		  method: 'DELETE'
+		}).done(function(data) {
+	  	log(data);
+		}).fail(function(data) {
+		  log(data);
+		  growlError("Opps! An error occured while removing this payment account.");
+		  $("#remove-payment-modal").modal("hide");
+		});
+	});
+
+	// Edit Account Button
 	// Add account button
 	$('#add-account-btn').on("click", function(e) {
 		$("#add-payment-frm").submit();
@@ -141,6 +172,39 @@ function loadUI() {
 		e.preventDefault();
 	});
 
+	/**
+	 * Return a timestamp with the format "m/d/yy h:MM:ss TT"
+	 * @type {Date}
+	 */
+	 
+	function prettify_timestamp(stamp) {
+		 
+	// Create an array with the current month, day and time
+	  var date = [ stamp.getMonth() + 1, stamp.getDate(), stamp.getFullYear() ];
+	 
+	// Create an array with the current hour, minute and second
+	  var time = [ stamp.getHours(), stamp.getMinutes(), stamp.getSeconds() ];
+	 
+	// Determine AM or PM suffix based on the hour
+	  var suffix = ( time[0] < 12 ) ? "AM" : "PM";
+	 
+	// Convert hour from military time
+	  time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+	 
+	// If hour is 0, set it to 12
+	  time[0] = time[0] || 12;
+	 
+	// If seconds and minutes are less than 10, add a zero
+	  for ( var i = 1; i < 3; i++ ) {
+	    if ( time[i] < 10 ) {
+	      time[i] = "0" + time[i];
+	    }
+	  }
+	 
+	// Return the formatted string
+	  return date.join("/") + " " + time.join(":") + " " + suffix;
+	}
+
 	// Statement Rendering Handlers
 	$("#donor-statement-button").on("click", function(e) {
 
@@ -151,7 +215,7 @@ function loadUI() {
 		$.get('ui/statement.html', function(data) {
 			// Parse HTML into Object
 			var $statement = $($.parseHTML(data));
-			// Now we need to get our statement data
+			// stamp we need to get our statement data
 
 			// Get donor info
 			$.ajax({
@@ -177,14 +241,14 @@ function loadUI() {
 				dataType:"json"}).success(function(response) {		    	 	
 		    	$.each(response.donations, function(k, v) {
 		    		var $row = $statement.find('tbody:last').append('<tr></tr>');		
-						// And now each bit for our row
+						// And stamp each bit for our row
 						var $col = $statement.find('tr:last').append('<td>' + v.donation.created_at + '</td>');
 						var $col = $statement.find('tr:last').append('<td>Endowment_id: ' + v.donation.endowment_id + '</td>');
 						var $col = $statement.find('tr:last').append('<td>' + v.donation.gross_amount + '</td>');
 					});
 					$statement.find('#statement-total').html("<span>Total: " + response.total + "</span>");
-					timestamp = new Date(response.timestamp * 1000);
-					pretty_timestamp = dateFormat(timestamp, "dddd, mmmm dS, yyyy, UTC:h:MM:ss TT Z");
+					ugly_timestamp = new Date(response.timestamp * 1000);
+					pretty_timestamp = prettify_timestamp(ugly_timestamp);
 					$statement.find('#statement-date-insert').html(pretty_timestamp);
 					// Open in new Window
 		    	var html = $('<html>').append($statement).html();

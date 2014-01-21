@@ -1,21 +1,16 @@
 // Statement Renderer
 // Michael Dream Team, 2014
 
-
-    /*
+$(document).ready(function () {     
  $.("#statement-print").on("click", function(e) {
    window.print();
  });
+});
 
-
+/*
 	
   $('#donor_statement_year').on("change", function(e) {
   	
-
-
-
-
-
 	  // Get Donor Statement
 		var statement_start_date = new Date($("#donor_statement_year").val(),0,1);
 		var statement_end_date = new Date($("#donor_statement_year").val(),11,31);

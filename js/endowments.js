@@ -47,7 +47,8 @@ function endowmentSelectors() {
     }).done(function(data) {
       log(data);
       // Show Next Panel
-
+      $("#add-endowment-step-one").addClass("hide");
+      $("#add-endowment-step-two").removeClass("hide");
     }).fail(function(data) {  
       log(data.responseText);
     });
