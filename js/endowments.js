@@ -54,6 +54,11 @@ function endowmentSelectors() {
     });
   });
 
+  $(".add-endowment-btn").on("click", function(e) {
+    $("#add-endowment").click();
+    e.preventDefault();
+  });
+
   $("#add-endowment").on("click", function(e) {
     // Clean & Show Modal
     $("#add-endowment-modal #endowment-name").val("");
@@ -73,7 +78,10 @@ function fetchSubscribedEndowments(callback) {
   	// did we get anything
   	if(data.length == 0) {
   		// Display not found card
-  		$("#sub-not-found-card").parent().removeClass('hide');
+      var card = "<div class='span3'><div class='card'><h2 class='card-heading simple'>No Subscriptions</h2>";
+      card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
+      card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div></div>";
+      $("#sub-endowments").append(card);
   	} else {
   		// Parse Results Here
   		$.each(data, function(k, v) {
@@ -104,7 +112,7 @@ function fetchSubscribedEndowments(callback) {
   			// Endowment Balance & Donations
   			body += "<div class='desc'><strong>"+sub.endowment_total_donations+"</strong> total donations.</div>";
   			// Action Buttons
-  			var actions = "<div class='bottom'><button class='btn btn-success'>More Details</button> <button class='btn btn-danger'>Unsubscribe</button></div>";
+  			var actions = "<div class='bottom'><button class='btn btn-primary'>More Details</button> <button class='btn btn-danger'>Unsubscribe</button></div>";
   			var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
   			// Add the Card
   			$("#sub-endowments").append(card_html);
@@ -142,8 +150,10 @@ function fetchFeaturedEndowments(callback) {
 	}).done(function(data) {
   	if(data.message == "Not found") {
   		// Display not found card
-      // @todo - Take out of row & add via code here - Spans won't fill page otherwise.
-  		$("#featured-not-found-card").removeClass('hide');
+      var card = "<div class='span3'><div class='card'><h2 class='card-heading simple'>No Endowments Yet.</h2>";
+      card += "<div class='card-body'><p>There are currently no giv2giv endowments yet.";
+      card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div></div>";
+  		$("#featured-endowments").append(card);
   	} else {
       // Parse Results Here
       var endowments = data.endowments;
@@ -170,7 +180,13 @@ function fetchFeaturedEndowments(callback) {
         // Endowment Balance & Donations
         body += "<div class='desc'><strong>"+sub.global_balances.endowment_donations+"</strong> total donations.</div>";
         // Action Buttons
-        var actions = "<div class='bottom'><button class='btn btn-success'>More Details</button> <button class='btn btn-danger'>Unsubscribe</button></div>";
+        var actions = "<div class='bottom'><button class='btn btn-primary'>More Details</button> ";
+        // Subscription Check
+        if(sub.my_balances.frequency == "") {
+          actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
+        } else {
+          actions += "<button data-id='"+sub.id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
+        }
         var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
         // Add the Card
         var $card = $("#featured-endowments").append(card_html);
