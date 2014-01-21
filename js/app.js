@@ -118,11 +118,8 @@ var WebUI = function() {
 		engine: Hogan,
 		limit: 5
 	}).on('typeahead:selected', function(obj, datum, name) {
- 		console.log(obj);
- 		console.log(datum);
- 		console.log(name);
  		// Go to Endowment
- 		History.pushState(null, document.title, "/endowment/" + datum.id);
+ 		crossroads.parse("/endowment/" + datum.id);
 	});
 
 	// Login Form
