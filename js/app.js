@@ -122,6 +122,72 @@ var WebUI = function() {
  		crossroads.parse("/endowment/" + datum.id);
 	});
 
+	// Show signup panel
+	$("#display-signup-btn").on("click", function(e) {
+		// Hide Login Panel
+		$("#login-panel").addClass("hide");
+		// Clean & Show Sign Up
+		$("#signup-name").val("");
+		$("#signup-email").val("");
+		$("#signup-password").val("");
+		$("#signup-panel").removeClass("hide");
+		e.preventDefault();
+	});
+
+	// Hide sign-up & return to login
+	$("#cancel-signup-btn").on("click", function(e) {
+		$("#signup-panel").addClass("hide");
+		$("#login-panel").removeClass("hide");
+		e.preventDefault();
+	});
+
+	// Signup Form
+	$("#signup-frm").on("submit", function(e) {
+		var payload = {};
+		payload['email'] = $("#signup-email").val();
+		payload['password'] = $("#signup-password").val();
+		payload['name'] = $("#signup-name").val();
+		var request = JSON.stringify(payload);
+		$.ajax({
+  		url: 'https://api.giv2giv.org/api/donors.json',
+  		method: 'POST',
+  		data: request,
+  		dataType: "json",
+  		contentType: "application/json"
+  	}).done(function(data) {
+  		// Success, now cheat and log the
+  		var payload = JSON.stringify({ "email" : $("#signup-email").val(), "password" : $("#signup-password").val() });
+			$.ajax({
+				url: "https://api.giv2giv.org/api/sessions/create.json",
+				type: "POST",
+				data: payload,
+				contentType: "application/json",
+				dataType:"json",
+				success: function (data) {
+					$.ajaxSetup({
+			 			beforeSend: function(xhr, settings) {
+				 			xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
+			  		}
+			 		});
+			 		// Set Cookie
+			 		$.cookie('session', data.session.session.token);
+				  startApplication();
+				},
+				error: function(data) {
+					var res = JSON.parse(data.responseText);
+					if(res.message == "unauthorized") {
+						$("#login-message").html("Incorrect Email or Password");
+					} else {
+						log("WebUI: Login Error - " + res.message);
+					}
+				}
+			});
+  	}).fail(function(data) {
+  		log(data);
+  	});
+		e.preventDefault();
+	});
+
 	// Login Form
 	$("#login-frm").on("submit", function(e) {
 		// Build Payload
@@ -227,27 +293,6 @@ var WebUI = function() {
       callback();
     }
 	};
-
-	// End Application
-	// @note - Not used yet/ever.
-	// var endApplication = function(message, callback) {
-	// 	// @todo - End our session
-	// 	// @todo - Fix history bug here
-	// 	// Line below "fixs" history bug, but isn't ideal.
-	// 	location.reload();
-	// 	// Clear existing data in Application Container
-	// 	$.removeCookie('session');
-	// 	$("#app-panel").html("");
-	// 	$('#app-panel').addClass('hide');
-	// 	$('#app-nav').addClass('hide');
-	// 	$('#login-panel').removeClass('hide');
-		
-	// 	// Callback
-	// 	if(typeof callback === "function") {
- //    	// Call it, since we have confirmed it is callable
- //      callback();
- //    }
-	// };
 
 	// Start Loading
   var startLoad = function() {

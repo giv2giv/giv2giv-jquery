@@ -86,7 +86,7 @@ function fetchDonorProfile(callback) {
   	$("#donor-profile-city").val(data.donor.city);
   	$("#donor-profile-state").val(data.donor.state);
   	$("#donor-profile-zip").val(data.donor.zip);
-  	$("#donor-profile-phone").val(data.donor.phone);
+  	$("#donor-profile-phone").val(data.donor.phone_number);
 	}).fail(function(data) {
 	  log(data);
 	  growlError("Opps! An error occured while loading your Donor Profile.");
@@ -117,19 +117,25 @@ function loadUI() {
 	$("#confirm-payment-removal").on("click", function(e) {
 		$.ajax({
 		  url: 'https://api.giv2giv.org/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
-		  method: 'DELETE'
+		  method: 'DELETE',
+		  contentType: "application/json",
+			dataType:"json"
 		}).done(function(data) {
-	  	log(data);
+	  	growlSuccess("Successfully removed payment account.")
+ 			$("#remove-payment-modal").modal("hide");
+ 			fetchPaymentAccounts();
 		}).fail(function(data) {
 		  log(data);
 		  growlError("Opps! An error occured while removing this payment account.");
 		  $("#remove-payment-modal").modal("hide");
 		});
+		e.preventDefault();
 	});
 
 	// Edit Account Button
 	// Add account button
 	$('#add-account-btn').on("click", function(e) {
+		log("Add Account");
 		$("#add-payment-frm").submit();
 		e.preventDefault();
 	});
@@ -148,11 +154,11 @@ function loadUI() {
 		var donor = {};
 		donor['name'] = $("#donor-profile-name").val();
 		donor['email'] = $("#donor-profile-email").val();
-		donor['address'] = $("#donor-profile-addresss").val();
+		donor['address'] = $("#donor-profile-address").val();
 		donor['city'] = $("#donor-profile-city").val();
 		donor['state'] = $("#donor-profile-state").val();
 		donor['zip'] = $("#donor-profile-zip").val();
-		donor['phone'] = $("#donor-profile-phone").val();
+		donor['phone_number'] = $("#donor-profile-phone").val();
 		var payload = JSON.stringify(donor);
 
 		$.ajax({
@@ -160,14 +166,13 @@ function loadUI() {
 			type: "PUT",
 			data: payload,
 			contentType: "application/json",
-			dataType:"json",
-			done: function (data) {
-				log("Success!");
-			},
-			fail: function(data) {
-				var res = JSON.parse(data.responseText);
-				log("[error]: " + res.message);
-			}
+			dataType:"json"
+		}).done(function (data) {
+			growlSuccess("Success! Profile updated.");
+		}).fail(function(data) {
+			growlError("An error occurred while updating your Donor Profile.");
+			var res = JSON.parse(data.responseText);
+			log("[error]: " + res.message);
 		});
 		e.preventDefault();
 	});
@@ -306,8 +311,7 @@ function loadUI() {
 
 // Stripe Response Handler
 var stripeResponseHandler = function(status, response) {
-	var $form = $('#add-payment-form');
-
+	var $form = $('#add-payment-frm');
 	if (response.error) {
     // Show the errors on the form
     $form.find('.payment-errors').text(response.error.message);
@@ -319,7 +323,6 @@ var stripeResponseHandler = function(status, response) {
     // Insert the token into the form so it gets submitted to the server
     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
     // and add token to g2g
-		log(response);
 		var payment = {};
 		payment['processor'] = "stripe";
 		payment['stripeToken'] = response.id;
@@ -330,21 +333,20 @@ var stripeResponseHandler = function(status, response) {
 			type: "POST",
 			data: payload,
 			contentType: "application/json",
-			dataType:"json",
-			done: function (data) {
-				// Success
-				// Hide Modal
-  			$("#add-payment-modal").modal('hide');
-				// Clear Form
-				$("#add-payment-form")[0].reset();
-  			$("#add-account-btn").prop('disabled', false);
-  			// Reload Payment Accounts
-  			fetchPaymentAccounts();
-			},
-			fail: function(data) {
-				var res = JSON.parse(data.responseText);
-					log("[error]: " + res.message);
-			}
+			dataType:"json"
+		}).done(function (data) {
+			log(data);
+			// Success
+			// Hide Modal
+			$("#add-payment-modal").modal('hide');
+			// Clear Form
+			$("#add-payment-frm")[0].reset();
+			$("#add-account-btn").prop('disabled', false);
+			// Reload Payment Accounts
+			fetchPaymentAccounts();
+		}).fail(function(data) {
+			var res = JSON.parse(data.responseText);
+			log("[error]: " + res.message);
 		});
 	}
 };

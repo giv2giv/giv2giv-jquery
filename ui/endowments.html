@@ -48,21 +48,42 @@
               <textarea id="endowment-description" rows="3"></textarea>
           </div>
         </div>
+        <div class="control-group">
+          <label class="control-label" for="add-endowment-charities">Charities</label>
+          <div class="controls">
+            <input type='hidden' id="add-endowment-charities" class="span11">
+          </div>
+        </div>
       </form>
     </div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-    <button id="add-endowment-modal-save-and-continue" class="btn btn-success">Save & Continue</a>
+    <button href="#" id="add-endowment-modal-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+    <button href="#" id="add-endowment-modal-save" class="btn btn-success">Save & Complete</button>
   </div>
 </div>
 <!-- Subscribe Modal -->
 <div id="subscribe-endowment-modal" class="modal hide">
   <div class="modal-header">
-    <h3>Subscribe to Endowment</h3>
+    <h3 id="subscribe-endowment-header">Subscribe to </h3>
   </div>
   <div class="modal-body">
-    <p>Form goes here.</p>
+    <form id="subcribe-endowment-modal-frm">
+      <p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
+      <div class="control-group">
+        <label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
+        <div class="controls">
+          <input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
+        <div class="controls">
+          <select id="subscribe-endowment-payment-accounts">
+          </select>
+        </div>
+      </div>
+    </form>
   </div>
   <div class="modal-footer">
     <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
@@ -72,7 +93,7 @@
 <!-- Unsubscribe Modal -->
 <div id="unsubscribe-endowment-modal" class="modal hide">
   <div class="modal-header">
-    <h3>Unsubscribe to Endowment</h3>
+    <h3 id="unsubscribe-endowment-header">Unsubscribe to Endowment</h3>
   </div>
   <div class="modal-body">
     <p>Are you sure you would like to unsubscribe to ?</p>

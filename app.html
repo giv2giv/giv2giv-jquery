@@ -15,6 +15,7 @@
       <link href="/css/bootplus.css" rel="stylesheet">
       <link href="/css/font-awesome.css" rel="stylesheet">
       <link href="/css/g2g.css" rel="stylesheet">
+      <link href="/css/select2.css" rel="stylesheet">
       <link href="/css/bootplus-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -77,8 +78,28 @@
                     <input id="signin-password" type="password" class="input-block-level" placeholder="Password">
                     <button class="btn btn-primary" type="submit">
                       Sign in
-                      <i class="icon-circle-arrow-right"></i>
                     </button>
+                    <button id="display-signup-btn" class="btn btn-success pull-right">
+                      Sign Up
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="signup-panel" class="hide">
+          <div class="row-fluid">
+            <div class="span4 offset4">
+              <div class="card">
+                <h2 class="card-heading simple">Sign Up</h2>
+                <div class="card-body">
+                  <form id="signup-frm" class="form-signin">
+                    <input type="text" id="signup-name" placeholder="Name">
+                    <input type="text" id="signup-email" placeholder="Email">
+                    <input type="password" id="signup-password" placeholder="Password">
+                    <button type="submit" class="btn btn-success">Create Account</button>
+                    <button id="cancel-signup-btn" type="button" class="btn btn-danger">Cancel</button>
                   </form>
                 </div>
               </div>
@@ -110,6 +131,7 @@
     <script src="/js/numbers.js"></script>
     <script src="/js/hogan-2.0.0.js"></script>
     <script src="/js/typeahead.min.js"></script>
+    <script src="/js/select2.min.js"></script>
     <script src="/js/app.js"></script>
    </body>
 </html>

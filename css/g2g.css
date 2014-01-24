@@ -161,7 +161,6 @@ code {
   text-overflow: ellipsis;
 }
 
-/* typeahead.js */
 .twitter-typeahead .tt-query {
   margin-bottom: 0;
 }
