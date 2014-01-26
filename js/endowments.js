@@ -3,11 +3,13 @@
 
 // Signal Hook
 var EndowmentsUI = {
-  start : new signals.Signal() 
+  start : new signals.Signal(),
+  details : new signals.Signal()
 };
 
 // Add Listener
 EndowmentsUI.start.add(onStart);
+EndowmentsUI.details.add(onDetails);
 
 // (Re)Start Endowments UI
 function onStart() {
@@ -19,6 +21,52 @@ function onStart() {
       endowmentSelectors();
       WebUI.stopLoad();
     });
+  });
+}
+
+// (Re)Start Endowments Detail UI
+function onDetails(endowment) {
+  WebUI.startLoad();
+  // Social Sharing Widget
+  $('#social-share').share({
+    networks: ['twitter','facebook','tumblr','pinterest','googleplus'],
+    orientation: 'vertical',
+    urlToShare: 'http://giv2giv.biscuitlabs.com/endowment/' + endowment.id,
+    affix: 'right center',
+    title: "giv2giv: " + endowment.name,
+    description: endowment.description
+  });
+
+  // Selectors
+  $("li a[href='#charities']").on('click', function(e) {
+    // Hide Details Cards
+    $("#endowment-charity-details").addClass("hide");
+  });
+
+  $("li a[href='#details']").on('click', function(e) {
+    // Show Details Cards
+    $("#endowment-charity-details").removeClass("hide");
+  });
+
+  // Header
+  $("#endowment-details-header").html("Details for " + endowment.name);
+  // Lead Description
+  $("#endowment-details-description").html(endowment.description);
+  $("#endowment-details-balance").html(endowment.global_balances.endowment_balance);
+  $("#endowment-details-donations").html(endowment.global_balances.endowment_donations);
+  $("#endowment-details-donations-count").html(endowment.global_balances.endowment_donations_count);
+  $("#endowment-details-donor-count").html(endowment.global_balances.endowment_donor_count);
+  $("#endowment-details-fees").html(endowment.global_balances.endowment_fees);
+  $("#endowment-details-grants").html(endowment.global_balances.endowment_grants);
+  $("#endowment-details-transaction-fees").html(endowment.global_balances.endowment_transaction_fees);
+
+  // Build Charity Table
+  $.each(endowment.charities, function(k, v) {
+    log(v.charity);
+    // Create table row & append
+    var $row = $("#charities-table").find('tbody:last').append('<tr></tr>');
+    $row.append("<td>"+v.charity.name+"</td>");
+    $row.append("<td>"+v.charity.address+" "+v.charity.city+", "+v.charity.state+" "+v.charity.zip+"</td>");
   });
 }
 
@@ -49,7 +97,7 @@ function endowmentSelectors() {
           log(v.charity)
           var charity = {};
           charity.id = v.charity.id;
-          charity.text = v.charity.name;
+          charity.text = v.charity.name + " (" + v.charity.city + ", " + v.charity.state + ")";
           results.push(charity);
         });
         return {results: results};
@@ -226,6 +274,7 @@ function endowmentSelectors() {
       method: 'GET'
     }).done(function(data) {
       log(data);
+
       // Clean & Prep Modal
       // $("#unsubscribe-endowment-modal #unsubscribe-endowment-donation").val("");
       $("#unsubscribe-endowment-modal #unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
@@ -234,6 +283,7 @@ function endowmentSelectors() {
       $("#confirm-unsubscribe-endowment").attr("data-id", data.endowment.my_balances.my_subscription_id);
       // Now Show Modal
       $("#unsubscribe-endowment-modal").modal('show');
+
     }).fail(function(data) {
       log(data);
     });
@@ -249,9 +299,17 @@ function endowmentSelectors() {
       url: "https://api.giv2giv.org/api/donors/payment_accounts/" + $("#confirm-unsubscribe-endowment").attr("data-id") + "/cancel_subscription.json",
       method: 'GET'
     }).done(function(data) {
-      log(data)
-      // Now Hide Modal
-      $("#unsubscribe-endowment-modal").modal('hide');
+      // Success
+      // Refresh Endowments & Hide Modal
+      fetchFeaturedEndowments(function() {
+        // Fetch Subscribed Endowments
+        fetchSubscribedEndowments(function() {
+          endowmentSelectors();
+          // Hide Modal
+          $("#unsubscribe-endowment-modal").modal('hide');
+        });
+      });
+
     }).fail(function(data) {
       log(data);
     });
@@ -300,28 +358,30 @@ function fetchSubscribedEndowments(callback) {
         var body = "<div class='info'><div class='title'>"+sub.endowment_name+"</div>";
         // Description
         body += "<p><em>"+sub.endowment_description+"</em></p>";
-        // Donation Amount
-        body += "<div class='desc'>Donation Amount: <strong>$"+sub.endowment_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.endowment_donation_type+")</strong></div>";
+        
         // # of Donors
         if(sub.endowment_donor_count == 1) {
           var donor_string = "donor";
         } else {
           var donor_string = "donors";
-        }
+        }  
+    
+        body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> unique "+donor_string+".</div>";
         // Endowment Balance
-        body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-        body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> "+donor_string+".</div>";
-        // Donor Balance
-        body += "<div class='desc'>My Balance: <strong>$"+sub.endowment_donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-        body += "<div class='desc'><strong>"+sub.endowment_donor_total_donations+"</strong> donations.</div>";
+        body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";    
+        
+        body += "<div class='desc'>Total I have donated: <strong>$"+sub.endowment_donor_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
         // Endowment Balance & Donations
-        body += "<div class='desc'><strong>"+sub.endowment_total_donations+"</strong> total donations.</div>";
+        body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+        // Donation Amount
+        body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.endowment_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.endowment_donation_type+")</strong></div>";
+        // Donor Balance
+        body += "<div class='desc'>My Current Balance: <strong>$"+sub.endowment_donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
 
         // Action Buttons
         var actions = "<div class='bottom'><button data-id='"+sub.endowment_id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
         // Subscription Check
         actions += "<button data-id='"+sub.endowment_id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
-        
 
         
         var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
@@ -393,22 +453,25 @@ function fetchFeaturedEndowments(callback) {
         var body = "<div class='info'><div class='title'>"+sub.name+"</div>";
         // Description
         body += "<p><em>"+sub.description+"</em></p>";
-        // Donation Amount
-        body += "<div class='desc'>Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
+        
         // # of Donors
         if(sub.global_balances.endowment_donor_count == 1) {
           var donor_string = "donor";
         } else {
           var donor_string = "donors";
         }
+
+        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> unique "+donor_string+".</div>";
+        body += "<div class='desc'><strong>"+sub.my_balances.my_donations_count+"</strong> unique donations.</div>";
         // Endowment Balance
         body += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> "+donor_string+".</div>";
-        // Donor Balance
-        body += "<div class='desc'>My Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-        body += "<div class='desc'><strong>"+sub.my_balances.my_donations_count+"</strong> donations.</div>";
+        // Donation Amount
+        body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
         // Endowment Balance & Donations
-        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donations+"</strong> total donations.</div>";
+        body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+        // Donor Balance
+        body += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
+
         // Action Buttons
         var actions = "<div class='bottom'><button data-id='"+sub.id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
         // Subscription Check

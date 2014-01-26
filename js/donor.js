@@ -343,7 +343,9 @@ var stripeResponseHandler = function(status, response) {
 			$("#add-payment-frm")[0].reset();
 			$("#add-account-btn").prop('disabled', false);
 			// Reload Payment Accounts
-			fetchPaymentAccounts();
+			fetchPaymentAccounts(function() {
+				loadUI();
+			});
 		}).fail(function(data) {
 			var res = JSON.parse(data.responseText);
 			log("[error]: " + res.message);

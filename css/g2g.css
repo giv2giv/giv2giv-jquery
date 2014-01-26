@@ -131,6 +131,11 @@ code {
           box-sizing: border-box;
 }
 
+.form-control-static
+{
+  padding-top: 5px;
+}
+
 /* Add Endowment Cards */
 .card.add-endowment {
   position: relative;

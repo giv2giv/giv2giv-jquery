@@ -130,6 +130,7 @@ var WebUI = function() {
 		$("#signup-name").val("");
 		$("#signup-email").val("");
 		$("#signup-password").val("");
+		$("#signup-accept-terms").attr('checked', false);
 		$("#signup-panel").removeClass("hide");
 		e.preventDefault();
 	});
@@ -147,6 +148,10 @@ var WebUI = function() {
 		payload['email'] = $("#signup-email").val();
 		payload['password'] = $("#signup-password").val();
 		payload['name'] = $("#signup-name").val();
+		if ($("#signup-accept-terms").attr('checked')) {
+			var accept_terms_datetime = new Date();
+			payload['accepted_terms'] = accept_terms_datetime.toISOString();
+		}
 		var request = JSON.stringify(payload);
 		$.ajax({
   		url: 'https://api.giv2giv.org/api/donors.json',
@@ -169,6 +174,8 @@ var WebUI = function() {
 				 			xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
 			  		}
 			 		});
+			 		// Hide Signup
+			 		$("#signup-panel").addClass("hide");
 			 		// Set Cookie
 			 		$.cookie('session', data.session.session.token);
 				  startApplication();
@@ -336,9 +343,23 @@ var WebUI = function() {
 		// Endowment Details Route
 		crossroads.addRoute('/endowment/{id}', function(id) {
 			startLoad();
-			alert("Loaded endowment " + id);
-			History.replaceState(null, 'giv2giv - Endowment ' + id, '/endowment/'+id);
-			stopLoad();
+			// Load Endowment Details First
+			// Get Donor Info (and check session as a result)
+			$.get("https://api.giv2giv.org/api/endowment/"+id+".json").success(function(data) {
+				loadPage('/ui/endowment_details.html', function() {
+					// Fill in jQuery Selectors
+					History.replaceState(null, 'giv2giv - Details for ' + data.endowment.name, '/endowment/'+id);
+					// Load JS
+					EndowmentsUI.details.dispatch(data.endowment);
+					// Set Nav Tab
+					$("#endowments-nav").addClass("active");
+					stopLoad();
+				});
+			}).error(function(data) {
+				growlError("There was an error loading the Endowment Details.");
+				crossroads.resetState();
+				stopLoad();
+			});
 		});
 
 		// Donor Route
