@@ -135,6 +135,13 @@ var WebUI = function() {
 		e.preventDefault();
 	});
 
+	// Terms Button
+	$("#terms-btn").on("click", function(e) {
+		$("#terms-div").load("/ui/terms.html", function() {
+			$("#terms-modal").modal('show');
+		});
+	});
+
 	// Hide sign-up & return to login
 	$("#cancel-signup-btn").on("click", function(e) {
 		$("#signup-panel").addClass("hide");
@@ -148,10 +155,8 @@ var WebUI = function() {
 		payload['email'] = $("#signup-email").val();
 		payload['password'] = $("#signup-password").val();
 		payload['name'] = $("#signup-name").val();
-		if ($("#signup-accept-terms").attr('checked')) {
-			var accept_terms_datetime = new Date();
-			payload['accepted_terms'] = accept_terms_datetime.toISOString();
-		}
+		payload['accepted_terms'] = $("#signup-accept-terms").prop('checked')
+
 		var request = JSON.stringify(payload);
 		$.ajax({
   		url: 'https://api.giv2giv.org/api/donors.json',
@@ -160,7 +165,7 @@ var WebUI = function() {
   		dataType: "json",
   		contentType: "application/json"
   	}).done(function(data) {
-  		// Success, now cheat and log the
+  		// Success, now cheat and login
   		var payload = JSON.stringify({ "email" : $("#signup-email").val(), "password" : $("#signup-password").val() });
 			$.ajax({
 				url: "https://api.giv2giv.org/api/sessions/create.json",

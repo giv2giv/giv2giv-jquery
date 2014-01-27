@@ -97,7 +97,9 @@
                     <input type="text" id="signup-name" placeholder="Name">
                     <input type="text" id="signup-email" placeholder="Email">
                     <input type="password" id="signup-password" placeholder="Password"><br />
-                    <input type="checkbox" id="signup-accept-terms"> Accept <a href="http://www.giv2giv.org/documents/giv2givTermsConditionsPoliciesandProcedures.html" target=_blank>terms and conditions?</a><br /><br />
+                    <label class="checkbox">
+                      <input type="checkbox" id="signup-accept-terms"> Accept <a id="terms-btn" href="#terms-modal">terms and conditions?</a>
+                    </label>
                     <button type="submit" class="btn btn-success">Create Account</button>
                     <button id="cancel-signup-btn" type="button" class="btn btn-danger">Cancel</button>
                   </form>
@@ -114,7 +116,15 @@
         <p class="muted credit">&copy; giv2giv, Inc. 2014</p>
       </div>
     </div>
-
+    <!-- Modals -->
+    <div id="terms-modal" class="modal hide">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Terms & Conditions</h3>
+      </div>
+      <div id="terms-div" class="modal-body">
+      </div>
+    </div>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
