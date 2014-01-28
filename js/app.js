@@ -49,11 +49,16 @@ function growlSuccess(message) {
 
 // Main Application
 var WebUI = function() {
+	// Public Router
+	var publicRouter;
+
 	// Login Bits
 	// Display the login screen.
 	var displayLogin = function(callback) {
-		// Hide Header
+		// Hide App Nav
 		$("#app-nav").addClass("hide");
+		// Show Public Nav
+		$("#public-nav").removeClass("hide");
 		// Set Title
 		document.title = "giv2giv - Login";
 		// Show Login Panel
@@ -68,8 +73,10 @@ var WebUI = function() {
 
 	// Hide the login screen
 	var hideLogin = function(callback) {
-		// Show Header
+		// Show App Nav
 		$("#app-nav").removeClass("hide");
+		// Hide Public Nav
+		$("#public-nav").addClass("hide");
 		// Title is set in Load Page
 		// Hide Login Panel
 		$("#login-panel").addClass("hide");
@@ -189,16 +196,29 @@ var WebUI = function() {
 				error: function(data) {
 					var res = JSON.parse(data.responseText);
 					if(res.message == "unauthorized") {
-						$("#login-message").html("Incorrect Email or Password");
-					} else {
+						growlError("Incorrect Email or Password");
+					}
+					else {
+						growlError(res.message);
 						log("WebUI: Login Error - " + res.message);
 					}
 				}
 			});
   	}).fail(function(data) {
-  		log(data);
-  	});
-		e.preventDefault();
+			var res = JSON.parse(data.responseText);
+			if(res.message == "unauthorized") {
+				growlError("Incorrect Email or Password");
+			} else if (res.message) {
+				growlError(res.message);
+				log("WebUI: Login Error - " + res.message);
+			}
+			else {
+				$.each(res, function(key, value) {
+  				growlError(key + ": " + value)
+				});	
+			}
+		});
+	e.preventDefault();
 	});
 
 	// Login Form
@@ -265,18 +285,30 @@ var WebUI = function() {
     }
 	};
 
+	// Display Public Application View
+	var displayPublicApplication = function(callback) {
+		// Show App Panel
+		$("#app-panel").removeClass("hide");
+		// Show App Nav
+		$("#public-nav").removeClass("hide");
+		// Callback
+		if(typeof callback === "function") {
+    	// Call it, since we have confirmed it is callable
+      callback();
+    }
+	};
+
 	// Start Application
 	// This is only loaded on full page refresh or first visit
 	var startApplication = function(callback) {
 		log("WebUI: Started Application");
 		if($.cookie('session') == undefined) {
 			log("WebUI: No Session Cookie found, displaying Login.");
-			displayLogin();
-			stopLoad();
+			publicRouter.parse(window.location.pathname);
 		} else {
 			// We have a session cookie, set header & see if it's valid
 			log("WebUI: Session Cookie found, checking session.");
-			// Set Header
+			// Set Authorization Header
 			$.ajaxSetup({
  				beforeSend: function(xhr, settings) {
 	 				xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
@@ -284,9 +316,11 @@ var WebUI = function() {
 			});
 			// Get Donor Info (and check session as a result)
 			$.get("https://api.giv2giv.org/api/donors.json").success(function(data) {
+				// Valid Session
 				log("WebUI: Valid session, loading application.");
 				log("WebUI: Initial Page " + window.location.pathname);
 				// Load Current URL
+				crossroads.resetState();
 				crossroads.parse(window.location.pathname);
 				// Set Donor Name
 				$("#donor-name").html(data.donor.name);
@@ -296,14 +330,14 @@ var WebUI = function() {
 			}).error(function(data) {
 				if(data.statusText == "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Login.");
-					displayLogin();
-					stopLoad();
+					$.removeCookie('session');
+					publicRouter.parse(window.location.pathname);
 				}
 			});
 		}
 		if(typeof callback === "function") {
-    	// Call it, since we have confirmed it is callable
-      callback();
+    		// Call it, since we have confirmed it is callable
+      	callback();
     }
 	};
 
@@ -319,22 +353,96 @@ var WebUI = function() {
     $('#loading').addClass("hide");
   };
 
-  // Setup App Router
-  // Note: Sub routing (like /endowments/1) handled in modules.
+  // Check if Session is Active
+  // URL parameter is the URL to goto if Session is dead
+  var activeSession = function() {
+  	log("WebUI: Checking session.");
+  	var status = false;
+  	$.ajax({
+		  type: 'POST',
+		  url: 'https://api.giv2giv.org/api/sessions/ping.json',
+		  async:false
+		}).done(function(data) {
+			status = true;
+		}).fail(function(data) {
+  		status = false;
+  	});
+  	return status;
+  };
+
+  // Router
+  // Will Create proper routes based on Active Session
 	var router = function(callback) {
 		log("WebUI: Starting router.");
-
-		// Handle Nav Bar Clicks woof
-		$(".nav-link a").on("click", function(e) {
-			if(!$(this).parent().hasClass("active")) {
-				crossroads.parse($(this).attr('href'));
-			}
-			e.preventDefault();
+		// Ignore Router State (Same URL Loads)
+		// crossroads.ignoreState = true;
+		
+		// Create Public Router
+		publicRouter = crossroads.create();
+		
+		// Signup Route
+		publicRouter.addRoute('/signup', function() {
+			// Show Signup
+			startLoad();
+			// Set Nav Tab
+			$("#signup-nav").addClass("active");
+			// Hide Login Panel
+			$("#login-panel").addClass("hide");
+			// Clean & Show Sign Up
+			$("#signup-name").val("");
+			$("#signup-email").val("");
+			$("#signup-password").val("");
+			$("#signup-accept-terms").attr('checked', false);
+			$("#signup-panel").removeClass("hide");
+			stopLoad();
+			displayPublicApplication();
 		});
 
-		// Routes
+		// Public Endowment Page
+		publicRouter.addRoute('/endowment/{id}', function(id) {
+			startLoad();
+			// Load Endowment Details First
+			// Get Donor Info (and check session as a result)
+			$.get("https://api.giv2giv.org/api/endowment/"+id+".json").done(function(data) {
+				loadPage('/ui/endowment_details.html', function() {
+					// Fill in jQuery Selectors
+					History.replaceState(null, 'giv2giv - Details for ' + data.endowment.name, '/endowment/'+id);
+					// Load JS
+					EndowmentsUI.details.dispatch(data.endowment);
+					stopLoad();
+				});
+			}).fail(function(data) {
+				publicRouter.parse('/');
+			}).always(function(data) {
+				displayPublicApplication();
+			});
+		});
+
+		publicRouter.addRoute('/{url}', function(url) {
+			publicRouter.parse('/');
+		});
+
+		// Login
+		publicRouter.addRoute('/', function(url) {
+			// History
+			History.replaceState(null, 'giv2giv - Login', '/');
+			// Show Login Screen
+			$("#signin-nav").addClass("active");
+			startLoad();
+			displayLogin();
+			stopLoad();
+		});
+
+		// Now for "Private Routes"
+		// Add Rule to Determine if we have Active Session. If not, pipe to public router
 		// Dashboard Route
-		crossroads.addRoute('/', function() {
+		var dashboardRoute = crossroads.addRoute('/');
+		dashboardRoute.rules = {
+			section : function(value, request, valuesObj) {
+				return (activeSession());
+			}
+		};
+		dashboardRoute.matched.add(function() {
 			startLoad();
 			loadPage('/ui/endowments.html', function() {
 				// Remove old active tabs
@@ -347,7 +455,13 @@ var WebUI = function() {
 		});
 
 		// Endowment Details Route
-		crossroads.addRoute('/endowment/{id}', function(id) {
+		var endowmentRoute = crossroads.addRoute('/endowment/{id}');
+		endowmentRoute.rules = {
+			section : function(value, request, valuesObj) {
+				return (activeSession());
+			}
+		};
+		endowmentRoute.matched.add(function(id) {
 			startLoad();
 			// Load Endowment Details First
 			// Get Donor Info (and check session as a result)
@@ -369,7 +483,13 @@ var WebUI = function() {
 		});
 
 		// Donor Route
-		crossroads.addRoute('/donor', function() {
+		var donorRoute = crossroads.addRoute('/donor');
+		donorRoute.rules = {
+			section : function(value, request, valuesObj) {
+				return(activeSession());
+			}
+		};
+		donorRoute.matched.add(function() {
 			startLoad();
 			loadPage('/ui/donor.html', function() {
 				$(".nav-link").siblings().removeClass("active");
@@ -382,7 +502,13 @@ var WebUI = function() {
 		});
 
 		// Numbers Route
-		crossroads.addRoute('/numbers', function() {
+		var numbersRoute = crossroads.addRoute('/numbers');
+		numbersRoute.rules = {
+			section : function(value, request, valuesObj) {
+				return(activeSession());
+			}
+		};
+		numbersRoute.matched.add(function() {
 			startLoad();
 			loadPage('/ui/numbers.html', function() {
 				$(".nav-link").siblings().removeClass("active");
@@ -391,6 +517,18 @@ var WebUI = function() {
 				// Set Nav Tab
 				$("#numbers-nav").addClass("active");
 			});
+		});
+
+		// Not found route - send to Dashboard with Error
+		crossroads.bypassed.add(function(request) {
+			log("WebUI: Route not found.");
+			if(activeSession()) {
+				log("WebUI: Return to Dashboard.");
+				crossroads.parse('/');
+			} else {
+				log("WebUI: Invalid Session, going public.");
+				publicRouter.parse(window.location.href);
+			}
 		});
 
 		// Callbacks
@@ -421,6 +559,12 @@ var WebUI = function() {
 	// Reload UI
 	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
 	function reloadUI() {
+		// Handle Nav Bar Clicks woof
+		$(".nav-link a").on("click", function(e) {
+			crossroads.parse($(this).attr('href'));
+			e.preventDefault();
+		});
+
 		// Initialize tabs
 		$('[data-toggle="tabs"] a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
 	}
@@ -432,8 +576,8 @@ var WebUI = function() {
 			log("WebUI: Init Start");
 			router(function() {
 				startApplication();
-				log("WebUI: Init Complete");
 			});
+			log("WebUI: Init Complete");
 		}, startLoad: function () {
 			startLoad();
 		}, stopLoad: function () {

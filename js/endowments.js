@@ -52,13 +52,13 @@ function onDetails(endowment) {
   $("#endowment-details-header").html("Details for " + endowment.name);
   // Lead Description
   $("#endowment-details-description").html(endowment.description);
-  $("#endowment-details-balance").html(endowment.global_balances.endowment_balance);
-  $("#endowment-details-donations").html(endowment.global_balances.endowment_donations);
+  $("#endowment-details-balance").html("$"+endowment.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+  $("#endowment-details-donations").html("$"+endowment.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
   $("#endowment-details-donations-count").html(endowment.global_balances.endowment_donations_count);
   $("#endowment-details-donor-count").html(endowment.global_balances.endowment_donor_count);
-  $("#endowment-details-fees").html(endowment.global_balances.endowment_fees);
-  $("#endowment-details-grants").html(endowment.global_balances.endowment_grants);
-  $("#endowment-details-transaction-fees").html(endowment.global_balances.endowment_transaction_fees);
+  $("#endowment-details-fees").html("$"+endowment.global_balances.endowment_fees.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+  $("#endowment-details-grants").html("$"+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+  $("#endowment-details-transaction-fees").html("$"+endowment.global_balances.endowment_transaction_fees.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
   // Build Charity Table
   $.each(endowment.charities, function(k, v) {
@@ -330,6 +330,7 @@ function endowmentSelectors() {
 // Get Subscribed Endowments
 function fetchSubscribedEndowments(callback) {
   // Clear Old Data
+  log("Fetching sub endowments");
   $("#sub-endowments").html("");
   $.ajax({
     url: 'https://api.giv2giv.org/api/donors/subscriptions.json',
@@ -426,6 +427,7 @@ function fetchSubscribedEndowments(callback) {
 // Get Featured Endowments
 function fetchFeaturedEndowments(callback) {
   // Clear Old Data
+  log("Fetching featured endowments");
   $("#featured-endowments").html("");
   $.ajax({
     url: 'https://api.giv2giv.org/api/endowment.json',
