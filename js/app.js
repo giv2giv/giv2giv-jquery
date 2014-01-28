@@ -140,6 +140,7 @@ var WebUI = function() {
 		$("#terms-div").load("/ui/terms.html", function() {
 			$("#terms-modal").modal('show');
 		});
+		e.preventDefault();
 	});
 
 	// Hide sign-up & return to login
