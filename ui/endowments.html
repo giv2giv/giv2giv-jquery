@@ -15,7 +15,7 @@
     <h3>Create New Endowment</h3>
   </div>
   <div class="modal-body">
-    <div id="add-endowment-step-one">
+    <div id="add-endowment-step-one" class="row-fluid">
       <form class="form-horizontal">
         <div class="control-group">
           <label class="control-label" for="endowment-name">Name</label>
@@ -87,19 +87,16 @@
   </div>
   <div class="modal-footer">
     <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-    <a href="#" id="confirm-subscribe-endowment" data-id="" class="btn btn-success">Subscribe</a>
+    <a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Unsubscribing" class="btn btn-success">Subscribe</a>
   </div>
 </div>
 <!-- Unsubscribe Modal -->
 <div id="unsubscribe-endowment-modal" class="modal hide">
-  <div class="modal-header">
-    <h3 id="unsubscribe-endowment-header">Unsubscribe to Endowment</h3>
-  </div>
   <div class="modal-body">
-    <p>Are you sure you would like to unsubscribe to ?</p>
+    <h4>Are you sure you would like to unsubscribe to this endowment?</h4>
   </div>
   <div class="modal-footer">
     <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-    <a href="#" id="confirm-unsubscribe-endowment" data-id="" class="btn btn-success">Unsubscribe</a>
+    <a href="#" id="confirm-unsubscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Unsubscribing" class="btn btn-success">Unsubscribe</a>
   </div>
 </div>

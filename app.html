@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
+      <meta content="Mini-endowment service revolutionizing personal philanthropy" name="description" />
+      <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta name="title" content="giv2giv - Join me to revolutionize charitable giving!" />
+      <meta name="description" content="Donate into an endowment, your endowment distributes to your favorite charities, every 90 days...Forever! (yes, like forever) giv2giv is a non-profit organization putting advanced investing tools to work for you and your causes.">
+      <meta property="og:title" content="giv2giv.org" />
+      <meta property="og:type" content="company" /> 
+      <meta property="og:image" content="images/apple-touch-icon.png" /> 
+      <meta property="og:site_name" content="giv2giv.org"/> 
+      <meta property="og:description" content="giv2giv - The way charitable giving should be." />
+      <meta property="og:url" content="http://www.giv2giv.org" />
       <meta charset="utf-8">
       <title>giv2giv</title>
       <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="">
-      <meta name="author" content="">
 
       <!-- Le styles -->
       <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
@@ -42,13 +50,15 @@
             <div id="loading">
               <i class="loading-brand fa fa-leaf fa-spin logo-loading"></i>
             </div>
-            <a id="logo-main" class="brand" href="#">
+            <a class="brand" href="http://giv2giv.org">
               <img src='/images/logo.png' alt='giv2giv'/>
             </a>
             <div class="nav-collapse collapse hide pull-right" id="public-nav">
               <ul class="nav">
-                <li id="signin-nav"><a href="/">Sign In</a></li>
-                <li id="signup-nav"><a href="/signup">Sign Up</a></li>
+                <!-- public only tabs go here -->
+                <li class="public-nav" id="pub-about-nav"><a href="/about">How Does This Work?</a></li>
+                <li class="public-nav" id="signin-nav"><a href="/login">Login</a></li>
+                <li class="public-nav" id="signup-nav"><a href="/signup">Sign Up</a></li>
               </ul>
             </div>
             <div class="nav-collapse collapse hide" id="app-nav">
@@ -60,8 +70,10 @@
               </p>
 
               <ul class="nav">
-                <li id="endowments-nav" class="nav-link"><a href="/">Endowments</a></li>
+                <!-- Logged in tabs go here -->
+                <li id="endowments-nav" class="nav-link"><a href="/endowments">Endowments</a></li>
                 <li id="donor-nav" class="nav-link"><a href="/donor">Donor</a></li>
+                <li id="about-nav" class="nav-link"><a href="/about">Questions?</a></li>
                 <li id="numbers-nav" class="nav-link"><a href="/numbers">Stats for Nerds</a></li>
                 <li><a id="logout-btn" href="logout">Logout</a></li>
               </ul>
@@ -69,7 +81,7 @@
           </div>
         </div>
       </div>
-      <div class="container">
+      <div id="app-container" data-page-id='' class="container">
         <div id="app-panel" class="hide">
         </div>
         <div id="login-panel" class="hide">
@@ -82,11 +94,8 @@
                   <form id="login-frm" class="form-signin" method="post">
                     <input id="signin-email" type="text" class="input-block-level" placeholder="Email address">
                     <input id="signin-password" type="password" class="input-block-level" placeholder="Password">
-                    <button class="btn btn-primary" type="submit">
+                    <button id="login-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
                       Sign in
-                    </button>
-                    <button id="display-signup-btn" class="btn btn-success pull-right">
-                      Sign Up
                     </button>
                   </form>
                 </div>
@@ -107,8 +116,7 @@
                     <label class="checkbox">
                       <input type="checkbox" id="signup-accept-terms"> Accept <a id="terms-btn" href="#terms-modal">terms and conditions?</a>
                     </label>
-                    <button type="submit" class="btn btn-success">Create Account</button>
-                    <button id="cancel-signup-btn" type="button" class="btn btn-danger">Cancel</button>
+                    <button id="signup-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Creating" class="btn btn-success">Create Account</button>
                   </form>
                 </div>
               </div>
@@ -120,7 +128,10 @@
     </div>
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; giv2giv, Inc. 2014</p>
+        <p class="muted credit">
+          <span>&copy; giv2giv, Inc. 2014</span>
+          <a href='#wish-modal' class='pull-right' data-toggle="modal">I wish this page would...</a>
+        </p>
       </div>
     </div>
     <!-- Modals -->
@@ -132,17 +143,33 @@
       <div id="terms-div" class="modal-body">
       </div>
     </div>
+    <div id="wish-modal" class="modal hide">
+      <div class="modal-body remove-padding">
+        <div class="row-fluid">
+          <form id="make-wish-frm">
+            <fieldset>
+              <legend>I Wish I Could</legend>
+                <textarea id="wish" class="span12" rows="5"></textarea>
+              <button type="submit" class="btn btn-success" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Making Wish">Make A Wish</button>
+              <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script src="/js/signals.min.js"></script>
     <script src="/js/crossroads.min.js"></script>
+    <script src="/js/hasher.min.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.cookie.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.history.js"></script>
     <script src="/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/js/jquery.formatter.min.js"></script>
+    <script src="/js/jquery.payment.js"></script>
     <script src="/js/endowments.js"></script>
     <script src="/js/donor.js"></script>
     <script src="/js/numbers.js"></script>

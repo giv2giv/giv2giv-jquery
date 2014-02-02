@@ -129,7 +129,7 @@
                   <!-- Update Profile Button -->
                   <div class="control-group">
                     <div class="controls">
-                      <button type="submit" class="btn btn-success">Update Profile</button>
+                      <button id="update-donor-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Updating" class="btn btn-success">Update Profile</button>
                     </div>
                   </div>
                 </form>
@@ -183,13 +183,13 @@
       <div class="control-group">
         <label class="control-label" for="add-card-number">Card Number</label>
         <div class="controls">
-          <input type="text" data-stripe="number"/>
+          <input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" /> <img width='50' height='32' src='' id="card-type">
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="add-card-cvc">CVC</label>
         <div class="controls">
-          <input type="text" data-stripe="cvc"/>
+          <input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc"/>
         </div>
       </div>
       <div class="control-group">
@@ -203,7 +203,7 @@
   </div>
   <div class="modal-footer">
     <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button id="add-account-btn" class="btn btn-success">Add Account</button>
+    <button id="add-account-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Adding" class="btn btn-success">Add Account</button>
   </div>
   <div class="modal-footer">
     <h4><strong>* giv2giv never sees or stores your card information.</strong></h4>
@@ -219,6 +219,6 @@
   </div>
   <div class="modal-footer">
     <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-    <a href="#" id="confirm-payment-removal" data-id="" class="btn btn-success">Yes</a>
+    <a href="#" id="confirm-payment-removal" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Removing" data-id="" class="btn btn-success">Yes</a>
   </div>
 </div>

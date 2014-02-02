@@ -60,7 +60,19 @@ function fetchPaymentAccounts(callback) {
 				var actions = "<button data-id='"+ii+"' data-last-four='"+card.last4+"' class='btn btn-danger remove-account-btn'>Remove</button>";
 				$row.append("<td>"+actions+"</td>");
 			});
+
 			$("#payment-accounts-card").removeClass("hide");
+			// Remove Account Button
+			$('.remove-account-btn').on("click", function(e) {
+				// Clear old Modal Data
+				$("#remove-payment-modal #remove-card-last-four").html("");
+				$("#remove-payment-modal #confirm-payment-removal").attr("data-id", "");
+				// Set new Data
+				$("#remove-payment-modal #remove-card-last-four").html($(this).attr("data-last-four"));
+				$("#remove-payment-modal #confirm-payment-removal").attr("data-id", $(this).attr("data-id"));
+				// Show Modal
+				$("#remove-payment-modal").modal("show");
+			});
 		}
 	}).fail(function(data) {
 	  growlError("Opps! An error occured while loading your Payment Accounts.");
@@ -101,20 +113,48 @@ function fetchDonorProfile(callback) {
 
 // Load UI
 function loadUI() {
-	// Remove Account Button
-	$('.remove-account-btn').on("click", function(e) {
-		// Clear old Modal Data
-		$("#remove-payment-modal #remove-card-last-four").html("");
-		$("#remove-payment-modal #confirm-payment-removal").attr("data-id", "");
-		// Set new Data
-		$("#remove-payment-modal #remove-card-last-four").html($(this).attr("data-last-four"));
-		$("#remove-payment-modal #confirm-payment-removal").attr("data-id", $(this).attr("data-id"));
-		// Show Modal
-		$("#remove-payment-modal").modal("show");
+	// Formatters
+	$('#donor-profile-phone').formatter({
+  	'pattern': '({{999}}) {{999}}-{{9999}}',
+  	'persistent': true
+	});
+
+	$('#donor-profile-zip').formatter({
+  	'pattern': '{{99999}}-{{9999}}',
+  	'persistent': true
+	});
+
+	// Credit Card Formatting
+	$('#add-card-number').payment('formatCardNumber');
+
+	// Card Type
+	$('#add-card-number').on('keyup', function(e) {
+		var type = $.payment.cardType($(this).val());
+		if(type == "visa") {
+			$("#card-type").attr("src", "/images/credit_cards/visa.png");
+		} else if(type == "mastercard") {
+			$("#card-type").attr("src", "/images/credit_cards/mastercard.png");
+		} else if(type == "discover") {
+			$("#card-type").attr("src", "/images/credit_cards/discover.png");
+		} else if(type == "amex") {
+			$("#card-type").attr("src", "/images/credit_cards/amex.png");
+		} else if(type == "dinersclub") {
+			$("#card-type").attr("src", "/images/credit_cards/diner_club.png");
+		} else if(type == "maestro") {
+			$("#card-type").attr("src", "/images/credit_cards/maestro.png");
+		} else if(type == "laser") {
+			$("#card-type").attr("src", "/images/credit_cards/laser.png");
+		} else if(type == "unionpay") {
+			$("#card-type").attr("src", "/images/credit_cards/union_pay.png");
+		} else {
+			// Nothing
+			$("#card-type").attr("src", "");
+		}
 	});
 
 	// Confirm Remove Account Button
 	$("#confirm-payment-removal").on("click", function(e) {
+		$btn = $(this).button('loading');
 		$.ajax({
 		  url: 'https://api.giv2giv.org/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
 		  method: 'DELETE',
@@ -123,9 +163,11 @@ function loadUI() {
 		}).done(function(data) {
 	  	growlSuccess("Successfully removed payment account.")
  			$("#remove-payment-modal").modal("hide");
+ 			$btn.button('reset');
  			fetchPaymentAccounts();
 		}).fail(function(data) {
 		  log(data);
+		  $btn.button('reset');
 		  growlError("Opps! An error occured while removing this payment account.");
 		  $("#remove-payment-modal").modal("hide");
 		});
@@ -135,7 +177,7 @@ function loadUI() {
 	// Edit Account Button
 	// Add account button
 	$('#add-account-btn').on("click", function(e) {
-		log("Add Account");
+		$(this).button('loading');
 		$("#add-payment-frm").submit();
 		e.preventDefault();
 	});
@@ -150,6 +192,8 @@ function loadUI() {
 
 	// Update Donor Profile
 	$("#donor-profile-frm").on("submit", function(e) {
+		$btn = $("#update-donor-btn");
+		$btn.button('loading');
 		// Setup payload
 		var donor = {};
 		donor['name'] = $("#donor-profile-name").val();
@@ -169,10 +213,12 @@ function loadUI() {
 			dataType:"json"
 		}).done(function (data) {
 			growlSuccess("Success! Profile updated.");
+			$btn.button('reset');
 		}).fail(function(data) {
 			growlError("An error occurred while updating your Donor Profile.");
 			var res = JSON.parse(data.responseText);
 			log("[error]: " + res.message);
+			$btn.button('reset');
 		});
 		e.preventDefault();
 	});
@@ -315,7 +361,7 @@ var stripeResponseHandler = function(status, response) {
 	if (response.error) {
     // Show the errors on the form
     $form.find('.payment-errors').text(response.error.message);
-  	$("#add-account-btn").prop('disabled', false);
+  	$("#add-account-btn").button('reset');
   	log(response.error);
   } else {
     // token contains id, last4, and card type
@@ -341,11 +387,9 @@ var stripeResponseHandler = function(status, response) {
 			$("#add-payment-modal").modal('hide');
 			// Clear Form
 			$("#add-payment-frm")[0].reset();
-			$("#add-account-btn").prop('disabled', false);
+  		$("#add-account-btn").button('reset');
 			// Reload Payment Accounts
-			fetchPaymentAccounts(function() {
-				loadUI();
-			});
+			fetchPaymentAccounts();
 		}).fail(function(data) {
 			var res = JSON.parse(data.responseText);
 			log("[error]: " + res.message);

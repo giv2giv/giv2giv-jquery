@@ -1,3 +1,8 @@
+/* Disable Textarea Resize */
+textarea {
+    resize: none;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
@@ -166,12 +171,16 @@ code {
   text-overflow: ellipsis;
 }
 
+
 .twitter-typeahead .tt-query {
   margin-bottom: 0;
 }
 .twitter-typeahead .tt-hint {
   margin-bottom: 0;
   color: #fff;
+}
+.tt-hint {
+  background-color: transparent !important;
 }
 
 .tt-dropdown-menu {
