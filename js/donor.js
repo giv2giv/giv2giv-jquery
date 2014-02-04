@@ -30,6 +30,8 @@ function fetchPaymentAccounts(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
 	  method: 'GET',
+	  contentType: "application/json",
+    dataType: "json"
 	}).done(function(data) {
 		log(data);
   	// Clear old data & hide things
@@ -89,7 +91,9 @@ function fetchPaymentAccounts(callback) {
 function fetchDonorProfile(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors.json',
-	  method: 'GET'
+	  method: 'GET',
+	  dataType: "json",
+  	contentType: "application/json"
 	}).done(function(data) {
   	// fill out profile form
   	$("#donor-profile-email").val(data.donor.email);
@@ -272,7 +276,6 @@ function loadUI() {
 			$.ajax({
 			  url: 'https://api.giv2giv.org/api/donors.json',
 			  method: 'GET',
-			  data: {},
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
 					var donor_info = "Donor: <br />" + response.donor.name + "(" + response.donor.email + ")<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip

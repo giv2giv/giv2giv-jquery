@@ -323,7 +323,11 @@ var WebUI = function() {
 		log("WebUI: Starting Application");
 		if(!activeSession()) {
 			// Parse URL (Will Show Login or Public Page)
-			hasher.setHash(window.location.hash);
+			if(window.location.hash == "" || window.location.hash == "/") {
+				hasher.setHash("/login");
+			} else {
+				hasher.setHash(window.location.hash);
+			}
 		} else {
 			// Get Donor Info
 			$.ajax({
@@ -492,7 +496,12 @@ var WebUI = function() {
 		crossroads.addRoute('/endowment/{id}', function(id) {
 			if(activeSession()) {
 				// Load Endowment Details First
-				$.get("https://api.giv2giv.org/api/endowment/"+id+".json").success(function(data) {
+				$.ajax({
+       		url: "https://api.giv2giv.org/api/endowment/"+id+".json",
+       		type: "GET",
+       		contentType: "application/json",
+       		dataType: "json"
+    		}).done(function(data) {
 					loadPage('/ui/endowment_details.html', function() {
 						$('#app-container').attr('data-page-id', 'endowment-details');
 						// Load JS
@@ -504,14 +513,19 @@ var WebUI = function() {
 						document.title = "giv2giv - " + data.endowment.name + " Details";
 						stopLoad();
 					});
-				}).error(function(data) {
+				}).fail(function(data) {
 					growlError("Opps! There was an error loading the Endowment Details.");
 					stopLoad();
 				});
 			} else {
 				// Load Endowment Details First
-				$.get("https://api.giv2giv.org/api/endowment/"+id+".json").success(function(data) {
-					displayPublicApplication();
+				$.ajax({
+       		url: "https://api.giv2giv.org/api/endowment/"+id+".json",
+       		type: "GET",
+       		contentType: "application/json",
+       		dataType: "json"
+    		}).done(function(data) {					
+    			displayPublicApplication();
 					$("#login-panel").addClass('hide');
 
 					loadPage('/ui/endowment_details.html', function() {
@@ -524,7 +538,7 @@ var WebUI = function() {
 						document.title = "giv2giv - " + data.endowment.name + " Details";
 						stopLoad();
 					});
-				}).error(function(data) {
+				}).fail(function(data) {
 					growlError("Opps! There was an error loading the Endowment Details.");
 					stopLoad();
 				});

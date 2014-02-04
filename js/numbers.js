@@ -21,7 +21,9 @@ function onStart() {
 function fetchStats(callback) {
 	$.ajax({
 	  url: 'https://api.giv2giv.org/api/donors/balance_information.json',
-	  method: 'GET'
+	  method: 'GET',
+	  contentType: "application/json",
+    dataType: "json"
 	}).done(function(data) {	  	
   	var donor_current_balance = '$' + data.donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
   	var donor_total_donations = '$' + data.donor_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');

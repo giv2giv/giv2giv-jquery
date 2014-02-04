@@ -334,7 +334,9 @@ function fetchSubscribedEndowments(callback) {
   log("Fetching sub endowments");
   $.ajax({
     url: 'https://api.giv2giv.org/api/donors/subscriptions.json',
-    method: 'GET'
+    method: 'GET',
+    dataType: "json",
+    contentType: "application/json"
   }).done(function(data) {
     $("#sub-endowments").html("");
     // did we get anything
@@ -434,7 +436,9 @@ function fetchFeaturedEndowments(callback) {
     data: {
       page: '1',
       per_page: '8'
-    }
+    },
+    dataType: "json",
+    contentType: "application/json"
   }).done(function(data) {
     $("#featured-endowments").html("");
     if(data.message == "Not found") {
