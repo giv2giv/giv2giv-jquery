@@ -1,7 +1,7 @@
 // WebUI Application
 // Michael Thomas, 2014
 // Setup Stripe
-var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
+var stripe_pub_key = 'YOUR_STRIPE_PUBLIC_KEY'
 Stripe.setPublishableKey(stripe_pub_key);
 
 // Wish Page ID
@@ -326,7 +326,12 @@ var WebUI = function() {
 			hasher.setHash(window.location.hash);
 		} else {
 			// Get Donor Info
-			$.get("https://api.giv2giv.org/api/donors.json").success(function(data) {
+			$.ajax({
+				url: "https://api.giv2giv.org/api/donors.json",
+				type: "GET",
+				contentType: "application/json",
+				dataType:"json"
+			}).done(function (data) {
 				log("WebUI: Loading Donor information.");
 				// Load Current URL
 				log(window.location.hash);
@@ -336,6 +341,7 @@ var WebUI = function() {
 					hasher.setHash(window.location.hash);
 				}
 				// Set Donor Name
+				// FF Fix
 				$("#donor-name").html(data.donor.name);
 				// Hide Login
 				hideLogin();
