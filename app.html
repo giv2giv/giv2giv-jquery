@@ -56,9 +56,10 @@
             <div class="nav-collapse collapse hide pull-right" id="public-nav">
               <ul class="nav">
                 <!-- public only tabs go here -->
-                <li class="public-nav" id="pub-about-nav"><a href="/about">How Does This Work?</a></li>
-                <li class="public-nav" id="signin-nav"><a href="/login">Login</a></li>
+                <li class="public-nav" id="landing-nav"><a href="/">Home</a></li>
+                <li class="public-nav" id="pub-about-nav"><a href="/about">Questions?</a></li>
                 <li class="public-nav" id="signup-nav"><a href="/signup">Sign Up</a></li>
+                <li class="public-nav" id="signin-nav"><a href="/signin">Sign In</a></li>
               </ul>
             </div>
             <div class="nav-collapse collapse hide" id="app-nav">
@@ -84,17 +85,18 @@
       <div id="app-container" data-page-id='' class="container">
         <div id="app-panel" class="hide">
         </div>
-        <div id="login-panel" class="hide">
+
+        <div id="signin-panel" class="hide">
           <div class="row-fluid">
             <div class="span4 offset4">
               <div class="card">
                 <h2 class="card-heading simple">Please Sign In</h2>
                 <div class="card-body">
-                  <p id="login-message"></p>
-                  <form id="login-frm" class="form-signin" method="post">
+                  <p id="signin-message"></p>
+                  <form id="signin-frm" class="form-signin" method="post">
                     <input id="signin-email" type="text" class="input-block-level" placeholder="Email address">
                     <input id="signin-password" type="password" class="input-block-level" placeholder="Password">
-                    <button id="login-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
+                    <button id="signin-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
                       Sign in
                     </button>
                   </form>
@@ -103,6 +105,8 @@
             </div>
           </div>
         </div>
+
+
         <div id="signup-panel" class="hide">
           <div class="row-fluid">
             <div class="span4 offset4">
@@ -160,6 +164,10 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Video JS -->
+    <script charset="ISO-8859-1" src="https://fast.wistia.com/static/concat/E-v1%2Csocialbar-v1%2CrequireEmail-v1.js"></script>
+    <script charset="ISO-8859-1" src="https://fast.wistia.com/embed/medias/mhpnb7v5so/metadata.js"></script>
+    <!-- Other JS  -->
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script src="/js/signals.min.js"></script>
     <script src="/js/crossroads.min.js"></script>
