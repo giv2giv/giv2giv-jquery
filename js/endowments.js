@@ -369,7 +369,7 @@ function fetchSubscribedEndowments(callback) {
           var donor_string = "donors";
         }  
     
-        body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> unique "+donor_string+".</div>";
+        body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
         // Endowment Balance
         body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";    
         
@@ -467,8 +467,8 @@ function fetchFeaturedEndowments(callback) {
           var donor_string = "donors";
         }
 
-        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> unique "+donor_string+".</div>";
-        body += "<div class='desc'><strong>"+sub.my_balances.my_donations_count+"</strong> unique donations.</div>";
+        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
+        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donations_count+"</strong> individual donations.</div>";
         // Endowment Balance
         body += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
         // Donation Amount
