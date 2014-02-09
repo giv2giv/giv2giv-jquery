@@ -96,6 +96,7 @@ var WebUI = function() {
 	$('#endowment-search').typeahead({
 		remote: {
 			name: 'endowments',
+			rateLimitWait: 500,
 			url: "https://api.giv2giv.org/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function(response) {
 				var results = [];
@@ -342,16 +343,17 @@ var WebUI = function() {
 				} else {
 					hasher.setHash(window.location.hash);
 				}
-                                // Facebook conversion tracking
-                                var fb_param = {};
-                                fb_param.pixel_id = '6017461958346';
-                                fb_param.value = '0.00';
-                                fb_param.currency = 'USD';
-                                var fpw = document.createElement('script');
-                                fpw.async = true;
-                                fpw.src = '//connect.facebook.net/en_US/fp.js';
-                                var ref = document.getElementsByTagName('script')[0];
-                                ref.parentNode.insertBefore(fpw, ref);
+        // Facebook conversion tracking
+        var fb_param = {};
+        fb_param.pixel_id = '6017461958346';
+        fb_param.value = '0.00';
+        fb_param.currency = 'USD';
+        var fpw = document.createElement('script');
+        fpw.async = true;
+        fpw.src = '//connect.facebook.net/en_US/fp.js';
+        var ref = document.getElementsByTagName('script')[0];
+        ref.parentNode.insertBefore(fpw, ref);
+        log(ref);
 				// Set Donor Name
 				// FF Fix
 				$("#donor-name").html(data.donor.name);
