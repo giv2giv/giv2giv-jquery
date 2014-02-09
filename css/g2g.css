@@ -31,6 +31,16 @@ body {
   background-color: #f5f5f5;
 }
 
+/* Remove Modal Padding */
+.modal {
+  padding: 10px;
+}
+
+.modal-body {
+  padding: 0;
+  margin: 0;
+}
+
 /* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
   #footer {

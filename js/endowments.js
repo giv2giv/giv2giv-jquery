@@ -81,12 +81,15 @@ function endowmentSelectors() {
     ajax: {
       url: "https://api.giv2giv.org/api/charity.json",
       dataType: 'json',
-      quietMillis: 100,
+      quietMillis: 500,
       data: function (term, page) { // page is the one-based page number tracked by Select2
         var payload = {};
         payload['page'] = page;
         payload['per_page'] = 10;
         payload['query'] = term;
+        if($("#charity-city").val().length > 0) {
+          payload['city'] = $("#charity-city").val();
+        }
         return payload;
       },
       results: function (data, page) {
@@ -94,13 +97,16 @@ function endowmentSelectors() {
         // notice we return the value of more so Select2 knows if more results can be loaded
         // Loop Through Charities & build Results
         var results = new Array();
-        $.each(data, function(k, v) {
-          log(v.charity)
-          var charity = {};
-          charity.id = v.charity.id;
-          charity.text = v.charity.name + " (" + v.charity.city + ", " + v.charity.state + ")";
-          results.push(charity);
-        });
+        if(data.message == undefined) {
+          log("Yes!");
+          $.each(data, function(k, v) {
+            log(v.charity)
+            var charity = {};
+            charity.id = v.charity.id;
+            charity.text = v.charity.name + " (" + v.charity.city + ", " + v.charity.state + ")";
+            results.push(charity);
+          });
+        }
         return {results: results};
       }
     }
@@ -158,6 +164,7 @@ function endowmentSelectors() {
     // Clean & Show Modal
     $("#add-endowment-modal #endowment-name").val("");
     $("#add-endowment-modal #endowment-desc").val("");
+    $("#add-endowment-modal #add-endowment-charities").val("");
     $("#add-endowment-modal").modal('show');
     e.preventDefault();
   });
@@ -167,6 +174,7 @@ function endowmentSelectors() {
     // Clean & Show Modal
     $("#add-endowment-modal #endowment-name").val("");
     $("#add-endowment-modal #endowment-desc").val("");
+    $("#add-endowment-modal #add-endowment-charities").val("");
     $("#add-endowment-modal").modal('show');
     e.preventDefault();
   });
@@ -435,7 +443,7 @@ function fetchFeaturedEndowments(callback) {
     method: 'GET',
     data: {
       page: '1',
-      per_page: '8'
+      per_page: '4'
     },
     dataType: "json",
     contentType: "application/json"
@@ -488,15 +496,16 @@ function fetchFeaturedEndowments(callback) {
         }
         var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
         row += card_html;
+        // sticking with 4 to a row for now - issue #5
         // New Row Check
-        var new_row_check = (k + 1) % 4;
-        if(new_row_check == 0) {
-          row += "</div>";
-          // Append Current Row
-          $("#featured-endowments").append(row);
-          // New Row
-          row = "<div class='row-fluid'>";
-        }
+        // var new_row_check = (k + 1) % 4;
+        // if(new_row_check == 0) {
+        //   row += "</div>";
+        //   // Append Current Row
+        //   $("#featured-endowments").append(row);
+        //   // New Row
+        //   row = "<div class='row-fluid'>";
+        // }
         if(endowments.length == (k + 1)) {
           row += "</div>";
           // Append Current Row

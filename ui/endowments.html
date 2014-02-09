@@ -14,7 +14,7 @@
   <div class="modal-header">
     <h3>Create New Endowment</h3>
   </div>
-  <div class="modal-body">
+  <div class="modal-body no-padding">
     <div id="add-endowment-step-one" class="row-fluid">
       <form class="form-horizontal">
         <div class="control-group">
@@ -48,10 +48,17 @@
               <textarea id="endowment-description" rows="3"></textarea>
           </div>
         </div>
+        <h4>Charities</h4>
         <div class="control-group">
           <label class="control-label" for="add-endowment-charities">Charities</label>
           <div class="controls">
             <input type='hidden' id="add-endowment-charities" class="span11">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="charity-city">By City</label>
+          <div class="controls">
+            <input type='text' id="charity-city" class="span11">
           </div>
         </div>
       </form>
