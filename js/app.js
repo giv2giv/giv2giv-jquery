@@ -482,19 +482,22 @@ var WebUI = function() {
 	            tweetText: "giv2giv.org is democratizing charitable giving!",
 	            showTweetCount: true
 	          },
-	          "requireEmail-v1": {
-	            topText: "Sign up!",
-	            bottomText: "Request an Invite to giv2giv.org",
-	            time: "end",
-	            provider: "mailchimp",
-	            list: "0a750d151d"
-	          },
 	          "captions-v1": {
 	            onByDefault: false
 	          }
 	        }
 	      });
 
+				// Rolling Thunder
+				Wistia.plugin.postRoll(wistiaEmbed, {
+				  version: "v1",
+				  text: "Click Here to Sign Up Now!",
+				  link: "https://www.giv2giv.org/#/signup",
+				  style: {
+				    background: "#404040",
+				    color: "#ffffff"
+				  },
+				});
         displayPublicApplication();
 				stopLoad();
 			});

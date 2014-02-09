@@ -74,6 +74,14 @@ function onDetails(endowment) {
 function endowmentSelectors() {
   log("EndowmentsUI: Selectors");
 
+  $("#refresh-featured-endowments").on("click", function(e) {
+    $(this).addClass("fa-spin");
+    fetchFeaturedEndowments(function() {
+      $("#refresh-featured-endowments").removeClass("fa-spin");
+    });
+    e.preventDefault();
+  });
+
   $("#add-endowment-charities").select2({
     placeholder: "Search for a charity",
     multiple: true,
