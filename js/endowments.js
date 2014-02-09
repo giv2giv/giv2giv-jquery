@@ -29,18 +29,25 @@ function onDetails(endowment) {
   WebUI.startLoad();
   log(endowment);
   // Subscription Info
-  if(endowment.my_balances.my_subscription_id == "") {
-    // Not subscribed
-    $("#no-subscription").removeClass("hide");
-    $("#endowment-details-subscribe").attr("data-id", endowment.id);
+  if(WebUI.activeSession()) {
+    $("#subscription-tab").removeClass("hide");
+    if(endowment.my_balances.my_subscription_canceled_at != undefined) {
+      // Not subscribed
+      $("#no-subscription").removeClass("hide");
+      $("#endowment-details-subscribe").attr("data-id", endowment.id);
+    } else {
+      // Subscribed
+      fetchEndowmentDonations(endowment.id);
+      $("#endowment-details-unsubscribe").attr("data-id", endowment.id);
+      $("#subscription-details").removeClass("hide");
+    }
   } else {
-    // Subscribed
-    fetchEndowmentDonations(endowment.id);
-    $("#endowment-details-unsubscribe").attr("data-id", endowment.id);
-    $("#subscription-details").removeClass("hide");
+    // Hide tab
+    $("#subscription-tab").addClass("hide");
   }
+
   // Subscription Buttons
-    // Confirm Endowment Subscription
+  // Confirm Endowment Subscription
   $("#confirm-subscribe-endowment").off("click");
   $("#confirm-subscribe-endowment").on("click", function(e) {
     $btn = $(this);
@@ -58,6 +65,11 @@ function onDetails(endowment) {
     }).done(function(data) {
       growlSuccess("Donation scheduled. Thank you! You'll see your endowment balance update in a minute or two.")
       $btn.button('reset');
+      fetchEndowmentDonations($("#confirm-subscribe-endowment").attr("data-id"), function() {
+        $("#no-subscription").addClass("hide");
+        $("#subscription-details").removeClass("hide");
+        $("#subscribe-endowment-modal").modal("hide");
+      });
     }).fail(function(data) {
       log(data);
       $btn.button('reset');
@@ -79,6 +91,7 @@ function onDetails(endowment) {
       method: 'GET'
     }).done(function(data) {
       // Clean & Prep Modal
+      $("#confirm-subscribe-endowment").attr("data-id", data.endowment.id);
       $("#subscribe-endowment-modal #subscribe-endowment-payment-accounts").html("");
       $("#subscribe-endowment-modal #subscribe-endowment-donation").val("");
       $("#subscribe-endowment-modal #subscribe-endowment-header").html("Subscribe to " + data.endowment.name);
@@ -129,7 +142,6 @@ function onDetails(endowment) {
       method: 'GET'
     }).done(function(data) {
       log(data);
-
       // Clean & Prep Modal
       // $("#unsubscribe-endowment-modal #unsubscribe-endowment-donation").val("");
       $("#unsubscribe-endowment-modal #unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
@@ -156,28 +168,19 @@ function onDetails(endowment) {
       url: "https://api.giv2giv.org/api/donors/payment_accounts/" + $("#confirm-unsubscribe-endowment").attr("data-id") + "/cancel_subscription.json",
       method: 'GET'
     }).done(function(data) {
-      // Refresh Endowments & Hide Modal
-      fetchFeaturedEndowments(function() {
-        // Fetch Subscribed Endowments
-        fetchSubscribedEndowments(function() {
-          $btn.button('reset');
-          growlSuccess("Successfully unsubscribed from endowment.");
-          endowmentSelectors();
-          // Hide Modal
-          $("#unsubscribe-endowment-modal").modal('hide');
-        });
-      });
-
+      $btn.button('reset');
+      growlSuccess("Successfully unsubscribed from endowment.");
+      $("#no-subscription").removeClass("hide");
+      $("#subscription-details").addClass("hide");
+      $("#unsubscribe-endowment-modal").modal('hide');
     }).fail(function(data) {
       $btn.button('reset');
       growlError("Opps! There was an error unsubscribing from this endowment.");
     });
     e.preventDefault();
-
     WebUI.stopLoad();
+  });
 
-
-    });
   // Social Sharing Widget
   $('#social-share').share({
     networks: ['twitter','facebook','tumblr','pinterest','googleplus'],
@@ -658,7 +661,7 @@ function fetchFeaturedEndowments(callback) {
         // Action Buttons
         var actions = "<div class='bottom'><button data-id='"+sub.id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
         // Subscription Check
-        if(sub.my_balances.my_subscription_id == "") {
+        if(sub.my_balances.my_subscription_canceled_at != undefined) {
           actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
         } else {
           actions += "<button data-id='"+sub.id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
@@ -716,7 +719,12 @@ function fetchEndowmentDonations(id, callback) {
         $row.append("<td>$"+i.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
       })
     }
+    // Callbacks
+    if(typeof callback === "function") {
+      // Call it, since we have confirmed it is callable
+      callback();
+    }
   }).fail(function(data) {
-
+    growlError("Opps! There was an error loading your donations.");
   });
 }

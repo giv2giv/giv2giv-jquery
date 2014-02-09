@@ -56,6 +56,7 @@ var WebUI = function() {
 	var displaysignin = function(callback) {
 		// Hide App Panel
 		$("#app-panel").addClass("hide");
+		$("#app-panel").html("");
 		// Hide App Nav
 		$("#app-nav").addClass("hide");
 		// Show Public Nav
@@ -82,6 +83,7 @@ var WebUI = function() {
 		// Hide Signin Panel
 		$("#signin-panel").addClass("hide");
 		// Clean up form here.
+		$("#signin-message").html("");
 		$("#signin-email").val("");
 		$("#signin-password").val("");
 
@@ -328,8 +330,6 @@ var WebUI = function() {
 			// Parse URL (Will Show Signin or Public Page)
 			hasher.setHash(window.location.hash);
 		} else {
-
-
 			// Get Donor Info
 			$.ajax({
 				url: "https://api.giv2giv.org/api/donors.json",
@@ -340,7 +340,7 @@ var WebUI = function() {
 				log("WebUI: Loading Donor information.");
 				// Load Current URL
 				log(window.location.hash);
-				if(window.location.hash == "#/signin" || window.location.hash == "#/signup") {
+				if(window.location.hash == "#/signin" || window.location.hash == "#/signup" || window.location.hash == "" || window.location.hash == "#/") {
 					hasher.setHash('/endowments');
 				} else {
 					hasher.setHash(window.location.hash);
@@ -360,9 +360,10 @@ var WebUI = function() {
 				// FF Fix
 				$("#donor-name").html(data.donor.name);
 				// Hide Signin
-				hidesignin();
 				// Display Main Application
-				displayApplication();
+				displayApplication(function() {
+					hidesignin();
+				});
 			}).error(function(data) {
 				if(data.statusText == "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
@@ -531,6 +532,7 @@ var WebUI = function() {
 			$("#signin-panel").addClass("hide");
 			// And App
 			$("#app-panel").addClass("hide");
+			$("#app-panel").html("");
 			// Set Title
 			document.title = "giv2giv - Sign Up";
 			// Clean & Show Sign Up
@@ -705,8 +707,6 @@ var WebUI = function() {
     }
 	};
 
-	
-
 	// Reload UI
 	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
 	function reloadUI() {
@@ -729,6 +729,8 @@ var WebUI = function() {
 			stopLoad();
 		}, showAlert: function(type, message, timeout) {
 			showAlert(type, message, timeout);
+		}, activeSession: function () {
+			return activeSession();
 		}
 	};
 } ();
