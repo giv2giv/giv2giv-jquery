@@ -99,16 +99,18 @@ var WebUI = function() {
 			rateLimitWait: 500,
 			url: "https://api.giv2giv.org/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function(response) {
-				var results = [];
+				var results = new Array();
 				log(response);
-				$.each(response.endowments, function(key, value) {
-					var endowment = new Object();
-					log(value);
-					endowment['id'] = value.id;
-					endowment['value'] = value.name;
-					endowment['desc'] = value.description;
-					results.push(endowment);
-				});
+				if(response.message == undefined) {
+					$.each(response.endowments, function(key, value) {
+						var endowment = new Object();
+						log(value);
+						endowment['id'] = value.id;
+						endowment['value'] = value.name;
+						endowment['desc'] = value.description;
+						results.push(endowment);
+					});
+				}
 				return results;
 			},
 			maxParallelRequests: 1,
@@ -642,6 +644,7 @@ var WebUI = function() {
 					$("#about-nav").addClass("active");
 					// Set Title
 					document.title = "giv2giv - About";
+					stopLoad();
 				});
 			} else {
 				loadPage('/ui/about.html', function() {

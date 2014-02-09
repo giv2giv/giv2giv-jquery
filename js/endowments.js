@@ -27,6 +27,157 @@ function onStart() {
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
   WebUI.startLoad();
+  log(endowment);
+  // Subscription Info
+  if(endowment.my_balances.my_subscription_id == "") {
+    // Not subscribed
+    $("#no-subscription").removeClass("hide");
+    $("#endowment-details-subscribe").attr("data-id", endowment.id);
+  } else {
+    // Subscribed
+    fetchEndowmentDonations(endowment.id);
+    $("#endowment-details-unsubscribe").attr("data-id", endowment.id);
+    $("#subscription-details").removeClass("hide");
+  }
+  // Subscription Buttons
+    // Confirm Endowment Subscription
+  $("#confirm-subscribe-endowment").off("click");
+  $("#confirm-subscribe-endowment").on("click", function(e) {
+    $btn = $(this);
+    $btn.button('loading');
+    var payload = {};
+    payload['amount'] = $("#subscribe-endowment-modal #subscribe-endowment-donation").val();
+    payload['endowment_id'] = $(this).attr("data-id");
+    var request_payload = JSON.stringify(payload);
+    $.ajax({
+      url: "https://api.giv2giv.org/api/donors/payment_accounts/"+$("#subscribe-endowment-payment-accounts").val()+"/donate_subscription.json",
+      method: 'POST',
+      contentType: "application/json",
+      dataType:"json",
+      data: request_payload
+    }).done(function(data) {
+      growlSuccess("Donation scheduled. Thank you! You'll see your endowment balance update in a minute or two.")
+      $btn.button('reset');
+    }).fail(function(data) {
+      log(data);
+      $btn.button('reset');
+      growlError("Opps! There was an error subscribing to this endowment.");
+    });
+    e.preventDefault();
+  });
+
+  // Subscribe Button
+  $("#endowment-details-subscribe").off("click");
+  $("#endowment-details-subscribe").on("click", function(e) {
+    WebUI.startLoad();
+    // Take ID and get Endowment Details
+    // Set Subscribe Button
+    $("#confirm-subscribe-endowment").attr("data-id", $(this).attr("data-id"));
+    // Now Get Endowment Details
+    $.ajax({
+      url: "https://api.giv2giv.org/api/endowment/" + $(this).attr("data-id") + ".json",
+      method: 'GET'
+    }).done(function(data) {
+      // Clean & Prep Modal
+      $("#subscribe-endowment-modal #subscribe-endowment-payment-accounts").html("");
+      $("#subscribe-endowment-modal #subscribe-endowment-donation").val("");
+      $("#subscribe-endowment-modal #subscribe-endowment-header").html("Subscribe to " + data.endowment.name);
+      $("#subscribe-endowment-modal #subscribe-endowment-min-donation").html("$" + data.endowment.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+      // Now Get Payment Accounts
+      $.ajax({
+        url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
+        method: 'GET'
+      }).done(function(data) {
+        if(data.length == 0) {
+          $("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
+          $("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
+        } else {
+          $.each(data, function(k, v) {
+            // for the love of god man make this prettier!
+            var i = v[0];
+            var ii = Object.keys(i);
+            var iii = i[ii[0]];
+            var c = iii.cards[0];
+            var cc = c[0];
+            var ccc = Object.keys(cc);
+            var card = cc[ccc[0]];
+            // Create Option
+            var $select = $("#subscribe-endowment-payment-accounts");
+            $select.append("<option value='"+ii+"'>"+card.type+" - "+card.last4+" ("+card.exp_month+"/"+card.exp_year+")</option>");
+          });
+        }
+        // Show Modal
+        $("#subscribe-endowment-modal").modal('show');
+        WebUI.stopLoad();
+      });
+    }).fail(function(data) {
+      log(data);
+    });
+    e.preventDefault();
+  });
+
+  // Unsubscribe Button
+  $("#endowment-details-unsubscribe").off("click");
+  $("#endowment-details-unsubscribe").on("click", function(e) {
+    WebUI.startLoad();
+    // Take ID and get Endowment Details
+    // Set Subscribe Button
+    $("#confirm-unsubscribe-endowment").attr("data-id", $(this).attr("data-id"));
+    // Now Get Endowment Details
+    $.ajax({
+      url: "https://api.giv2giv.org/api/endowment/" + $(this).attr("data-id") + ".json",
+      method: 'GET'
+    }).done(function(data) {
+      log(data);
+
+      // Clean & Prep Modal
+      // $("#unsubscribe-endowment-modal #unsubscribe-endowment-donation").val("");
+      $("#unsubscribe-endowment-modal #unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
+      // $("#unsubscribe-endowment-modal #unsubscribe-endowment-min-donation").html("$" + data.endowment.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+      // Set Confirm Button
+      $("#confirm-unsubscribe-endowment").attr("data-id", data.endowment.my_balances.my_subscription_id);
+      // Now Show Modal
+      $("#unsubscribe-endowment-modal").modal('show');
+      WebUI.stopLoad();
+    }).fail(function(data) {
+      log(data);
+    });
+    e.preventDefault();
+  });
+
+  // Unsubscribe confirmation click
+  $("#confirm-unsubscribe-endowment").off("click");
+  $("#confirm-unsubscribe-endowment").on("click", function(e) {
+    WebUI.startLoad();
+    $btn = $(this);
+    $btn.button('loading');
+    // Now Get Endowment Details
+    $.ajax({
+      url: "https://api.giv2giv.org/api/donors/payment_accounts/" + $("#confirm-unsubscribe-endowment").attr("data-id") + "/cancel_subscription.json",
+      method: 'GET'
+    }).done(function(data) {
+      // Refresh Endowments & Hide Modal
+      fetchFeaturedEndowments(function() {
+        // Fetch Subscribed Endowments
+        fetchSubscribedEndowments(function() {
+          $btn.button('reset');
+          growlSuccess("Successfully unsubscribed from endowment.");
+          endowmentSelectors();
+          // Hide Modal
+          $("#unsubscribe-endowment-modal").modal('hide');
+        });
+      });
+
+    }).fail(function(data) {
+      $btn.button('reset');
+      growlError("Opps! There was an error unsubscribing from this endowment.");
+    });
+    e.preventDefault();
+
+    WebUI.stopLoad();
+
+
+    });
   // Social Sharing Widget
   $('#social-share').share({
     networks: ['twitter','facebook','tumblr','pinterest','googleplus'],
@@ -39,6 +190,11 @@ function onDetails(endowment) {
 
   // Selectors
   $("li a[href='#charities']").on('click', function(e) {
+    // Hide Details Cards
+    $("#endowment-charity-details").addClass("hide");
+  });
+
+  $("li a[href='#subscription']").on('click', function(e) {
     // Hide Details Cards
     $("#endowment-charity-details").addClass("hide");
   });
@@ -74,6 +230,7 @@ function onDetails(endowment) {
 function endowmentSelectors() {
   log("EndowmentsUI: Selectors");
 
+  $("#refresh-featured-endowments").off("click");
   $("#refresh-featured-endowments").on("click", function(e) {
     $(this).addClass("fa-spin");
     fetchFeaturedEndowments(function() {
@@ -82,6 +239,10 @@ function endowmentSelectors() {
     });
     e.preventDefault();
   });
+
+  if($(this).data('select2')) {
+    $("#add-endowment-charities").select2('destroy');
+  }
 
   $("#add-endowment-charities").select2({
     placeholder: "Search for a charity",
@@ -107,7 +268,6 @@ function endowmentSelectors() {
         // Loop Through Charities & build Results
         var results = new Array();
         if(data.message == undefined) {
-          log("Yes!");
           $.each(data, function(k, v) {
             log(v.charity)
             var charity = {};
@@ -531,5 +691,32 @@ function fetchFeaturedEndowments(callback) {
       // Call it, since we have confirmed it is callable
       callback();
     }
+  });
+}
+
+function fetchEndowmentDonations(id, callback) {
+  log("Fetching endowment donations.");
+  $.ajax({
+    url: 'https://api.giv2giv.org/api/donors/donations.json',
+    method: 'GET',
+    data: {
+      endowment_id: id
+    },
+    dataType: "json",
+    contentType: "application/json"
+  }).done(function(data) {
+    log(data);
+    if(data.message == undefined) {
+      $.each(data.donations, function(k, v) {
+        var i = v.donation;
+        var date = new Date(i.created_at);
+        var $row = $("#donations-table").find('tbody:last').append('<tr></tr>');
+        $row.append("<td>"+date.toLocaleDateString()+"</td>");
+        $row.append("<td>$"+i.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+        $row.append("<td>$"+i.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+      })
+    }
+  }).fail(function(data) {
+
   });
 }

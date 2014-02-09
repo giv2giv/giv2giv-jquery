@@ -9,6 +9,7 @@
             <ul class="nav nav-pills" data-toggle="tabs">
               <li class="active"><a href="#details">Details</a></li>
               <li><a href="#charities">Charities</a></li>
+              <li><a href="#subscription">Subscription</a></li>
             </ul>
           </div>
           <div class="card-body">           
@@ -28,6 +29,26 @@
                   </thead>
                   <tbody></tbody>
                 </table>
+              </div>
+              <div class="tab-pane" id="subscription">
+                <div id="no-subscription" class="hide">
+                  <h3>You haven't subscribed to this endowment.</h3>
+                  <p><a class="btn btn-success" id="endowment-details-subscribe" data-id="" data-toggle="modal" href="#">Subscribe</a></p>
+                </div>
+                <div id="subscription-details" class="hide">
+                  <h4>Past Donations</h4>
+                  <table id="donations-table" class="table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Gross Amount</th>
+                        <th>Net Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                  <p><a class="btn btn-danger" data-id="" id="endowment-details-unsubscribe" href="#">Unsubscribe</a></p>
+                </div>
               </div>
             </div>
           </div>
@@ -107,3 +128,42 @@
     </div>
   </div><!--/span-->
 </div><!--/row-->
+<!-- Modals -->
+<!-- Subscribe Modal -->
+<div id="subscribe-endowment-modal" class="modal hide">
+  <div class="modal-header">
+    <h3 id="subscribe-endowment-header">Subscribe to </h3>
+  </div>
+  <div class="modal-body">
+    <form id="subcribe-endowment-modal-frm">
+      <p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
+      <div class="control-group">
+        <label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
+        <div class="controls">
+          <input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
+        <div class="controls">
+          <select id="subscribe-endowment-payment-accounts">
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+    <a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>
+  </div>
+</div>
+<!-- Unsubscribe Modal -->
+<div id="unsubscribe-endowment-modal" class="modal hide">
+  <div class="modal-body">
+    <h4>Are you sure you would like to unsubscribe to this endowment?</h4>
+  </div>
+  <div class="modal-footer">
+    <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+    <a href="#" id="confirm-unsubscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Unsubscribe</a>
+  </div>
+</div>
