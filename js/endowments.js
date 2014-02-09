@@ -78,6 +78,7 @@ function endowmentSelectors() {
     $(this).addClass("fa-spin");
     fetchFeaturedEndowments(function() {
       $("#refresh-featured-endowments").removeClass("fa-spin");
+      endowmentSelectors();
     });
     e.preventDefault();
   });
