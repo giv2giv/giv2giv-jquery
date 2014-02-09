@@ -1,7 +1,7 @@
 // WebUI Application
 // Michael Thomas, 2014
 // Setup Stripe
-var stripe_pub_key = 'YOUR_STRIPE_PUBLIC_KEY'
+var stripe_pub_key = 'pk_live_5DnwbkdS3FpUgGeejYSOjdr9'
 Stripe.setPublishableKey(stripe_pub_key);
 
 // Wish Page ID
@@ -10,7 +10,7 @@ var wish_page;
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @todo - Send serious logs to server?
-var debug = true;
+var debug = false;
 
 log = function () {
   if (debug && console && typeof console.log === 'function') {
