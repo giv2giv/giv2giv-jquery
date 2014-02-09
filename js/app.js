@@ -325,6 +325,8 @@ var WebUI = function() {
 			// Parse URL (Will Show Signin or Public Page)
 			hasher.setHash(window.location.hash);
 		} else {
+
+
 			// Get Donor Info
 			$.ajax({
 				url: "https://api.giv2giv.org/api/donors.json",
@@ -340,6 +342,16 @@ var WebUI = function() {
 				} else {
 					hasher.setHash(window.location.hash);
 				}
+                                // Facebook conversion tracking
+                                var fb_param = {};
+                                fb_param.pixel_id = '6017461958346';
+                                fb_param.value = '0.00';
+                                fb_param.currency = 'USD';
+                                var fpw = document.createElement('script');
+                                fpw.async = true;
+                                fpw.src = '//connect.facebook.net/en_US/fp.js';
+                                var ref = document.getElementsByTagName('script')[0];
+                                ref.parentNode.insertBefore(fpw, ref);
 				// Set Donor Name
 				// FF Fix
 				$("#donor-name").html(data.donor.name);
