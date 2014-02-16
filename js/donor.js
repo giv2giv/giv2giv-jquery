@@ -202,6 +202,7 @@ function loadUI() {
 		var donor = {};
 		donor['name'] = $("#donor-profile-name").val();
 		donor['email'] = $("#donor-profile-email").val();
+		donor['password'] = $("#donor-profile-password").val();
 		donor['address'] = $("#donor-profile-address").val();
 		donor['city'] = $("#donor-profile-city").val();
 		donor['state'] = $("#donor-profile-state").val();

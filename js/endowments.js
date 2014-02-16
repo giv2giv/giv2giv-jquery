@@ -31,15 +31,15 @@ function onDetails(endowment) {
   // Subscription Info
   if(WebUI.activeSession()) {
     $("#subscription-tab").removeClass("hide");
-    if(endowment.my_balances.my_subscription_canceled_at != undefined) {
-      // Not subscribed
-      $("#no-subscription").removeClass("hide");
-      $("#endowment-details-subscribe").attr("data-id", endowment.id);
-    } else {
+    if(endowment.my_balances.is_subscribed) {
       // Subscribed
       fetchEndowmentDonations(endowment.id);
       $("#endowment-details-unsubscribe").attr("data-id", endowment.id);
-      $("#subscription-details").removeClass("hide");
+      $("#subscription-details").removeClass("hide");      
+    } else {
+      // Not subscribed
+      $("#no-subscription").removeClass("hide");
+      $("#endowment-details-subscribe").attr("data-id", endowment.id);
     }
   } else {
     // Hide tab
@@ -530,36 +530,36 @@ function fetchSubscribedEndowments(callback) {
       // Parse Results Here
       // First Row
       var row = "<div class='row-fluid'>";
-      $.each(data, function(k, v) {
-        var i = v[0];
-        // Get Object
-        var ii = Object.keys(i);
-        var sub = i[ii[0]];
-        log(sub);
+      $.each(data, function(index, sub) {
+        
+
+log (sub) 
+      
         // Now Build A Card
         // Start Body & Name
-        var body = "<div class='info'><div class='title'>"+sub.endowment_name+"</div>";
+        var body = "<div class='info'><div class='title'>"+sub.name+"</div>";
         // Description
-        body += "<p><em>"+sub.endowment_description+"</em></p>";
+        body += "<p><em>"+sub.description+"</em></p>";
         
         // # of Donors
-        if(sub.endowment_donor_count == 1) {
+        if(sub.global_balances.endowment_donor_count == 1) {
           var donor_string = "donor";
         } else {
           var donor_string = "donors";
         }  
     
-        body += "<div class='desc'><strong>"+sub.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
+
+        body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
         // Endowment Balance
-        body += "<div class='desc'>Endowment Balance: <strong>$"+sub.endowment_total_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";    
+        body += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";    
         
-        body += "<div class='desc'>Total I have donated: <strong>$"+sub.endowment_donor_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+        body += "<div class='desc'>Total I have donated: <strong>$"+sub.my_balances.my_donations_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
         // Endowment Balance & Donations
-        body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+        body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
         // Donation Amount
-        body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.endowment_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.endowment_donation_type+")</strong></div>";
+        body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.my_balances.my_subscription_type+")</strong></div>";
         // Donor Balance
-        body += "<div class='desc'>My Current Balance: <strong>$"+sub.endowment_donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
+        body += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
 
         // Action Buttons
         var actions = "<div class='bottom'><button data-id='"+sub.endowment_id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
@@ -571,7 +571,7 @@ function fetchSubscribedEndowments(callback) {
         // Add the Card to the Row
         row += card_html;
         // New Row Check
-        var new_row_check = (k + 1) % 4;
+        var new_row_check = (index + 1) % 4;
         if(new_row_check == 0) {
           row += "</div>";
           // Append Current Row
@@ -579,7 +579,7 @@ function fetchSubscribedEndowments(callback) {
           // New Row
           row = "<div class='row-fluid'>";
         }
-        if(data.length == (k + 1)) {
+        if(data.length == (index + 1)) {
           row += "</div>";
           // Append Current Row
           $("#sub-endowments").append(row);
