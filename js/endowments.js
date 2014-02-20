@@ -325,7 +325,8 @@ function endowmentSelectors() {
           $("#add-endowment-modal").modal('hide');
         });
       });
-    }).fail(function(data) {  
+    }).fail(function(data) {
+      log(data)
       growlError("An error occured while adding this endowment.");
     });
   });
@@ -661,7 +662,8 @@ function fetchFeaturedEndowments(callback) {
         // Action Buttons
         var actions = "<div class='bottom'><button data-id='"+sub.id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
         // Subscription Check
-        if(sub.my_balances.my_subscription_canceled_at != undefined) {
+
+        if(sub.my_balances.is_subscribed == 'true') {
           actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
         } else {
           actions += "<button data-id='"+sub.id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
