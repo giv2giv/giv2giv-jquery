@@ -27,11 +27,10 @@ function onStart() {
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
   WebUI.startLoad();
-  log(endowment);
   // Subscription Info
   if(WebUI.activeSession()) {
     $("#subscription-tab").removeClass("hide");
-    if(endowment.my_balances.is_subscribed) {
+    if (endowment.my_balances.is_subscribed) {
       // Subscribed
       fetchEndowmentDonations(endowment.id);
       $("#endowment-details-unsubscribe").attr("data-id", endowment.id);
@@ -102,6 +101,7 @@ function onDetails(endowment) {
         method: 'GET'
       }).done(function(data) {
         if(data.length == 0) {
+          growlError("Please set up a payment account under Donors->Payment Accounts");
           $("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
           $("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
         } else {
@@ -662,11 +662,11 @@ function fetchFeaturedEndowments(callback) {
         // Action Buttons
         var actions = "<div class='bottom'><button data-id='"+sub.id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
         // Subscription Check
-
-        if(sub.my_balances.is_subscribed == 'true') {
-          actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
-        } else {
+        
+        if (sub.my_balances.is_subscribed) {
           actions += "<button data-id='"+sub.id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
+        } else {
+          actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
         }
         var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
         row += card_html;
