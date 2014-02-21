@@ -1,7 +1,7 @@
 // WebUI Application
 // Michael Thomas, 2014
 // Setup Stripe
-var stripe_pub_key = 'pk_live_5DnwbkdS3FpUgGeejYSOjdr9'
+var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy'
 Stripe.setPublishableKey(stripe_pub_key);
 
 // Wish Page ID
