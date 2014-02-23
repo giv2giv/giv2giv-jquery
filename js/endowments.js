@@ -411,6 +411,7 @@ function endowmentSelectors() {
         method: 'GET'
       }).done(function(data) {
         if(data.length == 0) {
+          growlError("Please set up a payment account under Donors->Payment Accounts");
           $("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
           $("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
         } else {
