@@ -20,7 +20,7 @@ function onStart() {
 
 function fetchStats(callback) {
 	$.ajax({
-	  url: 'https://api.giv2giv.org/api/donors/balance_information.json',
+	  url: server_url + '/api/donors/balance_information.json',
 	  method: 'GET',
 	  contentType: "application/json",
     dataType: "json"

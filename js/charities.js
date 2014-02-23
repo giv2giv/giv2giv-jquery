@@ -15,7 +15,7 @@ $(function() {
 
 		//Search charities
 		$.ajax({
-		  url: 'https://api.giv2giv.org/api/charities.json',
+		  url: server_url + '/api/charities.json',
 		  method: 'GET',
 		  data: {
 		    page: '1',

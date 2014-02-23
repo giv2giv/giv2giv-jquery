@@ -1,5 +1,8 @@
 // WebUI Application
 // Michael Thomas, 2014
+
+var server_url = "http://localhost:3000"
+
 // Setup Stripe
 var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy'
 Stripe.setPublishableKey(stripe_pub_key);
@@ -99,7 +102,7 @@ var WebUI = function() {
 		remote: {
 			name: 'endowments',
 			rateLimitWait: 500,
-			url: "https://api.giv2giv.org/api/endowment.json?page=1&per_page=5&query=%QUERY",
+			url: server_url + "/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function(response) {
 				var results = new Array();
 				log(response);
@@ -157,7 +160,7 @@ var WebUI = function() {
 		log(payload);
 		var request = JSON.stringify(payload);
 		$.ajax({
-  		url: 'https://api.giv2giv.org/api/wishes.json',
+  		url: server_url + '/api/wishes.json',
   		method: 'POST',
   		data: request,
   		dataType: "json",
@@ -190,7 +193,7 @@ var WebUI = function() {
 
 		var request = JSON.stringify(payload);
 		$.ajax({
-  		url: 'https://api.giv2giv.org/api/donors.json',
+  		url: server_url + '/api/donors.json',
   		method: 'POST',
   		data: request,
   		dataType: "json",
@@ -199,7 +202,7 @@ var WebUI = function() {
   		// Success, now cheat and signin
   		var payload = JSON.stringify({ "email" : $("#signup-email").val(), "password" : $("#signup-password").val() });
 			$.ajax({
-				url: "https://api.giv2giv.org/api/sessions/create.json",
+				url: server_url + "/api/sessions/create.json",
 				type: "POST",
 				data: payload,
 				contentType: "application/json",
@@ -252,7 +255,7 @@ var WebUI = function() {
 		$btn.button('loading');
 		var payload = JSON.stringify({ "email" : $("#signin-email").val(), "password" : $("#signin-password").val() });
 		$.ajax({
-			url: "https://api.giv2giv.org/api/sessions/create.json",
+			url: server_url + "/api/sessions/create.json",
 			type: "POST",
 			data: payload,
 			contentType: "application/json",
@@ -283,7 +286,7 @@ var WebUI = function() {
 	$("#logout-btn").on("click", function(e) {
 		log("WebUI: Logout.");
 		$.ajax({
-			url: "https://api.giv2giv.org/api/sessions/destroy.json",
+			url: server_url + "/api/sessions/destroy.json",
 			type: "POST",
 			contentType: "application/json",
 			dataType:"json"
@@ -332,7 +335,7 @@ var WebUI = function() {
 		} else {
 			// Get Donor Info
 			$.ajax({
-				url: "https://api.giv2giv.org/api/donors.json",
+				url: server_url + "/api/donors.json",
 				type: "GET",
 				contentType: "application/json",
 				dataType:"json"
@@ -403,7 +406,7 @@ var WebUI = function() {
 			});
 			$.ajax({
 			  type: 'POST',
-			  url: 'https://api.giv2giv.org/api/sessions/ping.json',
+			  url: server_url + '/api/sessions/ping.json',
 			  async:false
 			}).done(function(data) {
 				log("WebUI: Session is good.");
@@ -569,7 +572,7 @@ var WebUI = function() {
 			if(activeSession()) {
 				// Load Endowment Details First
 				$.ajax({
-       		url: "https://api.giv2giv.org/api/endowment/"+id+".json",
+       		url: server_url + "/api/endowment/"+id+".json",
        		type: "GET",
        		contentType: "application/json",
        		dataType: "json"
@@ -592,7 +595,7 @@ var WebUI = function() {
 			} else {
 				// Load Endowment Details First
 				$.ajax({
-       		url: "https://api.giv2giv.org/api/endowment/"+id+".json",
+       		url: server_url + "/api/endowment/"+id+".json",
        		type: "GET",
        		contentType: "application/json",
        		dataType: "json"

@@ -28,7 +28,7 @@ function onStart() {
 function fetchPaymentAccounts(callback) {
 	// Get Payment Accounts
 	$.ajax({
-	  url: 'https://api.giv2giv.org/api/donors/payment_accounts.json',
+	  url: server_url + '/api/donors/payment_accounts.json',
 	  method: 'GET',
 	  contentType: "application/json",
     dataType: "json"
@@ -90,7 +90,7 @@ function fetchPaymentAccounts(callback) {
 // Fetch Donor Profile
 function fetchDonorProfile(callback) {
 	$.ajax({
-	  url: 'https://api.giv2giv.org/api/donors.json',
+	  url: server_url + '/api/donors.json',
 	  method: 'GET',
 	  dataType: "json",
   	contentType: "application/json"
@@ -160,7 +160,7 @@ function loadUI() {
 	$("#confirm-payment-removal").on("click", function(e) {
 		$btn = $(this).button('loading');
 		$.ajax({
-		  url: 'https://api.giv2giv.org/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
+		  url: server_url + '/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
 		  method: 'DELETE',
 		  contentType: "application/json",
 			dataType:"json"
@@ -211,7 +211,7 @@ function loadUI() {
 		var payload = JSON.stringify(donor);
 
 		$.ajax({
-			url: "https://api.giv2giv.org/api/donors.json",
+			url: server_url + "/api/donors.json",
 			type: "PUT",
 			data: payload,
 			contentType: "application/json",
@@ -275,7 +275,7 @@ function loadUI() {
 
 			// Get donor info
 			$.ajax({
-			  url: 'https://api.giv2giv.org/api/donors.json',
+			  url: server_url + '/api/donors.json',
 			  method: 'GET',
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
@@ -289,22 +289,24 @@ function loadUI() {
 
 		  // Get donation info
 			$.ajax({
-			  url: 'https://api.giv2giv.org/api/donors/donations.json',
+			  url: server_url + '/api/donors/donations.json',
 			  method: 'GET',
 			  data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {		    	 	
-		    	$.each(response.donations, function(k, v) {
+		    	$.each(response.donations, function(k, donation) {
 		    		var $row = $statement.find('tbody:last').append('<tr></tr>');		
 						// And stamp each bit for our row
-						var $col = $statement.find('tr:last').append('<td>' + v.donation.created_at + '</td>');
-						var $col = $statement.find('tr:last').append('<td>Endowment_id: ' + v.donation.endowment_id + '</td>');
-						var $col = $statement.find('tr:last').append('<td>' + v.donation.gross_amount + '</td>');
+						ugly_timestamp = new Date(donation.created_at * 1000);
+						pretty_timestamp = prettify_timestamp(ugly_timestamp);
+						var $col = $statement.find('tr:last').append('<td>' + pretty_timestamp + '</td>');
+						var $col = $statement.find('tr:last').append('<td>Endowment Name: ' + donation.endowment_name + '</td>');
+						var $col = $statement.find('tr:last').append('<td>$' + donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + '</td>');
 					});
-					$statement.find('#statement-total').html("<span>Total: " + response.total + "</span>");
-					ugly_timestamp = new Date(response.timestamp * 1000);
-					pretty_timestamp = prettify_timestamp(ugly_timestamp);
-					$statement.find('#statement-date-insert').html(pretty_timestamp);
+					$statement.find('#statement-total').html("<span>Total: $" + response.total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span>");
+					ugly_statement_timestamp = new Date(response.timestamp * 1000);
+					pretty_statement_timestamp = prettify_timestamp(ugly_statement_timestamp);
+					$statement.find('#statement-date-insert').html(pretty_statement_timestamp);
 					// Open in new Window
 		    	var html = $('<html>').append($statement).html();
 		    	popup.document.write(html);
@@ -334,7 +336,7 @@ function loadUI() {
 	// 	*/
 
  //  	$.ajax({
-	// 	  url: 'https://api.giv2giv.org/api/donors/donations.json',
+	// 	  url: server_url + '/api/donors/donations.json',
 	// 	  method: 'GET',
 	// 	  data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 	// 		contentType: "application/json",
@@ -379,7 +381,7 @@ var stripeResponseHandler = function(status, response) {
 		var payload = JSON.stringify(payment);
 
 		$.ajax({
-			url: "https://api.giv2giv.org/api/donors/payment_accounts.json",
+			url: server_url + "/api/donors/payment_accounts.json",
 			type: "POST",
 			data: payload,
 			contentType: "application/json",

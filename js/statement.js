@@ -20,7 +20,7 @@ $(document).ready(function () {
 
   	$.ajax({
 
-		  url: 'https://api.giv2giv.org/api/donors/donations.json',
+		  url: server_url + '/api/donors/donations.json',
 		  method: 'GET',
 		  data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 			contentType: "application/json",
