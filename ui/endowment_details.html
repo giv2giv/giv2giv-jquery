@@ -1,135 +1,136 @@
 <div id="social-share"></div>
-<div class="row-fluid">
-  <div class="span12">
-    <h1 id="endowment-details-header"></h1>
-    <div class="row-fluid">
-      <div class="span12">
-        <div class="card">
-          <div class="card-heading simple">
-            <ul class="nav nav-pills" data-toggle="tabs">
-              <li class="active"><a href="#details">Details</a></li>
-              <li><a href="#charities">Charities</a></li>
-              <li id="subscription-tab"><a href="#subscription">Subscription</a></li>
-            </ul>
-          </div>
-          <div class="card-body">           
-            <div class="tab-content">
-              <div class="tab-pane active" id="details">
-                <!-- Details Tab -->
-                <p id="endowment-details-description" class="lead"></p>
-              </div>
-              <div class="tab-pane" id="charities">
-                <!-- Charities Tab -->
-                <table id="charities-table" class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Address</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-              <div class="tab-pane" id="subscription">
-                <div id="no-subscription" class="hide">
-                  <h3>You haven't subscribed to this endowment.</h3>
-                  <p><a class="btn btn-success" id="endowment-details-subscribe" data-id="" data-toggle="modal" href="#">Subscribe</a></p>
+  <div class="row-fluid">
+    <div class="span12">
+      <h1 id="endowment-details-header"></h1>
+      <div class="row-fluid">
+        <div class="span12">
+          <div class="card">
+            <div class="card-heading simple">
+              <ul class="nav nav-pills" data-toggle="tabs">
+                <li class="active"><a href="#details">Details</a></li>
+                <li><a href="#charities">Charities</a></li>
+                <li id="subscription-tab"><a href="#subscription">Subscription</a></li>
+              </ul>
+            </div>
+            <div class="card-body">           
+              <div class="tab-content">
+                <div class="tab-pane active" id="details">
+                  <!-- Details Tab -->
+                  <p id="endowment-details-description" class="lead"></p>
                 </div>
-                <div id="subscription-details" class="hide">
-                  <h4>Past Donations</h4>
-                  <table id="donations-table" class="table">
+                <div class="tab-pane" id="charities">
+                  <!-- Charities Tab -->
+                  <table id="charities-table" class="table">
                     <thead>
                       <tr>
-                        <th>Date</th>
-                        <th>Gross Amount</th>
-                        <th>Net Amount</th>
+                        <th>Name</th>
+                        <th>Address</th>
                       </tr>
                     </thead>
                     <tbody></tbody>
                   </table>
-                  <strong>* Note: Some donations may take a few minutes to appear.</strong>
-                  <br/>
-                  <br/>
-                  <p><a class="btn btn-danger" data-id="" id="endowment-details-unsubscribe" href="#">Unsubscribe</a></p>
+                </div>
+                <div class="tab-pane" id="subscription">
+                  <div id="no-subscription" class="hide">
+                    <h3>You haven't subscribed to this endowment.</h3>
+                    <p><a class="btn btn-success" id="endowment-details-subscribe" data-id="" data-toggle="modal" href="#">Subscribe</a></p>
+                  </div>
+                  <div id="subscription-details" class="hide">
+                    <h4>Past Donations</h4>
+                    <table id="donations-table" class="table">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Gross Amount</th>
+                          <th>Net Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                    <strong>* Note: Some donations may take a few minutes to appear.</strong>
+                    <br/>
+                    <br/>
+                    <p><a class="btn btn-danger" data-id="" id="endowment-details-unsubscribe" href="#">Unsubscribe</a></p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div><!--/row-->
+      <div id="endowment-charity-details">
+        <div class="row-fluid">
+
+          <div class="span4">
+            <div class="card">
+              <h2 class="card-heading simple">Global Current Balance</h2>
+              <div class="card-body">
+                <h3 id="endowment-details-balance"></h3>
+                <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="span4">
+            <div class="card">
+              <h2 class="card-heading simple">Number of Donors</h2>
+              <div class="card-body">
+                <h3 id="endowment-details-donor-count"></h3>
+                <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="span4">
+            <div class="card">
+            <h2 class="card-heading simple">Global Grants Paid *</h2>
+              <div class="card-body">
+                <h3 id="endowment-details-grants"></h3>
+                <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row-fluid">
+
+          <div class="span4">
+            <div class="card">
+              <h2 class="card-heading simple">My Current Balance</h2>
+              <div class="card-body">
+                <h3 id="endowment-details-my-balance"></h3>
+                <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="span4">
+            <div class="card">
+              <h2 class="card-heading simple">My Donations (#)</h2>
+              <div class="card-body">
+                <h3 id="endowment-details-my-donations-count"></h3>
+                <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="span4">
+            <div class="card">
+            <h2 class="card-heading simple">My Grants Paid *</h2>
+              <div class="card-body">
+                <h3 id="endowment-details-my-grants-amount"></h3>
+                <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+              </div>
+            </div>
+          </div><!--/span-->
+
+        </div>
       </div>
-    </div><!--/row-->
-    <div id="endowment-charity-details">
-      <div class="row-fluid">
-
-        <div class="span4">
-          <div class="card">
-            <h2 class="card-heading simple">Global Current Balance</h2>
-            <div class="card-body">
-              <h3 id="endowment-details-balance"></h3>
-              <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
-            </div>
-          </div>
-        </div>
-
-        <div class="span4">
-          <div class="card">
-            <h2 class="card-heading simple">Number of Donors</h2>
-            <div class="card-body">
-              <h3 id="endowment-details-donor-count"></h3>
-              <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
-            </div>
-          </div>
-        </div>
-
-        <div class="span4">
-          <div class="card">
-          <h2 class="card-heading simple">Global Grants Paid</h2>
-            <div class="card-body">
-              <h3 id="endowment-details-grants"></h3>
-              <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="row-fluid">
-
-        <div class="span4">
-          <div class="card">
-            <h2 class="card-heading simple">My Current Balance</h2>
-            <div class="card-body">
-              <h3 id="endowment-details-my-balance"></h3>
-              <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
-            </div>
-          </div>
-        </div>
-
-        <div class="span4">
-          <div class="card">
-            <h2 class="card-heading simple">My Donations (#)</h2>
-            <div class="card-body">
-              <h3 id="endowment-details-my-donations-count"></h3>
-              <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
-            </div>
-          </div>
-        </div>
-
-        <div class="span4">
-          <div class="card">
-          <h2 class="card-heading simple">My Grants Paid</h2>
-            <div class="card-body">
-              <h3 id="endowment-details-my-grants-amount"></h3>
-              <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
-            </div>
-          </div>
-        </div>
-
-        </div>
-      </div>
-
+      <h3>* giv2giv began accepting donations February 9th 2014. The first grant is currently scheduled for May 24th 2014.</h3>
     </div>
   </div><!--/span-->
 </div><!--/row-->
+
 <!-- Modals -->
 <!-- Subscribe Modal -->
 <div id="subscribe-endowment-modal" class="modal hide">
