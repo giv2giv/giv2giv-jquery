@@ -1,7 +1,10 @@
 giv2giv-jquery
 ==============
 
-Web front-end using jquery, history.js, crossroads.js
+https://giv2giv.org user interface using jquery, history.js, crossroads.js
+
+
+##Setup:##
 
 Edit js/app.js to point to your giv2giv API. Options include:
 
