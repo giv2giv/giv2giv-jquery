@@ -26,18 +26,21 @@ function fetchStats(callback) {
     dataType: "json"
 	}).done(function(data) {	  	
   	var donor_current_balance = '$' + data.donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-  	var donor_total_donations = '$' + data.donor_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-  	var giv2giv_current_balance = '$' + data.giv2giv_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-  	var giv2giv_total_donations = '$' + data.giv2giv_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-  	var giv2giv_total_grants = '$' + data.giv2giv_total_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-  	var donor_total_grants = '$' + data.donor_total_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	var donor_total_amount_of_donations = '$' + data.donor_total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	var donor_total_amount_of_grants = '$' + data.donor_total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	var current_fund_balance_all_donors = '$' + data.current_fund_balance_all_donors.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	var total_amount_of_donations = '$' + data.total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	var total_number_of_donations = '$' + data.total_number_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	var total_amount_of_grants = '$' + data.total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  	
 
   	$("#donor-current-balance").text(donor_current_balance);
-  	$("#donor-total-donations").text(donor_total_donations);
-  	$("#donor-total-grants").text(donor_total_grants);
-  	$("#giv2giv-current-balance").text(giv2giv_current_balance);
-  	$("#giv2giv-total-donations").text(giv2giv_total_donations);
-  	$("#giv2giv-total-grants").text(giv2giv_total_grants);
+  	$("#donor-total-amount-of-donations").text(donor_total_amount_of_donations);
+  	$("#donor-total-amount-of-grants").text(donor_total_amount_of_grants);
+  	$("#current-fund-balance-all-donors").text(current_fund_balance_all_donors);
+  	$("#total-amount-of-donations").text(total_amount_of_donations);
+  	$("#total-amount-of-grants").text(total_amount_of_grants);
+
 	}).fail(function(data) {
 	  	log(data);
 	  	growlError("Opps! An error occured while loading the Numbers.");
