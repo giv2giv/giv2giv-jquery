@@ -97,6 +97,23 @@ code {
   line-height: 1;
 }
 
+/* Landing Page Stuff */
+.header {
+  text-align: center;
+}
+  .header .main-description {
+    font-size: 2rem;
+    line-height: 150%;
+    font-style: italic;
+  }
+    .header .main-description span {
+      display: block;
+      font-style: normal;
+
+    }
+
+
+
 /* Endowment Cards */
 .card.endowment {
   position: relative;
