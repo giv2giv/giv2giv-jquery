@@ -42,16 +42,6 @@ body {
   max-height: 600px;
 }
 
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-  #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
 #wrap > .container {
   padding-top: 60px;
 }
@@ -256,5 +246,14 @@ code {
   }
   .card.endowment .info .title {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  #footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }

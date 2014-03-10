@@ -14,8 +14,54 @@
   <link href="/css/jquery.share.css" rel="stylesheet">
 </head>
 <body>
-  <div id="footer">
-    hello world
+  <div id="wrap">
+    <!-- Re-do the navbar later -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div id="loading">
+            <i class="loading-brand fa fa-leaf fa-spin logo-loading"></i>
+          </div>
+          <a class="brand" href="http://giv2giv.org">
+            <img src='/images/logo.png' alt='giv2giv'/>
+          </a>
+          <div class="nav-collapse collapse hide pull-right" id="public-nav">
+            <ul class="nav">
+              <!-- public only tabs go here -->
+              <li class="public-nav" id="landing-nav"><a href="/">Home</a></li>
+              <li class="public-nav" id="pub-about-nav"><a href="/about">Questions?</a></li>
+              <li class="public-nav" id="signup-nav"><a href="/signup">Sign Up</a></li>
+              <li class="public-nav" id="signin-nav"><a href="/signin">Sign In</a></li>
+            </ul>
+          </div>
+          <div class="nav-collapse collapse hide" id="app-nav">
+            <form class="navbar-search pull-left">
+              <input id="endowment-search" type="text" class="search-query span2" placeholder="Search Endowments">
+            </form>
+            <p class="navbar-text pull-right">
+              Logged in as <span id="donor-name" class="navbar-link"></span>
+            </p>
+
+            <ul class="nav">
+              <!-- Logged in tabs go here -->
+              <li id="endowments-nav" class="nav-link"><a href="/endowments">Endowments</a></li>
+              <li id="donor-nav" class="nav-link"><a href="/donor">Donor</a></li>
+              <li id="about-nav" class="nav-link"><a href="/about">Questions?</a></li>
+              <li id="numbers-nav" class="nav-link"><a href="/numbers">Stats for Nerds</a></li>
+              <li><a id="logout-btn" href="logout">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <blockquote class="header-quote">&ldquo;Compound interest is the most powerful force in the universe&rdquo;</blockquote>
+    <p>Let's use it to transform non-profits:</p>
   </div>
 
   <!-- Insert the rest of the JS tags here -->
