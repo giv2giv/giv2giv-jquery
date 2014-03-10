@@ -1,7 +1,7 @@
 // WebUI Application
 // Michael Thomas, 2014
 
-var server_url = "http://localhost:3000"
+var server_url = "https://apitest.giv2giv.org"
 
 // Setup Stripe
 var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy'
@@ -93,7 +93,7 @@ var WebUI = function() {
 		// Callback
 		if(typeof callback === "function") {
     	// Call it, since we have confirmed it is callable
-      callback();
+    	callback();
     }
 	};
 
@@ -682,8 +682,27 @@ var WebUI = function() {
 					document.title = "giv2giv - Numbers";
 				});
 			} else {
-				crossroads.parse('/signin');
+				loadPage('/ui/numbers.html', function() {
+					$("#app-panel").removeClass("hide");
+					$("#signin-panel").addClass("hide");
+					$("#signup-panel").addClass("hide");
+					$(".public-nav").siblings().removeClass("active");
+					$('#app-container').attr('data-page-id', 'numbers');
+					// Load JS
+					NumbersUI.start.dispatch();
+					// Set Nav Tab
+					$("#pub-numbers-nav").addClass("active");
+					// Set Title
+					document.title = "giv2giv - Numbers";
+					displayPublicApplication();
+					stopLoad();
+				});
 			}
+
+
+			 //else {
+			//	crossroads.parse('/signin');
+			//}
 		});
 
 		// Not found route - send to Endowments
