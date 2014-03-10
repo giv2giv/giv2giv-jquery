@@ -175,15 +175,21 @@ code {
     background-image: url('../images/charity.png');
   }
   #beanstalk {
-    display: none;
-    top: 50px;
+    top: 100px;
     left: 550px;
     width: 100px;
     height: 100px;
+    z-index: -1;
     background-image: url('../images/beanstalk.png');
   }
     #beanstalk.grown {
-      display: inline-block;
+      top: 50px;
+      z-index: 2;
+      -webkit-transition: top 1s;
+      -moz-transition: top 1s;
+      -ms-transition: top 1s;
+      -o-transition: top 1s;
+      transition: top 1s;
     }
 
 /* Endowment Cards */

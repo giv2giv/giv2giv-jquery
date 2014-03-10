@@ -24,8 +24,13 @@ $(function() {
 		drop: function(event, ui) {
 			$dragPrompt.html('Horray!');
 			moneyHomePosition = {top: 100, left: 550};
-			$benjamins.remove();
+			$benjamins.animate({
+				top: 100,
+				left: 550,
+				opacity: 0
+			},500,function(){$(benjamins).remove()});
 			$beanstalk.grow();
+
 		}
 	});
 	$charity.droppable({
@@ -36,7 +41,11 @@ $(function() {
 		}
 	});
 
-	$beanstalk.grow = function () {
+	$beanstalk.grow = function() {
 		$beanstalk.addClass('grown')
+	}
+
+	function cashflows() {
+		
 	}
 });
