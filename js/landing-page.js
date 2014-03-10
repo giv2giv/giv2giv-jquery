@@ -1,3 +1,10 @@
+/* TODO: 
+- Fill out the Cashflows object to make it rain
+- Improve the art (flat + rounded corners for image sprites)
+- Add on hover functionality for responsiveness (e.g. concentric circles for the wallet, pot, and charity)
+- Add passive animation (concentric circles) to the wallet to attract attention there
+*/
+
 $(function() {
 	var $dragPrompt = $('#drag-prompt');
 	var $benjamins = $('#benjamins');
