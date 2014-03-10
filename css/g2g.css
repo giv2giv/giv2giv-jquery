@@ -106,18 +106,34 @@ code {
 .header {
   text-align: center;
 }
-  .header .main-description {
-    font-size: 2rem;
-    line-height: 150%;
-    font-style: italic;
+  .header .primary-description {
+    margin-top: 50px;
+    font-weight: bold;
+    font-family: Roboto;
+    font-size: 4em;
+    line-height: 115%;
   }
-    .header .main-description span {
+    .header .primary-description span {
       display: block;
-      font-style: normal;
-
+      font-weight: normal;
+      font-style: italic;
+      font-size: 0.75em;
     }
+  .header .secondary-description {
+      margin-top: 50px;
+      font-size: 2em;
+  }
 
+/* Interactive Demo */
+.moneytree {
 
+}
+  .moneytree div {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+  }
 
 /* Endowment Cards */
 .card.endowment {
