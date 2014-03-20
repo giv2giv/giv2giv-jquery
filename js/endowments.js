@@ -185,7 +185,7 @@ function onDetails(endowment) {
   $('#social-share').share({
     networks: ['twitter','facebook','tumblr','pinterest','googleplus'],
     orientation: 'vertical',
-    urlToShare: 'https://giv2giv.org/endowment/' + endowment.id,
+    urlToShare: 'https://giv2giv.org/#/endowment/' + endowment.id,
     affix: 'right center',
     title: "giv2giv: " + endowment.name,
     description: endowment.description
