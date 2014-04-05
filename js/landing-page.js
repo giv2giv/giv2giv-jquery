@@ -1,7 +1,7 @@
 /* TODO: 
 - Fill out the Cashflows object to make it rain
 - Improve the art (flat + rounded corners for image sprites)
-- Add passive animation (concentric circles) to the wallet to attract attention there
+- Add passive animation to the wallet to attract attention there
 */
 
 $(function() {
