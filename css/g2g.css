@@ -151,10 +151,11 @@ code {
   }
     .circles-highlight {
       position: absolute;
-      top: 50;
-      left: 50;
-      width: 10px;
-      height: 10px;
+      display: none;
+      width: 0;
+      height: 0;
+      top: 60px;
+      left: 60px;
       border: 1px solid rgba(100, 100, 100, 0.4);
       -webkit-border-radius: 100%;
       -moz-border-radius: 100%;

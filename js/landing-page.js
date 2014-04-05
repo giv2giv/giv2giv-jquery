@@ -38,11 +38,12 @@ $(function() {
 			},500,function(){$(benjamins).remove();});
 			$beanstalk.grow();
 		},
+		tolerance: 'touch',
 		over: function(event, ui) {
-			animateCircles(ui);
+			animateCircles(event.target);
 		},
 		out: function(event, ui) {
-			deanimateCircles(ui);
+			deanimateCircles(event.target);
 		}
 	});
 	$charity.droppable({
@@ -51,31 +52,31 @@ $(function() {
 			moneyHomePosition = {top: 100, left: 566};
 			$benjamins.animate(moneyHomePosition);
 		},
+		tolerance: 'touch',
 		over: function(event, ui) {
-			animateCircles(ui);
+			animateCircles(event.target);
 		},
 		out: function(event, ui) {
-			deanimateCircles(ui);
+			deanimateCircles(event.target);
 		}
 	});
 
-	function animateCircles(ui) {
-		console.log(ui.val)
-		ui.append('<div class="circles-highlight"></div>');
-		$('.circles-highlight').filter(':not(:animated)').animate({
+	function animateCircles(el) {
+		$(el).append('<div class="circles-highlight"></div>');
+		$('.circles-highlight').animate({
 			width: 100,
 			height: 100,
-			top: -50,
-			left: -50
+			top: -30,
+			left: -30
 		}, 200);
 	}
 
-	function deanimateCircles(ui) {
+	function deanimateCircles(el) {
 		$('.circles-highlight').animate({
-			width: 10,
-			height: 10,
-			top: 0,
-			left: 0
+			width: 0,
+			height: 0,
+			top: 30,
+			left: 30
 		}, 200, function() {
 			$('.circles-highlight').remove();
 		});
