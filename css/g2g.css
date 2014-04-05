@@ -6,6 +6,7 @@ textarea {
 /* Fonts */
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -127,14 +128,13 @@ code {
 /* Interactive Demo */
 .moneytree {
   /* Making the demo a fixed size solves animation headaches */
-  width: 1000px;
+  width: 800px;
   height: 300px;
   position: relative;
 }
   .moneytree div {
     position: absolute;
     display: inline-block;
-    border: 2px solid black; /*temporarily here so you can see the divs*/
   }
   #person {
     top: 100px;
@@ -150,11 +150,36 @@ code {
     height: 100px;
     background-image: url('../images/person-wallet.png');
   }
+    .moneytree div.circles-highlight:before {
+      -webkit-transition: 1s linear;
+      -moz-transition: 1s linear;
+      -ms-transition: 1s linear;
+      -o-transition: 1s linear;
+      transition: 1s linear;
+    }
+    .moneytree div.circles-highlight:hover:before {
+      position: absolute;
+      content: " ";
+      width: 90px;
+      height: 90px;
+      border: 5px solid rgba(100, 100, 100, 0.4);
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      border-radius: 100%;
+      -webkit-box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
+      -moz-box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
+      box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
+      -webkit-transform: scale(2, 2);
+      -moz-transform: scale(2, 2);
+      -ms-transform: scale(2, 2);
+      -o-transform: scale(2, 2);
+      transform: scale(2, 2);
+    }
   #benjamins {
     top: 100px;
     left: 150px;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 40px;
     z-index: 2;
   }
     #benjamins img {
@@ -162,21 +187,21 @@ code {
     }
   #plant-pot {
     top: 100px;
-    left: 550px;
+    left: 350px;
     width: 100px;
     height: 100px;
     background-image: url('../images/plant-pot.png');
   }
   #charity {
     top: 100px;
-    left: 1066px;
+    left: 566px;
     width: 100px;
     height: 100px;
     background-image: url('../images/charity.png');
   }
   #beanstalk {
     top: 100px;
-    left: 550px;
+    left: 350px;
     width: 100px;
     height: 100px;
     z-index: -1;
