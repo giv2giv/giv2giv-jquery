@@ -19,12 +19,24 @@ $(function() {
 	};
 	$.each([$personWallet, $plantPot, $charity], function(index, val) {
 		val.hover(function() {
-			val.addClass('circles-highlight');
+			val.append('<div class="circles-highlight"></div>');
+			$('.circles-highlight').animate({
+				width: "+= 100",
+				height: "+= 100"
+			}, 1000, function(){});
 		}, function() {
-			val.removeClass('circles-highlight');
+			$('.circles-highlight').removeClass('circles-animate');
+			$('.circles-highlight').remove();
 		});
 	});
 
+	// $hoverBox.each(function(index, val) {
+		// $('.hover-box').hover(function() {
+		// 	$(this).addClass('circles-highlight');
+		// }, function() {
+		// 	$(this).removeClass('circles-highlight');
+		// });
+	// });
 
 	// From http://stackoverflow.com/a/5848800
 	// Reverts the money to your wallet if you don't drag it into the pot or the charity

@@ -150,30 +150,31 @@ code {
     height: 100px;
     background-image: url('../images/person-wallet.png');
   }
-    .moneytree div.circles-highlight:before {
-      -webkit-transition: 1s linear;
-      -moz-transition: 1s linear;
-      -ms-transition: 1s linear;
-      -o-transition: 1s linear;
-      transition: 1s linear;
+    .circles-highlight {
+      background-color: red;
+      width: 100px;
+      height: 100px;
+      -webkit-transition: -webkit-transform 0.1s linear;
+      -moz-transition: -moz-transform 0.1s linear;
+      -ms-transition: -ms-transform 0.1s linear;
+      -o-transition: -o-transform 0.1s linear;
+      transition: transform 0.1s linear;
     }
-    .moneytree div.circles-highlight:hover:before {
-      position: absolute;
-      content: " ";
-      width: 90px;
-      height: 90px;
-      border: 5px solid rgba(100, 100, 100, 0.4);
+    .circles-animate {
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba(100, 100, 100, 0.4);
       -webkit-border-radius: 100%;
       -moz-border-radius: 100%;
       border-radius: 100%;
       -webkit-box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
       -moz-box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
       box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
-      -webkit-transform: scale(2, 2);
-      -moz-transform: scale(2, 2);
-      -ms-transform: scale(2, 2);
-      -o-transform: scale(2, 2);
-      transform: scale(2, 2);
+      -webkit-transform: scale(9, 9);
+      -moz-transform: scale(9, 9);
+      -ms-transform: scale(9, 9);
+      -o-transform: scale(9, 9);
+      transform: scale(9, 9);
     }
   #benjamins {
     top: 100px;
