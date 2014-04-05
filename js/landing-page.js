@@ -17,26 +17,6 @@ $(function() {
 		top: 100,
 		left: 150
 	};
-	$.each([$personWallet, $plantPot, $charity], function(index, val) {
-		val.hover(function() {
-			val.append('<div class="circles-highlight"></div>');
-			$('.circles-highlight').animate({
-				width: "+= 100",
-				height: "+= 100"
-			}, 1000, function(){});
-		}, function() {
-			$('.circles-highlight').removeClass('circles-animate');
-			$('.circles-highlight').remove();
-		});
-	});
-
-	// $hoverBox.each(function(index, val) {
-		// $('.hover-box').hover(function() {
-		// 	$(this).addClass('circles-highlight');
-		// }, function() {
-		// 	$(this).removeClass('circles-highlight');
-		// });
-	// });
 
 	// From http://stackoverflow.com/a/5848800
 	// Reverts the money to your wallet if you don't drag it into the pot or the charity
@@ -57,7 +37,12 @@ $(function() {
 				opacity: 0
 			},500,function(){$(benjamins).remove();});
 			$beanstalk.grow();
-
+		},
+		over: function(event, ui) {
+			animateCircles(ui);
+		},
+		out: function(event, ui) {
+			deanimateCircles(ui);
 		}
 	});
 	$charity.droppable({
@@ -65,8 +50,36 @@ $(function() {
 			$dragPrompt.html('Donating directly is great, but what if your charity needs more money? Try giving your money to giv2giv instead.');
 			moneyHomePosition = {top: 100, left: 566};
 			$benjamins.animate(moneyHomePosition);
+		},
+		over: function(event, ui) {
+			animateCircles(ui);
+		},
+		out: function(event, ui) {
+			deanimateCircles(ui);
 		}
 	});
+
+	function animateCircles(ui) {
+		console.log(ui.val)
+		ui.append('<div class="circles-highlight"></div>');
+		$('.circles-highlight').filter(':not(:animated)').animate({
+			width: 100,
+			height: 100,
+			top: -50,
+			left: -50
+		}, 200);
+	}
+
+	function deanimateCircles(ui) {
+		$('.circles-highlight').animate({
+			width: 10,
+			height: 10,
+			top: 0,
+			left: 0
+		}, 200, function() {
+			$('.circles-highlight').remove();
+		});
+	}
 
 	$beanstalk.grow = function() {
 		$beanstalk.addClass('grown');
