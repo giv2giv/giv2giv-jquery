@@ -18,14 +18,20 @@ $(function() {
 		left: 150
 	};
 
-	// From http://stackoverflow.com/a/5848800
-	// Reverts the money to your wallet if you don't drag it into the pot or the charity
 	$benjamins.draggable({
+		// From http://stackoverflow.com/a/5848800
+		// Reverts the money to your wallet if you don't drag it into the pot or the charity
 		revert: function(event, ui) {
 			$(this).data("uiDraggable").originalPosition = moneyHomePosition;
 			return !event;
 		},
-		containment: 'document'
+		containment: 'document',
+		start: function(event, ui) {
+			$(this).removeClass('stationary');
+		},
+		stop: function(event, ui) {
+			$(this).addClass('stationary');
+		}
 	});
 	$plantPot.droppable({
 		drop: function(event, ui) {
@@ -39,12 +45,7 @@ $(function() {
 			$beanstalk.grow();
 		},
 		tolerance: 'touch',
-		over: function(event, ui) {
-			animateCircles(event.target);
-		},
-		out: function(event, ui) {
-			deanimateCircles(event.target);
-		}
+		hoverClass: 'highlight-hover'
 	});
 	$charity.droppable({
 		drop: function(event, ui) {
@@ -53,40 +54,14 @@ $(function() {
 			$benjamins.animate(moneyHomePosition);
 		},
 		tolerance: 'touch',
-		over: function(event, ui) {
-			animateCircles(event.target);
-		},
-		out: function(event, ui) {
-			deanimateCircles(event.target);
-		}
+		hoverClass: 'highlight-hover'
 	});
-
-	function animateCircles(el) {
-		$(el).append('<div class="circles-highlight"></div>');
-		$('.circles-highlight').animate({
-			width: 100,
-			height: 100,
-			top: -30,
-			left: -30
-		}, 200);
-	}
-
-	function deanimateCircles(el) {
-		$('.circles-highlight').animate({
-			width: 0,
-			height: 0,
-			top: 30,
-			left: 30
-		}, 200, function() {
-			$('.circles-highlight').remove();
-		});
-	}
 
 	$beanstalk.grow = function() {
 		$beanstalk.addClass('grown');
 	};
 
-	function Cashflows() {
+	function cashflows() {
 		
 	}
 });
