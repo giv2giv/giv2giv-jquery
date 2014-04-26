@@ -20,10 +20,14 @@ body {
 }
 
 /* Border-box for all .container elements */
+/* Also make the default font-size larger so that it's easier on the eyes 
+*/
 .container {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  font-size: 14px;
+  clear: both;
 }
 
 /* Wrapper for page content to push down footer */
@@ -123,7 +127,7 @@ code {
   background-repeat: no-repeat;
 }
   .header .primary-description {
-    margin-top: 100px;
+    margin-top: 150px;
     font-weight: bold;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     font-size: 4em;
@@ -169,24 +173,29 @@ code {
 /* Interactive Demo */
 .container.moneytree { /* increased specificity needed to override width on `.container`*/
   /* Making the demo a fixed size solves animation headaches */
-  width: 800px;
+  width: 767px;
   height: 300px;
   position: relative;
+  background-color: #fbfbfb;
+  margin: 50px auto;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
   .moneytree div {
     position: absolute;
     display: inline-block;
   }
   #person {
-    top: 100px;
-    left: 0;
+    top: 20px;
+    left: 20px;
     width: 120px;
     height: 220px;
     background-image: url('../images/person.png');
   }
   #person-wallet {
-    top: 100px;
-    left: 150px;
+    top: 20px;
+    left: 170px;
     width: 100px;
     height: 100px;
   }
@@ -201,8 +210,8 @@ code {
       transition: 0.2s linear;
     }
   #benjamins {
-    top: 100px;
-    left: 150px;
+    top: 20px;
+    left: 170px;
     width: 80px;
     height: 40px;
     z-index: 2;
@@ -226,22 +235,22 @@ code {
       position: absolute;
     }
   #plant-pot {
-    top: 100px;
-    left: 350px;
+    top: 20px;
+    left: 370px;
     width: 100px;
     height: 100px;
     background-image: url('../images/plant-pot.png');
   }
   #charity {
-    top: 100px;
-    left: 566px;
+    top: 20px;
+    left: 586px;
     width: 100px;
     height: 100px;
     background-image: url('../images/charity.png');
   }
   #beanstalk {
-    top: 100px;
-    left: 350px;
+    top: 20px;
+    left: 370px;
     width: 100px;
     height: 100px;
     z-index: -1;
@@ -257,8 +266,19 @@ code {
       transition: top 1s;
     }
 
-.container {
-  clear: both;
+.container.main-content {
+  /* Fixed width but with at the responsive breakpoint */
+  width: 767px;
+  background-color: #fbfbfb;
+  padding: 50px;
+  margin-bottom: 50px;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+}
+.container.main-content:last-child {
+  /* Fix bottom margin to account for the footer */
+  margin-bottom: 100px;
 }
 
 /* Endowment Cards */

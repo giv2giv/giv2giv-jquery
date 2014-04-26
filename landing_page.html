@@ -42,7 +42,42 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <span style="font-size:22px;color:red;">Placeholder Navbar. Gonna delete this later</span>
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div id="loading">
+            <i class="loading-brand fa fa-leaf fa-spin logo-loading"></i>
+          </div>
+          <a class="brand" href="http://giv2giv.org">
+            <img src='/images/logo.png' alt='giv2giv'/>
+          </a>
+          <div class="nav-collapse collapse hide pull-right" id="public-nav">
+            <ul class="nav">
+              <!-- public only tabs go here -->
+              <li class="public-nav" id="landing-nav"><a href="/">Home</a></li>
+              <li class="public-nav" id="signup-nav"><a href="/signup">Sign Up</a></li>
+              <li class="public-nav" id="signin-nav"><a href="/signin">Sign In</a></li>
+            </ul>
+          </div>
+          <div class="nav-collapse collapse hide" id="app-nav">
+            <form class="navbar-search pull-left">
+              <input id="endowment-search" type="text" class="search-query span2" placeholder="Search Endowments">
+            </form>
+            <p class="navbar-text pull-right">
+              Logged in as <span id="donor-name" class="navbar-link"></span>
+            </p>
+
+            <ul class="nav">
+              <!-- Logged in tabs go here -->
+              <li id="endowments-nav" class="nav-link"><a href="/endowments">Endowments</a></li>
+              <li id="donor-nav" class="nav-link"><a href="/donor">Donor</a></li>
+              <li id="about-nav" class="nav-link"><a href="/about">Questions?</a></li>
+              <li id="numbers-nav" class="nav-link"><a href="/numbers">Stats for Nerds</a></li>
+              <li><a id="logout-btn" href="logout">Logout</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -68,10 +103,16 @@
       <div id="charity">Your Charity</div>
     </div>
   
-    <div class="container">
+    <div class="container main-content">
       <h2>What is giv2giv?</h2>
       <p>We are a crowdfunded endowment platform that distributes the income from your investment to the charities you want to support. Your charity will receive donations every 90 days... Forever! Yes, forever!</p>
-
+    </div>
+    <div class="container main-content">
+      <h2>Video</h2>
+      <!-- Video is a just a placeholder screenshot for now until we can get it on a proper host like Vimeo -->
+      <img src="http://i.imgur.com/NTzgdur.png" alt="A video describing giv2giv">
+    </div>
+    <div class="container main-content">
       <h2>How it Works</h2>
       <h3>1. Donations Go In</h3>
       <p>Your donations are charged to your credit card and are sent in to giv2giv. Your donation is <strong>tax-deductible</strong> to the fullest extent of the law.</p>
@@ -81,13 +122,22 @@
       <h2>3. Grants Go Out</h2>
       <p>giv2giv makes periodic grants out to donors' favorite causes, currently <strong>1.25% of the entire fund every 90 days</strong> for a total annual grant of 5% per year. By law, giv2giv will take under advisement the charities selected by you, the donors, and we will follow this advice whenever possible. Sorry, giv2giv cannot follow your advice if you specify grants should go to your Uncle Leo&mdash;only registered charities!</p>
       <p>Now comes the fun part! We send anonymous, unrestricted grants out to charities so they can direct resources where they are most needed.</p>
-
+    </div>
+    <div class="container main-content">
       <h2>Frequently Asked Questions</h2>
       <h3>How does my donation get to my favorite causes?</h3>
       <h3>Why not just donate directly to my charity?</h3>
       <h3>Is subscribing a big commitment?</h3>
       <h3>Are there any fees?</h3>
+    </div>
+  </div>
 
+  <div id="footer">
+    <div class="container">
+      <p class="muted credit">
+        <span>&copy; giv2giv, Inc. 2014. Background Image Credit: NASA and ESA/Hubble</span>
+        <a id="open-wish-modal" href='#wish-modal' class='pull-right' data-toggle="modal"><i class="fa fa-magic"></i> I wish this page would...</a>
+      </p>
     </div>
   </div>
 
