@@ -35,7 +35,7 @@ $(function() {
 	});
 	$plantPot.droppable({
 		drop: function(event, ui) {
-			$dragPrompt.html('Horray!');
+			$dragPrompt.html('Awesome :)<br/><span class="secondary-drag-prompt">Your charity will now receive investment income every 90 days, forever.</span>');
 			moneyHomePosition = {top: 100, left: 350};
 			$benjamins.animate({
 				top: 100,
@@ -49,7 +49,7 @@ $(function() {
 	});
 	$charity.droppable({
 		drop: function(event, ui) {
-			$dragPrompt.html('Donating directly is great, but what if your charity needs more money? Try giving your money to giv2giv instead.');
+			$dragPrompt.html('Donating directly is great, but what if your charity needs more money?<br/><span class="secondary-drag-prompt">Try giving your money to giv2giv instead.</span>');
 			moneyHomePosition = {top: 100, left: 566};
 			$benjamins.animate(moneyHomePosition);
 		},

@@ -19,6 +19,13 @@ body {
   /* The html and body elements cannot have any padding or margin. */
 }
 
+/* Border-box for all .container elements */
+.container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 /* Wrapper for page content to push down footer */
 #wrap {
   min-height: 100%;
@@ -48,9 +55,6 @@ body {
   max-height: 600px;
 }
 
-#wrap > .container {
-  padding-top: 60px;
-}
 .container .credit {
   margin: 20px 0;
 }
@@ -107,9 +111,9 @@ code {
 .container.header {
   text-align: center;
   width: 100%;
-  min-height: 500px;
   margin: 0;
   color: #fff;
+  text-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
   /* Background Image from ESA/Hubble
   https://www.spacetelescope.org/copyright/
   "ESA/Hubble images, videos and web texts are released under the Creative Commons Attribution 3.0 Unported license and may on a non-exclusive basis be reproduced without fee provided they are clearly and visibly credited."
@@ -119,7 +123,7 @@ code {
   background-repeat: no-repeat;
 }
   .header .primary-description {
-    margin-top: 30px;
+    margin-top: 100px;
     font-weight: bold;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     font-size: 4em;
@@ -132,8 +136,31 @@ code {
       font-size: 0.75em;
     }
   .header .secondary-description {
-      margin-top: 30px;
+      margin-top: 75px;
       font-size: 2em;
+      margin-bottom: 150px;
+  }
+
+.container.action-bar {
+  text-align: center;
+  width: 100%;
+  height: 100px;
+  color: #fff;
+  background-color: #216c2a;
+  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+}
+  #drag-prompt {
+    font-weight: bold;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-size: 2em;
+    line-height: 115%;
+  }
+  .secondary-drag-prompt {
+    font-weight: normal;
+    font-size: 0.5em;
   }
 
 .navbar.navbar-fixed-top {
