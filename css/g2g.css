@@ -15,7 +15,7 @@ html,
 body {
   font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   height: 100%;
-  background: url(/images/grid.png);
+  background: url('/images/grid.png');
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -97,20 +97,31 @@ code {
 .navbar-search .search-query {
   padding: 4px 14px;
   margin-bottom: 0;
-  font-family: Roboto, arial, sans-serif;
+  font-family: 'Roboto', arial, sans-serif;
   font-size: 13px;
   font-weight: normal;
   line-height: 1;
 }
 
-/* Landing Page Stuff */
-.header {
+/* Landing Page CSS */
+.container.header {
   text-align: center;
+  width: 100%;
+  min-height: 500px;
+  margin: 0;
+  color: #fff;
+  /* Background Image from ESA/Hubble
+  https://www.spacetelescope.org/copyright/
+  "ESA/Hubble images, videos and web texts are released under the Creative Commons Attribution 3.0 Unported license and may on a non-exclusive basis be reproduced without fee provided they are clearly and visibly credited."
+  */
+  background-image: url('/images/galaxy-1600-1200.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
   .header .primary-description {
     margin-top: 30px;
     font-weight: bold;
-    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
     font-size: 4em;
     line-height: 115%;
   }
@@ -125,10 +136,8 @@ code {
       font-size: 2em;
   }
 
-#wrap {
-  /* Subtle-Grey pattern by Haris Šumić */
-  /* http://subtlepatterns.com/subtle-grey/ */
-  background: url('../images/grey.png');
+.navbar.navbar-fixed-top {
+  margin-bottom: 0;
 }
 /* Interactive Demo */
 .container.moneytree { /* increased specificity needed to override width on `.container`*/
@@ -369,6 +378,14 @@ code {
   }
 }
 @media (min-width: 768px) and (max-width: 979px) {
+  body {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .container {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
   .card.endowment {
     width: 180px;
   }
@@ -378,6 +395,14 @@ code {
 }
 
 @media (max-width: 767px) {
+  body {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .container {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
   #footer {
     margin-left: -20px;
     margin-right: -20px;
