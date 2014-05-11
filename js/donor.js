@@ -28,21 +28,21 @@ function onStart() {
 function fetchPaymentAccounts(callback) {
 	// Get Payment Accounts
 	$.ajax({
-	  url: server_url + '/api/donors/payment_accounts.json',
-	  method: 'GET',
-	  contentType: "application/json",
-    dataType: "json"
+		url: server_url + '/api/donors/payment_accounts.json',
+		method: 'GET',
+		contentType: "application/json",
+		dataType: "json"
 	}).done(function(data) {
 		log(data);
-  	// Clear old data & hide things
+		// Clear old data & hide things
 		$("#payment-accounts-table").find('tbody:last').html("");
 		$("#no-payment-accounts-card").addClass("hide");
 		$("#payment-accounts-card").addClass("hide");
-  	if(data.length == 0) {
-  		// Show "Add Payment Account Card"
-  		$("#no-payment-accounts-card").removeClass("hide");
-  	} else {
-  		// Loop through accounts & create payment accounts table
+		if(data.length === 0) {
+			// Show "Add Payment Account Card"
+			$("#no-payment-accounts-card").removeClass("hide");
+		} else {
+			// Loop through accounts & create payment accounts table
 			$.each(data, function(k, v) {
 				// for the love of god man make this prettier!
 				var i = v[0];
@@ -77,41 +77,41 @@ function fetchPaymentAccounts(callback) {
 			});
 		}
 	}).fail(function(data) {
-	  growlError("Opps! An error occured while loading your Payment Accounts.");
+		growlError("Opps! An error occured while loading your Payment Accounts.");
 	}).always(function() {
-  	// Callbacks
+		// Callbacks
 		if(typeof callback === "function") {
-    	// Call it, since we have confirmed it is callable
-      callback();
-    }
+			// Call it, since we have confirmed it is callable
+			callback();
+		}
 	});
 }
 
 // Fetch Donor Profile
 function fetchDonorProfile(callback) {
 	$.ajax({
-	  url: server_url + '/api/donors.json',
-	  method: 'GET',
-	  dataType: "json",
-  	contentType: "application/json"
+		url: server_url + '/api/donors.json',
+		method: 'GET',
+		dataType: "json",
+		contentType: "application/json"
 	}).done(function(data) {
-  	// fill out profile form
-  	$("#donor-profile-email").val(data.donor.email);
-  	$("#donor-profile-name").val(data.donor.name);
-  	$("#donor-profile-address").val(data.donor.address);
-  	$("#donor-profile-city").val(data.donor.city);
-  	$("#donor-profile-state").val(data.donor.state);
-  	$("#donor-profile-zip").val(data.donor.zip);
-  	$("#donor-profile-phone").val(data.donor.phone_number);
+		// fill out profile form
+		$("#donor-profile-email").val(data.donor.email);
+		$("#donor-profile-name").val(data.donor.name);
+		$("#donor-profile-address").val(data.donor.address);
+		$("#donor-profile-city").val(data.donor.city);
+		$("#donor-profile-state").val(data.donor.state);
+		$("#donor-profile-zip").val(data.donor.zip);
+		$("#donor-profile-phone").val(data.donor.phone_number);
 	}).fail(function(data) {
-	  log(data);
-	  growlError("Opps! An error occured while loading your Donor Profile.");
+		log(data);
+		growlError("Opps! An error occured while loading your Donor Profile.");
 	}).always(function() {
-  	// Callbacks
+		// Callbacks
 		if(typeof callback === "function") {
-    	// Call it, since we have confirmed it is callable
-      callback();
-    }
+			// Call it, since we have confirmed it is callable
+			callback();
+		}
 	});
 }
 
@@ -119,13 +119,13 @@ function fetchDonorProfile(callback) {
 function loadUI() {
 	// Formatters
 	$('#donor-profile-phone').formatter({
-  	'pattern': '({{999}}) {{999}}-{{9999}}',
-  	'persistent': true
+		'pattern': '({{999}}) {{999}}-{{9999}}',
+		'persistent': true
 	});
 
 	$('#donor-profile-zip').formatter({
-  	'pattern': '{{99999}}-{{9999}}',
-  	'persistent': true
+		'pattern': '{{99999}}-{{9999}}',
+		'persistent': true
 	});
 
 	// Credit Card Formatting
@@ -134,21 +134,21 @@ function loadUI() {
 	// Card Type
 	$('#add-card-number').on('keyup', function(e) {
 		var type = $.payment.cardType($(this).val());
-		if(type == "visa") {
+		if(type === "visa") {
 			$("#card-type").attr("src", "/images/credit_cards/visa.png");
-		} else if(type == "mastercard") {
+		} else if(type === "mastercard") {
 			$("#card-type").attr("src", "/images/credit_cards/mastercard.png");
-		} else if(type == "discover") {
+		} else if(type === "discover") {
 			$("#card-type").attr("src", "/images/credit_cards/discover.png");
-		} else if(type == "amex") {
+		} else if(type === "amex") {
 			$("#card-type").attr("src", "/images/credit_cards/amex.png");
-		} else if(type == "dinersclub") {
+		} else if(type === "dinersclub") {
 			$("#card-type").attr("src", "/images/credit_cards/diner_club.png");
-		} else if(type == "maestro") {
+		} else if(type === "maestro") {
 			$("#card-type").attr("src", "/images/credit_cards/maestro.png");
-		} else if(type == "laser") {
+		} else if(type === "laser") {
 			$("#card-type").attr("src", "/images/credit_cards/laser.png");
-		} else if(type == "unionpay") {
+		} else if(type === "unionpay") {
 			$("#card-type").attr("src", "/images/credit_cards/union_pay.png");
 		} else {
 			// Nothing
@@ -160,20 +160,20 @@ function loadUI() {
 	$("#confirm-payment-removal").on("click", function(e) {
 		$btn = $(this).button('loading');
 		$.ajax({
-		  url: server_url + '/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
-		  method: 'DELETE',
-		  contentType: "application/json",
+			url: server_url + '/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
+			method: 'DELETE',
+			contentType: "application/json",
 			dataType:"json"
 		}).done(function(data) {
-	  	growlSuccess("Successfully removed payment account.")
- 			$("#remove-payment-modal").modal("hide");
- 			$btn.button('reset');
- 			fetchPaymentAccounts();
+			growlSuccess("Successfully removed payment account.");
+			$("#remove-payment-modal").modal("hide");
+			$btn.button('reset');
+			fetchPaymentAccounts();
 		}).fail(function(data) {
-		  log(data);
-		  $btn.button('reset');
-		  growlError("Opps! An error occured while removing this payment account.");
-		  $("#remove-payment-modal").modal("hide");
+			log(data);
+			$btn.button('reset');
+			growlError("Opps! An error occured while removing this payment account.");
+			$("#remove-payment-modal").modal("hide");
 		});
 		e.preventDefault();
 	});
@@ -187,11 +187,11 @@ function loadUI() {
 	});
 
 	$('#add-payment-frm').on("submit", function(e) {
-	  var $form = $(this);
-	 	// Disable the submit button to prevent repeated clicks
-	  $("#add-account-btn").prop('disabled', true);
-	  Stripe.card.createToken($form, stripeResponseHandler);
-	  e.preventDefault();
+		var $form = $(this);
+		// Disable the submit button to prevent repeated clicks
+		$("#add-account-btn").prop('disabled', true);
+		Stripe.card.createToken($form, stripeResponseHandler);
+		e.preventDefault();
 	});
 
 	// Update Donor Profile
@@ -236,29 +236,29 @@ function loadUI() {
 	function prettify_timestamp(stamp) {
 		 
 	// Create an array with the current month, day and time
-	  var date = [ stamp.getMonth() + 1, stamp.getDate(), stamp.getFullYear() ];
+		var date = [ stamp.getMonth() + 1, stamp.getDate(), stamp.getFullYear() ];
 	 
 	// Create an array with the current hour, minute and second
-	  var time = [ stamp.getHours(), stamp.getMinutes(), stamp.getSeconds() ];
+		var time = [ stamp.getHours(), stamp.getMinutes(), stamp.getSeconds() ];
 	 
 	// Determine AM or PM suffix based on the hour
-	  var suffix = ( time[0] < 12 ) ? "AM" : "PM";
+		var suffix = ( time[0] < 12 ) ? "AM" : "PM";
 	 
 	// Convert hour from military time
-	  time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+		time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
 	 
 	// If hour is 0, set it to 12
-	  time[0] = time[0] || 12;
+		time[0] = time[0] || 12;
 	 
 	// If seconds and minutes are less than 10, add a zero
-	  for ( var i = 1; i < 3; i++ ) {
-	    if ( time[i] < 10 ) {
-	      time[i] = "0" + time[i];
-	    }
-	  }
+		for ( var i = 1; i < 3; i++ ) {
+			if ( time[i] < 10 ) {
+				time[i] = "0" + time[i];
+			}
+		}
 	 
 	// Return the formatted string
-	  return date.join("/") + " " + time.join(":") + " " + suffix;
+		return date.join("/") + " " + time.join(":") + " " + suffix;
 	}
 
 	// Statement Rendering Handlers
@@ -275,27 +275,27 @@ function loadUI() {
 
 			// Get donor info
 			$.ajax({
-			  url: server_url + '/api/donors.json',
-			  method: 'GET',
+				url: server_url + '/api/donors.json',
+				method: 'GET',
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
-					var donor_info = "Donor: <br />" + response.donor.name + "(" + response.donor.email + ")<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip
+					var donor_info = "Donor: <br />" + response.donor.name + "(" + response.donor.email + ")<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip;
 					$statement.find('#statement-donor-info').html(donor_info);
-		   	}).fail(function(data) {
-		    	// Close Window
-		    	popup.close();
-		    	growlError('Opps! There was an error loading your Statement.');
-		   });
+				}).fail(function(data) {
+					// Close Window
+					popup.close();
+					growlError('Opps! There was an error loading your Statement.');
+			 });
 
-		  // Get donation info
+			// Get donation info
 			$.ajax({
-			  url: server_url + '/api/donors/donations.json',
-			  method: 'GET',
-			  data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
+				url: server_url + '/api/donors/donations.json',
+				method: 'GET',
+				data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {		    	 	
-		    	$.each(response.donations, function(k, donation) {
-		    		var $row = $statement.find('tbody:last').append('<tr></tr>');		
+					$.each(response.donations, function(k, donation) {
+						var $row = $statement.find('tbody:last').append('<tr></tr>');		
 						// And stamp each bit for our row
 						ugly_timestamp = new Date(donation.created_at * 1000);
 						pretty_timestamp = prettify_timestamp(ugly_timestamp);
@@ -308,17 +308,17 @@ function loadUI() {
 					pretty_statement_timestamp = prettify_timestamp(ugly_statement_timestamp);
 					$statement.find('#statement-date-insert').html(pretty_statement_timestamp);
 					// Open in new Window
-		    	var html = $('<html>').append($statement).html();
-		    	popup.document.write(html);
-		    }).fail(function(data) {
-		    	// Close Window
-		    	popup.close();
-		    	growlError('Opps! There was an error loading your Statement.');
-		    });
+					var html = $('<html>').append($statement).html();
+					popup.document.write(html);
+				}).fail(function(data) {
+					// Close Window
+					popup.close();
+					growlError('Opps! There was an error loading your Statement.');
+				});
 			}).fail(function(data) {
 				// Close Window
-		    popup.close();
-		    growlError('Opps! There was an error loading your Statement.');
+				popup.close();
+				growlError('Opps! There was an error loading your Statement.');
 			});
 		e.preventDefault();
 	});
@@ -326,7 +326,7 @@ function loadUI() {
 	// Statement Preview (on Date Change)
 	// Not in use
 	// $('#donor_statement_year').on("change", function(e) {
-  	
+		
  //    /*
 	//   // Get Donor Statement
 	// 	var statement_start_date = new Date($("#donor_statement_year").val(),0,1);
@@ -365,16 +365,16 @@ function loadUI() {
 var stripeResponseHandler = function(status, response) {
 	var $form = $('#add-payment-frm');
 	if (response.error) {
-    // Show the errors on the form
-    $form.find('.payment-errors').text(response.error.message);
-  	$("#add-account-btn").button('reset');
-  	log(response.error);
-  } else {
-    // token contains id, last4, and card type
-    var token = response.id;
-    // Insert the token into the form so it gets submitted to the server
-    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-    // and add token to g2g
+		// Show the errors on the form
+		$form.find('.payment-errors').text(response.error.message);
+		$("#add-account-btn").button('reset');
+		log(response.error);
+	} else {
+		// token contains id, last4, and card type
+		var token = response.id;
+		// Insert the token into the form so it gets submitted to the server
+		$form.append($('<input type="hidden" name="stripeToken" />').val(token));
+		// and add token to g2g
 		var payment = {};
 		payment['processor'] = "stripe";
 		payment['stripeToken'] = response.id;
@@ -393,7 +393,7 @@ var stripeResponseHandler = function(status, response) {
 			$("#add-payment-modal").modal('hide');
 			// Clear Form
 			$("#add-payment-frm")[0].reset();
-  		$("#add-account-btn").button('reset');
+			$("#add-account-btn").button('reset');
 			// Reload Payment Accounts
 			fetchPaymentAccounts();
 		}).fail(function(data) {
