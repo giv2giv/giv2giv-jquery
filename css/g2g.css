@@ -15,7 +15,7 @@ html,
 body {
   font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   height: 100%;
-  background: url('/images/grid.png');
+  background: url('../images/grid.png');
   /* The html and body elements cannot have any padding or margin. */
 }
 
@@ -85,44 +85,20 @@ code {
   font-size: 80%;
 }
 
-/* CSS Overrides */
-.navbar .brand {
-  display: block;
-  float: left;
-  padding: 7px 10px 7px;
-  margin-left: -20px;
-  font-size: 20px;
-  font-weight: 200;
-  color: #737373;
-  text-shadow: 0 1px 0 #ffffff;
+nav {
+  position: fixed;
+  width: 100%;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+  background-color: #fbfbfb;
 }
-
-.navbar .loading-brand {
-  display: block;
-  float: left;
-  padding: 12px 20px 12px;
-  margin-left: -20px;
-  font-size: 20px;
-  font-weight: 200;
-  color: #737373;
-  text-shadow: 0 1px 0 #ffffff;
-}
-
-.navbar-search {
-  position: relative;
-  float: left;
-  margin-top: 7px;
-  margin-bottom: 7px;
-}
-
-.navbar-search .search-query {
-  padding: 4px 14px;
-  margin-bottom: 0;
-  font-family: 'Roboto', Helvetica, arial, sans-serif;
-  font-size: 13px;
-  font-weight: normal;
-  line-height: 1;
-}
+  nav ul {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    list-style: none;
+  }
 
 /* Landing Page CSS */
 .container.header {
@@ -135,7 +111,7 @@ code {
   https://www.spacetelescope.org/copyright/
   "ESA/Hubble images, videos and web texts are released under the Creative Commons Attribution 3.0 Unported license and may on a non-exclusive basis be reproduced without fee provided they are clearly and visibly credited."
   */
-  background-image: url('/images/galaxy-1600-1200.jpg');
+  background-image: url('../images/galaxy-1600-1200.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -180,9 +156,6 @@ code {
     font-size: 0.5em;
   }
 
-.navbar.navbar-fixed-top {
-  margin-bottom: 0;
-}
 /* Interactive Demo */
 .container.moneytree { /* increased specificity needed to override width on `.container`*/
   /* Making the demo a fixed size solves animation headaches */
@@ -292,6 +265,10 @@ code {
 .container.main-content:last-child {
   /* Fix bottom margin to account for the footer */
   margin-bottom: 100px;
+}
+.container.video iframe {
+  width: 687px; /* 687 = 767 width - 40px padding left - 40px padding right */
+  height: 414px;
 }
 
 /* Endowment Cards */
