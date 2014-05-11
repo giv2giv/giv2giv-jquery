@@ -9,9 +9,9 @@ https://giv2giv.org user interface using jquery, history.js, crossroads.js
 Install nginx
 
 Edit example-nginx.conf to point to your local git folder
-
+```
 root /home/my_user/giv2giv-jquery;
-
+```
 Copy example-nginx.conf to your nginx sites-available directory (default: /etc/nginx/conf/sites-available)
 
 restart nginx
