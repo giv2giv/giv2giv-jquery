@@ -12,14 +12,14 @@ var wish_page;
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @todo - Send serious logs to server?
-var debug = true;
+var debug = false;
 
 log = function () {
-	if (debug && console && typeof console.log === 'function') {
-		for (var i = 0, ii = arguments.length; i < ii; i++) {
-			console.log(arguments[i]);
-		}
-	}
+  if (debug && console && typeof console.log === 'function') {
+    for (var i = 0, ii = arguments.length; i < ii; i++) {
+      console.log(arguments[i]);
+    }
+  }
 };
 
 // Bootstrap Growl Helpers
@@ -58,10 +58,10 @@ function growlSuccess(message) {
 }
 
 // Main Application
-var WebUI = function () {
+var WebUI = function() {
 	// Signin Bits
 	// Display the signin screen.
-	var displaysignin = function (callback) {
+	var displaysignin = function(callback) {
 		// Hide App Panel
 		$("#app-panel").addClass("hide");
 		$("#app-panel").html("");
@@ -470,7 +470,6 @@ var WebUI = function () {
 			$("#signup-panel").addClass("hide");
 			$("#signin-panel").addClass("hide");
 			document.title = "giv2giv.org";
-
 		});
 	};
 
