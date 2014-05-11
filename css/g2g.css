@@ -293,6 +293,10 @@ code {
   /* Fix bottom margin to account for the footer */
   margin-bottom: 100px;
 }
+.container.video iframe {
+  width: 687px; /* 687 = 767 width - 40px padding left - 40px padding right */
+  height: 414px;
+}
 
 /* Endowment Cards */
 .card.endowment {

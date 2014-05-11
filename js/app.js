@@ -1,10 +1,10 @@
 // WebUI Application
 // Michael Thomas, 2014
 
-var server_url = "http://localhost:3000"
+var server_url = "https://apitest.giv2giv.org";
 
 // Setup Stripe
-var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy'
+var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 Stripe.setPublishableKey(stripe_pub_key);
 
 // Wish Page ID
@@ -21,7 +21,7 @@ log = function () {
       console.log(arguments[i]);
     }
   }
-}
+};
 
 // Bootstrap Growl Helpers
 // Growl Error
@@ -119,7 +119,6 @@ var WebUI = function() {
 				return results;
 			},
 			maxParallelRequests: 1,
-			rateLimitWait: 500
 		},
 		template: [                                                                 
   		'<p>{{value}} - {{desc}}</p>'                         
