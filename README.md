@@ -12,7 +12,12 @@ Edit example-nginx.conf to point to your local git folder
 ```
 root /home/my_user/giv2giv-jquery;
 ```
-Copy example-nginx.conf to your nginx sites-available directory (default: /etc/nginx/sites-available)
+Make a link to *your* example-nginx.conf in your nginx sites-available directory (default: /etc/nginx/sites-enabled)
+
+```
+cd /etc/nginx/sites-enabled
+sudo ln -s ~my_user/giv2giv-jquery/example-nginx.conf
+```
 
 restart nginx
 
