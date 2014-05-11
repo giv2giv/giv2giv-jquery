@@ -1,0 +1,22 @@
+.colors {
+	/* White */
+	color: #fbfbfb;
+	
+	/* Logo Green Primary */
+	color: #459d50;
+	/* Logo Green Secondary Lighter*/
+	color: #e1ecae;
+
+	/* Link Blue Primary */
+	/* a */
+	color: #4d90fe;
+	color: rgba(77, 144, 254, 1);
+	/* Link Blue Secondary Darker */
+	/* a:hover */
+	color: #0161fd;
+
+	/* Money Green Primary */
+	color: #216c2a;
+	/* Money Green Secondary Lighter */
+	color: #459d50;
+}

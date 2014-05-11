@@ -62,7 +62,7 @@ function onDetails(endowment) {
       dataType:"json",
       data: request_payload
     }).done(function(data) {
-      growlSuccess("Donation scheduled. Thank you! You'll see your endowment balance update in a minute or two.")
+      growlSuccess("Donation scheduled. Thank you! You'll see your endowment balance update in a minute or two.");
       $btn.button('reset');
       fetchEndowmentDonations($("#confirm-subscribe-endowment").attr("data-id"), function() {
         $("#no-subscription").addClass("hide");
@@ -100,7 +100,7 @@ function onDetails(endowment) {
         url: server_url + '/api/donors/payment_accounts.json',
         method: 'GET'
       }).done(function(data) {
-        if(data.length == 0) {
+        if(data.length === 0) {
           growlError("Please set up a payment account under Donors->Payment Accounts");
           $("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
           $("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
@@ -279,7 +279,7 @@ function endowmentSelectors() {
         // notice we return the value of more so Select2 knows if more results can be loaded
         // Loop Through Charities & build Results
         var results = new Array();
-        if(data.message == undefined) {
+        if(data.message === undefined) {
           $.each(data, function(k, v) {
             log(v.charity)
             var charity = {};
@@ -312,7 +312,7 @@ function endowmentSelectors() {
       var charity = {};
       charity['id'] = v;
       payload['charities'].push(charity);
-    })
+    });
 
     var request_payload = JSON.stringify(payload);
     log(request_payload);
@@ -335,7 +335,7 @@ function endowmentSelectors() {
         });
       });
     }).fail(function(data) {
-      log(data)
+      log(data);
       growlError("An error occured while adding this endowment.");
     });
   });
@@ -377,7 +377,7 @@ function endowmentSelectors() {
       dataType:"json",
       data: request_payload
     }).done(function(data) {
-      growlSuccess("Donation scheduled. Thank you! You'll see your endowment balance update in a minute or two.")
+      growlSuccess("Donation scheduled. Thank you! You'll see your endowment balance update in a minute or two.");
       // Success
       // Refresh Endowments & Hide Modal
       fetchFeaturedEndowments(function() {
@@ -419,7 +419,7 @@ function endowmentSelectors() {
         url: server_url + '/api/donors/payment_accounts.json',
         method: 'GET'
       }).done(function(data) {
-        if(data.length == 0) {
+        if(data.length === 0) {
           growlError("Please set up a payment account under Donors->Payment Accounts");
           $("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
           $("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
@@ -531,7 +531,7 @@ function fetchSubscribedEndowments(callback) {
   }).done(function(data) {
     $("#sub-endowments").html("");
     // did we get anything
-    if(data.length == 0) {
+    if(data.length === 0) {
       // Display not found card
       var card = "<div class='span3'><div class='card'><h2 class='card-heading simple'>No Subscriptions</h2>";
       card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
@@ -544,7 +544,7 @@ function fetchSubscribedEndowments(callback) {
       $.each(data, function(index, sub) {
         
 
-log (sub) 
+log (sub);
       
         // Now Build A Card
         // Start Body & Name
@@ -553,7 +553,7 @@ log (sub)
         body += "<p><em>"+sub.description+"</em></p>";
         
         // # of Donors
-        if(sub.global_balances.endowment_donor_count == 1) {
+        if (sub.global_balances.endowment_donor_count === 1) {
           var donor_string = "donor";
         } else {
           var donor_string = "donors";
@@ -583,14 +583,14 @@ log (sub)
         row += card_html;
         // New Row Check
         var new_row_check = (index + 1) % 4;
-        if(new_row_check == 0) {
+        if(new_row_check === 0) {
           row += "</div>";
           // Append Current Row
           $("#sub-endowments").append(row);
           // New Row
           row = "<div class='row-fluid'>";
         }
-        if(data.length == (index + 1)) {
+        if(data.length === (index + 1)) {
           row += "</div>";
           // Append Current Row
           $("#sub-endowments").append(row);
@@ -652,7 +652,7 @@ function fetchFeaturedEndowments(callback) {
         body += "<p><em>"+sub.description+"</em></p>";
         
         // # of Donors
-        if(sub.global_balances.endowment_donor_count == 1) {
+        if(sub.global_balances.endowment_donor_count === 1) {
           var donor_string = "donor";
         } else {
           var donor_string = "donors";
@@ -683,14 +683,14 @@ function fetchFeaturedEndowments(callback) {
         // sticking with 4 to a row for now - issue #5
         // New Row Check
         // var new_row_check = (k + 1) % 4;
-        // if(new_row_check == 0) {
+        // if(new_row_check === 0) {
         //   row += "</div>";
         //   // Append Current Row
         //   $("#featured-endowments").append(row);
         //   // New Row
         //   row = "<div class='row-fluid'>";
         // }
-        if(endowments.length == (k + 1)) {
+        if(endowments.length === (k + 1)) {
           row += "</div>";
           // Append Current Row
           $("#featured-endowments").append(row);
@@ -721,7 +721,7 @@ function fetchEndowmentDonations(id, callback) {
     contentType: "application/json"
   }).done(function(data) {
     log(data);
-    if(data.message == undefined) {
+    if(data.message === undefined) {
       $.each(data.donations, function(k, v) {
         var i = v.donation;
         var date = new Date(i.created_at);
@@ -729,7 +729,7 @@ function fetchEndowmentDonations(id, callback) {
         $row.append("<td>"+date.toLocaleDateString()+"</td>");
         $row.append("<td>$"+i.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
         $row.append("<td>$"+i.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
-      })
+      });
     }
     // Callbacks
     if(typeof callback === "function") {

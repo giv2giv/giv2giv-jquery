@@ -3,15 +3,45 @@ textarea {
     resize: none;
 }
 
+/* Fonts */
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
 html,
 body {
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   height: 100%;
-  background: url(/images/grid.png);
+  background: url('../images/grid.png');
   /* The html and body elements cannot have any padding or margin. */
 }
+
+/* Border-box for all .container elements */
+/* Also make the default font-size larger so that it's easier on the eyes 
+*/
+.container {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 14px;
+  clear: both;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  line-height: 1em;
+  font-family: 'Roboto', Helvetica, arial, sans-serif;
+}
+  h1, h2 {
+    text-align: center;
+  }
+  h3 {
+    margin-top: 1em;
+  }
 
 /* Wrapper for page content to push down footer */
 #wrap {
@@ -42,19 +72,6 @@ body {
   max-height: 600px;
 }
 
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-  #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-#wrap > .container {
-  padding-top: 60px;
-}
 .container .credit {
   margin: 20px 0;
 }
@@ -101,10 +118,184 @@ code {
 .navbar-search .search-query {
   padding: 4px 14px;
   margin-bottom: 0;
-  font-family: Roboto, arial, sans-serif;
+  font-family: 'Roboto', Helvetica, arial, sans-serif;
   font-size: 13px;
   font-weight: normal;
   line-height: 1;
+}
+
+/* Landing Page CSS */
+.container.header {
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
+  /* Background Image from ESA/Hubble
+  https://www.spacetelescope.org/copyright/
+  "ESA/Hubble images, videos and web texts are released under the Creative Commons Attribution 3.0 Unported license and may on a non-exclusive basis be reproduced without fee provided they are clearly and visibly credited."
+  */
+  background-image: url('../images/galaxy-1600-1200.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+  .header .primary-description {
+    margin-top: 150px;
+    font-weight: bold;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-size: 4em;
+    line-height: 115%;
+  }
+    .header .primary-description span {
+      display: block;
+      font-weight: normal;
+      font-style: italic;
+      font-size: 0.75em;
+    }
+  .header .secondary-description {
+      margin-top: 75px;
+      font-size: 2em;
+      margin-bottom: 150px;
+  }
+
+.container.action-bar {
+  text-align: center;
+  width: 100%;
+  height: 100px;
+  color: #fff;
+  background-color: #216c2a;
+  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+}
+  #drag-prompt {
+    font-weight: bold;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    font-size: 2em;
+    line-height: 115%;
+  }
+  .secondary-drag-prompt {
+    font-weight: normal;
+    font-size: 0.5em;
+  }
+
+.navbar.navbar-fixed-top {
+  margin-bottom: 0;
+}
+/* Interactive Demo */
+.container.moneytree { /* increased specificity needed to override width on `.container`*/
+  /* Making the demo a fixed size solves animation headaches */
+  width: 767px;
+  height: 300px;
+  position: relative;
+  background-color: #fbfbfb;
+  margin: 50px auto;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+}
+  .moneytree div {
+    position: absolute;
+    display: inline-block;
+  }
+  #person {
+    top: 20px;
+    left: 20px;
+    width: 120px;
+    height: 220px;
+    background-image: url('../images/person.png');
+  }
+  #person-wallet {
+    top: 20px;
+    left: 170px;
+    width: 100px;
+    height: 100px;
+  }
+    .highlight-hover {
+      -webkit-box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
+      -moz-box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
+      box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
+      -webkit-transition: 0.2s linear;
+      -moz-transition: 0.2s linear;
+      -ms-transition: 0.2s linear;
+      -o-transition: 0.2s linear;
+      transition: 0.2s linear;
+    }
+  #benjamins {
+    top: 20px;
+    left: 170px;
+    width: 80px;
+    height: 40px;
+    z-index: 2;
+  }
+    .stationary {
+      -webkit-transition: 0.2s linear;
+      -moz-transition: 0.2s linear;
+      -ms-transition: 0.2s linear;
+      -o-transition: 0.2s linear;
+      transition: 0.2s linear;
+    }
+      .stationary:hover {
+        -webkit-box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+        -moz-box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+        box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+      }
+    #benjamins:hover {
+      cursor: pointer;
+    }
+    #benjamins img {
+      position: absolute;
+    }
+  #plant-pot {
+    top: 20px;
+    left: 370px;
+    width: 100px;
+    height: 100px;
+    background-image: url('../images/plant-pot.png');
+  }
+  #charity {
+    top: 20px;
+    left: 586px;
+    width: 100px;
+    height: 100px;
+    background-image: url('../images/charity.png');
+  }
+  #beanstalk {
+    top: 20px;
+    left: 370px;
+    width: 100px;
+    height: 100px;
+    z-index: -1;
+    background-image: url('../images/beanstalk.png');
+  }
+    #beanstalk.grown {
+      top: 50px;
+      z-index: 2;
+      -webkit-transition: top 1s;
+      -moz-transition: top 1s;
+      -ms-transition: top 1s;
+      -o-transition: top 1s;
+      transition: top 1s;
+    }
+
+.container.main-content {
+  /* Fixed width but with at the responsive breakpoint */
+  width: 767px;
+  background-color: #fbfbfb;
+  padding: 40px;
+  margin-bottom: 50px;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+}
+.container.main-content:last-child {
+  /* Fix bottom margin to account for the footer */
+  margin-bottom: 100px;
+}
+.container.video iframe {
+  width: 687px; /* 687 = 767 width - 40px padding left - 40px padding right */
+  height: 414px;
 }
 
 /* Endowment Cards */
@@ -251,10 +442,35 @@ code {
   }
 }
 @media (min-width: 768px) and (max-width: 979px) {
+  body {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .container {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
   .card.endowment {
     width: 180px;
   }
   .card.endowment .info .title {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .container {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  #footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
