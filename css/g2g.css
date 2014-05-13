@@ -125,6 +125,11 @@ code {
 }
 
 /* Landing Page CSS */
+div[data-page-id="landing"].container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 .container.header {
   text-align: center;
   width: 100%;

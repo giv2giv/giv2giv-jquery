@@ -111,7 +111,7 @@ var WebUI = function() {
 			filter: function (response) {
 				var results = new Array();
 				log(response);
-				if (response.message == undefined) {
+				if (response.message === undefined) {
 					$.each(response.endowments, function (key, value) {
 						var endowment = new Object();
 						log(value);
@@ -170,7 +170,7 @@ var WebUI = function() {
 			dataType: "json",
 			contentType: "application/json"
 		}).done(function (data) {
-			growlSuccess("Thank you for your feedback! Got wizard? Fork our code at <a href='https://github.com/giv2giv' target=_blank>GitHub</a> to grant wishes!");
+			growlSuccess("Thank you for your feedback! Got a wizard? Fork our code at <a href='https://github.com/giv2giv' target=_blank>GitHub</a> to grant wishes!");
 			$("#wish-modal").modal('hide');
 		}).fail(function (data) {
 			growlError("Opps! There was an error making this wish.");
@@ -186,14 +186,14 @@ var WebUI = function() {
 	});
 
 	// Signup Form
-	$("#signup-frm").on("submit", function (e) {
+	$("#signup-form").on("submit", function (e) {
 		$btn = $("#signup-btn");
 		$btn.button('loading');
 		var payload = {};
 		payload['email'] = $("#signup-email").val();
 		payload['password'] = $("#signup-password").val();
 		payload['name'] = $("#signup-name").val();
-		payload['accepted_terms'] = $("#signup-accept-terms").prop('checked')
+		payload['accepted_terms'] = $("#signup-accept-terms").prop('checked');
 
 		var request = JSON.stringify(payload);
 		$.ajax({
@@ -246,7 +246,7 @@ var WebUI = function() {
 				log("WebUI: Signin Error - " + res.message);
 			} else {
 				$.each(res, function (key, value) {
-					growlError(key + ": " + value)
+					growlError(key + ": " + value);
 				});
 			}
 		});
@@ -254,7 +254,7 @@ var WebUI = function() {
 	});
 
 	// Signin Form
-	$("#signin-frm").on("submit", function (e) {
+	$("#signin-form").on("submit", function (e) {
 		// Build Payload
 		$btn = $("#signin-btn");
 		$btn.button('loading');
@@ -351,7 +351,7 @@ var WebUI = function() {
 				log("WebUI: Loading Donor information.");
 				// Load Current URL
 				log(window.location.hash);
-				if (window.location.hash == "#/signin" || window.location.hash == "#/signup" || window.location.hash == "" || window.location.hash == "#/") {
+				if (window.location.hash === "#/signin" || window.location.hash === "#/signup" || window.location.hash === "" || window.location.hash === "#/") {
 					hasher.setHash('/endowments');
 				} else {
 					hasher.setHash(window.location.hash);
@@ -376,7 +376,7 @@ var WebUI = function() {
 					hidesignin();
 				});
 			}).error(function (data) {
-				if (data.statusText == "Unauthorized") {
+				if (data.statusText === "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
 					$.removeCookie('session');
 					hasher.setHash('/signin');
@@ -406,7 +406,7 @@ var WebUI = function() {
 	var activeSession = function () {
 		log("WebUI: Checking session.");
 		var status = false;
-		if ($.cookie('session') != undefined) {
+		if ($.cookie('session') !== undefined) {
 			$.ajaxSetup({
 				beforeSend: function (xhr, settings) {
 					xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
@@ -439,7 +439,7 @@ var WebUI = function() {
 	function loadPage(url, callback) {
 		log("WebUI: Loading Page HTML: " + url);
 		$.get(url, function (data) {
-			log("WebUI: Loaded page.")
+			log("WebUI: Loaded page.");
 			$("#app-panel").html(data);
 			reloadUI();
 			// Callback
@@ -458,20 +458,35 @@ var WebUI = function() {
 		log("WebUI: Starting router.");
 		// Ignore Router State (Same URL Loads)
 		// crossroads.ignoreState = true;
-
-		// Video Landing Route
-		crossroads.addRoute('/', function () {
-			// Start Load
-			startLoad();
-			// Set Tabs
-			$(".public-nav").siblings().removeClass("active");
-			$("#landing-nav").addClass("active");
-			// Hide Signup Panel
-			$("#signup-panel").addClass("hide");
-			$("#signin-panel").addClass("hide");
-			document.title = "giv2giv.org";
-		});
 	};
+
+	// Landing Page Route
+	crossroads.addRoute('/', function () {
+		startLoad();
+		if (activeSession()) {
+			loadPage('/ui/landing.html', function () {
+				$(".public-nav").siblings().removeClass("active");
+				$("#landing-nav").addClass("active");
+				$('#app-container').attr('data-page-id', 'landing');
+				// Set Title
+				document.title = "giv2giv.org";
+			});
+		} else {
+			loadPage('/ui/landing.html', function () {
+				$(".public-nav").siblings().removeClass("active");
+				$("#app-panel").removeClass("hide");
+				$("#signin-panel").addClass("hide");
+				$("#signup-panel").addClass("hide");
+				$('#app-container').attr('data-page-id', 'landing');
+				// Set Nav Tab
+				$("#landing-nav").addClass("active");
+				// Set Title
+				document.title = "giv2giv.org";
+				displayPublicApplication();
+			});
+		}
+		stopLoad();
+	});
 
 	// Signin Route
 	crossroads.addRoute('/signin', function () {

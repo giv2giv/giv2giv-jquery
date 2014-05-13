@@ -32,4 +32,4 @@ A local development copy of the giv2giv Ruby on Rails API from [giv2giv-rails](h
 
 	var server_url = "http://localhost:3000"
 
-**Step 6**: Using a browser navigate to `http://localhost`
+**Step 6**: Using a browser navigate to `http://localhost`. If you get a `403` error try `sudo chmod -R 755 *`
