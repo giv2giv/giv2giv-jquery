@@ -618,35 +618,6 @@ var WebUI = function() {
 		}
 	});
 
-	// About Route
-	crossroads.addRoute('/about', function () {
-		if (activeSession()) {
-			loadPage('/ui/about.html', function () {
-				$(".nav-link").siblings().removeClass("active");
-				$('#app-container').attr('data-page-id', 'about');
-				// Set Nav Tab
-				$("#about-nav").addClass("active");
-				// Set Title
-				document.title = "giv2giv - About";
-				stopLoad();
-			});
-		} else {
-			loadPage('/ui/about.html', function () {
-				$("#app-panel").removeClass("hide");
-				$("#signin-panel").addClass("hide");
-				$("#signup-panel").addClass("hide");
-				$(".public-nav").siblings().removeClass("active");
-				$('#app-container').attr('data-page-id', 'about');
-				// Set Nav Tab
-				$("#pub-about-nav").addClass("active");
-				// Set Title
-				document.title = "giv2giv - About";
-				displayPublicApplication();
-				stopLoad();
-			});
-		}
-	});
-
 	// Numbers Route
 	crossroads.addRoute('/numbers', function () {
 		if (activeSession()) {
