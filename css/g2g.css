@@ -200,22 +200,27 @@ div[data-page-id="landing"].container {
   -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
-  .moneytree div {
-    position: absolute;
+  .moneytree .steps {
     display: inline-block;
+    width: 100px;
+    padding: 20px;
+    margin: 0 20px;
   }
-  #person {
-    top: 20px;
-    left: 20px;
-    width: 120px;
-    height: 220px;
-    background-image: url('../images/person.png');
-  }
-  #person-wallet {
-    top: 20px;
-    left: 170px;
+    .steps h3, .steps p {
+      text-align: center;
+    }
+  .interactive-target {
     width: 100px;
     height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 1px dotted rgb(200, 200, 200);
+  }
+
+  #person-wallet {
+    top: 20px;
+    left: 0px;
   }
     .highlight-hover {
       -webkit-box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
@@ -255,15 +260,11 @@ div[data-page-id="landing"].container {
   #plant-pot {
     top: 20px;
     left: 370px;
-    width: 100px;
-    height: 100px;
     background-image: url('../images/plant-pot.png');
   }
   #charity {
     top: 20px;
     left: 586px;
-    width: 100px;
-    height: 100px;
     background-image: url('../images/charity.png');
   }
   #beanstalk {
