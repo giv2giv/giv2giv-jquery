@@ -190,22 +190,23 @@ div[data-page-id="landing"].container {
 }
 /* Interactive Demo */
 .container.moneytree { /* increased specificity needed to override width on `.container`*/
-  /* Making the demo a fixed size solves animation headaches */
-  width: 767px;
-  height: 300px;
-  position: relative;
   background-color: #fbfbfb;
-  margin: 50px auto;
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  text-align: justify;
+  -ms-text-justify: distribute-all-lines;
+  text-justify: distribute-all-lines;
 }
   .moneytree .steps {
     display: inline-block;
+    position: relative;
     width: 100px;
     padding: 20px;
-    margin: 0 20px;
   }
+    .whitespace {
+      width: 100%;
+      display: inline-block;
+      font-size: 0;
+      line-height: 0;
+    }
     .steps h3, .steps p {
       text-align: center;
     }
@@ -215,58 +216,45 @@ div[data-page-id="landing"].container {
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
-    border: 1px dotted rgb(200, 200, 200);
+    border: 2px dashed rgb(100, 100, 100);
+    -webkit-transition: background-color 0.1s linear;
+    -moz-transition: background-color 0.1s linear;
+    -ms-transition: background-color 0.1s linear;
+    -o-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
   }
+    .interactive-target:hover {
+      background-color: rgba(200, 200, 200, 0.8);
+    }
 
   #person-wallet {
-    top: 20px;
-    left: 0px;
+
   }
-    .highlight-hover {
-      -webkit-box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
-      -moz-box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
-      box-shadow: 0 0 10px rgba(200, 200, 200, 0.8);
-      -webkit-transition: 0.2s linear;
-      -moz-transition: 0.2s linear;
-      -ms-transition: 0.2s linear;
-      -o-transition: 0.2s linear;
-      transition: 0.2s linear;
+    .dragover-hover {
+      background-color: #ff0000;
     }
+  #plant-pot {
+    /*background-image: url('../images/plant-pot.png');*/
+  }
+  #charity {
+    /*background-image: url('../images/charity.png');*/
+  }
   #benjamins {
-    top: 20px;
-    left: 170px;
+    position: absolute;
+    top: 140px;
+    left: 30px;
     width: 80px;
     height: 40px;
     z-index: 2;
   }
     .stationary {
-      -webkit-transition: 0.2s linear;
-      -moz-transition: 0.2s linear;
-      -ms-transition: 0.2s linear;
-      -o-transition: 0.2s linear;
-      transition: 0.2s linear;
     }
-      .stationary:hover {
-        -webkit-box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
-        -moz-box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
-        box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
-      }
     #benjamins:hover {
       cursor: pointer;
     }
     #benjamins img {
       position: absolute;
     }
-  #plant-pot {
-    top: 20px;
-    left: 370px;
-    background-image: url('../images/plant-pot.png');
-  }
-  #charity {
-    top: 20px;
-    left: 586px;
-    background-image: url('../images/charity.png');
-  }
   #beanstalk {
     top: 20px;
     left: 370px;
