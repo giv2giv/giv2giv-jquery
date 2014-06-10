@@ -12,7 +12,6 @@ $(function() {
 	var $beanstalk = $('#beanstalk');
 	var $charity = $('#charity');
 
-	console.log($benjamins)
 	// Defines where the money goes back to if the user doesn't drop it anywhere
 	var moneyHomePosition = {
 		top: 140,
