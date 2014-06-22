@@ -174,27 +174,24 @@ div[data-page-id="landing"].container {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
   padding: 20px;
 }
-  #drag-prompt {
-    font-weight: bold;
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    font-size: 2em;
-    line-height: 115%;
-  }
-  .secondary-drag-prompt {
-    font-weight: normal;
-    font-size: 0.5em;
-  }
 
 .navbar.navbar-fixed-top {
   margin-bottom: 0;
 }
 /* Interactive Demo */
 .container.moneytree { /* increased specificity needed to override width on `.container`*/
+  position: relative;
   background-color: #fbfbfb;
   text-align: justify;
   -ms-text-justify: distribute-all-lines;
   text-justify: distribute-all-lines;
 }
+  #drag-prompt {
+    position: absolute;
+    top: 200px;
+    left: 230px;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  }
   .moneytree .steps {
     display: inline-block;
     position: relative;
@@ -202,6 +199,7 @@ div[data-page-id="landing"].container {
     padding: 20px;
   }
     .whitespace {
+      /* Whitespace used to force the divs to justify/distribute */
       width: 100%;
       display: inline-block;
       font-size: 0;

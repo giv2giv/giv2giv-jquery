@@ -35,11 +35,11 @@ $(function() {
 	});
 	$plantPot.droppable({
 		drop: function(event, ui) {
-			$dragPrompt.html('Awesome :)<br/><span class="secondary-drag-prompt">Your charity will now receive investment income every 90 days, forever.</span>');
-			moneyHomePosition = {top: 140, left: 350};
+			$dragPrompt.fadeOut(400, function(){$dragPrompt.remove();});
+			moneyHomePosition = {top: 140, left: 300};
 			$benjamins.animate({
 				top: 140,
-				left: 350,
+				left: 300,
 				opacity: 0
 			},500,function(){$(benjamins).remove();});
 			$beanstalk.grow();
@@ -49,8 +49,7 @@ $(function() {
 	});
 	$charity.droppable({
 		drop: function(event, ui) {
-			$dragPrompt.html('Donating directly is great, but what if your charity needs more money?<br/><span class="secondary-drag-prompt">Try giving your money to giv2giv instead.</span>');
-			moneyHomePosition = {top: 140, left: 566};
+			moneyHomePosition = {top: 140, left: 600};
 			$benjamins.animate(moneyHomePosition);
 		},
 		tolerance: 'touch',
