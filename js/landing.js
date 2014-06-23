@@ -1,6 +1,5 @@
 /* TODO: 
-- Fill out the Cashflows object to make it rain
-- Add passive animation to the wallet to attract attention there
+- Add passive animation to the drag arrow to attract attention there
 */
 
 $(function() {
@@ -29,7 +28,7 @@ $(function() {
 			// From http://stackoverflow.com/a/5848800
 			// Reverts the money to your wallet if you don't drag it into the pot or the charity
 			revert: function(event, ui) {
-				disappearIntoPosition(moneyHomePosition);
+				disappearIntoPosition(moneyHomePosition, 500);
 				return !event;
 			},
 			containment: 'document',
@@ -43,9 +42,11 @@ $(function() {
 		drop: function(event, ui) {
 			$dragArrow.fadeOut(400, function(){$dragArrow.remove();});
 			moneyHomePosition = {top: 108, left: 295, opacity: 0};
-			disappearIntoPosition(moneyHomePosition);
+			disappearIntoPosition(moneyHomePosition, 500);
 			$tree.grow();
-			$resultArrow.delay(400).fadeIn(400);
+			$resultArrow.delay(400).fadeIn(400, function(){
+				makeItRain();
+			});
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
@@ -57,21 +58,26 @@ $(function() {
 	$charity.droppable({
 		drop: function(event, ui) {
 			moneyHomePosition = {top: 108, left: 570, opacity: 0};
-			disappearIntoPosition(moneyHomePosition);
+			disappearIntoPosition(moneyHomePosition, 500);
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
 	});
 
-	function disappearIntoPosition(position) {
-		$benjamins.animate(position,500,function(){
+	function disappearIntoPosition(position, speed) {
+		$benjamins.animate(position, speed, function(){
 			$benjamins.remove();
 			createNewBenjamins();
 		});
 	}
 
-	function cashflows() {
-		
+	function makeItRain() {
+		$benjamins.removeClass('stationary');
+		$benjamins.css({top: 108, left: 295});
+		$benjamins.fadeIn(800, function() {
+			disappearIntoPosition({top: 108, left: 570, opacity: 0}, 800);
+			setTimeout(function(){console.log('again');makeItRain();}, 3000);
+		});
 	}
 
 	createNewBenjamins();
