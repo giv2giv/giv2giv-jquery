@@ -223,7 +223,7 @@ div[data-page-id="landing"].container {
     -o-transition: background-color 0.1s linear;
     transition: background-color 0.1s linear;
   }
-    .interactive-target:hover {
+    .dragover-hover {
       background-color: rgba(200, 200, 200, 0.8);
     }
 
@@ -234,9 +234,6 @@ div[data-page-id="landing"].container {
     #person-wallet:hover {
       cursor: pointer;
       background-image: url('../images/wallet-open-full.png');
-    }
-    .dragover-hover {
-      background-color: #ff0000;
     }
   #flowerpot {
     background-image: url('../images/flowerpot.png');
