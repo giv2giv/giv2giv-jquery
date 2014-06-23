@@ -226,16 +226,16 @@ div[data-page-id="landing"].container {
     }
 
   #person-wallet {
-
+    
   }
     .dragover-hover {
       background-color: #ff0000;
     }
-  #plant-pot {
-    /*background-image: url('../images/plant-pot.png');*/
+  #flowerpot {
+    background-image: url('../images/flowerpot.png');
   }
   #charity {
-    /*background-image: url('../images/charity.png');*/
+    background-image: url('../images/charity.png');
   }
   #benjamins {
     position: absolute;
@@ -253,15 +253,15 @@ div[data-page-id="landing"].container {
     #benjamins img {
       position: absolute;
     }
-  #beanstalk {
+  #flower {
     top: 20px;
     left: 370px;
     width: 100px;
     height: 100px;
     z-index: -1;
-    background-image: url('../images/beanstalk.png');
+    background-image: url('../images/flower.png');
   }
-    #beanstalk.grown {
+    #flower.grown {
       top: 50px;
       z-index: 2;
       -webkit-transition: top 1s;

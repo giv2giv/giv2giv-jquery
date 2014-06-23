@@ -8,8 +8,8 @@ $(function() {
 	var $dragPrompt = $('#drag-prompt');
 	var $personWallet = $('#person-wallet');
 	var $benjamins = $('#benjamins');
-	var $plantPot = $('#plant-pot');
-	var $beanstalk = $('#beanstalk');
+	var $flowerpot = $('#flowerpot');
+	// var $flower = $('#flower');
 	var $charity = $('#charity');
 
 	// Defines where the money goes back to if the user doesn't drop it anywhere
@@ -33,7 +33,7 @@ $(function() {
 			$(this).addClass('stationary');
 		}
 	});
-	$plantPot.droppable({
+	$flowerpot.droppable({
 		drop: function(event, ui) {
 			$dragPrompt.fadeOut(400, function(){$dragPrompt.remove();});
 			moneyHomePosition = {top: 140, left: 300};
@@ -42,7 +42,7 @@ $(function() {
 				left: 300,
 				opacity: 0
 			},500,function(){$(benjamins).remove();});
-			$beanstalk.grow();
+			$flower.grow();
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
@@ -56,8 +56,8 @@ $(function() {
 		hoverClass: 'dragover-hover'
 	});
 
-	$beanstalk.grow = function() {
-		$beanstalk.addClass('grown');
+	$flower.grow = function() {
+		$flower.addClass('grown');
 	};
 
 	function cashflows() {
