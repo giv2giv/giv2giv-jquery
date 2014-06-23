@@ -11,7 +11,7 @@ $(function() {
 	var $tree = $('#tree');
 	var $charity = $('#charity');
 
-	function createNewBenjamins() {
+	function createNewBenjamins(draggable) {
 		// Initialize the benjamins on page load
 		// Create a new dollar bill once the old one disappears
 		$personWallet.before('<div class="interactive-target stationary" id="benjamins"></div>');
@@ -24,25 +24,27 @@ $(function() {
 			opacity: 0
 		};
 
-		$benjamins.draggable({
-			// From http://stackoverflow.com/a/5848800
-			// Reverts the money to your wallet if you don't drag it into the pot or the charity
-			revert: function(event, ui) {
-				disappearIntoPosition(moneyHomePosition, 500);
-				return !event;
-			},
-			containment: 'document',
-			start: function(event, ui) {
-				$(this).removeClass('stationary');
-			}
-		});
+		if (draggable) {
+			$benjamins.draggable({
+				// From http://stackoverflow.com/a/5848800
+				// Reverts the money to your wallet if you don't drag it into the pot or the charity
+				revert: function(event, ui) {
+					disappearIntoPosition(moneyHomePosition, 500, true);
+					return !event;
+				},
+				containment: 'document',
+				start: function(event, ui) {
+					$(this).removeClass('stationary');
+				}
+			});
+		}
 	}
 
 	$tree.droppable({
 		drop: function(event, ui) {
 			$dragArrow.fadeOut(400, function(){$dragArrow.remove();});
 			moneyHomePosition = {top: 108, left: 295, opacity: 0};
-			disappearIntoPosition(moneyHomePosition, 500);
+			disappearIntoPosition(moneyHomePosition, 500, true);
 			$tree.grow();
 			$resultArrow.delay(400).fadeIn(400, function(){
 				makeItRain();
@@ -58,29 +60,29 @@ $(function() {
 	$charity.droppable({
 		drop: function(event, ui) {
 			moneyHomePosition = {top: 108, left: 570, opacity: 0};
-			disappearIntoPosition(moneyHomePosition, 500);
+			disappearIntoPosition(moneyHomePosition, 500, true);
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
 	});
 
-	function disappearIntoPosition(position, speed) {
+	function disappearIntoPosition(position, speed, draggable) {
 		$benjamins.animate(position, speed, function(){
 			$benjamins.remove();
-			createNewBenjamins();
+			createNewBenjamins(draggable);
 		});
 	}
 
 	function makeItRain() {
+		$benjamins.draggable('disable');
 		$benjamins.removeClass('stationary');
-		$benjamins.css({top: 108, left: 295, opacity:1});
-		$benjamins.show(800, function() {
-		// $benjamins.animate({top: 108, left: 295, height: '100px', width: '100px'}, function() {
-			disappearIntoPosition({top: 108, left: 570, opacity: 0}, 1000);
-			setTimeout(function(){console.log('again');makeItRain();}, 3000);
+		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px'});
+		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 4000, function() {
+			disappearIntoPosition({top: 158, left: 595, opacity: 0}, 1000, false);
+			setTimeout(function(){makeItRain();}, 2000);
 		});
 	}
 
-	createNewBenjamins();
+	createNewBenjamins(true);
 
 });

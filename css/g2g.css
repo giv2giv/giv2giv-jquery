@@ -261,6 +261,7 @@ div[data-page-id="landing"].container {
   }
   #benjamins {
     background-image: url('../images/benjamins.png');
+    border-radius: 0;
     position: absolute;
     top: 108px;
     left: 22px;
