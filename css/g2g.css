@@ -192,6 +192,15 @@ div[data-page-id="landing"].container {
     left: 230px;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
   }
+    #drag.prompt:after {
+      position: absolute;
+      display: block;
+      top: 250px;
+      left: 200px;
+      width: 130px;
+      height: 20px;
+      background-image: url('../images/arrow-right.png');
+    }
   .moneytree .steps {
     display: inline-block;
     position: relative;
@@ -235,9 +244,12 @@ div[data-page-id="landing"].container {
       cursor: pointer;
       background-image: url('../images/wallet-open-full.png');
     }
-  #flowerpot {
-    background-image: url('../images/flowerpot.png');
+  #tree {
+    background-image: url('../images/treepot.png');
   }
+    #tree.grown  {
+      background-image: url('../images/tree.png');
+    }
   #charity {
     background-image: url('../images/charity.png');
   }
@@ -258,23 +270,6 @@ div[data-page-id="landing"].container {
     }
     #benjamins.stationary:hover + #person-wallet {
       background-image: url('../images/wallet-open-full.png');
-    }
-  #flower {
-    top: 20px;
-    left: 370px;
-    width: 100px;
-    height: 100px;
-    z-index: -1;
-    background-image: url('../images/flower.png');
-  }
-    #flower.grown {
-      top: 50px;
-      z-index: 2;
-      -webkit-transition: top 1s;
-      -moz-transition: top 1s;
-      -ms-transition: top 1s;
-      -o-transition: top 1s;
-      transition: top 1s;
     }
 
 .container.main-content {

@@ -8,8 +8,7 @@ $(function() {
 	var moneyHomePosition;
 	var $dragPrompt = $('#drag-prompt');
 	var $personWallet = $('#person-wallet');
-	var $flowerpot = $('#flowerpot');
-	var $flower = $('#flower');
+	var $tree = $('#tree');
 	var $charity = $('#charity');
 
 	function createNewBenjamins() {
@@ -39,28 +38,27 @@ $(function() {
 		});
 	}
 
-	$flowerpot.droppable({
+	$tree.droppable({
 		drop: function(event, ui) {
-			moneyHomePosition = {top: 108, left: 300, opacity: 0};
+			moneyHomePosition = {top: 108, left: 295, opacity: 0};
 			disappearIntoPosition(moneyHomePosition);
-			$flower.grow();
+			$tree.grow();
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
 	});
+	$tree.grow = function() {
+		$tree.addClass('grown');
+	};
+
 	$charity.droppable({
 		drop: function(event, ui) {
-			moneyHomePosition = {top: 108, left: 600, opacity: 0};
+			moneyHomePosition = {top: 108, left: 570, opacity: 0};
 			disappearIntoPosition(moneyHomePosition);
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
 	});
-
-
-	$flower.grow = function() {
-		$flower.addClass('grown');
-	};
 
 	function disappearIntoPosition(position) {
 		$dragPrompt.fadeOut(400, function(){$dragPrompt.remove();});
@@ -69,10 +67,11 @@ $(function() {
 			createNewBenjamins();
 		});
 	}
-
-	createNewBenjamins();
-
+	
 	function cashflows() {
 		
 	}
+
+	createNewBenjamins();
+
 });
