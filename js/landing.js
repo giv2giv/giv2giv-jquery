@@ -6,7 +6,8 @@
 $(function() {
 	var $benjamins;
 	var moneyHomePosition;
-	var $dragPrompt = $('#drag-prompt');
+	var $dragArrow = $('#drag-arrow');
+	var $resultArrow = $('#result-arrow');
 	var $personWallet = $('#person-wallet');
 	var $tree = $('#tree');
 	var $charity = $('#charity');
@@ -40,9 +41,11 @@ $(function() {
 
 	$tree.droppable({
 		drop: function(event, ui) {
+			$dragArrow.fadeOut(400, function(){$dragArrow.remove();});
 			moneyHomePosition = {top: 108, left: 295, opacity: 0};
 			disappearIntoPosition(moneyHomePosition);
 			$tree.grow();
+			$resultArrow.delay(400).fadeIn(400);
 		},
 		tolerance: 'touch',
 		hoverClass: 'dragover-hover'
@@ -61,13 +64,12 @@ $(function() {
 	});
 
 	function disappearIntoPosition(position) {
-		$dragPrompt.fadeOut(400, function(){$dragPrompt.remove();});
 		$benjamins.animate(position,500,function(){
 			$benjamins.remove();
 			createNewBenjamins();
 		});
 	}
-	
+
 	function cashflows() {
 		
 	}

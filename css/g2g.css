@@ -186,17 +186,23 @@ div[data-page-id="landing"].container {
   -ms-text-justify: distribute-all-lines;
   text-justify: distribute-all-lines;
 }
-  #drag-prompt {
+  .prompt-arrow {
     position: absolute;
-    top: 200px;
-    left: 230px;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    top: 225px;
   }
-    #drag.prompt:after {
+  #drag-arrow {
+    left: 235px;
+  }
+  #result-arrow {
+    left: 510px;
+    display: none;
+  }
+    .prompt-arrow:after {
       position: absolute;
-      display: block;
-      top: 250px;
-      left: 200px;
+      content: "";
+      top: 25px;
+      left: -50px;
       width: 130px;
       height: 20px;
       background-image: url('../images/arrow-right.png');
