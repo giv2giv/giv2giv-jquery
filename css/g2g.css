@@ -215,6 +215,8 @@ div[data-page-id="landing"].container {
     -moz-border-radius: 50%;
     border-radius: 50%;
     border: 2px dashed rgb(100, 100, 100);
+    background-repeat: no-repeat;
+    background-position: center;
     -webkit-transition: background-color 0.1s linear;
     -moz-transition: background-color 0.1s linear;
     -ms-transition: background-color 0.1s linear;
@@ -226,8 +228,13 @@ div[data-page-id="landing"].container {
     }
 
   #person-wallet {
+    background-image: url('../images/wallet-closed-full.png');
     
   }
+    #person-wallet:hover {
+      cursor: pointer;
+      background-image: url('../images/wallet-open-full.png');
+    }
     .dragover-hover {
       background-color: #ff0000;
     }
@@ -238,20 +245,22 @@ div[data-page-id="landing"].container {
     background-image: url('../images/charity.png');
   }
   #benjamins {
+    background-image: url('../images/benjamins.png');
     position: absolute;
-    top: 140px;
-    left: 30px;
-    width: 80px;
-    height: 40px;
+    top: 108px;
+    left: 22px;
+    border: none;
     z-index: 2;
   }
-    .stationary {
-    }
     #benjamins:hover {
       cursor: pointer;
+      background-color: rgba(255, 255, 255, 0);
     }
-    #benjamins img {
-      position: absolute;
+    #benjamins.stationary {
+      background-image: none;
+    }
+    #benjamins.stationary:hover + #person-wallet {
+      background-image: url('../images/wallet-open-full.png');
     }
   #flower {
     top: 20px;
