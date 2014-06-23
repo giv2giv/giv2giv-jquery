@@ -73,8 +73,8 @@ $(function() {
 
 	function makeItRain() {
 		$benjamins.removeClass('stationary');
-		$benjamins.css({top: 108, left: 295});
-		$benjamins.fadeIn(800, function() {
+		$benjamins.css({top: 108, left: 295, opacity:1, height: 0, width: 0});
+		$benjamins.animate({top: 108, left: 295, height: '100px', width: '100px'}, function() {
 			disappearIntoPosition({top: 108, left: 570, opacity: 0}, 800);
 			setTimeout(function(){console.log('again');makeItRain();}, 3000);
 		});
