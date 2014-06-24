@@ -243,21 +243,25 @@ div[data-page-id="landing"].container {
     }
 
   #person-wallet {
-    background-image: url('../images/wallet-closed-full.png');
-    
+    background-image: url('../images/animation-sprites.png');
+    background-position: -100px 0;
   }
     #person-wallet:hover {
       cursor: pointer;
-      background-image: url('../images/wallet-open-full.png');
+      background-image: url('../images/animation-sprites.png');
+      background-position: -100px -100px;
     }
   #tree {
-    background-image: url('../images/treepot.png');
+    background-image: url('../images/animation-sprites.png');
+    background-position: 0 0;
   }
     #tree.grown  {
-      background-image: url('../images/tree.png');
+      background-image: url('../images/animation-sprites.png');
+      background-position: 0 -100px;
     }
   #charity {
-    background-image: url('../images/charity.png');
+    background-image: url('../images/animation-sprites.png');
+      background-position: -200px 0;
   }
   #benjamins {
     background-image: url('../images/benjamins.png');
@@ -276,7 +280,8 @@ div[data-page-id="landing"].container {
       background-image: none;
     }
     #benjamins.stationary:hover + #person-wallet {
-      background-image: url('../images/wallet-open-full.png');
+      background-image: url('../images/animation-sprites.png');
+      background-position: -100px -100px;
     }
 
 .container.main-content {
