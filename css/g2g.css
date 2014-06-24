@@ -261,7 +261,7 @@ div[data-page-id="landing"].container {
     }
   #charity {
     background-image: url('../images/animation-sprites.png');
-      background-position: -200px 0;
+      background-position: -200px -100px;
   }
   #benjamins {
     background-image: url('../images/benjamins.png');

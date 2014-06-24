@@ -1,7 +1,3 @@
-/* TODO: 
-- Add passive animation to the drag arrow to attract attention there
-*/
-
 $(function() {
 	var $benjamins;
 	var moneyHomePosition;
@@ -46,6 +42,7 @@ $(function() {
 			moneyHomePosition = {top: 108, left: 295, opacity: 0};
 			disappearIntoPosition(moneyHomePosition, 500, true);
 			$tree.grow();
+			$benjamins.draggable('disable');
 			$resultArrow.delay(400).fadeIn(400, function(){
 				makeItRain();
 			});
@@ -74,7 +71,6 @@ $(function() {
 	}
 
 	function makeItRain() {
-		$benjamins.draggable('disable');
 		$benjamins.removeClass('stationary');
 		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px'});
 		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 4000, function() {
