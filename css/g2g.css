@@ -193,9 +193,9 @@ div[data-page-id="landing"].container {
   }
   #drag-arrow {
     left: 235px;
-    -webkit-animation: attentionAttraction 2s infinite;
-    -o-animation: attentionAttraction 2s infinite;
-    animation: attentionAttraction 2s infinite;
+    -webkit-animation: attentionAttraction 1.5s infinite;
+    -o-animation: attentionAttraction 1.5s infinite;
+    animation: attentionAttraction 1.5s infinite;
   }
 
   @-webkit-keyframes attentionAttraction {
@@ -206,10 +206,10 @@ div[data-page-id="landing"].container {
       transform: scale(1);
     }
     50% {
-      -webkit-transform: scale(0.9);
-      -ms-transform: scale(0.9);
-      -o-transform: scale(0.9);
-      transform: scale(0.9);
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+      transform: scale(1.2);
     }
     100% {
       -webkit-transform: scale(1);
@@ -226,10 +226,10 @@ div[data-page-id="landing"].container {
       transform: scale(1);
     }
     50% {
-      -webkit-transform: scale(0.9);
-      -ms-transform: scale(0.9);
-      -o-transform: scale(0.9);
-      transform: scale(0.9);
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+      transform: scale(1.2);
     }
     100% {
       -webkit-transform: scale(1);
@@ -246,10 +246,10 @@ div[data-page-id="landing"].container {
       transform: scale(1);
     }
     50% {
-      -webkit-transform: scale(0.9);
-      -ms-transform: scale(0.9);
-      -o-transform: scale(0.9);
-      transform: scale(0.9);
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+      transform: scale(1.2);
     }
     100% {
       -webkit-transform: scale(1);
@@ -266,10 +266,10 @@ div[data-page-id="landing"].container {
       transform: scale(1);
     }
     50% {
-      -webkit-transform: scale(0.9);
-      -ms-transform: scale(0.9);
-      -o-transform: scale(0.9);
-      transform: scale(0.9);
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+      transform: scale(1.2);
     }
     100% {
       -webkit-transform: scale(1);

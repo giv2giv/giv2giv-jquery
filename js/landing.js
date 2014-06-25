@@ -72,8 +72,8 @@ $(function() {
 
 	function makeItRain() {
 		$benjamins.removeClass('stationary');
-		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px'});
-		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 4000, function() {
+		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px', cursor: 'default'});
+		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 1000, function() {
 			disappearIntoPosition({top: 158, left: 595, opacity: 0}, 1000, false);
 			setTimeout(function(){makeItRain();}, 2000);
 		});
