@@ -1,67 +1,83 @@
-/* TODO: 
-- Fill out the Cashflows object to make it rain
-- Improve the art (flat + rounded corners for image sprites)
-- Add passive animation to the wallet to attract attention there
-*/
-
 $(function() {
-	var $dragPrompt = $('#drag-prompt');
+	var $benjamins;
+	var moneyHomePosition;
+	var $dragArrow = $('#drag-arrow');
+	var $resultArrow = $('#result-arrow');
 	var $personWallet = $('#person-wallet');
-	var $benjamins = $('#benjamins');
-	var $plantPot = $('#plant-pot');
-	var $beanstalk = $('#beanstalk');
+	var $tree = $('#tree');
 	var $charity = $('#charity');
 
-	// Defines where the money goes back to if the user doesn't drop it anywhere
-	var moneyHomePosition = {
-		top: 100,
-		left: 150
-	};
+	function createNewBenjamins(draggable) {
+		// Initialize the benjamins on page load
+		// Create a new dollar bill once the old one disappears
+		$personWallet.before('<div class="interactive-target stationary" id="benjamins"></div>');
+		$benjamins = $('#benjamins');
+		
+		// Defines where the money goes back to if the user doesn't drop it anywhere
+		moneyHomePosition = {
+			top: 108,
+			left: 22,
+			opacity: 0
+		};
 
-	$benjamins.draggable({
-		// From http://stackoverflow.com/a/5848800
-		// Reverts the money to your wallet if you don't drag it into the pot or the charity
-		revert: function(event, ui) {
-			$(this).data("uiDraggable").originalPosition = moneyHomePosition;
-			return !event;
-		},
-		containment: 'document',
-		start: function(event, ui) {
-			$(this).removeClass('stationary');
-		},
-		stop: function(event, ui) {
-			$(this).addClass('stationary');
+		if (draggable) {
+			$benjamins.draggable({
+				// From http://stackoverflow.com/a/5848800
+				// Reverts the money to your wallet if you don't drag it into the pot or the charity
+				revert: function(event, ui) {
+					disappearIntoPosition(moneyHomePosition, 500, true);
+					return !event;
+				},
+				containment: 'document',
+				start: function(event, ui) {
+					$(this).removeClass('stationary');
+				}
+			});
 		}
-	});
-	$plantPot.droppable({
+	}
+
+	$tree.droppable({
 		drop: function(event, ui) {
-			$dragPrompt.html('Awesome :)<br/><span class="secondary-drag-prompt">Your charity will now receive investment income every 90 days, forever.</span>');
-			moneyHomePosition = {top: 100, left: 350};
-			$benjamins.animate({
-				top: 100,
-				left: 350,
-				opacity: 0
-			},500,function(){$(benjamins).remove();});
-			$beanstalk.grow();
+			$dragArrow.fadeOut(400, function(){$dragArrow.remove();});
+			moneyHomePosition = {top: 108, left: 295, opacity: 0};
+			disappearIntoPosition(moneyHomePosition, 500, true);
+			$tree.grow();
+			$benjamins.draggable('disable');
+			$resultArrow.delay(400).fadeIn(400, function(){
+				makeItRain();
+			});
 		},
 		tolerance: 'touch',
-		hoverClass: 'highlight-hover'
+		hoverClass: 'dragover-hover'
 	});
+	$tree.grow = function() {
+		$tree.addClass('grown');
+	};
+
 	$charity.droppable({
 		drop: function(event, ui) {
-			$dragPrompt.html('Donating directly is great, but what if your charity needs more money?<br/><span class="secondary-drag-prompt">Try giving your money to giv2giv instead.</span>');
-			moneyHomePosition = {top: 100, left: 566};
-			$benjamins.animate(moneyHomePosition);
+			moneyHomePosition = {top: 108, left: 570, opacity: 0};
+			disappearIntoPosition(moneyHomePosition, 500, true);
 		},
 		tolerance: 'touch',
-		hoverClass: 'highlight-hover'
+		hoverClass: 'dragover-hover'
 	});
 
-	$beanstalk.grow = function() {
-		$beanstalk.addClass('grown');
-	};
-
-	function cashflows() {
-		
+	function disappearIntoPosition(position, speed, draggable) {
+		$benjamins.animate(position, speed, function(){
+			$benjamins.remove();
+			createNewBenjamins(draggable);
+		});
 	}
+
+	function makeItRain() {
+		$benjamins.removeClass('stationary');
+		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px', cursor: 'default'});
+		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 1000, function() {
+			disappearIntoPosition({top: 158, left: 595, opacity: 0}, 1000, false);
+			setTimeout(function(){makeItRain();}, 2000);
+		});
+	}
+
+	createNewBenjamins(true);
 });
