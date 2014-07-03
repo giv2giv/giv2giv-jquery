@@ -383,9 +383,18 @@ div[data-page-id="landing"].container {
   /* Fix bottom margin to account for the footer */
   margin-bottom: 100px;
 }
-.container.video iframe {
-  width: 687px; /* 687 = 767 width - 40px padding left - 40px padding right */
-  height: 414px;
+.fluid-video-container{
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-top: 25px;
+  height: 0;
+}
+.fluid-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* Endowment Cards */
@@ -549,17 +558,18 @@ div[data-page-id="landing"].container {
 }
 
 @media (max-width: 767px) {
-  body {
+  html body {
     padding-right: 0px;
     padding-left: 0px;
   }
-  .container {
+  #app-container .container {
     padding-right: 20px;
     padding-left: 20px;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
   #footer {
-    margin-left: -20px;
-    margin-right: -20px;
     padding-left: 20px;
     padding-right: 20px;
   }
