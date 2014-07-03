@@ -562,12 +562,20 @@ div[data-page-id="landing"].container {
     padding-right: 0px;
     padding-left: 0px;
   }
+  .navbar.navbar-fixed-top {
+    margin-left: 0;
+    margin-right: 0;
+  }
   #app-container .container {
     padding-right: 20px;
     padding-left: 20px;
     width: 100%;
     margin-left: 0;
     margin-right: 0;
+  }
+  .animation-container {
+    display: none;
+    visibility: hidden;
   }
   #footer {
     padding-left: 20px;
