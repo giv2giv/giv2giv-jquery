@@ -1,4 +1,7 @@
 $(function() {
+	/**************************
+	** Interactive Animation **
+	***************************/
 	var $benjamins;
 	var moneyHomePosition;
 	var $dragArrow = $('#drag-arrow');
@@ -80,4 +83,12 @@ $(function() {
 	}
 
 	createNewBenjamins(true);
+
+	/*************************
+	** Expand Landing Image **
+	**************************/
+	var $splashImage = $('.container.header');
+	var heightToExpand = $(window).height() - $splashImage.height();
+	$splashImage.height(heightToExpand);
+
 });
