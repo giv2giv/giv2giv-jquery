@@ -90,5 +90,4 @@ $(function() {
 	var $splashImage = $('.container.header');
 	var heightToExpand = $(window).height() - $splashImage.height();
 	$splashImage.height(heightToExpand);
-
 });
