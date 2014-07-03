@@ -665,7 +665,7 @@ function fetchFeaturedEndowments(callback) {
 				// Donation Amount
 				body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
 				// Endowment Balance & Donations
-				body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+				body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
 				// Donor Balance
 				body += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
 
