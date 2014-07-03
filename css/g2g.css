@@ -165,7 +165,6 @@ div[data-page-id="landing"].container {
 
 .container.action-bar {
   text-align: center;
-  width: 100%;
   height: 100px;
   color: #fff;
   background-color: #216c2a;
@@ -189,10 +188,10 @@ div[data-page-id="landing"].container {
   .prompt-arrow {
     position: absolute;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    top: 225px;
   }
   #drag-arrow {
-    left: 235px;
+    left: 215px;
+    top: 225px;
     -webkit-animation: attentionAttraction 1.5s infinite;
     -o-animation: attentionAttraction 1.5s infinite;
     animation: attentionAttraction 1.5s infinite;
@@ -280,7 +279,8 @@ div[data-page-id="landing"].container {
   }
 
   #result-arrow {
-    left: 510px;
+    left: 445px;
+    top: 235px;
     display: none;
   }
     .prompt-arrow:after {
@@ -371,7 +371,7 @@ div[data-page-id="landing"].container {
 
 .container.main-content {
   /* Fixed width but with at the responsive breakpoint */
-  width: 767px;
+  width: 687px;
   background-color: #fbfbfb;
   padding: 40px;
   margin-bottom: 50px;

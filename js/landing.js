@@ -15,7 +15,7 @@ $(function() {
 		
 		// Defines where the money goes back to if the user doesn't drop it anywhere
 		moneyHomePosition = {
-			top: 108,
+			top: 128,
 			left: 22,
 			opacity: 0
 		};
@@ -39,7 +39,7 @@ $(function() {
 	$tree.droppable({
 		drop: function(event, ui) {
 			$dragArrow.fadeOut(400, function(){$dragArrow.remove();});
-			moneyHomePosition = {top: 108, left: 295, opacity: 0};
+			moneyHomePosition = {top: 128, left: 255, opacity: 0};
 			disappearIntoPosition(moneyHomePosition, 500, true);
 			$tree.grow();
 			$benjamins.draggable('disable');
@@ -56,7 +56,7 @@ $(function() {
 
 	$charity.droppable({
 		drop: function(event, ui) {
-			moneyHomePosition = {top: 108, left: 570, opacity: 0};
+			moneyHomePosition = {top: 128, left: 490, opacity: 0};
 			disappearIntoPosition(moneyHomePosition, 500, true);
 		},
 		tolerance: 'touch',
@@ -72,9 +72,9 @@ $(function() {
 
 	function makeItRain() {
 		$benjamins.removeClass('stationary');
-		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px', cursor: 'default'});
-		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 1000, function() {
-			disappearIntoPosition({top: 158, left: 595, opacity: 0}, 1000, false);
+		$benjamins.css({top: 163, left: 305, opacity:1, height:'0px', width: '0px', cursor: 'default'});
+		$benjamins.animate({top: 138, left: 280, height: '50px', width: '50px'}, 1000, function() {
+			disappearIntoPosition({top: 158, left: 515, opacity: 0}, 1000, false);
 			setTimeout(function(){makeItRain();}, 2000);
 		});
 	}
