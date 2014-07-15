@@ -17,7 +17,6 @@
 	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-	<!-- Le styles -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/css/bootstrap-theme.min.css" rel="stylesheet">
 	<link href="/css/font-awesome.css" rel="stylesheet">
@@ -78,62 +77,55 @@
 			</ul>
 		</div>
 	</nav>
+	
+	<div id="app-container" data-page-id="landing" class="container">
+		<div id="app-panel" class="row hide"></div>
 
-		<div id="app-container" data-page-id='landing' class="container">
-			<div id="app-panel" class="hide">
-			</div>
-
-			<div id="signin-panel" class="hide">
-				<div class="row-fluid">
-					<div class="span4 offset4">
-						<div class="card">
-							<h2 class="card-heading simple">Please Sign In</h2>
-							<div class="card-body">
-								<p id="signin-message"></p>
-								<form id="signin-form" class="form-signin" method="post">
-									<input id="signin-email" type="text" class="input-block-level" placeholder="Email address">
-									<input id="signin-password" type="password" class="input-block-level" placeholder="Password">
-									<button id="signin-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
-										Sign in
-									</button>
-								</form>
-							</div>
-						</div>
+		<div id="signin-panel" class="row hide">
+			<div class="col-sm-4 col-sm-offset-4">
+				<div class="card">
+					<h2 class="card-heading simple">Please Sign In</h2>
+					<div class="card-body">
+						<p id="signin-message"></p>
+						<form id="signin-form" class="form-signin" method="post">
+							<input id="signin-email" type="text" class="input-block-level" placeholder="Email address">
+							<input id="signin-password" type="password" class="input-block-level" placeholder="Password">
+							<button id="signin-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
+								Sign in
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
-
-
-			<div id="signup-panel" class="hide">
-				<div class="row-fluid">
-					<div class="span4 offset4">
-						<div class="card">
-							<h2 class="card-heading simple">Sign Up</h2>
-							<div class="card-body">
-								<form id="signup-form" class="form-signin">
-									<input type="text" id="signup-name" placeholder="Name">
-									<input type="text" id="signup-email" placeholder="Email">
-									<input type="password" id="signup-password" placeholder="Password"><br />
-									<label class="checkbox">
-										<input type="checkbox" id="signup-accept-terms"> Accept <a id="terms-btn" href="#terms-modal">terms and conditions?</a>
-									</label>
-									<button id="signup-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Creating" class="btn btn-success">Create Account</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="push"></div>
 		</div>
-	<div id="footer">
+		
+		<div id="signup-panel" class="row hide">
+			<div class="col-sm-4 col-sm-offset-4">
+				<div class="card">
+					<h2 class="card-heading simple">Sign Up</h2>
+					<div class="card-body">
+						<form id="signup-form" class="form-signin">
+							<input type="text" id="signup-name" placeholder="Name">
+							<input type="text" id="signup-email" placeholder="Email">
+							<input type="password" id="signup-password" placeholder="Password"><br />
+							<label class="checkbox">
+								<input type="checkbox" id="signup-accept-terms"> Accept <a id="terms-btn" href="#terms-modal">terms and conditions?</a>
+							</label>
+							<button id="signup-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Creating" class="btn btn-success">Create Account</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
 		<div class="container">
 			<p class="muted credit">
 				<span>&copy; giv2giv, Inc. 2014</span>
 				<a id="open-wish-modal" href='#wish-modal' class='pull-right' data-toggle="modal"><i class="fa fa-magic"></i> I wish this page would...</a>
 			</p>
 		</div>
-	</div>
+	</footer>
 	<!-- Modals -->
 	<div id="terms-modal" class="modal hide">
 		<div class="modal-header">
@@ -145,7 +137,7 @@
 	</div>
 	<div id="wish-modal" class="modal hide">
 		<div class="modal-body remove-padding">
-			<div class="row-fluid">
+			<div class="row">
 				<form id="make-wish-frm">
 					<fieldset>
 						<legend>Feedback</legend>
@@ -161,10 +153,6 @@
 	<!-- FB tracking -->
 	<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6017461958346&amp;value=0&amp;currency=USD" /></noscript>
 
-	<!-- Le javascript
-	================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<!-- Other JS  -->
 	<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	<script src="/js/signals.min.js"></script>
 	<script src="/js/crossroads.min.js"></script>

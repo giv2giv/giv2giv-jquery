@@ -540,7 +540,7 @@ function fetchSubscribedEndowments(callback) {
 		} else {
 			// Parse Results Here
 			// First Row
-			var row = "<div class='row-fluid'>";
+			var row = "<div class='row'>";
 			$.each(data, function(index, sub) {
 				
 
@@ -588,7 +588,7 @@ log (sub);
 					// Append Current Row
 					$("#sub-endowments").append(row);
 					// New Row
-					row = "<div class='row-fluid'>";
+					row = "<div class='row'>";
 				}
 				if(data.length === (index + 1)) {
 					row += "</div>";
@@ -603,7 +603,7 @@ log (sub);
 			add_body += "<p><em>Ready to make a difference?</em></p>";
 			add_body += "<div class='bottom'><button id='add-endowment' class='btn btn-success'>Create Endowment</button></div>";
 			var card = "<div class='span3'><div class='card endowment'>"+add_body+"</div></div>";
-			$("#sub-endowments .row-fluid:last").append(card);
+			$("#sub-endowments .row:last").append(card);
 		}
 	}).fail(function(data) {
 		log(data);
@@ -642,7 +642,7 @@ function fetchFeaturedEndowments(callback) {
 			// Parse Results Here
 			var endowments = data.endowments;
 			// First Row
-			var row = "<div class='row-fluid'>";
+			var row = "<div class='row'>";
 			$.each(endowments, function(k, v) {
 				// Now build a card
 				log(v);
@@ -688,7 +688,7 @@ function fetchFeaturedEndowments(callback) {
 				//   // Append Current Row
 				//   $("#featured-endowments").append(row);
 				//   // New Row
-				//   row = "<div class='row-fluid'>";
+				//   row = "<div class='row'>";
 				// }
 				if(endowments.length === (k + 1)) {
 					row += "</div>";
