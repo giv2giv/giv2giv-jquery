@@ -242,6 +242,7 @@ code {
 			line-height: 0;
 		}
 		.steps h3, .steps p {
+			font-size: 14px;
 			text-align: center;
 		}
 	.interactive-target {
