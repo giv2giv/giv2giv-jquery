@@ -147,7 +147,7 @@ code {
 		font-family: 'Roboto', Helvetica, Arial, sans-serif;
 	}
 	#drag-arrow {
-		left: 215px;
+		left: 210px;
 		top: 225px;
 		-webkit-animation: attentionAttraction 1.5s infinite;
 		-o-animation: attentionAttraction 1.5s infinite;
@@ -228,11 +228,10 @@ code {
 			height: 20px;
 			background-image: url('../images/arrow-right.png');
 		}
-	.moneytree .steps {
+	.steps {
 		display: inline-block;
 		position: relative;
-		width: 100px;
-		padding: 20px;
+		width: 120px;
 	}
 		.whitespace {
 			/* Whitespace used to force the divs to justify/distribute */
@@ -242,12 +241,12 @@ code {
 			line-height: 0;
 		}
 		.steps h3, .steps p {
-			font-size: 14px;
 			text-align: center;
 		}
 	.interactive-target {
 		width: 100px;
 		height: 100px;
+		margin: 0 auto;
 		-webkit-border-radius: 50%;
 		-moz-border-radius: 50%;
 		border-radius: 50%;
@@ -377,9 +376,6 @@ code {
 	padding: 10px 20px;
 	line-height: 29px;
 	text-align: center;
-	-webkit-box-sizing: border-box;
-		 -moz-box-sizing: border-box;
-					box-sizing: border-box;
 }
 
 .form-control-static
