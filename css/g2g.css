@@ -23,11 +23,7 @@ body {
 /* Also make the default font-size larger so that it's easier on the eyes 
 */
 .container {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   font-size: 14px;
-  clear: both;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -42,15 +38,6 @@ h1, h2, h3, h4, h5, h6 {
   h3 {
     margin-top: 1em;
   }
-
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -60px;
-}
 
 /* Set the fixed height of the footer here */
 #push,
