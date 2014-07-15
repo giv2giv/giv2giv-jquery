@@ -157,7 +157,7 @@ var WebUI = function() {
 	});
 
 	// Wish Modal
-	$("#make-wish-frm").on("submit", function (e) {
+	$("#make-wish-form").on("submit", function (e) {
 		var payload = {};
 		payload.wish_text = $("#wish").val();
 		payload.page = $('#app-container').attr('data-page-id');
