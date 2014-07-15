@@ -87,7 +87,7 @@ $(function() {
 	/*************************
 	** Expand Landing Image **
 	**************************/
-	var $splashImage = $('.container.header');
+	var $splashImage = $('#splash-image');
 	var heightToExpand = $(window).height() - $splashImage.height();
 	$splashImage.height(heightToExpand);
 });
