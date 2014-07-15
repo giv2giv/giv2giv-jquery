@@ -44,12 +44,6 @@ footer {
   background-color: #f5f5f5;
 }
 
-
-.container .credit {
-  margin: 20px 0;
-}
-
-
 code {
   font-size: 80%;
 }
@@ -94,15 +88,8 @@ code {
 }
 
 /* Landing Page CSS */
-div[data-page-id="landing"].container {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-.container.header {
+.header {
   text-align: center;
-  width: 100%;
-  margin: 0;
   color: #fff;
   text-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
   /* Background Image from ESA/Hubble
@@ -132,7 +119,7 @@ div[data-page-id="landing"].container {
       margin-bottom: 150px;
   }
 
-.container.action-bar {
+.action-bar {
   text-align: center;
   height: 100px;
   color: #fff;
@@ -147,7 +134,7 @@ div[data-page-id="landing"].container {
   margin-bottom: 0;
 }
 /* Interactive Demo */
-.container.moneytree { /* increased specificity needed to override width on `.container`*/
+.moneytree {
   position: relative;
   background-color: #fbfbfb;
   text-align: justify;
@@ -317,7 +304,7 @@ div[data-page-id="landing"].container {
       background-position: -100px -100px;
     }
 
-.container.main-content {
+.main-content {
   /* Fixed width but with at the responsive breakpoint */
   width: 687px;
   background-color: #fbfbfb;
@@ -327,7 +314,7 @@ div[data-page-id="landing"].container {
   -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
-.container.main-content:last-child {
+.main-content:last-child {
   /* Fix bottom margin to account for the footer */
   margin-bottom: 100px;
 }
