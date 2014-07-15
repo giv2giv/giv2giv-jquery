@@ -1,131 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <title>giv2giv &middot; Statement</title>
-      <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
-      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="">
-      <meta name="author" content="">
+<head>
+	<meta charset="utf-8">
+	<title>giv2giv &middot; Statement</title>
+	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-    <!-- Le styles -->
-      <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-      <link href="css/bootstrap.min.css" rel="stylesheet">
-      <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-      <link href="css/statement.css" rel="stylesheet">
-      <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .hero-unit {
-          padding: 60px;
-      }
-      @media (max-width: 980px) {
-        /* Enable use of floated navbar text */
-        .navbar-text.pull-right {
-          float: none;
-          padding-left: 5px;
-          padding-right: 5px;
-        }
-      }
-      </style>
+	<!-- Le styles -->
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="css/statement.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
+		.hero-unit {
+			padding: 60px;
+		}
+		@media (max-width: 980px) {
+			/* Enable use of floated navbar text */
+			.navbar-text.pull-right {
+				float: none;
+				padding-left: 5px;
+				padding-right: 5px;
+			}
+		}
+	</style>
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+	<script src="../assets/js/html5shiv.js"></script>
+	<![endif]-->
 
-    <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="../assets/ico/favicon.png">
-
-
-    <!-- template for statement rows -->
-		<script id="donation-row-template" type="text/x-jquery-tmpl">
-      <tr>
-
-      </tr>
-    </script>
+	<!-- Fav and touch icons -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png"/>
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png"/>
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png"/>
+	<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png"/>
+	<link rel="shortcut icon" href="../assets/ico/favicon.png"/>
 
 
-   </head>
-
-  <body>
-
-    <section id="main">
-        
-        <div id="main-content">
-
-            <div id="statement-toolbar" class="btn-toolbar">
-            	<div class="control-group">
-                  <label class="control-label" for="donor_statement_year">Statement Year</label>
-                  <div class="controls">
-                    <select id="donor_statement_year">
-                      <option value="2014" selected="selected">2014</option> 
-                  	</select>
-                  </div>
-                </div>
-                <div class="btn-group">
-                    <button type="button" id="statement-print" class="btn" onClick="window.print();">
-                        <i class="icol-printer"></i> Print statement
-                    </button>
-                </div>
-            </div>
-
-            <div class="statement paper-stack">
-                <div class="statement-header clearfix">
-                    <div class="statement-logo">
-                        <img src="/images/giv2giv.org.png" alt="">
-                    </div>
-                    <div class="statement-company">
-                        giv2giv, Incorporated<br>
-                        190 Doe Hill Drive<br>
-                        Churchville, VA 24421<br>
-                    </div>
-                </div>
-                <div class="statement-sub clearfix">
-                    <div class="statement-to">
-                        <span id = "statement-donor-info" class="statement-caption">Donor:</span>
-
-                    </div>
-                    <div class="statement-info">
-                        <span class="statement-caption">Print Date</span>
-                        <ul>
-                            <li><span id="statement-date-insert"></span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="statement-content clearfix">
-                    <table id="statement-table" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Donation Date</th>
-                                <th>Donation Description</th>
-                                <th>Donation Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
-                    <div id="statement-total" class="statement-total">
-                    </div>
-                </div>
-            </div>
-            <div class="statement-sub clearfix">
-            giv2giv is a pending 501(c)(3) charitable organization which has exclusive legal control over the assets contributed. No goods or services were provided to you by giv2giv in exchange for your donation. giv2giv has applied for tax-exempt status as a 501(c)(3), but we haven't received confirmation of charitable determination. As per IRS regulations, giv2giv can accept deductible donations while the application is in-progress. giv2giv.org will alert all donors upon receipt of charitable determination by the IRS as to the conclusion of their ruling. giv2giv.org does not provide income tax advice. For further information, please consult a tax advisor.
-
-            </div>
-
-        </div>
-      </section>
+	<!-- template for statement rows -->
+	<script id="donation-row-template" type="text/x-jquery-tmpl">
+	</script>
 
 
-  </body>
+</head>
+
+<body>
+
+	<section id="main">
+		<div id="main-content">
+			<div id="statement-toolbar" class="btn-toolbar">
+				<div class="control-group">
+					<label class="control-label" for="donor_statement_year">Statement Year</label>
+					<div class="controls">
+						<select id="donor_statement_year">
+							<option value="2014" selected="selected">2014</option> 
+						</select>
+					</div>
+				</div>
+				<div class="btn-group">
+					<button type="button" id="statement-print" class="btn" onClick="window.print();">
+						<i class="icol-printer"></i> Print statement
+					</button>
+				</div>
+			</div>
+
+			<div class="statement paper-stack">
+				<div class="statement-header clearfix">
+					<div class="statement-logo">
+						<img src="/images/giv2giv.org.png" alt="">
+					</div>
+					<div class="statement-company">
+						giv2giv, Incorporated<br>
+						190 Doe Hill Drive<br>
+						Churchville, VA 24421<br>
+					</div>
+				</div>
+				<div class="statement-sub clearfix">
+					<div class="statement-to">
+						<span id = "statement-donor-info" class="statement-caption">Donor:</span>
+
+					</div>
+					<div class="statement-info">
+						<span class="statement-caption">Print Date</span>
+						<ul>
+							<li><span id="statement-date-insert"></span></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="statement-content clearfix">
+					<table id="statement-table" class="table table-striped">
+						<thead>
+							<tr>
+								<th>Donation Date</th>
+								<th>Donation Description</th>
+								<th>Donation Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+					<div id="statement-total" class="statement-total">
+					</div>
+				</div>
+			</div>
+			<div class="statement-sub clearfix">
+				giv2giv is a pending 501(c)(3) charitable organization which has exclusive legal control over the assets contributed. No goods or services were provided to you by giv2giv in exchange for your donation. giv2giv has applied for tax-exempt status as a 501(c)(3), but we haven't received confirmation of charitable determination. As per IRS regulations, giv2giv can accept deductible donations while the application is in-progress. giv2giv.org will alert all donors upon receipt of charitable determination by the IRS as to the conclusion of their ruling. giv2giv.org does not provide income tax advice. For further information, please consult a tax advisor.
+
+			</div>
+
+		</div>
+	</section>
+
+</body>
 </html>
