@@ -1,3 +1,19 @@
+<!-- 
+TODO:
+
+- Wireframes for the rest of the site, and wireframes for new landing page
+- Discourse email notifications
+- Larger drag arrow sprite, then shrink it via CSS animation (use SVG+fallback instead of PNG)
+- Set body min-height to push down footer
+- Terms of Service
+- Add 10px padding on both sides to animation sprites to accomodate the larger circle
+- Make the tree grow?
+- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
+- Add FB / Twitter Links
+
+-->
+
+
 <div id="splash-image" class="row">
 	<div class="col-xs-12">
 		<h1 class="primary-description">Compound Interest
@@ -23,6 +39,7 @@
 				<h3>Step 2</h3>
 				<p>Funds are invested</p>
 				<div class="interactive-target" id="tree"></div>
+				<p class="muted">giv2giv.org</p>
 			</div>
 			<div class="steps" id="step3">
 				<h3>Step 3</h3>
@@ -36,7 +53,9 @@
 <div class="row main-content video">
 	<div class="fixed-column">
 		<h2>Video</h2>
-		<iframe src="//fast.wistia.net/embed/iframe/mhpnb7v5so" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+		<div class="fluid-video-container">
+			<iframe src="//fast.wistia.net/embed/iframe/mhpnb7v5so" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+		</div>
 	</div>
 </div>
 <div class="row main-content">

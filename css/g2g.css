@@ -142,80 +142,23 @@ code {
 	-ms-text-justify: distribute-all-lines;
 	text-justify: distribute-all-lines;
 }
+	.animation-container {
+		vertical-align: top;
+	}
 	.prompt-arrow {
 		position: absolute;
 		font-family: 'Roboto', Helvetica, Arial, sans-serif;
 	}
 	#drag-arrow {
-		left: 210px;
+		left: 230px;
 		top: 225px;
-		-webkit-animation: attentionAttraction 1.5s infinite;
-		-o-animation: attentionAttraction 1.5s infinite;
-		animation: attentionAttraction 1.5s infinite;
+		z-index: 2;
+		-webkit-animation: attentionAttraction 1.2s infinite;
+		-o-animation: attentionAttraction 1.2s infinite;
+		animation: attentionAttraction 1.2s infinite;
 	}
-
-	@-webkit-keyframes attentionAttraction {
-		0% {
-			-webkit-transform: scale(1);
-			transform: scale(1);
-		}
-		50% {
-			-webkit-transform: scale(1.2);
-			transform: scale(1.2);
-		}
-		100% {
-			-webkit-transform: scale(1);
-			transform: scale(1);
-		}
-	}
-	@-moz-keyframes attentionAttraction {
-		0% {
-			transform: scale(1);
-		}
-		50% {
-			transform: scale(1.2);
-		}
-		100% {
-			transform: scale(1);
-		}
-	}
-	@-o-keyframes attentionAttraction {
-		0% {
-			-o-transform: scale(1);
-			transform: scale(1);
-		}
-		50% {
-			-o-transform: scale(1.2);
-			transform: scale(1.2);
-		}
-		100% {
-			-o-transform: scale(1);
-			transform: scale(1);
-		}
-	}
-	@keyframes attentionAttraction {
-		0% {
-			-webkit-transform: scale(1);
-			-ms-transform: scale(1);
-			-o-transform: scale(1);
-			transform: scale(1);
-		}
-		50% {
-			-webkit-transform: scale(1.2);
-			-ms-transform: scale(1.2);
-			-o-transform: scale(1.2);
-			transform: scale(1.2);
-		}
-		100% {
-			-webkit-transform: scale(1);
-			-ms-transform: scale(1);
-			-o-transform: scale(1);
-			transform: scale(1);
-		}
-	}
-
 	#result-arrow {
-		left: 445px;
+		left: 510px;
 		top: 235px;
 		display: none;
 	}
@@ -232,6 +175,7 @@ code {
 		display: inline-block;
 		position: relative;
 		width: 120px;
+		vertical-align: top;
 	}
 		.whitespace {
 			/* Whitespace used to force the divs to justify/distribute */
@@ -242,6 +186,10 @@ code {
 		}
 		.steps h3, .steps p {
 			text-align: center;
+		}
+		.steps .muted {
+			font-size: 12px;
+			margin-top: 1em;
 		}
 	.interactive-target {
 		width: 100px;
@@ -291,7 +239,7 @@ code {
 		top: 108px;
 		left: 22px;
 		border: none;
-		z-index: 2;
+		z-index: 5;
 	}
 		#benjamins:hover {
 			cursor: pointer;
@@ -306,7 +254,7 @@ code {
 		}
 
 .fixed-column {
-	width: 687px;
+	width: 768px;
 	margin: 0 auto;
 	padding: 40px;
 	background-color: #fbfbfb;
@@ -459,6 +407,67 @@ code {
 	margin: 0;
 }
 
+/* Animations */
+@-webkit-keyframes attentionAttraction {
+	0% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+	50% {
+		-webkit-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+}
+@-moz-keyframes attentionAttraction {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.5);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@-o-keyframes attentionAttraction {
+	0% {
+		-o-transform: scale(1);
+		transform: scale(1);
+	}
+	50% {
+		-o-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-o-transform: scale(1);
+		transform: scale(1);
+	}
+}
+@keyframes attentionAttraction {
+	0% {
+		-webkit-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1);
+	}
+	50% {
+		-webkit-transform: scale(1.5);
+		-ms-transform: scale(1.5);
+		-o-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-webkit-transform: scale(1);
+		-ms-transform: scale(1);
+		-o-transform: scale(1);
+		transform: scale(1);
+	}
+}
+
 /* Responsiveness */
 @media (min-width: 1200px) {
 	.card.endowment {
@@ -468,7 +477,7 @@ code {
 		font-size: 24px;
 	}
 }
-@media (min-width: 980px) and (max-width: 1199px) {
+@media (min-width: 992px) and (max-width: 1199px) {
 	.card.endowment {
 		width: 240px;
 	}
@@ -476,7 +485,7 @@ code {
 		font-size: 20px;
 	}
 }
-@media (min-width: 768px) and (max-width: 979px) {
+@media (min-width: 768px) and (max-width: 991px) {
 	.card.endowment {
 		width: 180px;
 	}
@@ -486,6 +495,9 @@ code {
 }
 
 @media (max-width: 767px) {
+	.fixed-column {
+		width: 100%;
+	}
 	.animation-container {
 		display: none;
 		visibility: hidden;
