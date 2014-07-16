@@ -31,7 +31,7 @@ function fetchStats(callback) {
 		var current_fund_balance_all_donors = '$' + data.current_fund_balance_all_donors.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var total_amount_of_donations = '$' + data.total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var total_number_of_donations = '$' + data.total_number_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-		var total_amount_of_grants = '$' + data.total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		// var total_amount_of_grants = '$' + data.total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		
 
 		$("#donor-current-balance").text(donor_current_balance);
@@ -39,7 +39,7 @@ function fetchStats(callback) {
 		$("#donor-total-amount-of-grants").text(donor_total_amount_of_grants);
 		$("#current-fund-balance-all-donors").text(current_fund_balance_all_donors);
 		$("#total-amount-of-donations").text(total_amount_of_donations);
-		$("#total-amount-of-grants").text(total_amount_of_grants);
+		// $("#total-amount-of-grants").text(total_amount_of_grants);
 
 	}).fail(function(data) {
 			log(data);

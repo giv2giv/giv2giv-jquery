@@ -1,224 +1,221 @@
-<div class="row-fluid">
-  <div class="span12">
-    <h2>Donor Information</h2>
-    <div class="row-fluid">
-      <div class="span12">
-        <div class="card">
-          <div class="card-heading simple">
-            <ul class="nav nav-pills" data-toggle="tabs">
-              <li class="active"><a href="#profile">Profile</a></li>
-              <li><a href="#payment">Payment Accounts</a></li>
-              <li><a href="#statement">Statement</a></li>
-              
-            </ul>
-          </div>
-          <div class="card-body">                   
-            <div class="tab-content">
-              <div class="tab-pane active" id="profile">
-                <!-- Profile Tab -->
-                <form id="donor-profile-frm" class="form-horizontal">
-                  <!-- Donor Email -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-email">Email</label>
-                    <div class="controls">
-                      <input type="text" id="donor-profile-email" placeholder="Email">
-                    </div>
-                  </div>
-                  <!-- Donor Password -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-password">Password</label>
-                    <div class="controls">
-                      <input type="password" id="donor-profile-password" placeholder="Password">
-                    </div>
-                  </div>
-                  <!-- Name -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-name">Name</label>
-                    <div class="controls">
-                      <input type="text" id="donor-profile-name" placeholder="Name">
-                    </div>
-                  </div>
-                  <!-- Address -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-address">Address</label>
-                    <div class="controls">
-                      <input type="text" id="donor-profile-address" placeholder="Address">
-                    </div>
-                  </div>
-                  <!-- City -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-city">City</label>
-                    <div class="controls">
-                      <input type="text" id="donor-profile-city" placeholder="City">
-                    </div>
-                  </div>
-                  <!-- State -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-state">State</label>
-                    <div class="controls">
-                      <select id="donor-profile-state">
-                        <option value="" selected="selected">Select a State</option> 
-                        <option value="AL">Alabama</option> 
-                        <option value="AK">Alaska</option> 
-                        <option value="AZ">Arizona</option> 
-                        <option value="AR">Arkansas</option> 
-                        <option value="CA">California</option> 
-                        <option value="CO">Colorado</option> 
-                        <option value="CT">Connecticut</option> 
-                        <option value="DE">Delaware</option> 
-                        <option value="DC">District Of Columbia</option> 
-                        <option value="FL">Florida</option> 
-                        <option value="GA">Georgia</option> 
-                        <option value="HI">Hawaii</option> 
-                        <option value="ID">Idaho</option> 
-                        <option value="IL">Illinois</option> 
-                        <option value="IN">Indiana</option> 
-                        <option value="IA">Iowa</option> 
-                        <option value="KS">Kansas</option> 
-                        <option value="KY">Kentucky</option> 
-                        <option value="LA">Louisiana</option> 
-                        <option value="ME">Maine</option> 
-                        <option value="MD">Maryland</option> 
-                        <option value="MA">Massachusetts</option> 
-                        <option value="MI">Michigan</option> 
-                        <option value="MN">Minnesota</option> 
-                        <option value="MS">Mississippi</option> 
-                        <option value="MO">Missouri</option> 
-                        <option value="MT">Montana</option> 
-                        <option value="NE">Nebraska</option> 
-                        <option value="NV">Nevada</option> 
-                        <option value="NH">New Hampshire</option> 
-                        <option value="NJ">New Jersey</option> 
-                        <option value="NM">New Mexico</option> 
-                        <option value="NY">New York</option> 
-                        <option value="NC">North Carolina</option> 
-                        <option value="ND">North Dakota</option> 
-                        <option value="OH">Ohio</option> 
-                        <option value="OK">Oklahoma</option> 
-                        <option value="OR">Oregon</option> 
-                        <option value="PA">Pennsylvania</option> 
-                        <option value="RI">Rhode Island</option> 
-                        <option value="SC">South Carolina</option> 
-                        <option value="SD">South Dakota</option> 
-                        <option value="TN">Tennessee</option> 
-                        <option value="TX">Texas</option> 
-                        <option value="UT">Utah</option> 
-                        <option value="VT">Vermont</option> 
-                        <option value="VA">Virginia</option> 
-                        <option value="WA">Washington</option> 
-                        <option value="WV">West Virginia</option> 
-                        <option value="WI">Wisconsin</option> 
-                        <option value="WY">Wyoming</option>
-                      </select>
-                     </div>
-                  </div>
-                  <!-- Zip -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-zip">Zip</label>
-                    <div class="controls">
-                      <input type="text" id="donor-profile-zip" placeholder="Zip">
-                    </div>
-                  </div>
-                  <!-- Phone Number -->
-                  <div class="control-group">
-                    <label class="control-label" for="donor-profile-phone">Phone Number</label>
-                    <div class="controls">
-                      <input type="text" id="donor-profile-phone" placeholder="Phone Number">
-                    </div>
-                  </div>
-                  <!-- Update Profile Button -->
-                  <div class="control-group">
-                    <div class="controls">
-                      <button id="update-donor-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Updating" class="btn btn-success">Update Profile</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="tab-pane" id="payment">
-                <div id="payment-accounts-card" class="hide">
-                  <table id="payment-accounts-table" class="table">
-                    <thead>
-                      <tr>
-                        <th>Card Type</th>
-                        <th>Last Four Digits</th>
-                        <th>Expiration Date</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                  <p><a class="btn btn-success" data-toggle="modal" href="#add-payment-modal">Add Payment Account</a></p>
-                </div>
-                <div id="no-payment-accounts-card" class="hide">
-                  <h3>You haven't added any payment accounts yet.</h3>
-                  <p><a class="btn btn-success" data-toggle="modal" href="#add-payment-modal">Add Payment Account</a></p>
-                </div>
-              </div>
-              <div class="tab-pane" id="statement">
-                <form id="donor-statement-form" class="form-horizontal">
-                  <div class="control-group">
-                    <div class="controls">
-                      <input type="button" id="donor-statement-button" class="btn btn-success" value="Display Statement">
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-      </div>
-    </div><!--/row-->
-  </div><!--/span-->
+<div class="row">
+	<div class="col-xs-12">
+		<h2>Donor Information</h2>
+		<div class="card">
+			<div class="card-heading simple">
+				<ul class="nav nav-pills" data-toggle="tabs">
+					<li class="active"><a href="#profile">Profile</a></li>
+					<li><a href="#payment">Payment Accounts</a></li>
+					<li><a href="#statement">Statement</a></li>
+
+				</ul>
+			</div>
+			<div class="card-body">                   
+				<div class="tab-content">
+					<div class="tab-pane active" id="profile">
+						<!-- Profile Tab -->
+						<form id="donor-profile-frm" class="form-horizontal">
+							<!-- Donor Email -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-email">Email</label>
+								<div class="controls">
+									<input type="text" id="donor-profile-email" placeholder="Email">
+								</div>
+							</div>
+							<!-- Donor Password -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-password">Password</label>
+								<div class="controls">
+									<input type="password" id="donor-profile-password" placeholder="Password">
+								</div>
+							</div>
+							<!-- Name -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-name">Name</label>
+								<div class="controls">
+									<input type="text" id="donor-profile-name" placeholder="Name">
+								</div>
+							</div>
+							<!-- Address -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-address">Address</label>
+								<div class="controls">
+									<input type="text" id="donor-profile-address" placeholder="Address">
+								</div>
+							</div>
+							<!-- City -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-city">City</label>
+								<div class="controls">
+									<input type="text" id="donor-profile-city" placeholder="City">
+								</div>
+							</div>
+							<!-- State -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-state">State</label>
+								<div class="controls">
+									<select id="donor-profile-state">
+										<option value="" selected="selected">Select a State</option> 
+										<option value="AL">Alabama</option> 
+										<option value="AK">Alaska</option> 
+										<option value="AZ">Arizona</option> 
+										<option value="AR">Arkansas</option> 
+										<option value="CA">California</option> 
+										<option value="CO">Colorado</option> 
+										<option value="CT">Connecticut</option> 
+										<option value="DE">Delaware</option> 
+										<option value="DC">District Of Columbia</option> 
+										<option value="FL">Florida</option> 
+										<option value="GA">Georgia</option> 
+										<option value="HI">Hawaii</option> 
+										<option value="ID">Idaho</option> 
+										<option value="IL">Illinois</option> 
+										<option value="IN">Indiana</option> 
+										<option value="IA">Iowa</option> 
+										<option value="KS">Kansas</option> 
+										<option value="KY">Kentucky</option> 
+										<option value="LA">Louisiana</option> 
+										<option value="ME">Maine</option> 
+										<option value="MD">Maryland</option> 
+										<option value="MA">Massachusetts</option> 
+										<option value="MI">Michigan</option> 
+										<option value="MN">Minnesota</option> 
+										<option value="MS">Mississippi</option> 
+										<option value="MO">Missouri</option> 
+										<option value="MT">Montana</option> 
+										<option value="NE">Nebraska</option> 
+										<option value="NV">Nevada</option> 
+										<option value="NH">New Hampshire</option> 
+										<option value="NJ">New Jersey</option> 
+										<option value="NM">New Mexico</option> 
+										<option value="NY">New York</option> 
+										<option value="NC">North Carolina</option> 
+										<option value="ND">North Dakota</option> 
+										<option value="OH">Ohio</option> 
+										<option value="OK">Oklahoma</option> 
+										<option value="OR">Oregon</option> 
+										<option value="PA">Pennsylvania</option> 
+										<option value="RI">Rhode Island</option> 
+										<option value="SC">South Carolina</option> 
+										<option value="SD">South Dakota</option> 
+										<option value="TN">Tennessee</option> 
+										<option value="TX">Texas</option> 
+										<option value="UT">Utah</option> 
+										<option value="VT">Vermont</option> 
+										<option value="VA">Virginia</option> 
+										<option value="WA">Washington</option> 
+										<option value="WV">West Virginia</option> 
+										<option value="WI">Wisconsin</option> 
+										<option value="WY">Wyoming</option>
+									</select>
+								</div>
+							</div>
+							<!-- Zip -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-zip">Zip</label>
+								<div class="controls">
+									<input type="text" id="donor-profile-zip" placeholder="Zip">
+								</div>
+							</div>
+							<!-- Phone Number -->
+							<div class="control-group">
+								<label class="control-label" for="donor-profile-phone">Phone Number</label>
+								<div class="controls">
+									<input type="text" id="donor-profile-phone" placeholder="Phone Number">
+								</div>
+							</div>
+							<!-- Update Profile Button -->
+							<div class="control-group">
+								<div class="controls">
+									<button id="update-donor-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Updating" class="btn btn-success">Update Profile</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="tab-pane" id="payment">
+						<div id="payment-accounts-card" class="hide">
+							<table id="payment-accounts-table" class="table">
+								<thead>
+									<tr>
+										<th>Card Type</th>
+										<th>Last Four Digits</th>
+										<th>Expiration Date</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+							<p><a class="btn btn-success" data-toggle="modal" href="#add-payment-modal">Add Payment Account</a></p>
+						</div>
+						<div id="no-payment-accounts-card" class="hide">
+							<h3>You haven't added any payment accounts yet.</h3>
+							<p><a class="btn btn-success" data-toggle="modal" href="#add-payment-modal">Add Payment Account</a></p>
+						</div>
+					</div>
+					<div class="tab-pane" id="statement">
+						<form id="donor-statement-form" class="form-horizontal">
+							<div class="control-group">
+								<div class="controls">
+									<input type="button" id="donor-statement-button" class="btn btn-success" value="Display Statement">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div><!--/row-->
 
 <!-- Modals -->
 <!-- Add Payment Modal -->
 <div id="add-payment-modal" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Add Payment Account</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" id="add-payment-frm" class="form-horizontal">
-      <span class="payment-errors"></span>
-      <div class="control-group">
-        <label class="control-label" for="add-card-number">Card Number</label>
-        <div class="controls">
-          <input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" /> <img width='50' height='32' src='' id="card-type">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="add-card-cvc">CVC</label>
-        <div class="controls">
-          <input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc"/>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="add-card-exp">Expiration (MM/YYYY)</label>
-        <div class="controls">
-          <input type="text" data-stripe="exp-month" class="span2"/>
-          <input type="text" data-stripe="exp-year" class="span2"/>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button id="add-account-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Adding" class="btn btn-success">Add Account</button>
-  </div>
-  <div class="modal-footer">
-    <h4><strong>* giv2giv never sees or stores your card information.</strong></h4>
-  </div>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3>Add Payment Account</h3>
+	</div>
+	<div class="modal-body">
+		<form method="post" id="add-payment-frm" class="form-horizontal">
+			<span class="payment-errors"></span>
+			<div class="control-group">
+				<label class="control-label" for="add-card-number">Card Number</label>
+				<div class="controls">
+					<input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" /> <img width='50' height='32' src='' id="card-type">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="add-card-cvc">CVC</label>
+				<div class="controls">
+					<input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="add-card-exp">Expiration (MM/YYYY)</label>
+				<div class="controls">
+					<input type="text" data-stripe="exp-month" class="span2"/>
+					<input type="text" data-stripe="exp-year" class="span2"/>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		<button id="add-account-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Adding" class="btn btn-success">Add Account</button>
+	</div>
+	<div class="modal-footer">
+		<h4><strong>* giv2giv never sees or stores your card information.</strong></h4>
+	</div>
 </div>
 <!-- Remove Card Modal -->
 <div id="remove-payment-modal" class="modal hide">
-  <div class="modal-header">
-    <h3>Confirm Removal</h3>
-  </div>
-  <div class="modal-body">
-    <p>Are you sure you would like to delete the payment account that ends in <strong id="remove-card-last-four"></strong>?</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-    <a href="#" id="confirm-payment-removal" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Removing" data-id="" class="btn btn-success">Yes</a>
-  </div>
+	<div class="modal-header">
+		<h3>Confirm Removal</h3>
+	</div>
+	<div class="modal-body">
+		<p>Are you sure you would like to delete the payment account that ends in <strong id="remove-card-last-four"></strong>?</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+		<a href="#" id="confirm-payment-removal" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Removing" data-id="" class="btn btn-success">Yes</a>
+	</div>
 </div>

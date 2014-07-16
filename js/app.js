@@ -15,11 +15,11 @@ var wish_page;
 var debug = false;
 
 log = function () {
-  if (debug && console && typeof console.log === 'function') {
-    for (var i = 0, ii = arguments.length; i < ii; i++) {
-      console.log(arguments[i]);
-    }
-  }
+	if (debug && console && typeof console.log === 'function') {
+		for (var i = 0, ii = arguments.length; i < ii; i++) {
+			console.log(arguments[i]);
+		}
+	}
 };
 
 // Bootstrap Growl Helpers
@@ -126,7 +126,7 @@ var WebUI = function() {
 			maxParallelRequests: 1,
 		},
 		template: [
-			'<p>{{value}} - {{desc}}</p>'
+		'<p>{{value}} - {{desc}}</p>'
 		],
 		engine: Hogan,
 		limit: 5
@@ -157,7 +157,7 @@ var WebUI = function() {
 	});
 
 	// Wish Modal
-	$("#make-wish-frm").on("submit", function (e) {
+	$("#make-wish-form").on("submit", function (e) {
 		var payload = {};
 		payload.wish_text = $("#wish").val();
 		payload.page = $('#app-container').attr('data-page-id');

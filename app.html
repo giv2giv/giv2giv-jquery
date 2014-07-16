@@ -1,203 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta content="Mini-endowment service revolutionizing personal philanthropy" name="description" />
-      <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-      <meta name="title" content="giv2giv - Join me to revolutionize charitable giving!" />
-      <meta name="description" content="Donate into an endowment, your endowment distributes to your favorite charities, every 90 days...Forever! (yes, like forever) giv2giv is a non-profit organization putting advanced investing tools to work for you and your causes.">
-      <meta property="og:title" content="giv2giv.org" />
-      <meta property="og:type" content="company" /> 
-      <meta property="og:image" content="images/apple-touch-icon.png" /> 
-      <meta property="og:site_name" content="giv2giv.org"/> 
-      <meta property="og:description" content="giv2giv - The way charitable giving should be." />
-      <meta property="og:url" content="http://www.giv2giv.org" />
-      <meta charset="utf-8">
-      <title>giv2giv</title>
-      <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
-      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<head>
+	<meta content="Mini-endowment service revolutionizing personal philanthropy" name="description" />
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+	<meta name="title" content="giv2giv - Join me to revolutionize charitable giving!" />
+	<meta name="description" content="Donate into an endowment, your endowment distributes to your favorite charities, every 90 days...Forever! (yes, like forever) giv2giv is a non-profit organization putting advanced investing tools to work for you and your causes.">
+	<meta property="og:title" content="giv2giv.org" />
+	<meta property="og:type" content="company" /> 
+	<meta property="og:image" content="images/apple-touch-icon.png" /> 
+	<meta property="og:site_name" content="giv2giv.org"/> 
+	<meta property="og:description" content="giv2giv - The way charitable giving should be." />
+	<meta property="og:url" content="http://www.giv2giv.org" />
+	<meta charset="utf-8">
+	<title>giv2giv</title>
+	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-      <!-- Le styles -->
-      <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-      <link href="/css/bootplus.css" rel="stylesheet">
-      <link href="/css/font-awesome.css" rel="stylesheet">
-      <link href="/css/g2g.css" rel="stylesheet">
-      <link href="/css/select2.css" rel="stylesheet">
-      <link href="/css/bootplus-responsive.css" rel="stylesheet">
-      <link href="/css/jquery.share.css" rel="stylesheet">
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
+	<link href="/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="/css/bootstrap-theme.min.css" rel="stylesheet" />
+	<link href="/css/font-awesome.css" rel="stylesheet" />
+	<link href="/css/g2g.css" rel="stylesheet" />
+	<link href="/css/select2.css" rel="stylesheet" />
+	<link href="/css/jquery.share.css" rel="stylesheet" />
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="../assets/js/html5shiv.js"></script>
+	<![endif]-->
 
-    <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="icon" type="image/ico" href="images/favicon.ico">
-  </head>
-  <body>
-    <div id="wrap">
-      <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <div id="loading">
-              <i class="loading-brand fa fa-leaf fa-spin logo-loading"></i>
-            </div>
-            <a class="brand" href="/">
-              <img src='/images/logo.png' alt='giv2giv'/>
-            </a>
-            <div class="nav-collapse collapse hide pull-right" id="public-nav">
-              <ul class="nav">
-                <!-- public only tabs go here -->
-                <li class="public-nav" id="landing-nav"><a href="/">Home</a></li>
-                <li class="public-nav" id="pub-numbers-nav"><a href="/numbers">Stats for Nerds</a></li>
-                <li class="public-nav" id="signup-nav"><a href="/signup">Start Helping</a></li>
-                <li class="public-nav" id="signin-nav"><a href="/signin">Sign In</a></li>
-              </ul>
-            </div>
-            <div class="nav-collapse collapse hide" id="app-nav">
-              <form class="navbar-search pull-left">
-                <input id="endowment-search" type="text" class="search-query span2" placeholder="Search Endowments">
-              </form>
-              <p class="navbar-text pull-right">
-                Logged in as <span id="donor-name" class="navbar-link"></span>
-              </p>
+	<!-- Fav and touch icons -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png" />
+	<link rel="icon" type="image/ico" href="images/favicon.ico" />
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<!-- Toggle navbar button -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+					<span class="sr-only">Toggle Navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="loading">
+				<i class="loading-brand fa fa-leaf fa-spin logo-loading"></i>
+			</div>
+			<a href="/" class="navbar-brand">
+				<img src='/images/logo.png' alt='giv2giv'/>
+			</a>
+		</div>
 
-              <ul class="nav">
-                <!-- Logged in tabs go here -->
-                <li id="endowments-nav" class="nav-link"><a href="/endowments">Endowments</a></li>
-                <li id="donor-nav" class="nav-link"><a href="/donor">Donor</a></li>
-                <li id="numbers-nav" class="nav-link"><a href="/numbers">Stats for Nerds</a></li>
-                <li><a id="logout-btn" href="logout">Logout</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="app-container" data-page-id='landing' class="container">
-        <div id="app-panel" class="hide">
-        </div>
+		<div class="collapse navbar-collapse" id="navbar-collapse">
 
-        <div id="signin-panel" class="hide">
-          <div class="row-fluid">
-            <div class="span4 offset4">
-              <div class="card">
-                <h2 class="card-heading simple">Please Sign In</h2>
-                <div class="card-body">
-                  <p id="signin-message"></p>
-                  <form id="signin-form" class="form-signin" method="post">
-                    <input id="signin-email" type="text" class="input-block-level" placeholder="Email address">
-                    <input id="signin-password" type="password" class="input-block-level" placeholder="Password">
-                    <button id="signin-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
-                      Sign in
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+			<form class="navbar-form navbar-left" role="search">
+				<input id="endowment-search" type="text" class="search-query span2" placeholder="Search Endowments">
+			</form>
+			<ul class="nav navbar-nav navbar-right">
+				<!-- Public Only Tabs -->
+				<li class="public-nav" id="landing-nav"><a href="/">Home</a></li>
+				<li class="public-nav" id="pub-numbers-nav"><a href="/numbers">Stats for Nerds</a></li>
+				<li class="public-nav" id="signup-nav"><a href="/signup">Sign Up</a></li>
+				<li class="public-nav" id="signin-nav"><a href="/signin">Sign In</a></li>
+				<!-- Logged In Tabs -->
+				<p class="navbar-text pull-right">
+					Logged in as <span id="donor-name" class="navbar-link"></span>
+				</p>
+				<li id="endowments-nav" class="private-nav nav-link"><a href="/endowments">Endowments</a></li>
+				<li id="donor-nav" class="private-nav nav-link"><a href="/donor">Donor</a></li>
+				<li id="numbers-nav" class="private-nav nav-link"><a href="/numbers">Stats for Nerds</a></li>
+				<li class="private-nav"><a id="logout-btn" href="logout">Logout</a></li>
+			</ul>
+		</div>
+	</nav>
+	
+	<div id="app-container" data-page-id="landing" class="container-fluid">
+		<div id="app-panel" class="hide"></div>
 
+		<div id="signin-panel" class="row hide">
+			<div class="col-sm-4 col-sm-offset-4">
+				<div class="card">
+					<h2 class="card-heading simple">Please Sign In</h2>
+					<div class="card-body">
+						<p id="signin-message"></p>
+						<form id="signin-form" class="form-signin" method="post">
+							<input id="signin-email" type="text" class="input-block-level" placeholder="Email address">
+							<input id="signin-password" type="password" class="input-block-level" placeholder="Password">
+							<button id="signin-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
+								Sign in
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="signup-panel" class="row hide">
+			<div class="col-sm-4 col-sm-offset-4">
+				<div class="card">
+					<h2 class="card-heading simple">Sign Up</h2>
+					<div class="card-body">
+						<form id="signup-form" class="form-signin">
+							<input type="text" id="signup-name" placeholder="Name">
+							<input type="text" id="signup-email" placeholder="Email">
+							<input type="password" id="signup-password" placeholder="Password"><br />
+							<label class="checkbox">
+								<input type="checkbox" id="signup-accept-terms"> Accept <a id="terms-btn" href="#terms-modal">terms and conditions?</a>
+							</label>
+							<button id="signup-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Creating" class="btn btn-success">Create Account</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<div class="container">
+			<p class="muted">
+				<span>&copy; giv2giv, Inc. 2014</span>
+				<a id="open-wish-modal" href='#wish-modal' class='pull-right' data-toggle="modal"><i class="fa fa-magic"></i> I wish this page would...</a>
+			</p>
+		</div>
+	</footer>
 
-        <div id="signup-panel" class="hide">
-          <div class="row-fluid">
-            <div class="span4 offset4">
-              <div class="card">
-                <h2 class="card-heading simple">Sign Up</h2>
-                <div class="card-body">
-                  <form id="signup-form" class="form-signin">
-                    <input type="text" id="signup-name" placeholder="Name">
-                    <input type="text" id="signup-email" placeholder="Email">
-                    <input type="password" id="signup-password" placeholder="Password"><br />
-                    <label class="checkbox">
-                      <input type="checkbox" id="signup-accept-terms"> Accept <a id="terms-btn" href="#terms-modal">terms and conditions?</a>
-                    </label>
-                    <button id="signup-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Creating" class="btn btn-success">Create Account</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="push"></div>
-      </div>
-    </div>
-    <div id="footer">
-      <div class="container">
-        <p class="muted credit">
-          <span>&copy; giv2giv, Inc. 2014</span>
-          <a id="open-wish-modal" href='#wish-modal' class='pull-right' data-toggle="modal"><i class="fa fa-magic"></i> I wish this page would...</a>
-        </p>
-      </div>
-    </div>
-    <!-- Modals -->
-    <div id="terms-modal" class="modal hide">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Terms &amp; Conditions</h3>
-      </div>
-      <div id="terms-div" class="modal-body">
-      </div>
-    </div>
-    <div id="wish-modal" class="modal hide">
-      <div class="modal-body remove-padding">
-        <div class="row-fluid">
-          <form id="make-wish-frm">
-            <fieldset>
-              <legend>Feedback</legend>
-              <h4>Give us your feedback - We'll do our best to implement the suggestions!</h4>
-                <textarea id="wish" class="span12" rows="5"></textarea>
-              <button type="submit" class="btn btn-success" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Making Wish">Make A Wish</button>
-              <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            </fieldset>
-          </form>
-        </div>
-      </div>
-    </div>
-    <!-- FB tracking -->
-    <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6017461958346&amp;value=0&amp;currency=USD" /></noscript>
+	<!-- Modals -->
+	<div id="terms-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="terms-label" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h3 class="modal-title" id="terms-label">
+						Terms &amp; Conditions
+					</h3>
+				</div>
+				<div class="modal-body">
+					<p></p>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- Other JS  -->
-    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    <script src="/js/signals.min.js"></script>
-    <script src="/js/crossroads.min.js"></script>
-    <script src="/js/hasher.min.js"></script>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.cookie.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.bootstrap-growl.min.js"></script>
-    <script src="/js/jquery.formatter.min.js"></script>
-    <script src="/js/jquery.payment.js"></script>
-    <script src="/js/endowments.js"></script>
-    <script src="/js/donor.js"></script>
-    <script src="/js/numbers.js"></script>
-    <script src="/js/hogan-2.0.0.js"></script>
-    <script src="/js/typeahead.min.js"></script>
-    <script src="/js/select2.min.js"></script>
-    <script src="/js/jquery.share.js"></script>
-    <script src="/js/jquery-ui-1.10.4.custom.js"></script>
-    <script src="/js/app.js"></script>
+	<div id="wish-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="wish-label" aria-hidden="true">
+		<div class="modal-dialog">
+			<form id="make-wish-form" class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h3 class="modal-title" id="wish-label">
+						Feedback
+					</h3>
+				</div>
+				<div class="modal-body">
+					<p>Give us your feedback&mdash;we'll do our best to implement the suggestions!</p>
+					<textarea id="wish" rows="5"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Making Wish">Make A Wish</button>
+					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</form>
+		</div>
+	</div>
 
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<!-- FB tracking -->
+	<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6017461958346&amp;value=0&amp;currency=USD" /></noscript>
 
-      ga('create', 'UA-30575602-1', 'giv2giv.org');
-      ga('send', 'pageview');
+	<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+	<script src="/js/signals.min.js"></script>
+	<script src="/js/crossroads.min.js"></script>
+	<script src="/js/hasher.min.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/jquery.cookie.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/jquery.bootstrap-growl.min.js"></script>
+	<script src="/js/jquery.formatter.min.js"></script>
+	<script src="/js/jquery.payment.js"></script>
+	<script src="/js/endowments.js"></script>
+	<script src="/js/donor.js"></script>
+	<script src="/js/numbers.js"></script>
+	<script src="/js/hogan-2.0.0.js"></script>
+	<script src="/js/typeahead.min.js"></script>
+	<script src="/js/select2.min.js"></script>
+	<script src="/js/jquery.share.js"></script>
+	<script src="/js/jquery-ui-1.10.4.custom.js"></script>
+	<script src="/js/app.js"></script>
 
-    </script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-   </body>
+		ga('create', 'UA-30575602-1', 'giv2giv.org');
+		ga('send', 'pageview');
+
+	</script>
+
+</body>
 </html>

@@ -1,110 +1,109 @@
-<div class="row-fluid">
-    <h2><a href="#"><i id="refresh-featured-endowments" class="fa fa-refresh"></i></a>Browse Featured Endowments or <a href="#" class="add-endowment-btn">Create Your Own!</a></h2>
-    <div id="featured-endowments" class="row-fluid"></div>
-    <hr />
-    <h2>Subscribed Endowments</h2>
-    <div id="sub-endowments" class="row-fluid"></div>
-  </div><!--/span-->
+<div class="row">
+	<h2><a href="#"><i id="refresh-featured-endowments" class="fa fa-refresh"></i></a>Browse Featured Endowments or <a href="#" class="add-endowment-btn">Create Your Own!</a></h2>
+	<div id="featured-endowments" class="row"></div>
+	<hr />
+	<h2>Subscribed Endowments</h2>
+	<div id="sub-endowments" class="row"></div>
 </div><!--/row-->
 
 <!-- Modals -->
 <div id="add-endowment-modal" class="modal hide">
-  <div class="modal-header">
-    <h3>Create New Endowment</h3>
-  </div>
-  <div class="modal-body no-padding">
-    <div id="add-endowment-step-one" class="row-fluid">
-      <form class="form-horizontal">
-        <div class="control-group">
-          <label class="control-label" for="endowment-name">Name</label>
-          <div class="controls">
-            <input type="text" id="endowment-name" placeholder="Endowment Name">
-            <span class="help-block">Your endowment name will be what people search on. Be creative!</span>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="endowment-min-donation">Minimum Monthly Donation Amount</label>
-          <div class="controls">
-            <input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount">
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="endowment-min-donation">Visibility</label>
-          <div class="controls">
-            <label class="radio">
-              <input type="radio" name="visibility-radios" id="public-radio" value="public" checked>
-              Public - Everyone on giv2giv can see and participate in this endowment.
-            </label>
-            <label class="radio">
-              <input type="radio" name="visibility-radios" id="private-radio" value="private">
-              Private - Only I can see and participate in this endowment.
-            </label>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="endowment-description">Description</label>
-          <div class="controls">
-              <textarea id="endowment-description" rows="3"></textarea>
-              <span class="help-block">Describe the purpose for your endowment - The more compelling you are the more donations your causes will receive!</span>
-          </div>
-        </div>
-        <h4>Charities</h4>
-        <div class="control-group">
-          <label class="control-label" for="charity-city">City</label>
-          <div class="controls">
-            <input type='text' id="charity-city" class="span11">
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="add-endowment-charities">Charities</label>
-          <div class="controls">
-            <input type='hidden' id="add-endowment-charities" class="span11">
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button href="#" id="add-endowment-modal-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-    <button href="#" id="add-endowment-modal-save" class="btn btn-success">Save & Complete</button>
-  </div>
+	<div class="modal-header">
+		<h3>Create New Endowment</h3>
+	</div>
+	<div class="modal-body no-padding">
+		<div id="add-endowment-step-one" class="row">
+			<form class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label" for="endowment-name">Name</label>
+					<div class="controls">
+						<input type="text" id="endowment-name" placeholder="Endowment Name">
+						<span class="help-block">Your endowment name will be what people search on. Be creative!</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="endowment-min-donation">Minimum Monthly Donation Amount</label>
+					<div class="controls">
+						<input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="endowment-min-donation">Visibility</label>
+					<div class="controls">
+						<label class="radio">
+							<input type="radio" name="visibility-radios" id="public-radio" value="public" checked>
+							Public - Everyone on giv2giv can see and participate in this endowment.
+						</label>
+						<label class="radio">
+							<input type="radio" name="visibility-radios" id="private-radio" value="private">
+							Private - Only I can see and participate in this endowment.
+						</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="endowment-description">Description</label>
+					<div class="controls">
+						<textarea id="endowment-description" rows="3"></textarea>
+						<span class="help-block">Describe the purpose for your endowment - The more compelling you are the more donations your causes will receive!</span>
+					</div>
+				</div>
+				<h4>Charities</h4>
+				<div class="control-group">
+					<label class="control-label" for="charity-city">City</label>
+					<div class="controls">
+						<input type='text' id="charity-city" class="span11">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="add-endowment-charities">Charities</label>
+					<div class="controls">
+						<input type='hidden' id="add-endowment-charities" class="span11">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button href="#" id="add-endowment-modal-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+		<button href="#" id="add-endowment-modal-save" class="btn btn-success">Save &amp; Complete</button>
+	</div>
 </div>
 <!-- Subscribe Modal -->
 <div id="subscribe-endowment-modal" class="modal hide">
-  <div class="modal-header">
-    <h3 id="subscribe-endowment-header">Subscribe to </h3>
-  </div>
-  <div class="modal-body">
-    <form id="subcribe-endowment-modal-frm">
-      <p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
-      <div class="control-group">
-        <label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
-        <div class="controls">
-          <input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
-        <div class="controls">
-          <select id="subscribe-endowment-payment-accounts">
-          </select>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-    <a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>    
-    <p>Your subscription can be stopped at any time with no additional payments or fees on the Endowments homepage of your account.</p>
-  </div>
+	<div class="modal-header">
+		<h3 id="subscribe-endowment-header">Subscribe to </h3>
+	</div>
+	<div class="modal-body">
+		<form id="subcribe-endowment-modal-frm">
+			<p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
+			<div class="control-group">
+				<label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
+				<div class="controls">
+					<input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
+				<div class="controls">
+					<select id="subscribe-endowment-payment-accounts">
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+		<a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>    
+		<p>Your subscription can be stopped at any time with no additional payments or fees on the Endowments homepage of your account.</p>
+	</div>
 </div>
 <!-- Unsubscribe Modal -->
 <div id="unsubscribe-endowment-modal" class="modal hide">
-  <div class="modal-body">
-    <h4>Are you sure you would like to unsubscribe to this endowment?</h4>
-  </div>
-  <div class="modal-footer">
-    <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-    <a href="#" id="confirm-unsubscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Unsubscribe</a>
-  </div>
+	<div class="modal-body">
+		<h4>Are you sure you would like to unsubscribe to this endowment?</h4>
+	</div>
+	<div class="modal-footer">
+		<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+		<a href="#" id="confirm-unsubscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Unsubscribe</a>
+	</div>
 </div>

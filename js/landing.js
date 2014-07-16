@@ -1,4 +1,7 @@
 $(function() {
+	/**************************
+	** Interactive Animation **
+	***************************/
 	var $benjamins;
 	var moneyHomePosition;
 	var $dragArrow = $('#drag-arrow');
@@ -15,8 +18,8 @@ $(function() {
 		
 		// Defines where the money goes back to if the user doesn't drop it anywhere
 		moneyHomePosition = {
-			top: 108,
-			left: 22,
+			top: 114,
+			left: 10,
 			opacity: 0
 		};
 
@@ -39,7 +42,7 @@ $(function() {
 	$tree.droppable({
 		drop: function(event, ui) {
 			$dragArrow.fadeOut(400, function(){$dragArrow.remove();});
-			moneyHomePosition = {top: 108, left: 295, opacity: 0};
+			moneyHomePosition = {top: 114, left: 294, opacity: 0};
 			disappearIntoPosition(moneyHomePosition, 500, true);
 			$tree.grow();
 			$benjamins.draggable('disable');
@@ -56,7 +59,7 @@ $(function() {
 
 	$charity.droppable({
 		drop: function(event, ui) {
-			moneyHomePosition = {top: 108, left: 570, opacity: 0};
+			moneyHomePosition = {top: 114, left: 578, opacity: 0};
 			disappearIntoPosition(moneyHomePosition, 500, true);
 		},
 		tolerance: 'touch',
@@ -72,12 +75,19 @@ $(function() {
 
 	function makeItRain() {
 		$benjamins.removeClass('stationary');
-		$benjamins.css({top: 163, left: 345, opacity:1, height:'0px', width: '0px', cursor: 'default'});
-		$benjamins.animate({top: 138, left: 320, height: '50px', width: '50px'}, 1000, function() {
-			disappearIntoPosition({top: 158, left: 595, opacity: 0}, 1000, false);
+		$benjamins.css({top: 155, left: 346, opacity:1, height:'0px', width: '0px', cursor: 'default'});
+		$benjamins.animate({top: 130, left: 321, height: '50px', width: '50px'}, 1000, function() {
+			disappearIntoPosition({top: 150, left: 578, opacity: 0}, 1000, false);
 			setTimeout(function(){makeItRain();}, 2000);
 		});
 	}
 
 	createNewBenjamins(true);
+
+	/*************************
+	** Expand Landing Image **
+	**************************/
+	var $splashImage = $('#splash-image');
+	var heightToExpand = $(window).height() - $splashImage.height();
+	$splashImage.height(heightToExpand);
 });
