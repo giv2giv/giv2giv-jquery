@@ -50,44 +50,25 @@ code {
 	font-size: 80%;
 }
 
-/* CSS Overrides */
-.navbar .brand {
-	display: block;
-	float: left;
-	padding: 7px 10px 7px;
-	margin-left: -20px;
-	font-size: 20px;
-	font-weight: 200;
-	color: #737373;
-	text-shadow: 0 1px 0 #ffffff;
-}
-
-.navbar .loading-brand {
-	display: block;
-	float: left;
-	padding: 12px 20px 12px;
-	margin-left: -20px;
-	font-size: 20px;
-	font-weight: 200;
-	color: #737373;
-	text-shadow: 0 1px 0 #ffffff;
-}
-
-.navbar-search {
-	position: relative;
-	float: left;
-	margin-top: 7px;
-	margin-bottom: 7px;
-}
-
-.navbar-search .search-query {
-	padding: 4px 14px;
+nav.navbar {
 	margin-bottom: 0;
-	font-family: 'Roboto', Helvetica, arial, sans-serif;
-	font-size: 13px;
-	font-weight: normal;
-	line-height: 1;
 }
+	.navbar .loading-brand {
+		display: block;
+		float: left;
+		padding: 12px 20px 12px;
+		margin-left: -20px;
+		font-size: 20px;
+		font-weight: 200;
+		color: #737373;
+		text-shadow: 0 1px 0 #ffffff;
+	}
+	.navbar-brand {
+		padding: 9px 10px;
+	}
+	.private-nav, li.private-nav {
+		display: none;
+	}
 
 /* Landing Page CSS */
 #splash-image {
@@ -121,20 +102,7 @@ code {
 			margin-bottom: 150px;
 	}
 
-.action-bar {
-	text-align: center;
-	height: 100px;
-	color: #fff;
-	background-color: #216c2a;
-	-webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
-	-moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
-	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
-	padding: 20px;
-}
 
-.navbar.navbar-fixed-top {
-	margin-bottom: 0;
-}
 /* Interactive Demo */
 .moneytree {
 	position: relative;
@@ -360,7 +328,6 @@ code {
 	color: #737373;
 	text-overflow: ellipsis;
 }
-
 
 .twitter-typeahead .tt-query {
 	margin-bottom: 0;

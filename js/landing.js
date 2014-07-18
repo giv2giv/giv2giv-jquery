@@ -88,6 +88,7 @@ $(function() {
 	** Expand Landing Image **
 	**************************/
 	var $splashImage = $('#splash-image');
-	var heightToExpand = $(window).height() - $splashImage.height();
+	// 50 px is the navbar height
+	var heightToExpand = $(window).height() - $splashImage.height() - 50;
 	$splashImage.height(heightToExpand);
 });
