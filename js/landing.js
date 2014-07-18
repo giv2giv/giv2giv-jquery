@@ -88,14 +88,24 @@ $(function() {
 	** Expand Landing Image **
 	**************************/
 	var $splashImage = $('#splash-image');
+	var $landingLights = $('.landing-lights');
 	// 50 px is the navbar height
 	var heightToExpand = $(window).height() - $splashImage.height() - 50;
 	if (heightToExpand < 600) {heightToExpand = 600;}
 	$splashImage.height(heightToExpand);
-
-	$('.landing-lights').on('click', function(){
+	$landingLights.on('click', function() {
 		$('body').animate({
 			scrollTop: $('.moneytree').offset().top
+		}, function() {
+			// Remove the landing lights after you've clicked on it so that the
+			// CPU is not unnecessarily animating something you don't need anymore
+			$landingLights.remove();
 		});
+	});
+	$(window).scroll(function() {
+		if ($(window).scrollTop() > $('.moneytree').offset().top) {
+			// Also remove the landing lights if you scroll past it, for performance
+			$landingLights.remove();
+		}
 	});
 });
