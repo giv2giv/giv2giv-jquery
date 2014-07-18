@@ -94,7 +94,7 @@ $(function() {
 	if (heightToExpand < 600) {heightToExpand = 600;}
 	$splashImage.height(heightToExpand);
 	$landingLights.on('click', function() {
-		$('body').animate({
+		$('html,body').animate({
 			scrollTop: $('.moneytree').offset().top
 		}, function() {
 			// Remove the landing lights after you've clicked on it so that the

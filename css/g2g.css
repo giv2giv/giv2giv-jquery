@@ -408,10 +408,6 @@ nav.navbar {
 		-webkit-transform: scale(1.5);
 		transform: scale(1.5);
 	}
-	100% {
-		-webkit-transform: scale(1);
-		transform: scale(1);
-	}
 }
 @-moz-keyframes attentionAttraction {
 	0% {
@@ -419,9 +415,6 @@ nav.navbar {
 	}
 	50% {
 		transform: scale(1.5);
-	}
-	100% {
-		transform: scale(1);
 	}
 }
 @-o-keyframes attentionAttraction {
@@ -432,10 +425,6 @@ nav.navbar {
 	50% {
 		-o-transform: scale(1.5);
 		transform: scale(1.5);
-	}
-	100% {
-		-o-transform: scale(1);
-		transform: scale(1);
 	}
 }
 @keyframes attentionAttraction {
@@ -451,69 +440,31 @@ nav.navbar {
 		-o-transform: scale(1.5);
 		transform: scale(1.5);
 	}
-	100% {
-		-webkit-transform: scale(1);
-		-ms-transform: scale(1);
-		-o-transform: scale(1);
-		transform: scale(1);
-	}
 }
 
 @-webkit-keyframes landingLights {
-	0% {
-		opacity: 0.4;
-	}
-	66% {
-		opacity: 0.4;
-	}
-	67% {
-		opacity: 0.8;
-	}
-	100% {
-		opacity: 0.8;
-	}
+	0%   {opacity: 0.4;}
+	66%  {opacity: 0.4;}
+	67%  {opacity: 0.8;}
+	100% {opacity: 0.8;}
 }
 @-moz-keyframes landingLights {
-	0% {
-		opacity: 0.4;
-	}
-	66% {
-		opacity: 0.4;
-	}
-	67% {
-		opacity: 0.8;
-	}
-	100% {
-		opacity: 0.8;
-	}
+	0%   {opacity: 0.4;}
+	66%  {opacity: 0.4;}
+	67%  {opacity: 0.8;}
+	100% {opacity: 0.8;}
 }
 @-o-keyframes landingLights {
-	0% {
-		opacity: 0.4;
-	}
-	66% {
-		opacity: 0.4;
-	}
-	67% {
-		opacity: 0.8;
-	}
-	100% {
-		opacity: 0.8;
-	}
+	0%   {opacity: 0.4;}
+	66%  {opacity: 0.4;}
+	67%  {opacity: 0.8;}
+	100% {opacity: 0.8;}
 }
 @keyframes landingLights {
-	0% {
-		opacity: 0.4;
-	}
-	66% {
-		opacity: 0.4;
-	}
-	67% {
-		opacity: 0.8;
-	}
-	100% {
-		opacity: 0.8;
-	}
+	0%   {opacity: 0.4;}
+	66%  {opacity: 0.4;}
+	67%  {opacity: 0.8;}
+	100% {opacity: 0.8;}
 }
 
 /* Responsiveness */
