@@ -2,16 +2,14 @@
 TODO:
 
 - Wireframes for the rest of the site, and wireframes for new landing page
+	- Add FB / Twitter Links
+	- Make the tree grow?
+	- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
 - Larger drag arrow sprite, then shrink it via CSS animation (use SVG+fallback instead of PNG)
-- Set body min-height to push down footer
-- Terms of Service
 - Add 10px padding on both sides to animation sprites to accomodate the larger circle
-- Make the tree grow?
-- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
-- Add FB / Twitter Links
-- Add an animate down-pointing arrow to the landing page to get the user to scroll
+- Terms of Service
+- Push down footer on sign in pages
 - Pick better fonts and normalize fonts (only two fonts)
-- Add 'Would you like to know more?' link to https://www.giv2giv.org/#/about
 
 -->
 
@@ -22,6 +20,11 @@ TODO:
 			<span>is the most powerful force in the universe</span>
 		</h1>
 		<p class="secondary-description">Let's use it to transform non-profits</p>
+		<a href="javascript:void(0);" class="landing-lights">
+			<span class="glyphicon glyphicon-chevron-down arrow1"></span>
+			<span class="glyphicon glyphicon-chevron-down arrow2"></span>
+			<span class="glyphicon glyphicon-chevron-down arrow3"></span>
+		</a>
 	</div>
 </div>
 
@@ -55,8 +58,8 @@ TODO:
 <div class="row main-content video">
 	<div class="fixed-column">
 		<h2>Video</h2>
-		<div class="fluid-video-container">
-			<iframe src="//fast.wistia.net/embed/iframe/mhpnb7v5so" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe src="//fast.wistia.net/embed/iframe/mhpnb7v5so" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed embed-responsive-item" name="wistia_embed" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen></iframe>
 		</div>
 	</div>
 </div>

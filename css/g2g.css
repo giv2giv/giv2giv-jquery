@@ -9,9 +9,6 @@ textarea {
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,700);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
-/* Sticky footer styles
--------------------------------------------------- */
-
 html,
 body {
 	font-family: 'Montserrat', Helvetica, Arial, sans-serif;
@@ -39,11 +36,11 @@ h1, h2, h3, h4, h5, h6 {
 footer {
 	background-color: #f5f5f5;
 	padding-top: 1em;
+	height: 50px;
 }
 
-.muted {
+.text-muted {
 	font-size: 14px;
-	color: #737373;
 }
 
 code {
@@ -70,157 +67,6 @@ nav.navbar {
 		display: none;
 	}
 
-/* Landing Page CSS */
-#splash-image {
-	text-align: center;
-	color: #fff;
-	text-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
-	/* Background Image from ESA/Hubble
-	https://www.spacetelescope.org/copyright/
-	"ESA/Hubble images, videos and web texts are released under the Creative Commons Attribution 3.0 Unported license and may on a non-exclusive basis be reproduced without fee provided they are clearly and visibly credited."
-	*/
-	background-image: url('../images/galaxy-1600-1200.jpg');
-	background-size: cover;
-	background-repeat: no-repeat;
-}
-	.primary-description {
-		margin-top: 150px;
-		font-weight: bold;
-		font-family: 'Roboto', Helvetica, Arial, sans-serif;
-		font-size: 4em;
-		line-height: 115%;
-	}
-		.primary-description span {
-			display: block;
-			font-weight: normal;
-			font-style: italic;
-			font-size: 0.75em;
-		}
-	.secondary-description {
-			margin-top: 50px;
-			font-size: 2em;
-			margin-bottom: 150px;
-	}
-
-
-/* Interactive Demo */
-.moneytree {
-	position: relative;
-	text-align: justify;
-	-ms-text-justify: distribute-all-lines;
-	text-justify: distribute-all-lines;
-}
-	.animation-container {
-		vertical-align: top;
-	}
-	.prompt-arrow {
-		position: absolute;
-		font-family: 'Roboto', Helvetica, Arial, sans-serif;
-	}
-	#drag-arrow {
-		left: 230px;
-		top: 225px;
-		z-index: 2;
-		-webkit-animation: attentionAttraction 1.2s infinite;
-		-o-animation: attentionAttraction 1.2s infinite;
-		animation: attentionAttraction 1.2s infinite;
-	}
-	#result-arrow {
-		left: 510px;
-		top: 235px;
-		display: none;
-	}
-		.prompt-arrow:after {
-			position: absolute;
-			content: "";
-			top: 25px;
-			left: -50px;
-			width: 130px;
-			height: 20px;
-			background-image: url('../images/arrow-right.png');
-		}
-	.steps {
-		display: inline-block;
-		position: relative;
-		width: 120px;
-		vertical-align: top;
-	}
-		.whitespace {
-			/* Whitespace used to force the divs to justify/distribute */
-			width: 100%;
-			display: inline-block;
-			font-size: 0;
-			line-height: 0;
-		}
-		.steps h3, .steps p {
-			text-align: center;
-		}
-		.steps .muted {
-			font-size: 12px;
-			margin-top: 1em;
-		}
-	.interactive-target {
-		width: 100px;
-		height: 100px;
-		margin: 0 auto;
-		-webkit-border-radius: 50%;
-		-moz-border-radius: 50%;
-		border-radius: 50%;
-		border: 2px dashed rgb(100, 100, 100);
-		background-repeat: no-repeat;
-		background-position: center;
-		-webkit-transition: background-color 0.1s linear;
-		-moz-transition: background-color 0.1s linear;
-		-ms-transition: background-color 0.1s linear;
-		-o-transition: background-color 0.1s linear;
-		transition: background-color 0.1s linear;
-	}
-		.dragover-hover {
-			background-color: rgba(200, 200, 200, 0.8);
-		}
-
-	#person-wallet {
-		background-image: url('../images/animation-sprites.png');
-		background-position: -100px 0;
-	}
-		#person-wallet:hover {
-			cursor: pointer;
-			background-image: url('../images/animation-sprites.png');
-			background-position: -100px -100px;
-		}
-	#tree {
-		background-image: url('../images/animation-sprites.png');
-		background-position: 0 0;
-	}
-		#tree.grown  {
-			background-image: url('../images/animation-sprites.png');
-			background-position: 0 -100px;
-		}
-	#charity {
-		background-image: url('../images/animation-sprites.png');
-			background-position: -200px -100px;
-	}
-	#benjamins {
-		background-image: url('../images/benjamins.png');
-		border-radius: 0;
-		position: absolute;
-		top: 108px;
-		left: 22px;
-		border: none;
-		z-index: 5;
-	}
-		#benjamins:hover {
-			cursor: pointer;
-			background-color: rgba(255, 255, 255, 0);
-		}
-		#benjamins.stationary {
-			background-image: none;
-		}
-		#benjamins.stationary:hover + #person-wallet {
-			background-image: url('../images/animation-sprites.png');
-			background-position: -100px -100px;
-		}
-
 .fixed-column {
 	width: 768px;
 	margin: 0 auto;
@@ -233,23 +79,6 @@ nav.navbar {
 }
 .main-content {	
 	margin-bottom: 50px;
-}
-.main-content:last-child {
-	/* Fix bottom margin to account for the footer */
-	margin-bottom: 100px;
-}
-.fluid-video-container{
-	position: relative;
-	padding-bottom: 56.25%; /* 16:9 aspect ratio */
-	padding-top: 25px;
-	height: 0;
-}
-.fluid-video-container iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
 }
 
 /* Endowment Cards */
@@ -374,6 +203,201 @@ nav.navbar {
 	margin: 0;
 }
 
+
+
+/* Landing Page CSS */
+#splash-image {
+	position: relative;
+	text-align: center;
+	color: #fff;
+	text-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
+	/* Background Image from ESA/Hubble
+	https://www.spacetelescope.org/copyright/
+	"ESA/Hubble images, videos and web texts are released under the Creative Commons Attribution 3.0 Unported license and may on a non-exclusive basis be reproduced without fee provided they are clearly and visibly credited."
+	*/
+	background-image: url('../images/galaxy-1600-1200.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+	#splash-image > div {
+		min-height: 100%;
+	}
+	.primary-description {
+		margin-top: 150px;
+		font-weight: bold;
+		font-family: 'Roboto', Helvetica, Arial, sans-serif;
+		font-size: 4em;
+		line-height: 115%;
+	}
+		.primary-description span {
+			display: block;
+			font-weight: normal;
+			font-style: italic;
+			font-size: 0.75em;
+		}
+	.secondary-description {
+			margin-top: 50px;
+			font-size: 2em;
+	}
+	.landing-lights {
+		display: block;
+		position: absolute;
+		left: 50%;
+		width: 100px;
+		margin-left: -50px;
+		bottom: 50px;
+		text-align: center;
+		/* Disable text-shadow for performance reasons during animation */
+		text-shadow: none;
+	}
+		.landing-lights:hover {
+			text-decoration: none;
+		}
+		.landing-lights span {
+			display: block;
+			opacity: 0.4;
+			color: #fff;
+			font-size: 3em;
+			-webkit-transform: scale(2, 1);
+			-ms-transform: scale(2, 1);
+			-o-transform: scale(2, 1);
+			transform: scale(2, 1);
+		}
+		.arrow1 {
+			-webkit-animation: landingLights 1.5s 0s infinite;
+			-o-animation: landingLights 1.5s 0s infinite;
+			animation: landingLights 1.5s 0s infinite;
+		}
+		.arrow2 {
+			-webkit-animation: landingLights 1.5s 0.5s infinite;
+			-o-animation: landingLights 1.5s 0.5s infinite;
+			animation: landingLights 1.5s 0.5s infinite;
+		}
+		.arrow3 {
+			-webkit-animation: landingLights 1.5s 1s infinite;
+			-o-animation: landingLights 1.5s 1s infinite;
+			animation: landingLights 1.5s 1s infinite;
+		}
+
+
+/* Interactive Demo */
+.moneytree {
+	position: relative;
+	text-align: justify;
+	-ms-text-justify: distribute-all-lines;
+	text-justify: distribute-all-lines;
+}
+	.animation-container {
+		vertical-align: top;
+	}
+	.prompt-arrow {
+		position: absolute;
+		font-family: 'Roboto', Helvetica, Arial, sans-serif;
+	}
+	#drag-arrow {
+		left: 230px;
+		top: 225px;
+		z-index: 2;
+		-webkit-animation: attentionAttraction 1.2s infinite;
+		-o-animation: attentionAttraction 1.2s infinite;
+		animation: attentionAttraction 1.2s infinite;
+	}
+	#result-arrow {
+		left: 510px;
+		top: 235px;
+		display: none;
+	}
+		.prompt-arrow:after {
+			position: absolute;
+			content: "";
+			top: 25px;
+			left: -50px;
+			width: 130px;
+			height: 20px;
+			background-image: url('../images/arrow-right.png');
+		}
+	.steps {
+		display: inline-block;
+		position: relative;
+		width: 120px;
+		vertical-align: top;
+	}
+		.whitespace {
+			/* Whitespace used to force the divs to justify/distribute */
+			width: 100%;
+			display: inline-block;
+			font-size: 0;
+			line-height: 0;
+		}
+		.steps h3, .steps p {
+			text-align: center;
+		}
+		.steps .muted {
+			font-size: 12px;
+			margin-top: 1em;
+		}
+	.interactive-target {
+		width: 100px;
+		height: 100px;
+		margin: 0 auto;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;
+		border-radius: 50%;
+		border: 2px dashed rgb(100, 100, 100);
+		background-repeat: no-repeat;
+		background-position: center;
+		-webkit-transition: background-color 0.1s linear;
+		-moz-transition: background-color 0.1s linear;
+		-ms-transition: background-color 0.1s linear;
+		-o-transition: background-color 0.1s linear;
+		transition: background-color 0.1s linear;
+	}
+		.dragover-hover {
+			background-color: rgba(200, 200, 200, 0.8);
+		}
+
+	#person-wallet {
+		background-image: url('../images/animation-sprites.png');
+		background-position: -100px 0;
+	}
+		#person-wallet:hover {
+			cursor: pointer;
+			background-image: url('../images/animation-sprites.png');
+			background-position: -100px -100px;
+		}
+	#tree {
+		background-image: url('../images/animation-sprites.png');
+		background-position: 0 0;
+	}
+		#tree.grown  {
+			background-image: url('../images/animation-sprites.png');
+			background-position: 0 -100px;
+		}
+	#charity {
+		background-image: url('../images/animation-sprites.png');
+			background-position: -200px -100px;
+	}
+	#benjamins {
+		background-image: url('../images/benjamins.png');
+		border-radius: 0;
+		position: absolute;
+		top: 108px;
+		left: 22px;
+		border: none;
+		z-index: 5;
+	}
+		#benjamins:hover {
+			cursor: pointer;
+			background-color: rgba(255, 255, 255, 0);
+		}
+		#benjamins.stationary {
+			background-image: none;
+		}
+		#benjamins.stationary:hover + #person-wallet {
+			background-image: url('../images/animation-sprites.png');
+			background-position: -100px -100px;
+		}
+
 /* Animations */
 @-webkit-keyframes attentionAttraction {
 	0% {
@@ -432,6 +456,63 @@ nav.navbar {
 		-ms-transform: scale(1);
 		-o-transform: scale(1);
 		transform: scale(1);
+	}
+}
+
+@-webkit-keyframes landingLights {
+	0% {
+		opacity: 0.4;
+	}
+	66% {
+		opacity: 0.4;
+	}
+	67% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 0.8;
+	}
+}
+@-moz-keyframes landingLights {
+	0% {
+		opacity: 0.4;
+	}
+	66% {
+		opacity: 0.4;
+	}
+	67% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 0.8;
+	}
+}
+@-o-keyframes landingLights {
+	0% {
+		opacity: 0.4;
+	}
+	66% {
+		opacity: 0.4;
+	}
+	67% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 0.8;
+	}
+}
+@keyframes landingLights {
+	0% {
+		opacity: 0.4;
+	}
+	66% {
+		opacity: 0.4;
+	}
+	67% {
+		opacity: 0.8;
+	}
+	100% {
+		opacity: 0.8;
 	}
 }
 

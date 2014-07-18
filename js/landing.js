@@ -90,5 +90,12 @@ $(function() {
 	var $splashImage = $('#splash-image');
 	// 50 px is the navbar height
 	var heightToExpand = $(window).height() - $splashImage.height() - 50;
+	if (heightToExpand < 600) {heightToExpand = 600;}
 	$splashImage.height(heightToExpand);
+
+	$('.landing-lights').on('click', function(){
+		$('body').animate({
+			scrollTop: $('.moneytree').offset().top
+		});
+	});
 });
