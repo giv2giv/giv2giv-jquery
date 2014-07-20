@@ -295,26 +295,28 @@ nav.navbar {
 		font-family: 'Roboto', Helvetica, Arial, sans-serif;
 	}
 	#drag-arrow {
-		left: 230px;
-		top: 225px;
+		left: 215px;
+		top: 210px;
 		z-index: 2;
+		font-size: 2em;
 		-webkit-animation: attentionAttraction 1.2s infinite;
 		-o-animation: attentionAttraction 1.2s infinite;
 		animation: attentionAttraction 1.2s infinite;
 	}
 	#result-arrow {
-		left: 510px;
-		top: 235px;
+		left: 495px;
+		top: 220px;
 		display: none;
 	}
 		.prompt-arrow:after {
 			position: absolute;
 			content: "";
-			top: 25px;
-			left: -50px;
-			width: 130px;
-			height: 20px;
+			top: 40px;
+			left: -56px;
+			width: 175px;
+			height: 26px;
 			background-image: url('../images/arrow-right.png');
+			background-image: url('../images/arrow-right.svg');
 		}
 	.steps {
 		display: inline-block;
@@ -337,8 +339,8 @@ nav.navbar {
 			margin-top: 1em;
 		}
 	.interactive-target {
-		width: 100px;
-		height: 100px;
+		width: 120px;
+		height: 120px;
 		margin: 0 auto;
 		-webkit-border-radius: 50%;
 		-moz-border-radius: 50%;
@@ -358,12 +360,12 @@ nav.navbar {
 
 	#person-wallet {
 		background-image: url('../images/animation-sprites.png');
-		background-position: -100px 0;
+		background-position: -120px 0;
 	}
 		#person-wallet:hover {
 			cursor: pointer;
 			background-image: url('../images/animation-sprites.png');
-			background-position: -100px -100px;
+			background-position: -120px -120px;
 		}
 	#tree {
 		background-image: url('../images/animation-sprites.png');
@@ -371,11 +373,11 @@ nav.navbar {
 	}
 		#tree.grown  {
 			background-image: url('../images/animation-sprites.png');
-			background-position: 0 -100px;
+			background-position: 0 -120px;
 		}
 	#charity {
 		background-image: url('../images/animation-sprites.png');
-			background-position: -200px -100px;
+			background-position: -240px -120px;
 	}
 	#benjamins {
 		background-image: url('../images/benjamins.png');
@@ -395,50 +397,67 @@ nav.navbar {
 		}
 		#benjamins.stationary:hover + #person-wallet {
 			background-image: url('../images/animation-sprites.png');
-			background-position: -100px -100px;
+			background-position: -120px -120px;
 		}
 
 /* Animations */
 @-webkit-keyframes attentionAttraction {
 	0% {
+		-webkit-transform: scale(0.5);
+		transform: scale(0.5);
+	}
+	50% {
 		-webkit-transform: scale(1);
 		transform: scale(1);
 	}
-	50% {
-		-webkit-transform: scale(1.5);
-		transform: scale(1.5);
+	100% {
+		-webkit-transform: scale(0.5);
+		transform: scale(0.5);
 	}
 }
 @-moz-keyframes attentionAttraction {
 	0% {
-		transform: scale(1);
+		transform: scale(0.5);
 	}
 	50% {
-		transform: scale(1.5);
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0.5);
 	}
 }
 @-o-keyframes attentionAttraction {
 	0% {
+		-o-transform: scale(0.5);
+		transform: scale(0.5);
+	}
+	50% {
 		-o-transform: scale(1);
 		transform: scale(1);
 	}
-	50% {
-		-o-transform: scale(1.5);
-		transform: scale(1.5);
+	100% {
+		-o-transform: scale(0.5);
+		transform: scale(0.5);
 	}
 }
 @keyframes attentionAttraction {
 	0% {
+		-webkit-transform: scale(0.5);
+		-ms-transform: scale(0.5);
+		-o-transform: scale(0.5);
+		transform: scale(0.5);
+	}
+	50% {
 		-webkit-transform: scale(1);
 		-ms-transform: scale(1);
 		-o-transform: scale(1);
 		transform: scale(1);
 	}
-	50% {
-		-webkit-transform: scale(1.5);
-		-ms-transform: scale(1.5);
-		-o-transform: scale(1.5);
-		transform: scale(1.5);
+	100% {
+		-webkit-transform: scale(0.5);
+		-ms-transform: scale(0.5);
+		-o-transform: scale(0.5);
+		transform: scale(0.5);
 	}
 }
 
