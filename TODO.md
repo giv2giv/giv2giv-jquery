@@ -1,0 +1,9 @@
+- Landing Page
+	- Add FB / Twitter Links
+	- Make the tree grow?
+	- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
+- Terms of Service
+- Push down footer on sign in pages
+- Pick better fonts and normalize fonts (only two fonts)
+- Let the user keep giving the tree money even after they've already given money
+- Make CSS for logged-in pages navbar

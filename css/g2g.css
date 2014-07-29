@@ -5,13 +5,13 @@ textarea {
 }
 
 /* Fonts */
-@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,700);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700);
+@import url(http://fonts.googleapis.com/css?family=Raleway);
 
 html,
 body {
-	font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 	height: 100%;
 	background: url('../images/grid.png');
 }
@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-top: 0;
 	margin-bottom: 0.5em;
 	line-height: 1em;
-	font-family: 'Roboto', Helvetica, arial, sans-serif;
+	font-family: 'PT Sans', Helvetica, arial, sans-serif;
 }
 	h1, h2 {
 		text-align: center;
@@ -81,6 +81,23 @@ nav.navbar {
 	margin-bottom: 50px;
 }
 
+/* Sign Up and Sign In Pages */
+
+.registration {
+
+}
+	.registration > div {
+		background-color: #fff;
+		margin-top: 2em;
+		margin-bottom: 2em;
+		padding: 40px;
+		background-color: #fbfbfb;
+		border-radius: 2px;
+		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+		-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+	}
+
 /* Endowment Cards */
 .card.endowment {
 	position: relative;
@@ -121,11 +138,6 @@ nav.navbar {
 	padding: 10px 20px;
 	line-height: 29px;
 	text-align: center;
-}
-
-.form-control-static
-{
-	padding-top: 5px;
 }
 
 /* Add Endowment Cards */
@@ -203,8 +215,6 @@ nav.navbar {
 	margin: 0;
 }
 
-
-
 /* Landing Page CSS */
 #splash-image {
 	position: relative;
@@ -225,7 +235,7 @@ nav.navbar {
 	.primary-description {
 		margin-top: 150px;
 		font-weight: bold;
-		font-family: 'Roboto', Helvetica, Arial, sans-serif;
+		font-family: 'PT Sans', Helvetica, Arial, sans-serif;
 		font-size: 4em;
 		line-height: 115%;
 	}
@@ -292,7 +302,7 @@ nav.navbar {
 	}
 	.prompt-arrow {
 		position: absolute;
-		font-family: 'Roboto', Helvetica, Arial, sans-serif;
+		font-family: 'PT Sans', Helvetica, Arial, sans-serif;
 	}
 	#drag-arrow {
 		left: 215px;
