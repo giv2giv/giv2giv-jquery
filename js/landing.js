@@ -110,7 +110,7 @@ function expandHeader() {
 	var $splashImage = $('#splash-image');
 	var $landingLights = $('.landing-lights');
 	// 50 px is the navbar height
-	var heightToExpand = $(window).height() - $splashImage.height() - 50;
+	var heightToExpand = $(window).height() - 50;
 	if (heightToExpand < 600) {heightToExpand = 600;}
 	$splashImage.height(heightToExpand);
 	$landingLights.on('click', function() {
