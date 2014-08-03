@@ -63,17 +63,16 @@
 				</form>
 				<ul class="nav navbar-nav navbar-right">
 					<!-- Public Only Tabs -->
-					<li class="public-nav" id="landing-nav"><a href="/">Home</a></li>
-					<li class="public-nav" id="pub-numbers-nav"><a href="/numbers">Stats for Nerds</a></li>
-					<li class="public-nav" id="signup-nav"><a href="/signup">Sign Up</a></li>
-					<li class="public-nav" id="signin-nav"><a href="/signin">Sign In</a></li>
+					<li class="public-nav hide" id="pub-numbers-nav"><a href="numbers">Stats for Nerds</a></li>
+					<li class="public-nav hide" id="signup-nav"><a href="signup">Sign Up</a></li>
+					<li class="public-nav hide" id="signin-nav"><a href="signin">Sign In</a></li>
 					<!-- Logged In Tabs -->
-					<p class="private-nav navbar-text pull-right">
-						Logged in as <span id="donor-name" class="navbar-link"></span>
+					<p class="navbar-text pull-right">
+						Logged in as <span id="donor-name" class="private-nav"></span>
 					</p>
-					<li id="endowments-nav" class="private-nav nav-link"><a href="/endowments">Endowments</a></li>
-					<li id="donor-nav" class="private-nav nav-link"><a href="/donor">Donor</a></li>
-					<li id="numbers-nav" class="private-nav nav-link"><a href="/numbers">Stats for Nerds</a></li>
+					<li id="endowments-nav" class="private-nav"><a href="endowments">Endowments</a></li>
+					<li id="donor-nav" class="private-nav"><a href="donor">Donor</a></li>
+					<li id="numbers-nav" class="private-nav"><a href="numbers">Stats for Nerds</a></li>
 					<li class="private-nav"><a id="logout-btn" href="logout">Logout</a></li>
 				</ul>
 			</div>
@@ -90,12 +89,12 @@
 				<form action="
 				" role="form" id="signin-form" method="post">
 					<div class="form-group">
-						<label for="signup-email">Email Address</label>
-						<input type="text" class="form-control" id="signup-email" placeholder="Email Address">
+						<label for="signin-email">Email Address</label>
+						<input type="text" class="form-control" id="signin-email" placeholder="Email Address">
 					</div>
 					<div class="form-group">
-						<label for="signup-password">Password</label>
-						<input type="password" class="form-control" id="signup-password" placeholder="Password"><br />
+						<label for="signin-password">Password</label>
+						<input type="password" class="form-control" id="signin-password" placeholder="Password"><br />
 					</div>
 					<button id="signin-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Signing In" class="btn btn-primary" type="submit">
 						Sign in
@@ -132,10 +131,14 @@
 	</div>
 </div>
 	<footer>
-			<p class="text-muted">
-				<span>&copy; giv2giv, Inc. 2014</span>
-				<a id="open-wish-modal" href='#wish-modal' class='pull-right' data-toggle="modal"><i class="fa fa-magic"></i> I wish this page would...</a>
-			</p>
+			<div class="container">
+				<div class="row">
+					<p class="text-muted">
+					<span>&copy; giv2giv, Inc. 2014</span>
+					<a id="open-wish-modal" href='#wish-modal' class='pull-right' data-toggle="modal"><i class="fa fa-magic"></i> I wish this page would...</a>
+				</p>
+				</div>
+			</div>
 	</footer>
 
 	<!-- Modals -->

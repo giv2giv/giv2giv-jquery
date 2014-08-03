@@ -69,8 +69,8 @@ nav.navbar {
 	.navbar-brand {
 		padding: 9px 10px;
 	}
-	.private-nav, li.private-nav {
-		display: none;
+	.navbar-text {
+		font-size: 12px;
 	}
 
 .fixed-column {

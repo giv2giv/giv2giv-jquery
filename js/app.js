@@ -65,10 +65,10 @@ var WebUI = function() {
 		// Hide App Panel
 		$("#app-panel").addClass("hide");
 		$("#app-panel").html("");
-		// Hide App Nav
-		$("#app-nav").addClass("hide");
+		// Hide Private Nav
+		$(".private-nav").addClass("hide");
 		// Show Public Nav
-		$("#public-nav").removeClass("hide");
+		$(".public-nav").removeClass("hide");
 		// Set Title
 		document.title = "giv2giv - Signin";
 		// Show Signin Panel
@@ -83,10 +83,10 @@ var WebUI = function() {
 
 	// Hide the signin screen
 	var hidesignin = function (callback) {
-		// Show App Nav
-		$("#app-nav").removeClass("hide");
+		// Show Private Nav
+		$(".private-nav").removeClass("hide");
 		// Hide Public Nav
-		$("#public-nav").addClass("hide");
+		$(".public-nav").addClass("hide");
 		// Title is set in Load Page
 		// Hide Signin Panel
 		$("#signin-panel").addClass("hide");
@@ -109,15 +109,15 @@ var WebUI = function() {
 			rateLimitWait: 500,
 			url: server_url + "/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function (response) {
-				var results = new Array();
+				var results = [];
 				log(response);
 				if (response.message === undefined) {
 					$.each(response.endowments, function (key, value) {
-						var endowment = new Object();
+						var endowment = {};
 						log(value);
-						endowment['id'] = value.id;
-						endowment['value'] = value.name;
-						endowment['desc'] = value.description;
+						endowment.id = value.id;
+						endowment.value = value.name;
+						endowment.desc = value.description;
 						results.push(endowment);
 					});
 				}
@@ -190,10 +190,10 @@ var WebUI = function() {
 		$btn = $("#signup-btn");
 		$btn.button('loading');
 		var payload = {};
-		payload['email'] = $("#signup-email").val();
-		payload['password'] = $("#signup-password").val();
-		payload['name'] = $("#signup-name").val();
-		payload['accepted_terms'] = $("#signup-accept-terms").prop('checked');
+		payload.email = $("#signup-email").val();
+		payload.password = $("#signup-password").val();
+		payload.name = $("#signup-name").val();
+		payload.accepted_terms = $("#signup-accept-terms").prop('checked');
 
 		var request = JSON.stringify(payload);
 		$.ajax({
@@ -311,8 +311,8 @@ var WebUI = function() {
 	var displayApplication = function (callback) {
 		// Show App Panel
 		$("#app-panel").removeClass("hide");
-		// Show App Nav
-		$("#app-nav").removeClass("hide");
+		// Show Private Nav
+		$(".private-nav").removeClass("hide");
 		// Callback
 		if (typeof callback === "function") {
 			// Call it, since we have confirmed it is callable
@@ -322,10 +322,12 @@ var WebUI = function() {
 
 	// Display Public Application View
 	var displayPublicApplication = function (callback) {
+		// Hide Private Nav
+		$(".private-nav").addClass("hide");
 		// Show App Panel
 		$("#app-panel").removeClass("hide");
-		// Show App Nav
-		$("#public-nav").removeClass("hide");
+		// Show Public Nav
+		$(".public-nav").removeClass("hide");
 		// Callback
 		if (typeof callback === "function") {
 			// Call it, since we have confirmed it is callable
@@ -430,7 +432,7 @@ var WebUI = function() {
 	};
 
 	// Nav Tabs
-	$(".nav-link a, .public-nav a").on("click", function (e) {
+	$(".private-nav a, .public-nav a").on("click", function (e) {
 		hasher.setHash($(this).attr('href'));
 		e.preventDefault();
 	});
@@ -465,8 +467,7 @@ var WebUI = function() {
 		startLoad();
 		if (activeSession()) {
 			loadPage('/ui/landing.html', function () {
-				$(".public-nav").siblings().removeClass("active");
-				$("#landing-nav").addClass("active");
+				$(".private-nav").siblings().removeClass("active");
 				$('#app-container').attr('data-page-id', 'landing');
 				// Load JS
 				LandingUI.start.dispatch();
@@ -475,6 +476,7 @@ var WebUI = function() {
 			});
 		} else {
 			loadPage('/ui/landing.html', function () {
+				displayPublicApplication();
 				$(".public-nav").siblings().removeClass("active");
 				$("#app-panel").removeClass("hide");
 				$("#signin-panel").addClass("hide");
@@ -482,11 +484,8 @@ var WebUI = function() {
 				$('#app-container').attr('data-page-id', 'landing');
 				// Load JS
 				LandingUI.start.dispatch();
-				// Set Nav Tab
-				$("#landing-nav").addClass("active");
 				// Set Title
 				document.title = "giv2giv.org";
-				displayPublicApplication();
 			});
 		}
 		stopLoad();
@@ -527,7 +526,7 @@ var WebUI = function() {
 		$("#signup-password").val("");
 		$("#signup-accept-terms").attr('checked', false);
 		$("#signup-panel").removeClass("hide");
-		$("#public-nav").removeClass("hide");
+		$(".public-nav").removeClass("hide");
 
 		stopLoad();
 	});
@@ -540,7 +539,7 @@ var WebUI = function() {
 				// Load JS
 				EndowmentsUI.start.dispatch();
 				// Set Tabs
-				$(".nav-link").siblings().removeClass("active");
+				$(".private-nav").siblings().removeClass("active");
 				$("#endowments-nav").addClass("active");
 				// Set Title
 				document.title = "giv2giv - Endowments";
@@ -565,7 +564,7 @@ var WebUI = function() {
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 					// Set Tabs
-					$(".nav-link").siblings().removeClass("active");
+					$(".private-nav").siblings().removeClass("active");
 					$("#endowments-nav").addClass("active");
 					// Set Title
 					document.title = "giv2giv - " + data.endowment.name + " Details";
@@ -612,7 +611,7 @@ var WebUI = function() {
 				// Load JS
 				DonorUI.start.dispatch();
 				// Set Tabs
-				$(".nav-link").siblings().removeClass("active");
+				$(".private-nav").siblings().removeClass("active");
 				$("#donor-nav").addClass("active");
 				// Set Title
 				document.title = "giv2giv - Donor";
@@ -626,7 +625,7 @@ var WebUI = function() {
 	crossroads.addRoute('/numbers', function () {
 		if (activeSession()) {
 			loadPage('/ui/numbers.html', function () {
-				$(".nav-link").siblings().removeClass("active");
+				$(".private-nav").siblings().removeClass("active");
 				$('#app-container').attr('data-page-id', 'numbers');
 				// Load JS
 				NumbersUI.start.dispatch();
