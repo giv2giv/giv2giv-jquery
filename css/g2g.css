@@ -33,6 +33,12 @@ h1, h2, h3, h4, h5, h6 {
 		margin-top: 1em;
 	}
 
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -50px;
+}
 footer {
 	background-color: #f5f5f5;
 	padding-top: 1em;
@@ -80,6 +86,9 @@ nav.navbar {
 .main-content {	
 	margin-bottom: 50px;
 }
+	.main-content:last-child {
+		margin-bottom: 100px;
+	}
 
 /* Sign Up and Sign In Pages */
 

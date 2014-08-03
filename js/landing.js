@@ -1,7 +1,25 @@
-$(function() {
-	/**************************
-	** Interactive Animation **
-	***************************/
+// Landing Page UI
+
+// Signal Hook
+var LandingUI = {
+	start : new signals.Signal() 
+};
+
+// Add Listener
+LandingUI.start.add(onStart);
+
+// (Re)Start Donor UI
+function onStart() {
+	WebUI.startLoad();
+	expandHeader();
+	interactiveAnimation();
+	WebUI.stopLoad();
+}
+
+/**************************
+** Interactive Animation **
+***************************/
+function interactiveAnimation() {
 	var $benjamins;
 	var moneyHomePosition;
 	var $dragArrow = $('#drag-arrow');
@@ -83,10 +101,12 @@ $(function() {
 	}
 
 	createNewBenjamins(true);
+}
 
-	/*************************
-	** Expand Landing Image **
-	**************************/
+/*************************
+** Expand Landing Image **
+**************************/
+function expandHeader() {
 	var $splashImage = $('#splash-image');
 	var $landingLights = $('.landing-lights');
 	// 50 px is the navbar height
@@ -108,4 +128,4 @@ $(function() {
 			$landingLights.remove();
 		}
 	});
-});
+}

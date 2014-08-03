@@ -468,6 +468,8 @@ var WebUI = function() {
 				$(".public-nav").siblings().removeClass("active");
 				$("#landing-nav").addClass("active");
 				$('#app-container').attr('data-page-id', 'landing');
+				// Load JS
+				LandingUI.start.dispatch();
 				// Set Title
 				document.title = "giv2giv.org";
 			});
@@ -478,6 +480,8 @@ var WebUI = function() {
 				$("#signin-panel").addClass("hide");
 				$("#signup-panel").addClass("hide");
 				$('#app-container').attr('data-page-id', 'landing');
+				// Load JS
+				LandingUI.start.dispatch();
 				// Set Nav Tab
 				$("#landing-nav").addClass("active");
 				// Set Title
