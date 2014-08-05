@@ -540,60 +540,16 @@ function fetchSubscribedEndowments(callback) {
 		} else {
 			// Parse Results Here
 			// First Row
-			var row = "<div class='row'>";
+			var row = $('#featured-endowments');
 			$.each(data, function(index, sub) {
 				
 
 log (sub);
-			
-				// Now Build A Card
-				// Start Body & Name
-				var body = "<div class='info'><div class='title'>"+sub.name+"</div>";
-				// Description
-				body += "<p><em>"+sub.description+"</em></p>";
-				var donor_string;
-				// # of Donors
-				if (sub.global_balances.endowment_donor_count === 1) {
-					donor_string = "donor";
-				} else {
-					donor_string = "donors";
-				}
-
-				body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
-				// Endowment Balance
-				body += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";    
-				
-				body += "<div class='desc'>Total I have donated: <strong>$"+sub.my_balances.my_donations_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
-				// Endowment Balance & Donations
-				body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
-				// Donation Amount
-				body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.my_balances.my_subscription_type+")</strong></div>";
-				// Donor Balance
-				body += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-
-				// Action Buttons
-				var actions = "<div class='bottom'><button data-id='"+sub.endowment_id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
-				// Subscription Check
-				actions += "<button data-id='"+sub.endowment_id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
-
-				
-				var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
 				// Add the Card to the Row
-				row += card_html;
-				// New Row Check
-				var new_row_check = (index + 1) % 4;
-				if(new_row_check === 0) {
-					row += "</div>";
-					// Append Current Row
-					$("#sub-endowments").append(row);
-					// New Row
-					row = "<div class='row'>";
-				}
-				if(data.length === (index + 1)) {
-					row += "</div>";
-					// Append Current Row
-					$("#sub-endowments").append(row);
-				}
+
+				row.prepend(getCardHTML(sub,false));
+
+				$("#sub-endowments").append(row);
 			});
 			// Finally Add the Create Endowment Card
 			// Header
@@ -616,6 +572,63 @@ log (sub);
 	});
 }
 
+// Returns a fully-formed HTML object to be appended to the DOM.
+function getCardHTML(sub, featured) {
+	var cardBody = "<div class='info'><div class='title'>"+sub.name+"</div>";
+	// Description
+	cardBody += "<p><em>"+sub.description+"</em></p>";
+	var donor_string;
+	// # of donors
+	if(sub.global_balances.endowment_donor_count === 1) {
+		donor_string = "donor";
+	} else {
+		donor_string = "donors";
+	}
+
+	cardBody += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
+	if (featured) {
+		cardBody += "<div class='desc'><strong>"+sub.global_balances.endowment_donations_count+"</strong> individual donations.</div>";
+	}
+	// Endowment Balance
+	cardBody += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
+	if (featured) {
+		// Donation Amount
+		cardBody += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
+		// Endowment Balance & Donations
+		cardBody += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+	} else {
+		cardBody += "<div class='desc'>Total I have donated: <strong>$"+sub.my_balances.my_donations_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+		// Endowment Balance & Donations
+		cardBody += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+		// Donation Amount
+		cardBody += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.my_balances.my_subscription_type+")</strong></div>";
+	}
+	// Donor Balance
+	cardBody += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
+
+	var actions;
+
+	if (featured) {
+		// Action Buttons
+		actions = "<div class='bottom'><button data-id='"+sub.id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
+	} else {
+		// Action Buttons
+		actions = "<div class='bottom'><button data-id='"+sub.endowment_id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
+		// Subscription Check
+		actions += "<button data-id='"+sub.endowment_id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
+	}
+
+	// Subscription Check
+	if (sub.my_balances.is_subscribed) {
+		actions += "<button data-id='"+sub.id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
+	} else {
+		actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
+	}
+	var card_html = "<div class='span3'><div class='card endowment'>"+cardBody+"</div>"+actions+"</div></div>";
+	return card_html;
+
+}
+
 // Get Featured Endowments
 function fetchFeaturedEndowments(callback) {
 	// Clear Old Data
@@ -634,64 +647,21 @@ function fetchFeaturedEndowments(callback) {
 		if(data.message == "Not found") {
 			// Display not found card
 			var card = "<div class='span3'><div class='card'><h2 class='card-heading simple'>No Endowments Yet.</h2>";
-			card += "<div class='card-body'><p>There are currently no giv2giv endowments yet.";
-			card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div></div>";
+			card += "<div class='card-body'><p>There are currently no giv2giv endowments yet.</p>";
+			card += "<p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div></div>";
 			$("#featured-endowments").append(card);
 		} else {
 			// Parse Results Here
 			var endowments = data.endowments;
 			// First Row
-			var row = "<div class='row'>";
-			$.each(endowments, function(k, v) {
+
+			$.each(endowments, function(index, sub) {
 				// Now build a card
-				log(v);
-				var sub = v;
-				var body = "<div class='info'><div class='title'>"+sub.name+"</div>";
-				// Description
-				body += "<p><em>"+sub.description+"</em></p>";
+				log(sub);
 				
-				var donor_string;
-				// # of Donors
-				if(sub.global_balances.endowment_donor_count === 1) {
-					donor_string = "donor";
-				} else {
-					donor_string = "donors";
-				}
+				var row = getCardHTML(sub, true);
 
-				body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
-				body += "<div class='desc'><strong>"+sub.global_balances.endowment_donations_count+"</strong> individual donations.</div>";
-				// Endowment Balance
-				body += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-				// Donation Amount
-				body += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
-				// Endowment Balance & Donations
-				body += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
-				// Donor Balance
-				body += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
-
-				// Action Buttons
-				var actions = "<div class='bottom'><button data-id='"+sub.id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
-				// Subscription Check
-				
-				if (sub.my_balances.is_subscribed) {
-					actions += "<button data-id='"+sub.id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
-				} else {
-					actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
-				}
-				var card_html = "<div class='span3'><div class='card endowment'>"+body+"</div>"+actions+"</div></div>";
-				row += card_html;
-				// sticking with 4 to a row for now - issue #5
-				// New Row Check
-				// var new_row_check = (k + 1) % 4;
-				// if(new_row_check === 0) {
-				//   row += "</div>";
-				//   // Append Current Row
-				//   $("#featured-endowments").append(row);
-				//   // New Row
-				//   row = "<div class='row'>";
-				// }
-				if(endowments.length === (k + 1)) {
-					row += "</div>";
+				if(endowments.length === (index + 1)) {
 					// Append Current Row
 					$("#featured-endowments").append(row);
 				}
