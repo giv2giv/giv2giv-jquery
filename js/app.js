@@ -306,6 +306,40 @@ var WebUI = function() {
 		e.preventDefault();
 	});
 
+
+	/*
+	* Prepares the CSS classes to display the correct page
+	* @param isPublic {boolean}
+	* @param activeTab {jQuery Object} CSS id of the active navbar tab e.g. "#signup-nav"
+	* @param title {string} document.title for the page
+	*/
+	function displayTemplate(isPublic, activeTab, title) {
+		// Show App Panel
+		$("#app-panel").removeClass("hide");
+
+		$("#signin-panel").addClass("hide");
+		$("#signup-panel").addClass("hide");
+
+		if (isPublic) {
+			// Hide Private Nav
+			$(".private-nav").addClass("hide");
+			// Show Public Nav
+			$(".public-nav").removeClass("hide");
+			// Set Tabs
+			$(".public-nav").siblings().removeClass("active");
+		} else {
+			// Show Private Nav
+			$(".private-nav").removeClass("hide");
+			// Set Tabs
+			$(".private-nav").siblings().removeClass("active");
+		}
+
+		activeTab.addClass("active");
+		document.title = title;
+	}
+
+
+
 	// Application Bits
 	// Display Application
 	var displayApplication = function (callback) {
@@ -321,18 +355,14 @@ var WebUI = function() {
 	};
 
 	// Display Public Application View
-	var displayPublicApplication = function (callback) {
+	var displayPublicApplication = function() {
 		// Hide Private Nav
 		$(".private-nav").addClass("hide");
 		// Show App Panel
 		$("#app-panel").removeClass("hide");
 		// Show Public Nav
 		$(".public-nav").removeClass("hide");
-		// Callback
-		if (typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
-			callback();
-		}
+
 	};
 
 	// Start Application
@@ -524,7 +554,7 @@ var WebUI = function() {
 		$("#signup-name").val("");
 		$("#signup-email").val("");
 		$("#signup-password").val("");
-		$("#signup-accept-terms").attr('checked', false);
+		$("#signup-accept-terms").attr("checked", false);
 		$("#signup-panel").removeClass("hide");
 		$(".public-nav").removeClass("hide");
 
@@ -636,24 +666,14 @@ var WebUI = function() {
 			});
 		} else {
 			loadPage('/ui/numbers.html', function() {
-				$("#app-panel").removeClass("hide");
-				$("#signin-panel").addClass("hide");
-				$("#signup-panel").addClass("hide");
-				$(".public-nav").siblings().removeClass("active");
-				$('#app-container').attr('data-page-id', 'numbers');
+				displayTemplate(true, $("#pub-numbers-nav"), "giv2giv - Numbers");
 				// Load JS
 				NumbersUI.start.dispatch();
 				// Set Nav Tab
-				$("#pub-numbers-nav").addClass("active");
-				// Set Title
-				document.title = "giv2giv - Numbers";
 				displayPublicApplication();
 				stopLoad();
 			});
 		}
-		//else {
-		//	crossroads.parse('/signin');
-		//}
 	});
 
 	// Not found route - send to Endowments
