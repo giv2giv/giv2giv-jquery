@@ -74,9 +74,7 @@ var WebUI = function() {
 		// Show Signin Panel
 		$("#signin-panel").removeClass("hide");
 		$('#app-container').attr('data-page-id', 'signin');
-		// Callback
 		if (typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
 			callback();
 		}
 	};
@@ -95,9 +93,7 @@ var WebUI = function() {
 		$("#signin-email").val("");
 		$("#signin-password").val("");
 
-		// Callback
 		if (typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
 			callback();
 		}
 	};
@@ -451,9 +447,7 @@ var WebUI = function() {
 			log("WebUI: Loaded page.");
 			$("#app-panel").html(data);
 			reloadUI();
-			// Callback
 			if (typeof callback === "function") {
-				// Call it, since we have confirmed it is callable
 				callback();
 			}
 		}).fail(function (data) {
@@ -625,9 +619,7 @@ var WebUI = function() {
 	hasher.init();
 	hasher.prependHash = '';
 
-	// Callbacks
 	if (typeof callback === "function") {
-		// Call it, since we have confirmed it is callable
 		callback();
 	}
 
