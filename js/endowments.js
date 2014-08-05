@@ -52,8 +52,8 @@ function onDetails(endowment) {
 		$btn = $(this);
 		$btn.button('loading');
 		var payload = {};
-		payload['amount'] = $("#subscribe-endowment-modal #subscribe-endowment-donation").val();
-		payload['endowment_id'] = $(this).attr("data-id");
+		payload.amount = $("#subscribe-endowment-modal #subscribe-endowment-donation").val();
+		payload.endowment_id = $(this).attr("data-id");
 		var request_payload = JSON.stringify(payload);
 		$.ajax({
 			url: server_url + "/api/donors/payment_accounts/"+$("#subscribe-endowment-payment-accounts").val()+"/donate_subscription.json",
@@ -266,11 +266,11 @@ function endowmentSelectors() {
 			quietMillis: 500,
 			data: function (term, page) { // page is the one-based page number tracked by Select2
 				var payload = {};
-				payload['page'] = page;
-				payload['per_page'] = 10;
-				payload['query'] = term;
+				payload.page = page;
+				payload.per_page = 10;
+				payload.query = term;
 				if($("#charity-city").val().length > 0) {
-					payload['city'] = $("#charity-city").val();
+					payload.city = $("#charity-city").val();
 				}
 				return payload;
 			},
@@ -278,7 +278,7 @@ function endowmentSelectors() {
 				//var more = (page * 10) < data.total;
 				// notice we return the value of more so Select2 knows if more results can be loaded
 				// Loop Through Charities & build Results
-				var results = new Array();
+				var results = [];
 				if(data.message === undefined) {
 					$.each(data, function(k, v) {
 						log(v.charity);
@@ -298,20 +298,20 @@ function endowmentSelectors() {
 	$("#add-endowment-modal-save").on("click", function(e) {
 		// Payload
 		var payload = {};
-		payload['name'] = $("#add-endowment-modal #endowment-name").val();
-		payload['minimum_donation_amount'] = $("#add-endowment-modal #endowment-min-donation").val();
-		payload['visibility'] = $("#add-endowment-modal input[name='visibility-radios']:checked").val();
+		payload.name = $("#add-endowment-modal #endowment-name").val();
+		payload.minimum_donation_amount = $("#add-endowment-modal #endowment-min-donation").val();
+		payload.visibility = $("#add-endowment-modal input[name='visibility-radios']:checked").val();
 
 		if($("#add-endowment-modal #endowment-description").val().length > 0) {
-			payload['description'] = $("#add-endowment-modal #endowment-description").val();
+			payload.description = $("#add-endowment-modal #endowment-description").val();
 		}
-		payload['charities'] = new Array();
+		payload.charities = [];
 		// Get our Charity IDs in the proper format
 		var charities = $("#add-endowment-charities").val().split(",");
 		$.each(charities, function(k, v) {
 			var charity = {};
-			charity['id'] = v;
-			payload['charities'].push(charity);
+			charity.id = v;
+			payload.charities.push(charity);
 		});
 
 		var request_payload = JSON.stringify(payload);
@@ -367,8 +367,8 @@ function endowmentSelectors() {
 		$btn = $(this);
 		$btn.button('loading');
 		var payload = {};
-		payload['amount'] = $("#subscribe-endowment-modal #subscribe-endowment-donation").val();
-		payload['endowment_id'] = $(this).attr("data-id");
+		payload.amount = $("#subscribe-endowment-modal #subscribe-endowment-donation").val();
+		payload.endowment_id = $(this).attr("data-id");
 		var request_payload = JSON.stringify(payload);
 		$.ajax({
 			url: server_url + "/api/donors/payment_accounts/"+$("#subscribe-endowment-payment-accounts").val()+"/donate_subscription.json",
@@ -551,14 +551,13 @@ log (sub);
 				var body = "<div class='info'><div class='title'>"+sub.name+"</div>";
 				// Description
 				body += "<p><em>"+sub.description+"</em></p>";
-				
+				var donor_string;
 				// # of Donors
 				if (sub.global_balances.endowment_donor_count === 1) {
-					var donor_string = "donor";
+					donor_string = "donor";
 				} else {
-					var donor_string = "donors";
-				}  
-		
+					donor_string = "donors";
+				}
 
 				body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
 				// Endowment Balance
@@ -607,7 +606,7 @@ log (sub);
 		}
 	}).fail(function(data) {
 		log(data);
-		growlError("Opps! An error occured while loading your Subscribed Endowments.");
+		growlError("Oops! An error occured while loading your Subscribed Endowments.");
 	}).always(function(data) {
 		// Callbacks
 		if(typeof callback === "function") {
@@ -651,11 +650,12 @@ function fetchFeaturedEndowments(callback) {
 				// Description
 				body += "<p><em>"+sub.description+"</em></p>";
 				
+				var donor_string;
 				// # of Donors
 				if(sub.global_balances.endowment_donor_count === 1) {
-					var donor_string = "donor";
+					donor_string = "donor";
 				} else {
-					var donor_string = "donors";
+					donor_string = "donors";
 				}
 
 				body += "<div class='desc'><strong>"+sub.global_balances.endowment_donor_count+"</strong> individual "+donor_string+".</div>";
