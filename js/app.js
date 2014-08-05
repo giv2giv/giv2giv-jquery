@@ -61,7 +61,7 @@ function growlSuccess(message) {
 var WebUI = function() {
 	// Signin Bits
 	// Display the signin screen.
-	var displaysignin = function(callback) {
+	var showsignin = function(callback) {
 		// Hide App Panel
 		$("#app-panel").addClass("hide");
 		$("#app-panel").html("");
@@ -313,7 +313,7 @@ var WebUI = function() {
 	* @param activeTab {jQuery Object} CSS id of the active navbar tab e.g. "#signup-nav"
 	* @param title {string} document.title for the page
 	*/
-	function displayTemplate(isPublic, activeTab, title) {
+	function setPageMetadata(isPublic, activeTab, title) {
 		// Show App Panel
 		$("#app-panel").removeClass("hide");
 
@@ -338,33 +338,6 @@ var WebUI = function() {
 		// Set Title
 		document.title = title;
 	}
-
-
-
-	// Application Bits
-	// Display Application
-	var displayApplication = function (callback) {
-		// Show App Panel
-		$("#app-panel").removeClass("hide");
-		// Show Private Nav
-		$(".private-nav").removeClass("hide");
-		// Callback
-		if (typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
-			callback();
-		}
-	};
-
-	// Display Public Application View
-	var displayPublicApplication = function() {
-		// Hide Private Nav
-		$(".private-nav").addClass("hide");
-		// Show App Panel
-		$("#app-panel").removeClass("hide");
-		// Show Public Nav
-		$(".public-nav").removeClass("hide");
-
-	};
 
 	// Start Application
 	// This is only loaded on full page refresh or first visit
@@ -405,9 +378,12 @@ var WebUI = function() {
 				$("#donor-name").html(data.donor.name);
 				// Hide Signin
 				// Display Main Application
-				displayApplication(function () {
-					hidesignin();
-				});
+				// Show App Panel
+				$("#app-panel").removeClass("hide");
+				// Show Private Nav
+				$(".private-nav").removeClass("hide");
+				hidesignin();
+
 			}).error(function (data) {
 				if (data.statusText === "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
@@ -496,21 +472,13 @@ var WebUI = function() {
 	// Landing Page Route
 	crossroads.addRoute('/', function () {
 		startLoad();
-		if (activeSession()) {
-			loadPage('/ui/landing.html', function () {
-				$('#app-container').attr('data-page-id', 'landing');
-				displayTemplate(false, null, "giv2giv.org");
-				// Load JS
-				LandingUI.start.dispatch();
-			});
-		} else {
-			loadPage('/ui/landing.html', function () {
-				$('#app-container').attr('data-page-id', 'landing');
-				displayTemplate(true, null, "giv2giv.org");
-				// Load JS
-				LandingUI.start.dispatch();
-			});
-		}
+		$('#app-container').attr('data-page-id', 'landing');
+
+		loadPage('/ui/landing.html', function () {
+			setPageMetadata(!activeSession(), null, "giv2giv.org");
+			LandingUI.start.dispatch(); // Load JS
+		});
+
 		stopLoad();
 	});
 
@@ -524,7 +492,7 @@ var WebUI = function() {
 		// Hide Signup Panel
 		$("#signup-panel").addClass("hide");
 		// Display Signin (Title Set in Method)
-		displaysignin();
+		showsignin();
 		// Stop Load
 		stopLoad();
 	});
@@ -559,7 +527,7 @@ var WebUI = function() {
 		if (activeSession()) {
 			loadPage('/ui/endowments.html', function () {
 				$('#app-container').attr('data-page-id', 'endowments');
-				displayTemplate(false, $("#endowments-nav"), "giv2giv - Endowments");
+				setPageMetadata(false, $("#endowments-nav"), "giv2giv - Endowments");
 				// Load JS
 				EndowmentsUI.start.dispatch();
 			});
@@ -580,7 +548,7 @@ var WebUI = function() {
 			}).done(function (data) {
 				loadPage('/ui/endowment_details.html', function () {
 					$('#app-container').attr('data-page-id', 'endowment-details');
-					displayTemplate(false, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
+					setPageMetadata(false, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 					stopLoad();
@@ -599,7 +567,7 @@ var WebUI = function() {
 			}).done(function (data) {
 				loadPage('/ui/endowment_details.html', function () {
 					$('#app-container').attr('data-page-id', 'endowment-details');
-					displayTemplate(true, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
+					setPageMetadata(true, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 					stopLoad();
@@ -617,7 +585,7 @@ var WebUI = function() {
 		if (activeSession()) {
 			loadPage('/ui/donor.html', function () {
 				$('#app-container').attr('data-page-id', 'donor');
-				displayTemplate(false, $("#donor-nav"), "giv2giv- Donor");
+				setPageMetadata(false, $("#donor-nav"), "giv2giv- Donor");
 				// Load JS
 				DonorUI.start.dispatch();
 			});
@@ -628,21 +596,16 @@ var WebUI = function() {
 
 	// Numbers Route
 	crossroads.addRoute('/numbers', function () {
-		if (activeSession()) {
-			loadPage('/ui/numbers.html', function () {
-				$('#app-container').attr('data-page-id', 'numbers');
-				displayTemplate(false, $("#numbers-nav"), "giv2giv - Numbers");
-				// Load JS
-				NumbersUI.start.dispatch();
-			});
-		} else {
-			loadPage('/ui/numbers.html', function() {
-				displayTemplate(true, $("#pub-numbers-nav"), "giv2giv - Numbers");
-				// Load JS
-				NumbersUI.start.dispatch();
-				stopLoad();
-			});
-		}
+		var navTab = activeSession() ? $("#numbers-nav") : $("#pub-numbers-nav");
+
+		loadPage('/ui/numbers.html', function () {
+			$('#app-container').attr('data-page-id', 'numbers');
+			setPageMetadata(!activeSession(), navTab, "giv2giv - Numbers");
+			// Load JS
+			NumbersUI.start.dispatch();
+			stopLoad();
+		});
+
 	});
 
 	// Not found route - send to Endowments
