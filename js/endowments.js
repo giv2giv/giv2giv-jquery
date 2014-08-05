@@ -275,7 +275,7 @@ function endowmentSelectors() {
 				return payload;
 			},
 			results: function (data, page) {
-				//var more = (page * 10) < data.total;
+				// var more = (page * 10) < data.total;
 				// notice we return the value of more so Select2 knows if more results can be loaded
 				// Loop Through Charities & build Results
 				var results = [];
@@ -533,7 +533,7 @@ function fetchSubscribedEndowments(callback) {
 		// did we get anything
 		if(data.length === 0) {
 			// Display not found card
-			var card = "<div class='span3'><div class='card'><h2 class='card-heading simple'>No Subscriptions</h2>";
+			var card = "<div class='col-xs-12'><div class='card'><h2 class='card-heading simple'>No Subscriptions</h2>";
 			card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
 			card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div></div>";
 			$("#sub-endowments").append(card);
@@ -557,7 +557,7 @@ log (sub);
 			// Description
 			add_body += "<p><em>Ready to make a difference?</em></p>";
 			add_body += "<div class='bottom'><button id='add-endowment' class='btn btn-success'>Create Endowment</button></div>";
-			var card = "<div class='span3'><div class='card endowment'>"+add_body+"</div></div>";
+			var card = "<div class='col-xs-12'><div class='card endowment'>"+add_body+"</div></div>";
 			$("#sub-endowments .row:last").append(card);
 		}
 	}).fail(function(data) {
@@ -624,7 +624,7 @@ function getCardHTML(sub, featured) {
 	} else {
 		actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
 	}
-	var card_html = "<div class='span3'><div class='card endowment'>"+cardBody+"</div>"+actions+"</div></div>";
+	var card_html = "<div class='col-xs-12'><div class='card endowment'>"+cardBody+"</div>"+actions+"</div></div>";
 	return card_html;
 
 }
@@ -646,7 +646,7 @@ function fetchFeaturedEndowments(callback) {
 		$("#featured-endowments").html("");
 		if(data.message == "Not found") {
 			// Display not found card
-			var card = "<div class='span3'><div class='card'><h2 class='card-heading simple'>No Endowments Yet.</h2>";
+			var card = "<div class='col-xs-12'><div class='card'><h2 class='card-heading simple'>No Endowments Yet.</h2>";
 			card += "<div class='card-body'><p>There are currently no giv2giv endowments yet.</p>";
 			card += "<p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div></div>";
 			$("#featured-endowments").append(card);

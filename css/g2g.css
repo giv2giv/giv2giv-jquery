@@ -114,6 +114,9 @@ nav.navbar {
 	overflow: hidden;
 	background-color: #fff;
 	min-height: 300px;
+	margin-left: 15px;
+	margin-right: 15px;
+	display: inline-block;
 }
 
 .card.endowment .info {
@@ -524,7 +527,7 @@ nav.navbar {
 }
 @media (min-width: 768px) and (max-width: 991px) {
 	.card.endowment {
-		width: 180px;
+		width: 240px;
 	}
 	.card.endowment .info .title {
 		font-size: 20px;
