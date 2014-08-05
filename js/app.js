@@ -333,8 +333,9 @@ var WebUI = function() {
 			// Set Tabs
 			$(".private-nav").siblings().removeClass("active");
 		}
-
+		// Set Tabs
 		activeTab.addClass("active");
+		// Set Title
 		document.title = title;
 	}
 
@@ -497,25 +498,17 @@ var WebUI = function() {
 		startLoad();
 		if (activeSession()) {
 			loadPage('/ui/landing.html', function () {
-				$(".private-nav").siblings().removeClass("active");
 				$('#app-container').attr('data-page-id', 'landing');
+				displayTemplate(false, null, "giv2giv.org");
 				// Load JS
 				LandingUI.start.dispatch();
-				// Set Title
-				document.title = "giv2giv.org";
 			});
 		} else {
 			loadPage('/ui/landing.html', function () {
-				displayPublicApplication();
-				$(".public-nav").siblings().removeClass("active");
-				$("#app-panel").removeClass("hide");
-				$("#signin-panel").addClass("hide");
-				$("#signup-panel").addClass("hide");
 				$('#app-container').attr('data-page-id', 'landing');
+				displayTemplate(true, null, "giv2giv.org");
 				// Load JS
 				LandingUI.start.dispatch();
-				// Set Title
-				document.title = "giv2giv.org";
 			});
 		}
 		stopLoad();
@@ -566,13 +559,9 @@ var WebUI = function() {
 		if (activeSession()) {
 			loadPage('/ui/endowments.html', function () {
 				$('#app-container').attr('data-page-id', 'endowments');
+				displayTemplate(false, $("#endowments-nav"), "giv2giv - Endowments");
 				// Load JS
 				EndowmentsUI.start.dispatch();
-				// Set Tabs
-				$(".private-nav").siblings().removeClass("active");
-				$("#endowments-nav").addClass("active");
-				// Set Title
-				document.title = "giv2giv - Endowments";
 			});
 		} else {
 			crossroads.parse('/signin');
@@ -591,13 +580,9 @@ var WebUI = function() {
 			}).done(function (data) {
 				loadPage('/ui/endowment_details.html', function () {
 					$('#app-container').attr('data-page-id', 'endowment-details');
+					displayTemplate(false, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
-					// Set Tabs
-					$(".private-nav").siblings().removeClass("active");
-					$("#endowments-nav").addClass("active");
-					// Set Title
-					document.title = "giv2giv - " + data.endowment.name + " Details";
 					stopLoad();
 				});
 			}).fail(function (data) {
@@ -612,17 +597,11 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				displayPublicApplication();
-				$("#signin-panel").addClass('hide');
-
 				loadPage('/ui/endowment_details.html', function () {
 					$('#app-container').attr('data-page-id', 'endowment-details');
+					displayTemplate(true, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
-					// Set Tabs
-					$(".public-nav").siblings().removeClass("active");
-					// Set Title
-					document.title = "giv2giv - " + data.endowment.name + " Details";
 					stopLoad();
 				});
 			}).fail(function (data) {
@@ -638,13 +617,9 @@ var WebUI = function() {
 		if (activeSession()) {
 			loadPage('/ui/donor.html', function () {
 				$('#app-container').attr('data-page-id', 'donor');
+				displayTemplate(false, $("#donor-nav"), "giv2giv- Donor");
 				// Load JS
 				DonorUI.start.dispatch();
-				// Set Tabs
-				$(".private-nav").siblings().removeClass("active");
-				$("#donor-nav").addClass("active");
-				// Set Title
-				document.title = "giv2giv - Donor";
 			});
 		} else {
 			crossroads.parse('/signin');
@@ -655,22 +630,16 @@ var WebUI = function() {
 	crossroads.addRoute('/numbers', function () {
 		if (activeSession()) {
 			loadPage('/ui/numbers.html', function () {
-				$(".private-nav").siblings().removeClass("active");
 				$('#app-container').attr('data-page-id', 'numbers');
+				displayTemplate(false, $("#numbers-nav"), "giv2giv - Numbers");
 				// Load JS
 				NumbersUI.start.dispatch();
-				// Set Nav Tab
-				$("#numbers-nav").addClass("active");
-				// Set Title
-				document.title = "giv2giv - Numbers";
 			});
 		} else {
 			loadPage('/ui/numbers.html', function() {
 				displayTemplate(true, $("#pub-numbers-nav"), "giv2giv - Numbers");
 				// Load JS
 				NumbersUI.start.dispatch();
-				// Set Nav Tab
-				displayPublicApplication();
 				stopLoad();
 			});
 		}
