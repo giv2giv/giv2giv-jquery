@@ -195,19 +195,19 @@ function loadUI() {
 	});
 
 	// Update Donor Profile
-	$("#donor-profile-frm").on("submit", function(e) {
+	$("#donor-profile-form").on("submit", function(e) {
 		$btn = $("#update-donor-btn");
 		$btn.button('loading');
 		// Setup payload
 		var donor = {};
-		donor['name'] = $("#donor-profile-name").val();
-		donor['email'] = $("#donor-profile-email").val();
-		donor['password'] = $("#donor-profile-password").val();
-		donor['address'] = $("#donor-profile-address").val();
-		donor['city'] = $("#donor-profile-city").val();
-		donor['state'] = $("#donor-profile-state").val();
-		donor['zip'] = $("#donor-profile-zip").val();
-		donor['phone_number'] = $("#donor-profile-phone").val();
+		donor.name = $("#donor-profile-name").val();
+		donor.email = $("#donor-profile-email").val();
+		donor.password = $("#donor-profile-password").val();
+		donor.address = $("#donor-profile-address").val();
+		donor.city = $("#donor-profile-city").val();
+		donor.state = $("#donor-profile-state").val();
+		donor.zip = $("#donor-profile-zip").val();
+		donor.phone_number = $("#donor-profile-phone").val();
 		var payload = JSON.stringify(donor);
 
 		$.ajax({
@@ -299,9 +299,10 @@ function loadUI() {
 						// And stamp each bit for our row
 						ugly_timestamp = new Date(donation.created_at * 1000);
 						pretty_timestamp = prettify_timestamp(ugly_timestamp);
-						var $col = $statement.find('tr:last').append('<td>' + pretty_timestamp + '</td>');
-						var $col = $statement.find('tr:last').append('<td>Endowment Name: ' + donation.endowment_name + '</td>');
-						var $col = $statement.find('tr:last').append('<td>$' + donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + '</td>');
+						var $col = $statement.find('tr:last');
+						$col.append('<td>' + pretty_timestamp + '</td>');
+						$col.append('<td>Endowment Name: ' + donation.endowment_name + '</td>');
+						$col.append('<td>$' + donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + '</td>');
 					});
 					$statement.find('#statement-total').html("<span>Total: $" + response.total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span>");
 					ugly_statement_timestamp = new Date(response.timestamp * 1000);

@@ -14,46 +14,35 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="profile">
 						<!-- Profile Tab -->
-						<form id="donor-profile-frm" class="form-horizontal">
+						<form id="donor-profile-form">
 							<!-- Donor Email -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-email">Email</label>
-								<div class="controls">
-									<input type="text" id="donor-profile-email" placeholder="Email">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-email">Email</label>
+								<input type="text" id="donor-profile-email" placeholder="Email" class="form-control"/>
 							</div>
 							<!-- Donor Password -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-password">Password</label>
-								<div class="controls">
-									<input type="password" id="donor-profile-password" placeholder="Password">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-password">Password</label>
+								<input type="password" id="donor-profile-password" placeholder="Password" class="form-control"/>
 							</div>
 							<!-- Name -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-name">Name</label>
-								<div class="controls">
-									<input type="text" id="donor-profile-name" placeholder="Name">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-name">Name</label>
+								<input type="text" id="donor-profile-name" placeholder="Name" class="form-control"/>
 							</div>
 							<!-- Address -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-address">Address</label>
-								<div class="controls">
-									<input type="text" id="donor-profile-address" placeholder="Address">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-address">Address</label>
+								<input type="text" id="donor-profile-address" placeholder="Address" class="form-control"/>
 							</div>
 							<!-- City -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-city">City</label>
-								<div class="controls">
-									<input type="text" id="donor-profile-city" placeholder="City">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-city">City</label>
+								<input type="text" id="donor-profile-city" placeholder="City" class="form-control"/>
 							</div>
 							<!-- State -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-state">State</label>
-								<div class="controls">
+							<div class="form-group">
+								<label for="donor-profile-state">State</label>
 									<select id="donor-profile-state">
 										<option value="" selected="selected">Select a State</option> 
 										<option value="AL">Alabama</option> 
@@ -108,27 +97,20 @@
 										<option value="WI">Wisconsin</option> 
 										<option value="WY">Wyoming</option>
 									</select>
-								</div>
 							</div>
 							<!-- Zip -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-zip">Zip</label>
-								<div class="controls">
-									<input type="text" id="donor-profile-zip" placeholder="Zip">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-zip">Zip</label>
+								<input type="text" id="donor-profile-zip" placeholder="Zip" class="form-control"/>
 							</div>
 							<!-- Phone Number -->
-							<div class="control-group">
-								<label class="control-label" for="donor-profile-phone">Phone Number</label>
-								<div class="controls">
-									<input type="text" id="donor-profile-phone" placeholder="Phone Number">
-								</div>
+							<div class="form-group">
+								<label for="donor-profile-phone">Phone Number</label>
+								<input type="text" id="donor-profile-phone" placeholder="Phone Number" class="form-control"/>
 							</div>
 							<!-- Update Profile Button -->
-							<div class="control-group">
-								<div class="controls">
-									<button id="update-donor-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Updating" class="btn btn-success">Update Profile</button>
-								</div>
+							<div class="form-group">
+								<button id="update-donor-btn" type="submit" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Updating" class="btn btn-success">Update Profile</button>
 							</div>
 						</form>
 					</div>
@@ -153,11 +135,9 @@
 						</div>
 					</div>
 					<div class="tab-pane" id="statement">
-						<form id="donor-statement-form" class="form-horizontal">
-							<div class="control-group">
-								<div class="controls">
-									<input type="button" id="donor-statement-button" class="btn btn-success" value="Display Statement">
-								</div>
+						<form id="donor-statement-form">
+							<div class="form-group">
+								<button id="donor-statement-button" class="btn btn-success">Display Statement</button>>
 							</div>
 						</form>
 					</div>
@@ -175,26 +155,20 @@
 		<h3>Add Payment Account</h3>
 	</div>
 	<div class="modal-body">
-		<form method="post" id="add-payment-frm" class="form-horizontal">
+		<form method="post" id="add-payment-frm">
 			<span class="payment-errors"></span>
-			<div class="control-group">
-				<label class="control-label" for="add-card-number">Card Number</label>
-				<div class="controls">
-					<input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" /> <img width='50' height='32' src='' id="card-type">
-				</div>
+			<div class="form-group">
+				<label for="add-card-number">Card Number</label>
+				<input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" class="form-control"/> <img width='50' height='32' src='' id="card-type">
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="add-card-cvc">CVC</label>
-				<div class="controls">
-					<input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc"/>
-				</div>
+			<div class="form-group">
+				<label for="add-card-cvc">CVC</label>
+				<input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc" class="form-control"/>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="add-card-exp">Expiration (MM/YYYY)</label>
-				<div class="controls">
-					<input type="text" data-stripe="exp-month" class="span2"/>
-					<input type="text" data-stripe="exp-year" class="span2"/>
-				</div>
+			<div class="form-group">
+				<label for="add-card-exp">Expiration (MM/YYYY)</label>
+				<input type="text" data-stripe="exp-month" class="form-control"/>
+				<input type="text" data-stripe="exp-year" class="form-control"/>
 			</div>
 		</form>
 	</div>
