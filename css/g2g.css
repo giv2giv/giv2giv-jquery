@@ -108,22 +108,23 @@ nav.navbar {
 	}
 
 /* Endowment Cards */
-.card.endowment {
-	position: relative;
-	padding-top: 0;
-	overflow: hidden;
-	background-color: #fff;
-	min-height: 300px;
-	margin-left: 15px;
-	margin-right: 15px;
+.card {
+	width: 384px; /*384 = 768/2*/
 	display: inline-block;
+	margin: 0 auto;
+	padding: 40px;
+	background-color: #fbfbfb;
+	border-radius: 2px;
+	-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
 
-.card.endowment .info {
+.card .info {
 	padding: 4px 8px 10px;
 }
 
-.card.endowment .info .title {
+.card .info .title {
 	text-align: center;
 	margin-bottom: 4px;
 	font-size: 24px;
@@ -132,7 +133,7 @@ nav.navbar {
 	vertical-align: middle;
 }
 
-.card.endowment .info .desc {
+.card .info .desc {
 	text-align: left;
 	overflow: hidden;
 	font-size: 12px;
@@ -142,45 +143,12 @@ nav.navbar {
 }
 
 .card.endowment .bottom {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	display: inline-block;
 	width: 100%;
 	padding: 10px 20px;
 	line-height: 29px;
 	text-align: center;
 }
 
-/* Add Endowment Cards */
-.card.add-endowment {
-	position: relative;
-	padding-top: 0;
-	overflow: hidden;
-	background-color: transparent;
-}
-
-.card.add-endowment .info {
-	padding: 4px 8px 10px;
-}
-
-.card.add-endowment .info .title {
-	text-align: center;
-	margin-bottom: 4px;
-	font-size: 24px;
-	line-height: 1;
-	color: #262626;
-	vertical-align: middle;
-}
-
-.card.add-endowment .info .desc {
-	text-align: left;
-	overflow: hidden;
-	font-size: 12px;
-	line-height: 20px;
-	color: #737373;
-	text-overflow: ellipsis;
-}
 
 .twitter-typeahead .tt-query {
 	margin-bottom: 0;
@@ -510,31 +478,19 @@ nav.navbar {
 
 /* Responsiveness */
 @media (min-width: 1200px) {
-	.card.endowment {
-		width: 300px;
-	}
-	.card.endowment .info .title {
-		font-size: 24px;
-	}
+
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-	.card.endowment {
-		width: 240px;
-	}
-	.card.endowment .info .title {
-		font-size: 20px;
-	}
+
 }
 @media (min-width: 768px) and (max-width: 991px) {
-	.card.endowment {
-		width: 240px;
-	}
-	.card.endowment .info .title {
-		font-size: 20px;
-	}
+
 }
 
 @media (max-width: 767px) {
+	.card.endowment {
+		width: 100%;
+	}
 	.fixed-column {
 		width: 100%;
 	}
