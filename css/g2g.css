@@ -83,12 +83,12 @@ nav.navbar {
 	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
-	.fixed-column:first-child {
-		margin-top: 2em;
-	}
 .main-content {	
 	margin-bottom: 50px;
 }
+	.first-content {
+		margin-top: 2em;
+	}
 	.main-content:last-child {
 		margin-bottom: 100px;
 	}
@@ -125,6 +125,14 @@ nav.navbar {
 	.card-heading {
 		margin-bottom: 2em;
 	}
+	.card-header-only {
+		padding: 20px;
+	}
+		.card-header-only h2, .card-header-only h3 {
+			margin-top: 0;
+			margin-bottom: 0;
+			text-align: center;
+		}
 .card .info {
 	padding: 4px 8px 10px;
 }
@@ -144,12 +152,20 @@ nav.navbar {
 	color: #737373;
 	text-overflow: ellipsis;
 }
-.card.endowment .bottom {
-	width: 100%;
-	padding: 10px 20px;
-	line-height: 29px;
-	text-align: center;
+.card.endowment {
+	margin-top: 2em;
+	margin-left: 1em;
 }
+	.card.endowment .bottom {
+		width: 100%;
+		padding: 10px 20px;
+		line-height: 29px;
+		text-align: center;
+	}
+	#sub-endowments {
+		/* Extra margin to account for footer */
+		margin-bottom: 100px;
+	}
 
 /*
  * Creditly Gray Theme (gray-theme)
@@ -610,6 +626,7 @@ nav.navbar {
 @media (max-width: 767px) {
 	.card.endowment {
 		width: 100%;
+		margin-left: 0;
 	}
 	.fixed-column {
 		width: 100%;

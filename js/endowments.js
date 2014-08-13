@@ -534,7 +534,7 @@ function fetchSubscribedEndowments(callback) {
 		var card;
 		if(data.length === 0) {
 			// Display not found card
-			card = "<div class='card'><h2 class='card-heading simple'>No Subscriptions</h2>";
+			card = "<div class='card endowment'><h2 class='card-heading simple'>No Subscriptions</h2>";
 			card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
 			card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div>";
 			$("#sub-endowments").append(card);
