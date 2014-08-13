@@ -83,6 +83,9 @@ nav.navbar {
 	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
+	.fixed-column:first-child {
+		margin-top: 2em;
+	}
 .main-content {	
 	margin-bottom: 50px;
 }
@@ -119,11 +122,12 @@ nav.navbar {
 	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 }
-
+	.card-heading {
+		margin-bottom: 2em;
+	}
 .card .info {
 	padding: 4px 8px 10px;
 }
-
 .card .info .title {
 	text-align: center;
 	margin-bottom: 4px;
@@ -132,7 +136,6 @@ nav.navbar {
 	color: #262626;
 	vertical-align: middle;
 }
-
 .card .info .desc {
 	text-align: left;
 	overflow: hidden;
@@ -141,12 +144,129 @@ nav.navbar {
 	color: #737373;
 	text-overflow: ellipsis;
 }
-
 .card.endowment .bottom {
 	width: 100%;
 	padding: 10px 20px;
 	line-height: 29px;
 	text-align: center;
+}
+
+/*
+ * Creditly Gray Theme (gray-theme)
+ */
+.creditly-wrapper .card_type {
+	float: right;
+	font-style: italic;
+	font-weight: normal !important;
+}
+.creditly-wrapper h3 {
+	background: #424242;
+	color: #FFF;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 14px;
+	margin: 0;
+	text-transform: uppercase;
+	height: 20px;
+}
+.creditly-wrapper .credit-card-wrapper {
+	padding: 30px 0;
+}
+.creditly-wrapper {
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+}
+.creditly-wrapper .form-control:focus {
+	border-color: #888;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	transition: all 0.1s ease;
+	-webkit-transition: all 0.1s ease;
+}
+.creditly-wrapper .form-control {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.428571429;
+}
+.creditly-wrapper .control-label {
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+.creditly-wrapper .col-sm-8,
+.creditly-wrapper .col-sm-4 {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+/* Creditly bootstrap stuff */
+.creditly-wrapper input.form-control.has-error {
+	outline: none;
+	border-color: #ff7076;
+	border-top-color: #ff5c61;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.2),0 1px 0 rgba(255,255,255,0),0 0 4px 0 rgba(255,0,0,0.5);
+	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.2),0 1px 0 rgba(255,255,255,0),0 0 4px 0 rgba(255,0,0,0.5);
+	-ms-box-shadow: inset 0 1px 2px rgba(0,0,0,0.2),0 1px 0 rgba(255,255,255,0),0 0 4px 0 rgba(255,0,0,0.5);
+	-o-box-shadow: inset 0 1px 2px rgba(0,0,0,0.2),0 1px 0 rgba(255,255,255,0),0 0 4px 0 rgba(255,0,0,0.5);
+	box-shadow: inset 0 1px 2px rgba(0,0,0,0.2),0 1px 0 rgba(255,255,255,0),0 0 4px 0 rgba(255,0,0,0.5);
+}
+.creditly-wrapper .form-control {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.428571429;
+	color: #555;
+	vertical-align: middle;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.creditly-wrapper .form-control:focus {
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);
+}
+.creditly-wrapper label {
+	display: inline-block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+.creditly-wrapper input:focus::-webkit-input-placeholder {
+		color: #ccc;
+}
+.creditly-wrapper input:focus:-moz-placeholder {
+		color: #ccc;
+}
+.creditly-wrapper input:focus::-moz-placeholder {
+		color: #ccc;
+}
+.creditly-wrapper input:focus:-ms-input-placeholder {
+		color: #ccc;
+}
+.creditly-wrapper .col-sm-8 {
+	width: 66.6666666666666%;
+}
+.creditly-wrapper .col-sm-4 {
+	width: 33.3333333333333%;
+}
+.creditly-wrapper .form-group {
+	width: 100%;
+	display: table;
+}
+.creditly-wrapper .first-row {
+	margin-bottom: 20px;
+}
+.creditly-wrapper .card-type {
+	margin-top: 1.7em;
 }
 
 

@@ -7,3 +7,5 @@
 - Pick better fonts and normalize fonts (only two fonts)
 - Let the user keep giving the tree money even after they've already given money
 - Make CSS for logged-in pages navbar
+- Better explain how endowments link to charities
+- Search for ENDOWMENTS on landing page, not CHARITIES
