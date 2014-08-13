@@ -182,11 +182,11 @@ function loadUI() {
 	// Add account button
 	$('#add-account-btn').on("click", function(e) {
 		$(this).button('loading');
-		$("#add-payment-frm").submit();
+		$("#add-payment-form").submit();
 		e.preventDefault();
 	});
 
-	$('#add-payment-frm').on("submit", function(e) {
+	$('#add-payment-form').on("submit", function(e) {
 		var $form = $(this);
 		// Disable the submit button to prevent repeated clicks
 		$("#add-account-btn").prop('disabled', true);
@@ -364,7 +364,7 @@ function loadUI() {
 
 // Stripe Response Handler
 var stripeResponseHandler = function(status, response) {
-	var $form = $('#add-payment-frm');
+	var $form = $('#add-payment-form');
 	if (response.error) {
 		// Show the errors on the form
 		$form.find('.payment-errors').text(response.error.message);
@@ -377,8 +377,8 @@ var stripeResponseHandler = function(status, response) {
 		$form.append($('<input type="hidden" name="stripeToken" />').val(token));
 		// and add token to g2g
 		var payment = {};
-		payment['processor'] = "stripe";
-		payment['stripeToken'] = response.id;
+		payment.processor = "stripe";
+		payment.stripeToken = response.id;
 		var payload = JSON.stringify(payment);
 
 		$.ajax({
@@ -393,7 +393,7 @@ var stripeResponseHandler = function(status, response) {
 			// Hide Modal
 			$("#add-payment-modal").modal('hide');
 			// Clear Form
-			$("#add-payment-frm")[0].reset();
+			$("#add-payment-form")[0].reset();
 			$("#add-account-btn").button('reset');
 			// Reload Payment Accounts
 			fetchPaymentAccounts();

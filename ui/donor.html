@@ -149,37 +149,41 @@
 
 <!-- Modals -->
 <!-- Add Payment Modal -->
-<div id="add-payment-modal" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3>Add Payment Account</h3>
-	</div>
-	<div class="modal-body">
-		<form method="post" id="add-payment-frm">
-			<span class="payment-errors"></span>
-			<div class="form-group">
-				<label for="add-card-number">Card Number</label>
-				<input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" class="form-control"/> <img width='50' height='32' src='' id="card-type">
+<div id="add-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-payment-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<form method="post" id="add-payment-form" class="modal-content form-inline">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="add-payment-label">
+					Add Payment
+				</h3>
 			</div>
-			<div class="form-group">
-				<label for="add-card-cvc">CVC</label>
-				<input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc" class="form-control"/>
+			<div class="modal-body">
+				<span class="payment-errors"></span>
+				<div class="form-group">
+					<label for="add-card-number">Card Number</label>
+					<input autocompletetype="cc-number" id="add-card-number" type="text" data-stripe="number" class="form-control"/> <img width='50' height='32' src='' id="card-type">
+				</div>
+				<div class="form-group">
+					<label for="add-card-cvc">CVC</label>
+					<input autocomplete="off" id="add-card-cvc" type="text" data-stripe="cvc" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label for="add-card-exp">Expiration (MM/YYYY)</label>
+					<input type="text" data-stripe="exp-month" placeholder="MM"/>
+					<input type="text" data-stripe="exp-year" placeholder="YYYY"/>
+				</div>
+				<strong>giv2giv never sees or stores your card information.</strong>
 			</div>
-			<div class="form-group">
-				<label for="add-card-exp">Expiration (MM/YYYY)</label>
-				<input type="text" data-stripe="exp-month" class="form-control"/>
-				<input type="text" data-stripe="exp-year" class="form-control"/>
+			<div class="modal-footer">
+				<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				<button id="add-account-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Adding" class="btn btn-success">Add Account</button>
 			</div>
 		</form>
 	</div>
-	<div class="modal-footer">
-		<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
-		<button id="add-account-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Adding" class="btn btn-success">Add Account</button>
-	</div>
-	<div class="modal-footer">
-		<h4><strong>* giv2giv never sees or stores your card information.</strong></h4>
-	</div>
 </div>
+	
+
 <!-- Remove Card Modal -->
 <div id="remove-payment-modal" class="modal hide">
 	<div class="modal-header">
