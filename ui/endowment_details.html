@@ -133,41 +133,46 @@
 
 <!-- Modals -->
 <!-- Subscribe Modal -->
-<div id="subscribe-endowment-modal" class="modal hide">
-	<div class="modal-header">
-		<h3 id="subscribe-endowment-header">Subscribe to </h3>
-	</div>
-	<div class="modal-body">
-		<form id="subcribe-endowment-modal-frm">
-			<p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
-			<div class="control-group">
-				<label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
-				<div class="controls">
-					<input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount">
-				</div>
+<div id="subscribe-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="subscribe-endowment-header" aria-hidden="true">
+	<div class="modal-dialog">
+		<form id="subcribe-endowment-modal-form" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 id="subscribe-endowment-header">Subscribe to </h3>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
-				<div class="controls">
-					<select id="subscribe-endowment-payment-accounts">
-					</select>
+			<div class="modal-body">
+				<p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
+				<div class="form-group">
+					<label for="subscribe-endowment-donation">Monthly Donation Amount</label>
+					<input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount" class="form-control">
 				</div>
+				<div class="form-group">
+					<label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
+					<select id="subscribe-endowment-payment-accounts">
+					</select class="form-control">
+				</div>
+				<p>Your subscription can be stopped at any time with no additional payments or fees on the Endowments homepage of your account.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+				<a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>    
 			</div>
 		</form>
 	</div>
-	<div class="modal-footer">
-		<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-		<a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>
-		<p>Your subscription can be stopped at any time with no additional payments or fees on the Endowments homepage of your account.</p>
-	</div>
 </div>
+
 <!-- Unsubscribe Modal -->
-<div id="unsubscribe-endowment-modal" class="modal hide">
-	<div class="modal-body">
-		<h4>Are you sure you would like to unsubscribe to this endowment?</h4>
-	</div>
-	<div class="modal-footer">
-		<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-		<a href="#" id="confirm-unsubscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Unsubscribe</a>
+<div id="unsubscribe-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unsubscribe-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="unsubscribe-label">Are you sure you would like to unsubscribe to this endowment?</h3>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+				<a href="#" id="confirm-unsubscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Unsubscribe</a>
+			</div>
+		</div>
 	</div>
 </div>
