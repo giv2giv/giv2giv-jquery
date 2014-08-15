@@ -453,12 +453,21 @@ var WebUI = function() {
 
 	// Landing Page Route
 	crossroads.addRoute('/', function () {
-		$('#app-container').attr('data-page-id', 'landing');
+		if (activeSession()) {
+			$('#app-container').attr('data-page-id', 'dashboard');
 
-		loadPage('/ui/landing.html', function () {
-			setPageMetadata(!activeSession(), null, "giv2giv.org");
-			LandingUI.start.dispatch(); // Load JS
-		});
+			loadPage('/ui/dashboard.html', function () {
+				setPageMetadata(!activeSession(), null, "giv2giv.org");
+				// DashboardUI.start.dispatch(); // Load JS
+			});
+		} else {
+			$('#app-container').attr('data-page-id', 'landing');
+
+			loadPage('/ui/landing.html', function () {
+				setPageMetadata(!activeSession(), null, "giv2giv.org");
+				LandingUI.start.dispatch(); // Load JS
+			});
+		}
 	});
 
 	// Signin Route
