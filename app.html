@@ -47,9 +47,6 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<div id="loading">
-					<i class="loading-brand fa fa-leaf fa-spin logo-loading"></i>
-				</div>
 				<a href="/" class="navbar-brand">
 					<img src='/images/logo.png' alt='giv2giv'/>
 				</a>
@@ -63,17 +60,21 @@
 				</form>
 				<ul class="nav navbar-nav navbar-right">
 					<!-- Public Only Tabs -->
-					<li class="public-nav hide" id="pub-numbers-nav"><a href="numbers">Stats for Nerds</a></li>
-					<li class="public-nav hide" id="signup-nav"><a href="signup">Sign Up</a></li>
-					<li class="public-nav hide" id="signin-nav"><a href="signin">Sign In</a></li>
+					<li class="public-nav" id="pub-numbers-nav"><a href="numbers">Stats for Nerds</a></li>
+					<li class="public-nav" id="signup-nav"><a href="signup"><button class="btn btn-primary">Sign Up</button></a></li>
+					<li class="public-nav" id="signin-nav"><a href="signin"><button class="btn btn-success">Sign In</button></a></li>
 					<!-- Logged In Tabs -->
-					<p class="navbar-text pull-right private-nav">
-						Logged in as <span id="donor-name"></span>
-					</p>
-					<li id="endowments-nav" class="private-nav"><a href="endowments">Endowments</a></li>
-					<li id="donor-nav" class="private-nav"><a href="donor">Donor</a></li>
-					<li id="numbers-nav" class="private-nav"><a href="numbers">Stats for Nerds</a></li>
-					<li class="private-nav"><a id="logout-btn" href="logout">Logout</a></li>
+					<li id="endowments-nav" class="private-nav hide"><a href="endowments">Endowments</a></li>
+					<li id="donor-nav" class="private-nav hide">
+					<li id="numbers-nav" class="private-nav hide"><a href="numbers">Stats for Nerds</a></li>
+					<li class="dropdown private-nav hide">
+						<div class="dropdown-toggle" data-toggle="dropdown">My Profile</div>
+						<ul class="dropdown-menu" role="menu">
+							<!-- <li><a href="">My Profile</a></li> -->
+							<li><a href="donor">Account Settings</a></li></li>
+							<li><a id="logout-btn" href="logout">Logout</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>		

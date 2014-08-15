@@ -11,11 +11,8 @@ NumbersUI.start.add(onStart);
 
 // (Re)Start Numbers UI
 function onStart() {
-	WebUI.startLoad();
-	// Load Stats
-	fetchStats(function() {
-		WebUI.stopLoad();
-	});
+		// Load Stats
+	fetchStats();
 }
 
 function fetchStats(callback) {

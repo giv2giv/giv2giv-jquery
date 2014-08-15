@@ -13,21 +13,18 @@ EndowmentsUI.details.add(onDetails);
 
 // (Re)Start Endowments UI
 function onStart() {
-	WebUI.startLoad();
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
 		// Fetch Subscribed Endowments
 		fetchSubscribedEndowments(function() {
 			endowmentSelectors();
-			WebUI.stopLoad();
 		});
 	});
 }
 
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
-	WebUI.startLoad();
-	// Subscription Info
+		// Subscription Info
 	if(WebUI.activeSession()) {
 		$("#subscription-tab").removeClass("hide");
 		if (endowment.my_balances.is_subscribed) {
@@ -80,8 +77,7 @@ function onDetails(endowment) {
 	// Subscribe Button
 	$("#endowment-details-subscribe").off("click");
 	$("#endowment-details-subscribe").on("click", function(e) {
-		WebUI.startLoad();
-		// Take ID and get Endowment Details
+				// Take ID and get Endowment Details
 		// Set Subscribe Button
 		$("#confirm-subscribe-endowment").attr("data-id", $(this).attr("data-id"));
 		// Now Get Endowment Details
@@ -121,7 +117,6 @@ function onDetails(endowment) {
 				}
 				// Show Modal
 				$("#subscribe-endowment-modal").modal('show');
-				WebUI.stopLoad();
 			});
 		}).fail(function(data) {
 			log(data);
@@ -132,8 +127,7 @@ function onDetails(endowment) {
 	// Unsubscribe Button
 	$("#endowment-details-unsubscribe").off("click");
 	$("#endowment-details-unsubscribe").on("click", function(e) {
-		WebUI.startLoad();
-		// Take ID and get Endowment Details
+				// Take ID and get Endowment Details
 		// Set Subscribe Button
 		$("#confirm-unsubscribe-endowment").attr("data-id", $(this).attr("data-id"));
 		// Now Get Endowment Details
@@ -150,7 +144,6 @@ function onDetails(endowment) {
 			$("#confirm-unsubscribe-endowment").attr("data-id", data.endowment.my_balances.my_subscription_id);
 			// Now Show Modal
 			$("#unsubscribe-endowment-modal").modal('show');
-			WebUI.stopLoad();
 		}).fail(function(data) {
 			log(data);
 		});
@@ -160,8 +153,7 @@ function onDetails(endowment) {
 	// Unsubscribe confirmation click
 	$("#confirm-unsubscribe-endowment").off("click");
 	$("#confirm-unsubscribe-endowment").on("click", function(e) {
-		WebUI.startLoad();
-		$btn = $(this);
+				$btn = $(this);
 		$btn.button('loading');
 		// Now Get Endowment Details
 		$.ajax({
@@ -178,7 +170,6 @@ function onDetails(endowment) {
 			growlError("Opps! There was an error unsubscribing from this endowment.");
 		});
 		e.preventDefault();
-		WebUI.stopLoad();
 	});
 
 	// Social Sharing Widget
@@ -400,8 +391,7 @@ function endowmentSelectors() {
 	// Subscribe Button
 	$(".endowment-subscribe-btn").off("click");
 	$(".endowment-subscribe-btn").on("click", function(e) {
-		WebUI.startLoad();
-		// Take ID and get Endowment Details
+				// Take ID and get Endowment Details
 		// Set Subscribe Button
 		$("#confirm-subscribe-endowment").attr("data-id", $(this).attr("data-id"));
 		// Now Get Endowment Details
@@ -440,7 +430,6 @@ function endowmentSelectors() {
 				}
 				// Show Modal
 				$("#subscribe-endowment-modal").modal('show');
-				WebUI.stopLoad();
 			});
 		}).fail(function(data) {
 			log(data);
@@ -451,8 +440,7 @@ function endowmentSelectors() {
 	// Unsubscribe Button
 	$(".endowment-unsubscribe-btn").off("click");
 	$(".endowment-unsubscribe-btn").on("click", function(e) {
-		WebUI.startLoad();
-		// Take ID and get Endowment Details
+				// Take ID and get Endowment Details
 		// Set Subscribe Button
 		$("#confirm-unsubscribe-endowment").attr("data-id", $(this).attr("data-id"));
 		// Now Get Endowment Details
@@ -480,8 +468,7 @@ function endowmentSelectors() {
 	// Unsubscribe confirmation click
 	$("#confirm-unsubscribe-endowment").off("click");
 	$("#confirm-unsubscribe-endowment").on("click", function(e) {
-		WebUI.startLoad();
-		$btn = $(this);
+				$btn = $(this);
 		$btn.button('loading');
 		// Now Get Endowment Details
 		$.ajax({
@@ -505,10 +492,6 @@ function endowmentSelectors() {
 			growlError("Opps! There was an error unsubscribing from this endowment.");
 		});
 		e.preventDefault();
-
-		WebUI.stopLoad();
-
-
 		});
 
 	// More Details Button

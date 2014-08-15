@@ -11,14 +11,12 @@ DonorUI.start.add(onStart);
 
 // (Re)Start Donor UI
 function onStart() {
-	WebUI.startLoad();
 	// Load Donor Profile
 	fetchDonorProfile(function() {
 		// Load Payment Accounts
 		fetchPaymentAccounts(function () {
 			// Load UI
 			loadUI();
-			WebUI.stopLoad();
 		});
 	});
 }

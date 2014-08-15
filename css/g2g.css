@@ -75,6 +75,21 @@ nav.navbar {
 	.navbar-text {
 		font-size: 12px;
 	}
+.dropdown-toggle {
+	color: #777;
+	text-shadow: 0 1px 0 rgba(255,255,255,.25);
+	line-height: 20px;
+	position: relative;
+	padding: 10px 15px;
+}
+	.dropdown-toggle:hover {
+		cursor: pointer;
+		color: #333;
+		background-color: transparent;
+	}
+	.dropdown:hover .dropdown-menu, .dropdown-menu:hover {
+		display: block;
+	}
 
 .fixed-column {
 	width: 768px;
@@ -111,6 +126,9 @@ nav.navbar {
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 		-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+	}
+	#signup-nav a, #signin-nav a {
+		padding: 7px 0 7px 3px;
 	}
 
 /* Endowment Cards */
@@ -617,16 +635,28 @@ nav.navbar {
 
 /* Responsiveness */
 @media (min-width: 1200px) {
-
+	.dropdown-toggle {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
 }
-@media (min-width: 992px) and (max-width: 1199px) {
-
+@media (min-width: 992px) {
+	.dropdown-toggle {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
 }
-@media (min-width: 768px) and (max-width: 991px) {
-
+@media (min-width: 768px) {
+	.dropdown-toggle {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
 }
 
 @media (max-width: 767px) {
+	#signup-nav a, #signin-nav a {
+		padding: 7px 0 7px 14px;
+	}
 	.card.endowment {
 		width: 100%;
 		margin-left: 0;
