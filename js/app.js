@@ -358,7 +358,7 @@ var WebUI = function() {
 				// Load Current URL
 				log(window.location.hash);
 				if (window.location.hash === "#/signin" || window.location.hash === "#/signup" || window.location.hash === "" || window.location.hash === "#/") {
-					hasher.setHash('/endowments');
+					hasher.setHash('/dashboard');
 				} else {
 					hasher.setHash(window.location.hash);
 				}
@@ -379,7 +379,6 @@ var WebUI = function() {
 				// Show Private Nav
 				$(".private-nav").removeClass("hide");
 				hidesignin();
-
 			}).error(function (data) {
 				if (data.statusText === "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
@@ -454,16 +453,15 @@ var WebUI = function() {
 	// Landing Page Route
 	crossroads.addRoute('/', function () {
 		if (activeSession()) {
-			$('#app-container').attr('data-page-id', 'dashboard');
-
-			loadPage('/ui/dashboard.html', function () {
-				setPageMetadata(!activeSession(), null, "giv2giv.org");
-				// DashboardUI.start.dispatch(); // Load JS
+			loadPage('/ui/endowments.html', function () {
+				$('#app-container').attr('data-page-id', 'endowments');
+				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
+				// Load JS
+				EndowmentsUI.start.dispatch();
 			});
 		} else {
-			$('#app-container').attr('data-page-id', 'landing');
-
 			loadPage('/ui/landing.html', function () {
+				$('#app-container').attr('data-page-id', 'landing');
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				LandingUI.start.dispatch(); // Load JS
 			});
@@ -500,14 +498,13 @@ var WebUI = function() {
 		$(".public-nav").removeClass("hide");
 	});
 
-	// Endowments Route
-	crossroads.addRoute('/endowments', function () {
+	// Dashboard Route
+	crossroads.addRoute('/dashboard', function () {
 		if (activeSession()) {
-			loadPage('/ui/endowments.html', function () {
-				$('#app-container').attr('data-page-id', 'endowments');
-				setPageMetadata(false, $("#endowments-nav"), "giv2giv - Endowments");
-				// Load JS
-				EndowmentsUI.start.dispatch();
+			loadPage('/ui/dashboard.html', function () {
+				$('#app-container').attr('data-page-id', 'dashboard');
+				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
+				// DashboardUI.start.dispatch(); // Load JS
 			});
 		} else {
 			crossroads.parse('/signin');
@@ -526,7 +523,7 @@ var WebUI = function() {
 			}).done(function (data) {
 				loadPage('/ui/endowment_details.html', function () {
 					$('#app-container').attr('data-page-id', 'endowment-details');
-					setPageMetadata(false, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
+					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
@@ -543,7 +540,7 @@ var WebUI = function() {
 			}).done(function (data) {
 				loadPage('/ui/endowment_details.html', function () {
 					$('#app-container').attr('data-page-id', 'endowment-details');
-					setPageMetadata(true, $("#endowments-nav"), "giv2giv - " + data.endowment.name + " Details");
+					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
@@ -581,11 +578,11 @@ var WebUI = function() {
 
 	});
 
-	// Not found route - send to Endowments
+	// Not found route - send to Dashboard
 	crossroads.bypassed.add(function (request) {
 		log("WebUI: Route not found.");
 		log(request);
-		crossroads.parse('/endowments');
+		crossroads.parse('/dashboard');
 	});
 
 	// Setup Hasher
