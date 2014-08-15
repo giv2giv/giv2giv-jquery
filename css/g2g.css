@@ -13,7 +13,7 @@ html,
 body {
 	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 	height: 100%;
-	background: url('../images/grid.png');
+	background-color: #eee;
 }
 
 /* Make the default font-size larger so that it's easier on the eyes  */
@@ -56,6 +56,9 @@ code {
 nav.navbar {
 	margin-bottom: 0;
 }
+	#loading {
+		display: inline;
+	}
 	.navbar .loading-brand {
 		display: block;
 		float: left;
@@ -89,7 +92,7 @@ nav.navbar {
 	.first-content {
 		margin-top: 2em;
 	}
-	.main-content:last-child {
+	.last-content {
 		margin-bottom: 100px;
 	}
 
@@ -127,6 +130,10 @@ nav.navbar {
 	}
 	.card-header-only {
 		padding: 20px;
+		background-color: inherit;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
 	}
 		.card-header-only h2, .card-header-only h3 {
 			margin-top: 0;
@@ -161,10 +168,6 @@ nav.navbar {
 		padding: 10px 20px;
 		line-height: 29px;
 		text-align: center;
-	}
-	#sub-endowments {
-		/* Extra margin to account for footer */
-		margin-bottom: 100px;
 	}
 
 /*
