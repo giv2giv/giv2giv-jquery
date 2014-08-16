@@ -6,4 +6,4 @@
 - Pick better fonts and normalize fonts (only two fonts)
 - Let the user keep giving the tree money even after they've already given money
 - CSS for gravatar in logged-in navbar
-- Search for ENDOWMENTS on landing page, not CHARITIES
+- Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead
