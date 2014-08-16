@@ -27,29 +27,28 @@ log = function () {
 function growlError(message) {
 	$.bootstrapGrowl(message, {
 		ele: "body", // which element to append to
-		type: "error", // (null, "info", "error", "success")
+		type: "danger", // (null, "info", "danger", "success")
 		offset: {
 			from: "top",
 			amount: 20
 		}, // "top", or "bottom"
-		align: "right", // ("left", "right", or "center")
+		align: "center", // ("left", "right", or "center")
 		width: "auto", // (integer, or "auto")
 		delay: 5000,
 		allow_dismiss: true,
 		stackup_spacing: 10 // spacing between consecutively stacked growls.
 	});
 }
-
 // Growl Success
 function growlSuccess(message) {
 	$.bootstrapGrowl(message, {
 		ele: "body", // which element to append to
-		type: "success", // (null, "info", "error", "success")
+		type: "success", // (null, "info", "danger", "success")
 		offset: {
 			from: "top",
 			amount: 20
 		}, // "top", or "bottom"
-		align: "right", // ("left", "right", or "center")
+		align: "center", // ("left", "right", or "center")
 		width: "auto", // (integer, or "auto")
 		delay: 5000,
 		allow_dismiss: true,
@@ -169,7 +168,7 @@ var WebUI = function() {
 			growlSuccess("Thank you for your feedback! Got a wizard? Fork our code at <a href='https://github.com/giv2giv' target=_blank>GitHub</a> to grant wishes!");
 			$("#wish-modal").modal("hide");
 		}).fail(function (data) {
-			growlError("Opps! There was an error making this wish.");
+			growlError("Oops! There was an error making this wish.");
 		});
 		e.preventDefault();
 	});
@@ -529,7 +528,7 @@ var WebUI = function() {
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
 			}).fail(function (data) {
-				growlError("Opps! There was an error loading the Endowment Details.");
+				growlError("Oops! There was an error loading the Endowment Details.");
 			});
 		} else {
 			// Load Endowment Details First
@@ -546,7 +545,7 @@ var WebUI = function() {
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
 			}).fail(function (data) {
-				growlError("Opps! There was an error loading the Endowment Details.");
+				growlError("Oops! There was an error loading the Endowment Details.");
 			});
 		}
 
