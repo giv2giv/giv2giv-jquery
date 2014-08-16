@@ -8,4 +8,3 @@
 - CSS for gravatar in logged-in navbar
 - Better explain how endowments link to charities. "Donate to an endowment" instead of "Donate to giv2giv" on landing page Step 1 (Change this in two places, (1) the animation and (2) the longer, "How it works" section)
 - Search for ENDOWMENTS on landing page, not CHARITIES
-

@@ -3,7 +3,7 @@
 var server_url = "https://apitest.giv2giv.org";
 
 // Setup Stripe
-var stripe_pub_key = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
+var stripe_pub_key = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
 Stripe.setPublishableKey(stripe_pub_key);
 
 // Wish Page ID
@@ -15,7 +15,7 @@ var wish_page;
 var debug = false;
 
 log = function () {
-	if (debug && console && typeof console.log === 'function') {
+	if (debug && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {
 			console.log(arguments[i]);
 		}
@@ -26,14 +26,14 @@ log = function () {
 // Growl Error
 function growlError(message) {
 	$.bootstrapGrowl(message, {
-		ele: 'body', // which element to append to
-		type: 'error', // (null, 'info', 'error', 'success')
+		ele: "body", // which element to append to
+		type: "error", // (null, "info", "error", "success")
 		offset: {
-			from: 'top',
+			from: "top",
 			amount: 20
-		}, // 'top', or 'bottom'
-		align: 'right', // ('left', 'right', or 'center')
-		width: 'auto', // (integer, or 'auto')
+		}, // "top", or "bottom"
+		align: "right", // ("left", "right", or "center")
+		width: "auto", // (integer, or "auto")
 		delay: 5000,
 		allow_dismiss: true,
 		stackup_spacing: 10 // spacing between consecutively stacked growls.
@@ -43,14 +43,14 @@ function growlError(message) {
 // Growl Success
 function growlSuccess(message) {
 	$.bootstrapGrowl(message, {
-		ele: 'body', // which element to append to
-		type: 'success', // (null, 'info', 'error', 'success')
+		ele: "body", // which element to append to
+		type: "success", // (null, "info", "error", "success")
 		offset: {
-			from: 'top',
+			from: "top",
 			amount: 20
-		}, // 'top', or 'bottom'
-		align: 'right', // ('left', 'right', or 'center')
-		width: 'auto', // (integer, or 'auto')
+		}, // "top", or "bottom"
+		align: "right", // ("left", "right", or "center")
+		width: "auto", // (integer, or "auto")
 		delay: 5000,
 		allow_dismiss: true,
 		stackup_spacing: 10 // spacing between consecutively stacked growls.
@@ -73,7 +73,7 @@ var WebUI = function() {
 		document.title = "giv2giv - Signin";
 		// Show Signin Panel
 		$("#signin-panel").removeClass("hide");
-		$('#app-container').attr('data-page-id', 'signin');
+		$("#app-container").attr("data-page-id", "signin");
 		if (typeof callback === "function") {
 			callback();
 		}
@@ -99,9 +99,9 @@ var WebUI = function() {
 	};
 
 	// Endowment Search
-	$('#endowment-search').typeahead({
+	$("#endowment-search").typeahead({
 		remote: {
-			name: 'endowments',
+			name: "endowments",
 			rateLimitWait: 500,
 			url: server_url + "/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function (response) {
@@ -122,13 +122,13 @@ var WebUI = function() {
 			maxParallelRequests: 1,
 		},
 		template: [
-		'<p>{{value}} - {{desc}}</p>'
+		"<p>{{value}} - {{desc}}</p>"
 		],
 		engine: Hogan,
 		limit: 5
-	}).on('typeahead:selected', function (obj, datum, name) {
+	}).on("typeahead:selected", function (obj, datum, name) {
 		// Go to Endowment
-		hasher.setHash('/endowment/' + datum.id);
+		hasher.setHash("/endowment/" + datum.id);
 	});
 
 	// Show signup panel
@@ -139,7 +139,7 @@ var WebUI = function() {
 		$("#signup-name").val("");
 		$("#signup-email").val("");
 		$("#signup-password").val("");
-		$("#signup-accept-terms").attr('checked', false);
+		$("#signup-accept-terms").attr("checked", false);
 		$("#signup-panel").removeClass("hide");
 		e.preventDefault();
 	});
@@ -147,7 +147,7 @@ var WebUI = function() {
 	// Terms Button
 	$("#terms-btn").on("click", function (e) {
 		$("#terms-div").load("/ui/terms.html", function () {
-			$("#terms-modal").modal('show');
+			$("#terms-modal").modal("show");
 		});
 		e.preventDefault();
 	});
@@ -156,18 +156,18 @@ var WebUI = function() {
 	$("#make-wish-form").on("submit", function (e) {
 		var payload = {};
 		payload.wish_text = $("#wish").val();
-		payload.page = $('#app-container').attr('data-page-id');
+		payload.page = $("#app-container").attr("data-page-id");
 		log(payload);
 		var request = JSON.stringify(payload);
 		$.ajax({
-			url: server_url + '/api/wishes.json',
-			method: 'POST',
+			url: server_url + "/api/wishes.json",
+			method: "POST",
 			data: request,
 			dataType: "json",
 			contentType: "application/json"
 		}).done(function (data) {
 			growlSuccess("Thank you for your feedback! Got a wizard? Fork our code at <a href='https://github.com/giv2giv' target=_blank>GitHub</a> to grant wishes!");
-			$("#wish-modal").modal('hide');
+			$("#wish-modal").modal("hide");
 		}).fail(function (data) {
 			growlError("Opps! There was an error making this wish.");
 		});
@@ -184,17 +184,17 @@ var WebUI = function() {
 	// Signup Form
 	$("#signup-form").on("submit", function (e) {
 		$btn = $("#signup-btn");
-		$btn.button('loading');
+		$btn.button("loading");
 		var payload = {};
 		payload.email = $("#signup-email").val();
 		payload.password = $("#signup-password").val();
 		payload.name = $("#signup-name").val();
-		payload.accepted_terms = $("#signup-accept-terms").prop('checked');
+		payload.accepted_terms = $("#signup-accept-terms").prop("checked");
 
 		var request = JSON.stringify(payload);
 		$.ajax({
-			url: server_url + '/api/donors.json',
-			method: 'POST',
+			url: server_url + "/api/donors.json",
+			method: "POST",
 			data: request,
 			dataType: "json",
 			contentType: "application/json"
@@ -219,12 +219,12 @@ var WebUI = function() {
 				// Hide Signup
 				$("#signup-panel").addClass("hide");
 				// Set Cookie
-				$.cookie('session', data.session.session.token);
+				$.cookie("session", data.session.session.token);
 				startApplication();
-				$btn.button('reset');
+				$btn.button("reset");
 			}).fail(function (data) {
 				var res = JSON.parse(data.responseText);
-				$btn.button('reset');
+				$btn.button("reset");
 				if (res.message == "unauthorized") {
 					growlError("Incorrect Email or Password");
 				} else {
@@ -234,7 +234,7 @@ var WebUI = function() {
 			});
 		}).fail(function (data) {
 			var res = JSON.parse(data.responseText);
-			$btn.button('reset');
+			$btn.button("reset");
 			if (res.message == "unauthorized") {
 				growlError("Incorrect Email or Password");
 			} else if (res.message) {
@@ -253,7 +253,7 @@ var WebUI = function() {
 	$("#signin-form").on("submit", function (e) {
 		// Build Payload
 		$btn = $("#signin-btn");
-		$btn.button('loading');
+		$btn.button("loading");
 		var payload = JSON.stringify({
 			"email": $("#signin-email").val(),
 			"password": $("#signin-password").val()
@@ -271,11 +271,11 @@ var WebUI = function() {
 				}
 			});
 			// Set Cookie
-			$.cookie('session', data.session.session.token);
+			$.cookie("session", data.session.session.token);
 			startApplication();
-			$btn.button('reset');
+			$btn.button("reset");
 		}).fail(function (data) {
-			$btn.button('reset');
+			$btn.button("reset");
 			var res = JSON.parse(data.responseText);
 			if (res.message == "unauthorized") {
 				$("#signin-message").html("Incorrect Email or Password");
@@ -296,8 +296,8 @@ var WebUI = function() {
 			dataType: "json"
 		}).done(function (data) {
 			// Delete Cookie
-			$.removeCookie('session');
-			hasher.setHash('/signin');
+			$.removeCookie("session");
+			hasher.setHash("/signin");
 		});
 		e.preventDefault();
 	});
@@ -343,10 +343,7 @@ var WebUI = function() {
 	// This is only loaded on full page refresh or first visit
 	var startApplication = function (callback) {
 		log("WebUI: Starting Application");
-		if (!activeSession()) {
-			// Parse URL (Will Show Signin or Public Page)
-			hasher.setHash(window.location.hash);
-		} else {
+		if (activeSession()) {
 			// Get Donor Info
 			$.ajax({
 				url: server_url + "/api/donors.json",
@@ -358,19 +355,20 @@ var WebUI = function() {
 				// Load Current URL
 				log(window.location.hash);
 				if (window.location.hash === "#/signin" || window.location.hash === "#/signup" || window.location.hash === "" || window.location.hash === "#/") {
-					hasher.setHash('/dashboard');
+					crossroads.parse("/dashboard");
+					hasher.setHash("#dashboard");
 				} else {
 					hasher.setHash(window.location.hash);
 				}
 				// Facebook conversion tracking
 				var fb_param = {};
-				fb_param.pixel_id = '6017461958346';
-				fb_param.value = '0.00';
-				fb_param.currency = 'USD';
-				var fpw = document.createElement('script');
+				fb_param.pixel_id = "6017461958346";
+				fb_param.value = "0.00";
+				fb_param.currency = "USD";
+				var fpw = document.createElement("script");
 				fpw.async = true;
-				fpw.src = '//connect.facebook.net/en_US/fp.js';
-				var ref = document.getElementsByTagName('script')[0];
+				fpw.src = "//connect.facebook.net/en_US/fp.js";
+				var ref = document.getElementsByTagName("script")[0];
 				ref.parentNode.insertBefore(fpw, ref);
 				log(ref);
 				// Hide Signin
@@ -382,10 +380,13 @@ var WebUI = function() {
 			}).error(function (data) {
 				if (data.statusText === "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
-					$.removeCookie('session');
-					hasher.setHash('/signin');
+					$.removeCookie("session");
+					hasher.setHash("/signin");
 				}
 			});
+		} else {
+			// Parse URL (Will Show Signin or Public Page)
+			hasher.setHash(window.location.hash);
 		}
 		if (typeof callback === "function") {
 			// Call it, since we have confirmed it is callable
@@ -398,15 +399,15 @@ var WebUI = function() {
 	var activeSession = function () {
 		log("WebUI: Checking session.");
 		var status = false;
-		if ($.cookie('session') !== undefined) {
+		if ($.cookie("session") !== undefined) {
 			$.ajaxSetup({
 				beforeSend: function (xhr, settings) {
-					xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
+					xhr.setRequestHeader("Authorization", "Token token=" + $.cookie("session"));
 				}
 			});
 			$.ajax({
-				type: 'POST',
-				url: server_url + '/api/sessions/ping.json',
+				type: "POST",
+				url: server_url + "/api/sessions/ping.json",
 				async: false
 			}).done(function (data) {
 				log("WebUI: Session is good.");
@@ -423,7 +424,7 @@ var WebUI = function() {
 
 	// Nav Tabs
 	$(".private-nav a, .public-nav a").on("click", function (e) {
-		hasher.setHash($(this).attr('href'));
+		hasher.setHash($(this).attr("href"));
 		e.preventDefault();
 	});
 
@@ -451,17 +452,17 @@ var WebUI = function() {
 	};
 
 	// Landing Page Route
-	crossroads.addRoute('/', function () {
+	crossroads.addRoute("/", function () {
 		if (activeSession()) {
-			loadPage('/ui/endowments.html', function () {
-				$('#app-container').attr('data-page-id', 'endowments');
+			loadPage("/ui/endowments.html", function () {
+				$("#app-container").attr("data-page-id", "endowments");
 				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
 				// Load JS
 				EndowmentsUI.start.dispatch();
 			});
 		} else {
-			loadPage('/ui/landing.html', function () {
-				$('#app-container').attr('data-page-id', 'landing');
+			loadPage("/ui/landing.html", function () {
+				$("#app-container").attr("data-page-id", "landing");
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				LandingUI.start.dispatch(); // Load JS
 			});
@@ -469,7 +470,7 @@ var WebUI = function() {
 	});
 
 	// Signin Route
-	crossroads.addRoute('/signin', function () {
+	crossroads.addRoute("/signin", function () {
 		// Set Tabs
 		$(".public-nav").siblings().removeClass("active");
 		// Hide Signup Panel
@@ -479,7 +480,7 @@ var WebUI = function() {
 	});
 
 	// Sign-Up Route
-	crossroads.addRoute('/signup', function () {
+	crossroads.addRoute("/signup", function () {
 		// Set Tabs
 		$(".public-nav").siblings().removeClass("active");
 		// Hide Signin Panel
@@ -499,20 +500,20 @@ var WebUI = function() {
 	});
 
 	// Dashboard Route
-	crossroads.addRoute('/dashboard', function () {
+	crossroads.addRoute("/dashboard", function () {
 		if (activeSession()) {
-			loadPage('/ui/dashboard.html', function () {
-				$('#app-container').attr('data-page-id', 'dashboard');
+			loadPage("/ui/dashboard.html", function () {
+				$("#app-container").attr("data-page-id", "dashboard");
 				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
 				// DashboardUI.start.dispatch(); // Load JS
 			});
 		} else {
-			crossroads.parse('/signin');
+			crossroads.parse("/signin");
 		}
 	});
 
 	// Endowment Details Route
-	crossroads.addRoute('/endowment/{id}', function (id) {
+	crossroads.addRoute("/endowment/{id}", function (id) {
 		if (activeSession()) {
 			// Load Endowment Details First
 			$.ajax({
@@ -521,8 +522,8 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				loadPage('/ui/endowment_details.html', function () {
-					$('#app-container').attr('data-page-id', 'endowment-details');
+				loadPage("/ui/endowment_details.html", function () {
+					$("#app-container").attr("data-page-id", "endowment-details");
 					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
@@ -538,8 +539,8 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				loadPage('/ui/endowment_details.html', function () {
-					$('#app-container').attr('data-page-id', 'endowment-details');
+				loadPage("/ui/endowment_details.html", function () {
+					$("#app-container").attr("data-page-id", "endowment-details");
 					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
@@ -552,25 +553,25 @@ var WebUI = function() {
 	});
 
 	// Donor Route
-	crossroads.addRoute('/donor', function () {
+	crossroads.addRoute("/donor", function () {
 		if (activeSession()) {
-			loadPage('/ui/donor.html', function () {
-				$('#app-container').attr('data-page-id', 'donor');
+			loadPage("/ui/donor.html", function () {
+				$("#app-container").attr("data-page-id", "donor");
 				setPageMetadata(false, $("#donor-nav"), "giv2giv- Donor");
 				// Load JS
 				DonorUI.start.dispatch();
 			});
 		} else {
-			crossroads.parse('/signin');
+			crossroads.parse("/signin");
 		}
 	});
 
 	// Numbers Route
-	crossroads.addRoute('/numbers', function () {
+	crossroads.addRoute("/numbers", function () {
 		var navTab = activeSession() ? $("#numbers-nav") : $("#pub-numbers-nav");
 
-		loadPage('/ui/numbers.html', function () {
-			$('#app-container').attr('data-page-id', 'numbers');
+		loadPage("/ui/numbers.html", function () {
+			$("#app-container").attr("data-page-id", "numbers");
 			setPageMetadata(!activeSession(), navTab, "giv2giv - Numbers");
 			// Load JS
 			NumbersUI.start.dispatch();
@@ -582,7 +583,7 @@ var WebUI = function() {
 	crossroads.bypassed.add(function (request) {
 		log("WebUI: Route not found.");
 		log(request);
-		crossroads.parse('/dashboard');
+		crossroads.parse("/dashboard");
 	});
 
 	// Setup Hasher
@@ -593,19 +594,19 @@ var WebUI = function() {
 	hasher.initialized.add(parseHash);
 	hasher.changed.add(parseHash);
 	hasher.init();
-	hasher.prependHash = '';
+	hasher.prependHash = "";
 
 	if (typeof callback === "function") {
 		callback();
 	}
 
 	// Reload UI
-	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
+	// Some jQuery Selectors can"t delegate & need to be applied to dynamic HTML
 	function reloadUI() {
 		// Initialize tabs
-		$('[data-toggle="tabs"] a').click(function (e) {
+		$("[data-toggle='tabs'] a").click(function (e) {
 			e.preventDefault();
-			$(this).tab('show');
+			$(this).tab("show");
 		});
 	}
 
