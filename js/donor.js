@@ -75,7 +75,7 @@ function fetchPaymentAccounts(callback) {
 			});
 		}
 	}).fail(function(data) {
-		growlError("Opps! An error occured while loading your Payment Accounts.");
+		growlError("An error occured while loading your Payment Accounts.");
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {
@@ -103,7 +103,7 @@ function fetchDonorProfile(callback) {
 		$("#donor-profile-phone").val(data.donor.phone_number);
 	}).fail(function(data) {
 		log(data);
-		growlError("Opps! An error occured while loading your Donor Profile.");
+		growlError("An error occured while loading your Donor Profile.");
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {
@@ -170,7 +170,7 @@ function loadUI() {
 		}).fail(function(data) {
 			log(data);
 			$btn.button('reset');
-			growlError("Opps! An error occured while removing this payment account.");
+			growlError("An error occured while removing this payment account.");
 			$("#remove-payment-modal").modal("hide");
 		});
 		e.preventDefault();
@@ -282,7 +282,7 @@ function loadUI() {
 				}).fail(function(data) {
 					// Close Window
 					popup.close();
-					growlError('Opps! There was an error loading your Statement.');
+					growlError('There was an error loading your Statement.');
 			 });
 
 			// Get donation info
@@ -312,12 +312,12 @@ function loadUI() {
 				}).fail(function(data) {
 					// Close Window
 					popup.close();
-					growlError('Opps! There was an error loading your Statement.');
+					growlError('There was an error loading your Statement.');
 				});
 			}).fail(function(data) {
 				// Close Window
 				popup.close();
-				growlError('Opps! There was an error loading your Statement.');
+				growlError('There was an error loading your Statement.');
 			});
 		e.preventDefault();
 	});

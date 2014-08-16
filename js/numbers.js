@@ -40,7 +40,7 @@ function fetchStats(callback) {
 
 	}).fail(function(data) {
 			log(data);
-			growlError("Opps! An error occured while loading the Numbers.");
+			growlError("An error occured while loading the Numbers.");
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {

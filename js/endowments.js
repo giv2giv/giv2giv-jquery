@@ -69,7 +69,7 @@ function onDetails(endowment) {
 		}).fail(function(data) {
 			log(data);
 			$btn.button("reset");
-			growlError("Opps! There was an error subscribing to this endowment.");
+			growlError("There was an error subscribing to this endowment.");
 		});
 		e.preventDefault();
 	});
@@ -97,7 +97,7 @@ function onDetails(endowment) {
 				method: "GET"
 			}).done(function(data) {
 				if(data.length === 0) {
-					growlError("Please set up a payment account under Donors->Payment Accounts");
+					growlError("You can't subscribe until you set up a payment account under Account Settings -> Payment Accounts");
 					$("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
 					$("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
 				} else {
@@ -167,7 +167,7 @@ function onDetails(endowment) {
 			$("#unsubscribe-endowment-modal").modal("hide");
 		}).fail(function(data) {
 			$btn.button("reset");
-			growlError("Opps! There was an error unsubscribing from this endowment.");
+			growlError("There was an error unsubscribing from this endowment.");
 		});
 		e.preventDefault();
 	});
@@ -372,7 +372,7 @@ function endowmentSelectors() {
 		}).fail(function(data) {
 			log(data);
 			$btn.button('reset');
-			growlError("Opps! There was an error subscribing to this endowment.");
+			growlError("There was an error subscribing to this endowment.");
 		});
 		e.preventDefault();
 	});
@@ -399,7 +399,7 @@ function endowmentSelectors() {
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
-					growlError("Please set up a payment account under Donors->Payment Accounts");
+					growlError("You can't subscribe until you set up a payment account under Account Settings -> Payment Accounts");
 					$("#subscribe-endowment-payment-accounts").append("<option>No Payment Accounts</option>");
 					$("#subscribe-endowment-payment-accounts").attr("disabled", "disabled");
 				} else {
@@ -478,7 +478,7 @@ function endowmentSelectors() {
 
 		}).fail(function(data) {
 			$btn.button('reset');
-			growlError("Opps! There was an error unsubscribing from this endowment.");
+			growlError("There was an error unsubscribing from this endowment.");
 		});
 		e.preventDefault();
 		});
@@ -535,7 +535,7 @@ function fetchSubscribedEndowments(callback) {
 		}
 	}).fail(function(data) {
 		log(data);
-		growlError("Oops! An error occured while loading your Subscribed Endowments.");
+		growlError("An error occured while loading your Subscribed Endowments.");
 	}).always(function(data) {
 		// Callbacks
 		if(typeof callback === "function") {
@@ -642,7 +642,7 @@ function fetchFeaturedEndowments(callback) {
 		}
 	}).fail(function(data) {
 		log(data);
-		growlError("Opps! An error occured while loading the Featured Endowments.");
+		growlError("An error occured while loading the Featured Endowments.");
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {
@@ -680,6 +680,6 @@ function fetchEndowmentDonations(id, callback) {
 			callback();
 		}
 	}).fail(function(data) {
-		growlError("Opps! There was an error loading your donations.");
+		growlError("There was an error loading your donations.");
 	});
 }
