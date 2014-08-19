@@ -91,6 +91,10 @@ nav.navbar {
 		display: block;
 	}
 
+.nav-pills {
+	margin-bottom: 1em;
+}
+
 .fixed-column {
 	width: 768px;
 	margin: 0 auto;
