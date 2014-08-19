@@ -116,31 +116,16 @@ nav.navbar {
 	}
 
 /* Sign Up and Sign In Pages */
-
 .registration {
-
+	margin-bottom: 2em;
 }
-	.registration > div {
-		background-color: #fff;
-		margin-top: 2em;
-		margin-bottom: 2em;
-		padding: 40px;
-		background-color: #fbfbfb;
-		border-radius: 2px;
-		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-		-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-	}
-	#signup-nav a, #signin-nav a {
-		padding: 7px 0 7px 3px;
-	}
+#signup-nav a, #signin-nav a {
+	padding: 7px 0 7px 3px;
+}
 
 /* Endowment Cards */
 .card {
-	width: 384px; /*384 = 768/2*/
-	display: inline-block;
 	margin-top: 2em;
-	margin-left: 1em;
 	padding: 40px;
 	vertical-align: top;
 	background-color: #fbfbfb;
@@ -148,7 +133,11 @@ nav.navbar {
 	-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-
+}
+.card-fixed {
+	width: 384px; /*384 = 768/2*/
+	display: inline-block;
+	margin-left: 1em;
 }
 	.card-heading {
 		margin-top: 0;
@@ -308,7 +297,6 @@ nav.navbar {
 .creditly-wrapper .card-type {
 	margin-top: 1.7em;
 }
-
 
 .twitter-typeahead .tt-query {
 	margin-bottom: 0;

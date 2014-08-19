@@ -504,7 +504,7 @@ var WebUI = function() {
 			loadPage("/ui/dashboard.html", function () {
 				$("#app-container").attr("data-page-id", "dashboard");
 				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
-				// DashboardUI.start.dispatch(); // Load JS
+				DashboardUI.start.dispatch(); // Load JS
 			});
 		} else {
 			crossroads.parse("/signin");

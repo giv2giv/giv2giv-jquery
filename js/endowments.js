@@ -1,5 +1,4 @@
 // Endowments UI
-// Michael Thomas, 2014
 
 // Signal Hook
 var EndowmentsUI = {
