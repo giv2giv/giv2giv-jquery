@@ -2,7 +2,7 @@
 
 // Signal Hook
 var LandingUI = {
-	start : new signals.Signal() 
+	start : new signals.Signal()
 };
 
 // Add Listener
