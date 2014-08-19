@@ -6,5 +6,4 @@
 - Pick better fonts and normalize fonts (only two fonts)
 - Let the user keep giving the tree money even after they've already given money
 - CSS for gravatar in logged-in navbar
-- Better explain how endowments link to charities. "Donate to an endowment" instead of "Donate to giv2giv" on landing page Step 1 (Change this in two places, (1) the animation and (2) the longer, "How it works" section)
-- Search for ENDOWMENTS on landing page, not CHARITIES
+- Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead
