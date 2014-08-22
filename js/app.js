@@ -388,7 +388,7 @@ var WebUI = function() {
 			hasher.setHash(window.location.hash);
 		}
 		if (typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
+			
 			callback();
 		}
 	};

@@ -538,7 +538,7 @@ function fetchSubscribedEndowments(callback) {
 	}).always(function(data) {
 		// Callbacks
 		if(typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
+			
 			callback();
 		}
 	});
@@ -645,7 +645,7 @@ function fetchFeaturedEndowments(callback) {
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
+			
 			callback();
 		}
 	});
@@ -675,7 +675,7 @@ function fetchEndowmentDonations(id, callback) {
 		}
 		// Callbacks
 		if(typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
+			
 			callback();
 		}
 	}).fail(function(data) {

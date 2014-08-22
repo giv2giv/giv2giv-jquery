@@ -11,11 +11,24 @@ DashboardUI.start.add(onStart);
 
 // (Re)Start Dashboard UI
 function onStart() {
-	// TODO: Rename this function
-	// main();
+	fetchDonorData();
 }
 
 function fetchDonorData() {
+	$.ajax({
+		url: server_url + '/api/donors/subscriptions.json',
+		type: 'GET',
+		contentType: 'application/json',
+		dataType: 'json'
+	})
+	.done(function(data) {
+		displayPie(data);
+	})
+	.fail(function(data) {
+		log(data);
+		growlError('An error occured while loading the dashboard.');
+	});
+
 	$.ajax({
 		url: server_url + '/api/donors/balance_information.json',
 		type: 'GET',
@@ -23,62 +36,69 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-
+		console.log(data)
+		displayBar(data);
 	})
 	.fail(function(data) {
 		log(data);
 		growlError('An error occured while loading the dashboard.');
-	});	
+	});
 }
 
-// function main() {
-// 	var data = {
-// 		labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-// 		datasets: [
-// 			{
-// 				label: 'My First dataset',
-// 				fillColor: 'rgba(220,220,220,0.5)',
-// 				strokeColor: 'rgba(220,220,220,0.8)',
-// 				highlightFill: 'rgba(220,220,220,0.75)',
-// 				highlightStroke: 'rgba(220,220,220,1)',
-// 				data: [65, 59, 80, 81, 56, 55, 40]
-// 			},
-// 			{
-// 				label: 'My Second dataset',
-// 				fillColor: 'rgba(151,187,205,0.5)',
-// 				strokeColor: 'rgba(151,187,205,0.8)',
-// 				highlightFill: 'rgba(151,187,205,0.75)',
-// 				highlightStroke: 'rgba(151,187,205,1)',
-// 				data: [28, 48, 40, 19, 86, 27, 90]
-// 			}
-// 		]
-// 	};
-// 	var ctx = $('#barChart').get(0).getContext('2d');
-// 	var options = {
-// 		responsive: true,
-// 		//Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-//     scaleBeginAtZero : true,
+function displayBar(data) {
 
-//     //Boolean - Whether grid lines are shown across the chart
-//     scaleShowGridLines : true,
+}
 
-//     //String - Colour of the grid lines
-//     scaleGridLineColor : 'rgba(0,0,0,.05)',
+// @param subs is an array of endowment objects
+function displayPie(subs) {
+	var endowmentData = [];
 
-//     //Number - Width of the grid lines
-//     scaleGridLineWidth : 1,
+	var colors = [
+		"#2DC940",
+		"#2697A1",
+		"#FF9639",
+		"#FF4339",
+		"#009913",
+		"#016E78",
+		"#C55D00",
+		"#C50A00",
+		"#97F9A3",
+		"#95ECF4",
+		"#FFCA9A",
+		"#FF9F9A",
+		"#00780F",
+		"#01565E",
+		"#9B4900",
+		"#9B0800"
+	];
+	var colorsLight = [
+		"#47e35a",
+		"#40b1bb",
+		"#ffb053",
+		"#ff5d53",
+		"#1ab32d",
+		"#1b8892",
+		"#df771a",
+		"#df241a",
+		"#b1ffbd",
+		"#afffff",
+		"#ffe4b4",
+		"#ffb9b4",
+		"#1a9229",
+		"#1b7078",
+		"#b5631a",
+		"#b5221a"
+	];
 
-//     //Boolean - If there is a stroke on each bar
-//     barShowStroke : true,
+	for (var i = 0; i < subs.length; i++) {
+		endowmentData[i] = {};
+		endowmentData[i].label = subs[i].name;
+		endowmentData[i].value = subs[i].my_balances.my_endowment_balance;
+		endowmentData[i].color = colors[i % colors.length];
+		endowmentData[i].highlight = colorsLight[i % colorsLight.length];
+	}
 
-//     //Number - Pixel width of the bar stroke
-//     barStrokeWidth : 2,
-
-//     //Number - Spacing between each of the X value sets
-//     barValueSpacing : 5,
-
-//     //Number - Spacing between data sets within X values
-//     barDatasetSpacing : 1,
-// 	};
-// 	var myBarChart = new Chart(ctx).Bar(data, options);
-// }
+	options = {};
+	var ctx = $('#endowmentPie').get(0).getContext('2d');
+	var endowmentPie = new Chart(ctx).Pie(endowmentData, options);
+}

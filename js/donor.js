@@ -78,7 +78,7 @@ function fetchPaymentAccounts(callback) {
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
+			
 			callback();
 		}
 	});
@@ -106,7 +106,7 @@ function fetchDonorProfile(callback) {
 	}).always(function() {
 		// Callbacks
 		if(typeof callback === "function") {
-			// Call it, since we have confirmed it is callable
+			
 			callback();
 		}
 	});

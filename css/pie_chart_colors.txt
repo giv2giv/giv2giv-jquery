@@ -1,0 +1,16 @@
+#2DC940 = rgb( 45,201, 64) = rgba( 45,201, 64,1) ; lightened 10% = #47e35a
+#2697A1 = rgb( 38,151,161) = rgba( 38,151,161,1) ; lightened 10% = #40b1bb
+#FF9639 = rgb(255,150, 57) = rgba(255,150, 57,1) ; lightened 10% = #ffb053
+#FF4339 = rgb(255, 67, 57) = rgba(255, 67, 57,1) ; lightened 10% = #ff5d53
+#009913 = rgb(  0,153, 19) = rgba(  0,153, 19,1) ; lightened 10% = #1ab32d
+#016E78 = rgb(  1,110,120) = rgba(  1,110,120,1) ; lightened 10% = #1b8892
+#C55D00 = rgb(197, 93,  0) = rgba(197, 93,  0,1) ; lightened 10% = #df771a
+#C50A00 = rgb(197, 10,  0) = rgba(197, 10,  0,1) ; lightened 10% = #df241a
+#97F9A3 = rgb(151,249,163) = rgba(151,249,163,1) ; lightened 10% = #b1ffbd
+#95ECF4 = rgb(149,236,244) = rgba(149,236,244,1) ; lightened 10% = #afffff
+#FFCA9A = rgb(255,202,154) = rgba(255,202,154,1) ; lightened 10% = #ffe4b4
+#FF9F9A = rgb(255,159,154) = rgba(255,159,154,1) ; lightened 10% = #ffb9b4
+#00780F = rgb(  0,120, 15) = rgba(  0,120, 15,1) ; lightened 10% = #1a9229
+#01565E = rgb(  1, 86, 94) = rgba(  1, 86, 94,1) ; lightened 10% = #1b7078
+#9B4900 = rgb(155, 73,  0) = rgba(155, 73,  0,1) ; lightened 10% = #b5631a
+#9B0800 = rgb(155,  8,  0) = rgba(155,  8,  0,1) ; lightened 10% = #b5221a
