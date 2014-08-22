@@ -75,6 +75,9 @@ function displayBar(data) {
 			name: '$',
 			data: donationData
 		}],
+		legend: {
+			enabled: false
+		},
 		tooltip: {
 			formatter: function() {
 				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -99,13 +102,26 @@ function displayPie(subs) {
 	$('#endowmentPie').highcharts({
 		chart: {
 			type: 'pie',
-			backgroundColor: '#fbfbfb'
+			backgroundColor: '#fbfbfb',
 		},
 		title: { text: 'Endowment Mix' },
 		series: [{
 			name: '$',
-			data: endowmentData
+			data: endowmentData,
 		}],
+		plotOptions: {
+			pie: {
+				dataLabels: {
+					enabled: false
+				},
+				showInLegend: true
+			}
+		},
+		tooltip: {
+			formatter: function() {
+				return this.point.name + '<br/>$' + this.point.y.toFixed(2);
+			}
+		},
 		credits: { enabled: false }
 	});
 }
