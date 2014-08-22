@@ -16,6 +16,20 @@ function onStart() {
 
 function fetchDonorData() {
 	$.ajax({
+		url: server_url + '/api/donors/donations.json',
+		type: 'GET',
+		contentType: 'application/json',
+		dataType: 'json'
+	})
+	.done(function(data) {
+		displayBar(data);
+	})
+	.fail(function(data) {
+		log(data);
+		growlError('An error occured while loading the dashboard.');
+	});
+
+	$.ajax({
 		url: server_url + '/api/donors/subscriptions.json',
 		type: 'GET',
 		contentType: 'application/json',
@@ -28,25 +42,24 @@ function fetchDonorData() {
 		log(data);
 		growlError('An error occured while loading the dashboard.');
 	});
-
-	$.ajax({
-		url: server_url + '/api/donors/balance_information.json',
-		type: 'GET',
-		contentType: 'application/json',
-		dataType: 'json'
-	})
-	.done(function(data) {
-		console.log(data)
-		displayBar(data);
-	})
-	.fail(function(data) {
-		log(data);
-		growlError('An error occured while loading the dashboard.');
-	});
 }
 
 function displayBar(data) {
+	var donationData = {};
 
+	donationData.labels = ["Total Donations"];
+	donationData.datasets = [{
+		label: "Total Donations",
+		fillColor: "#2DC940",
+		strokeColor: "#009913",
+		highlightFill: "#47e35a",
+		highlightStroke: "#1ab32d",
+		data: [parseFloat(data.total)]
+	}];
+
+	options = {};
+	var ctx = $('#donationChart').get(0).getContext('2d');
+	var donationChart = new Chart(ctx).Bar(donationData, options);
 }
 
 // @param subs is an array of endowment objects
@@ -98,7 +111,13 @@ function displayPie(subs) {
 		endowmentData[i].highlight = colorsLight[i % colorsLight.length];
 	}
 
-	options = {};
+	options = {
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\">" +
+		"<% for (var i=0; i<segments.length; i++){%>" +
+			"<li><span style=\"background-color:<%=segments[i].fillColor%>\"></span>" +
+			"<%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+	};
 	var ctx = $('#endowmentPie').get(0).getContext('2d');
 	var endowmentPie = new Chart(ctx).Pie(endowmentData, options);
+	$('#endowmentPie').after(endowmentPie.generateLegend());
 }

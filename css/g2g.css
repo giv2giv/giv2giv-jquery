@@ -308,7 +308,6 @@ nav.navbar {
 .tt-hint {
 	background-color: transparent !important;
 }
-
 .tt-dropdown-menu {
 	min-width: 160px;
 	margin-top: 2px;
@@ -317,12 +316,10 @@ nav.navbar {
 	border: 1px solid #ccc;
 	border: 1px solid rgba(0,0,0,.2);
 }
-
 .tt-suggestion {
 	display: block;
 	padding: 3px 20px;
 }
-
 .tt-suggestion.tt-is-under-cursor {
 	color: #fff;
 	background-color: #0081c2;
@@ -334,14 +331,29 @@ nav.navbar {
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
 }
-
 .tt-suggestion.tt-is-under-cursor a {
 	color: #fff;
 }
-
 .tt-suggestion p {
 	margin: 0;
 }
+
+/* Dashboard CSS */
+.pie-legend {
+	padding: 0;
+	list-style: none;
+}
+	.pie-legend li {
+		line-height: 150%;
+	}
+	.pie-legend li span {
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+		margin-right: 0.5em;
+		vertical-align: top;
+		margin-top: 2px;
+	}
 
 /* Landing Page CSS */
 #splash-image {
