@@ -45,28 +45,73 @@ function fetchDonorData() {
 }
 
 function displayBar(data) {
-	var donationData = {};
+	var donationData = [];
+	var runningTotal = 0;
+	for (var i = 0; i < data.donations.length; i++) {
+		runningTotal += parseFloat(data.donations[i].net_amount);
+		donationData[i] = {};
+		donationData[i].x = new Date(data.donations[i].created_at * 1000);
+		donationData[i].y = runningTotal;
+	}
 
-	donationData.labels = ["Total Donations"];
-	donationData.datasets = [{
-		label: "Total Donations",
-		fillColor: "#2DC940",
-		strokeColor: "#009913",
-		highlightFill: "#47e35a",
-		highlightStroke: "#1ab32d",
-		data: [parseFloat(data.total)]
-	}];
-
-	options = {};
-	var ctx = $('#donationChart').get(0).getContext('2d');
-	var donationChart = new Chart(ctx).Bar(donationData, options);
+	$('#donationHistory').highcharts({
+		chart: {
+			type: 'line',
+			backgroundColor: '#fbfbfb'
+		},
+		title: { text: 'Cumulative Donation History' },
+		xAxis: {
+			type: 'datetime',
+			title: {
+				text: 'Date'
+			}
+		},
+		yAxis: {
+			title: {
+				text: '($ USD)'
+			}
+		},
+		series: [{
+			name: '$',
+			data: donationData
+		}],
+		tooltip: {
+			formatter: function() {
+				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+				var month = months[this.point.x.getMonth() - 1];
+				return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + '<br/>$' + this.point.y.toFixed(2);
+			}
+		},
+		credits: { enabled: false }
+	});
 }
 
 // @param subs is an array of endowment objects
 function displayPie(subs) {
 	var endowmentData = [];
 
-	var colors = [
+	for (var i = 0; i < subs.length; i++) {
+		endowmentData[i] = {};
+		endowmentData[i].name = subs[i].name;
+		endowmentData[i].y = subs[i].my_balances.my_endowment_balance;
+	}
+
+	$('#endowmentPie').highcharts({
+		chart: {
+			type: 'pie',
+			backgroundColor: '#fbfbfb'
+		},
+		title: { text: 'Endowment Mix' },
+		series: [{
+			name: '$',
+			data: endowmentData
+		}],
+		credits: { enabled: false }
+	});
+}
+
+Highcharts.setOptions({
+	colors: [
 		"#2DC940",
 		"#2697A1",
 		"#FF9639",
@@ -83,41 +128,5 @@ function displayPie(subs) {
 		"#01565E",
 		"#9B4900",
 		"#9B0800"
-	];
-	var colorsLight = [
-		"#47e35a",
-		"#40b1bb",
-		"#ffb053",
-		"#ff5d53",
-		"#1ab32d",
-		"#1b8892",
-		"#df771a",
-		"#df241a",
-		"#b1ffbd",
-		"#afffff",
-		"#ffe4b4",
-		"#ffb9b4",
-		"#1a9229",
-		"#1b7078",
-		"#b5631a",
-		"#b5221a"
-	];
-
-	for (var i = 0; i < subs.length; i++) {
-		endowmentData[i] = {};
-		endowmentData[i].label = subs[i].name;
-		endowmentData[i].value = subs[i].my_balances.my_endowment_balance;
-		endowmentData[i].color = colors[i % colors.length];
-		endowmentData[i].highlight = colorsLight[i % colorsLight.length];
-	}
-
-	options = {
-		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\">" +
-		"<% for (var i=0; i<segments.length; i++){%>" +
-			"<li><span style=\"background-color:<%=segments[i].fillColor%>\"></span>" +
-			"<%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-	};
-	var ctx = $('#endowmentPie').get(0).getContext('2d');
-	var endowmentPie = new Chart(ctx).Pie(endowmentData, options);
-	$('#endowmentPie').after(endowmentPie.generateLegend());
-}
+	]
+});
