@@ -22,7 +22,7 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		displayBar(data);
+		donationHistory(data);
 	})
 	.fail(function(data) {
 		log(data);
@@ -36,7 +36,24 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		displayPie(data);
+		currentEndowments(data);
+	})
+	.fail(function(data) {
+		log(data);
+		growlError('An error occured while loading the dashboard.');
+	});
+
+	$.ajax({
+		url: server_url + '/api/endowment/my_endowments.json',
+		type: 'GET',
+		contentType: 'application/json',
+		dataType: 'json',
+		beforeSend: function(xhr, settings) {
+			xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
+		}
+	})
+	.done(function(data) {
+		pastEndowments(data);
 	})
 	.fail(function(data) {
 		log(data);
@@ -44,7 +61,7 @@ function fetchDonorData() {
 	});
 }
 
-function displayBar(data) {
+function donationHistory(data) {
 	var donationData = [];
 	var runningTotal = 0;
 	for (var i = 0; i < data.donations.length; i++) {
@@ -90,7 +107,7 @@ function displayBar(data) {
 }
 
 // @param subs is an array of endowment objects
-function displayPie(subs) {
+function currentEndowments(subs) {
 	var endowmentData = [];
 
 	for (var i = 0; i < subs.length; i++) {
@@ -99,12 +116,49 @@ function displayPie(subs) {
 		endowmentData[i].y = subs[i].my_balances.my_endowment_balance;
 	}
 
-	$('#endowmentPie').highcharts({
+	$('#currentEndowments').highcharts({
 		chart: {
 			type: 'pie',
 			backgroundColor: '#fbfbfb',
 		},
-		title: { text: 'Endowment Mix' },
+		title: { text: 'My Active Donations' },
+		series: [{
+			name: '$',
+			data: endowmentData,
+		}],
+		plotOptions: {
+			pie: {
+				dataLabels: {
+					enabled: false
+				},
+				showInLegend: true
+			}
+		},
+		tooltip: {
+			formatter: function() {
+				return this.point.name + '<br/>$' + this.point.y.toFixed(2);
+			}
+		},
+		credits: { enabled: false }
+	});
+}
+
+// @param subs is an array of endowment objects
+function pastEndowments(subs) {
+	var endowmentData = [];
+
+	for (var i = 0; i < subs.length; i++) {
+		endowmentData[i] = {};
+		endowmentData[i].name = subs[i].name;
+		endowmentData[i].y = subs[i].my_balances.my_endowment_balance;
+	}
+
+	$('#pastEndowments').highcharts({
+		chart: {
+			type: 'pie',
+			backgroundColor: '#fbfbfb',
+		},
+		title: { text: 'All My Donations' },
 		series: [{
 			name: '$',
 			data: endowmentData,
@@ -146,3 +200,4 @@ Highcharts.setOptions({
 		"#9B0800"
 	]
 });
+

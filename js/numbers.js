@@ -20,7 +20,9 @@ function fetchStats(callback) {
 		method: 'GET',
 		contentType: "application/json",
 		dataType: "json"
-	}).done(function(data) {	  	
+	}).done(function(data) {	 
+	
+
 		var donor_current_balance = '$' + data.donor_current_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var donor_total_amount_of_donations = '$' + data.donor_total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var donor_total_amount_of_grants = '$' + data.donor_total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
