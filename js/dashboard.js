@@ -36,7 +36,14 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		currentEndowments(data);
+		endowmentsPie(data, $('#currentEndowments'), 'My Active Donations', function(ed, subs){
+			for (var i = 0; i < subs.length; i++) {
+				ed[i] = {};
+				ed[i].id = subs[i].endowment_id;
+				ed[i].name = subs[i].name;
+				ed[i].y = subs[i].my_balances.my_endowment_balance;
+			}
+		});
 	})
 	.fail(function(data) {
 		log(data);
@@ -53,7 +60,15 @@ function fetchDonorData() {
 		}
 	})
 	.done(function(data) {
-		pastEndowments(data);
+		endowmentsPie(data, $('#pastEndowments'), 'All My Donations', function(ed, subs) {
+			var subs2 = subs.endowments;
+			for (var i = 0; i < subs2.length; i++) {
+				ed[i] = {};
+				ed[i].id = subs2[i].id;
+				ed[i].name = subs2[i].name;
+				ed[i].y = subs2[i].my_balances.my_endowment_balance;
+			}
+		});
 	})
 	.fail(function(data) {
 		log(data);
@@ -107,21 +122,17 @@ function donationHistory(data) {
 }
 
 // @param subs is an array of endowment objects
-function currentEndowments(subs) {
+function endowmentsPie(subs, DOMnode, subs_text, extractData) {
 	var endowmentData = [];
 
-	for (var i = 0; i < subs.length; i++) {
-		endowmentData[i] = {};
-		endowmentData[i].name = subs[i].name;
-		endowmentData[i].y = subs[i].my_balances.my_endowment_balance;
-	}
+	extractData(endowmentData, subs);
 
-	$('#currentEndowments').highcharts({
+	DOMnode.highcharts({
 		chart: {
 			type: 'pie',
 			backgroundColor: '#fbfbfb',
 		},
-		title: { text: 'My Active Donations' },
+		title: { text: subs_text },
 		series: [{
 			name: '$',
 			data: endowmentData,
@@ -131,44 +142,15 @@ function currentEndowments(subs) {
 				dataLabels: {
 					enabled: false
 				},
-				showInLegend: true
-			}
-		},
-		tooltip: {
-			formatter: function() {
-				return this.point.name + '<br/>$' + this.point.y.toFixed(2);
-			}
-		},
-		credits: { enabled: false }
-	});
-}
-
-// @param subs is an array of endowment objects
-function pastEndowments(subs) {
-	var endowmentData = [];
-
-	for (var i = 0; i < subs.length; i++) {
-		endowmentData[i] = {};
-		endowmentData[i].name = subs[i].name;
-		endowmentData[i].y = subs[i].my_balances.my_endowment_balance;
-	}
-
-	$('#pastEndowments').highcharts({
-		chart: {
-			type: 'pie',
-			backgroundColor: '#fbfbfb',
-		},
-		title: { text: 'All My Donations' },
-		series: [{
-			name: '$',
-			data: endowmentData,
-		}],
-		plotOptions: {
-			pie: {
-				dataLabels: {
-					enabled: false
-				},
-				showInLegend: true
+				showInLegend: true,
+				events: {
+					click: function(e) {
+						crossroads.parse("/endowment/" + e.point.id);
+						// TODO: Making the URL update correctly via crossroads
+						// TODO: Make the back button work as it should
+						history.pushState(null, null, "/endowment/" + e.point.id);
+					}
+				}
 			}
 		},
 		tooltip: {
