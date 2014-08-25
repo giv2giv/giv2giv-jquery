@@ -33,9 +33,15 @@
 					<input type="text" id="endowment-name" placeholder="Endowment Name" class="form-control">
 					<span class="help-block">Your endowment name will be what people search on. Be creative!</span>
 				</div>
+				<h4>Charities</h4>
 				<div class="form-group">
-					<label for="endowment-min-donation">Minimum Monthly Donation Amount</label>
-					<input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount" class="form-control">
+					<label for="add-endowment-charities">Charities</label>
+					<input type='hidden' id="add-endowment-charities">
+				</div>
+				<div class="form-group">
+					<button class="btn btn-default">Narrow By City</button>
+					<label for="charity-city">Charity City</label>
+					<input type='text' id="charity-city" class="form-control">
 				</div>
 				<div class="radio">
 					<strong>Visibility</strong><br/>
@@ -52,15 +58,6 @@
 					<label for="endowment-description">Description</label>
 					<textarea id="endowment-description" rows="3" class="form-control"></textarea>
 						<span class="help-block">Describe the purpose for your endowment - The more compelling you are the more donations your causes will receive!</span>
-				</div>
-				<h4>Charities</h4>
-				<div class="form-group">
-					<label for="charity-city">City</label>
-					<input type='text' id="charity-city" class="form-control">
-				</div>
-				<div class="form-group">
-					<label for="add-endowment-charities">Charities</label>
-					<input type='hidden' id="add-endowment-charities">
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -80,11 +77,6 @@
 				<h3 id="subscribe-endowment-header">Subscribe to </h3>
 			</div>
 			<div class="modal-body">
-				<p>The minimum donation amount for this endowment is <strong id="subscribe-endowment-min-donation"></strong>.</p>
-				<div class="form-group">
-					<label for="subscribe-endowment-donation">Monthly Donation Amount</label>
-					<input type="text" id="subscribe-endowment-donation" placeholder="Monthly Donation Amount" class="form-control">
-				</div>
 				<div class="form-group">
 					<label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
 					<select id="subscribe-endowment-payment-accounts">

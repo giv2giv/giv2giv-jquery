@@ -86,10 +86,9 @@ function onDetails(endowment) {
 		}).done(function(data) {
 			// Clean & Prep Modal
 			$("#confirm-subscribe-endowment").attr("data-id", data.endowment.id);
-			$("#subscribe-endowment-modal #subscribe-endowment-payment-accounts").html("");
-			$("#subscribe-endowment-modal #subscribe-endowment-donation").val("");
-			$("#subscribe-endowment-modal #subscribe-endowment-header").html("Subscribe to " + data.endowment.name);
-			$("#subscribe-endowment-modal #subscribe-endowment-min-donation").html("$" + data.endowment.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+			$("#subscribe-endowment-payment-accounts").html("");
+			$("#subscribe-endowment-donation").val("");
+			$("#subscribe-endowment-header").html("Subscribe to " + data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
 				url: server_url + "/api/donors/payment_accounts.json",
@@ -136,9 +135,8 @@ function onDetails(endowment) {
 		}).done(function(data) {
 			log(data);
 			// Clean & Prep Modal
-			// $("#unsubscribe-endowment-modal #unsubscribe-endowment-donation").val("");
-			$("#unsubscribe-endowment-modal #unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
-			// $("#unsubscribe-endowment-modal #unsubscribe-endowment-min-donation").html("$" + data.endowment.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,"));
+			// $("#unsubscribe-endowment-donation").val("");
+			$("#unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
 			// Set Confirm Button
 			$("#confirm-unsubscribe-endowment").attr("data-id", data.endowment.my_balances.my_subscription_id);
 			// Now Show Modal
@@ -278,7 +276,6 @@ function endowmentSelectors() {
 		// Payload
 		var payload = {};
 		payload.name = $("#add-endowment-modal #endowment-name").val();
-		payload.minimum_donation_amount = $("#add-endowment-modal #endowment-min-donation").val();
 		payload.visibility = $("#add-endowment-modal input[name='visibility-radios']:checked").val();
 
 		if($("#add-endowment-modal #endowment-description").val().length > 0) {
@@ -388,10 +385,9 @@ function endowmentSelectors() {
 			method: 'GET'
 		}).done(function(data) {
 			// Clean & Prep Modal
-			$("#subscribe-endowment-modal #subscribe-endowment-payment-accounts").html("");
-			$("#subscribe-endowment-modal #subscribe-endowment-donation").val("");
-			$("#subscribe-endowment-modal #subscribe-endowment-header").html("Subscribe to " + data.endowment.name);
-			$("#subscribe-endowment-modal #subscribe-endowment-min-donation").html("$" + data.endowment.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+			$("#subscribe-endowment-payment-accounts").html("");
+			$("#subscribe-endowment-donation").val("");
+			$("#subscribe-endowment-header").html("Subscribe to " + data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
 				url: server_url + '/api/donors/payment_accounts.json',
@@ -439,9 +435,7 @@ function endowmentSelectors() {
 			log(data);
 
 			// Clean & Prep Modal
-			// $("#unsubscribe-endowment-modal #unsubscribe-endowment-donation").val("");
-			$("#unsubscribe-endowment-modal #unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
-			// $("#unsubscribe-endowment-modal #unsubscribe-endowment-min-donation").html("$" + data.endowment.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+			$("#unsubscribe-endowment-header").html("Unsubscribe to " + data.endowment.name);
 			// Set Confirm Button
 			$("#confirm-unsubscribe-endowment").attr("data-id", data.endowment.my_balances.my_subscription_id);
 			// Now Show Modal
@@ -561,12 +555,10 @@ function getCardHTML(sub, featured) {
 	if (featured) {
 		cardBody += "<div class='desc'><strong>"+sub.global_balances.endowment_donations_count+"</strong> individual donations.</div>";
 	}
-	console.log(sub)
 	// Endowment Balance
 	cardBody += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
 	if (featured) {
 		// Donation Amount
-		cardBody += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" (per-month)</strong></div>";
 		// Endowment Balance & Donations
 		cardBody += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
 	} else {
@@ -574,7 +566,6 @@ function getCardHTML(sub, featured) {
 		// Endowment Balance & Donations
 		cardBody += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
 		// Donation Amount
-		cardBody += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.my_balances.my_subscription_type+")</strong></div>";
 	}
 	// Donor Balance
 	cardBody += "<div class='desc'>My Current Balance: <strong>$"+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
