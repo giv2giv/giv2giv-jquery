@@ -52,6 +52,9 @@ footer {
 code {
 	font-size: 80%;
 }
+.nobreak {
+	white-space: nowrap;
+}
 
 nav.navbar {
 	margin-bottom: 0;

@@ -1,9 +1,7 @@
 - Landing Page
 	- Add FB / Twitter Links
-	- Make the tree grow?
 	- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
 - Terms of Service
 - Pick better fonts and normalize fonts (only two fonts)
-- Let the user keep giving the tree money even after they've already given money
 - CSS for gravatar in logged-in navbar
 - Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead

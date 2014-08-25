@@ -15,8 +15,9 @@ function onStart() {
 }
 
 function fetchDonorData() {
+	// First ajax call
 	$.ajax({
-		url: server_url + '/api/donors/donations.json',
+		url: server_url + '/api/donors/balance_information.json',
 		type: 'GET',
 		contentType: 'application/json',
 		dataType: 'json'
@@ -29,6 +30,7 @@ function fetchDonorData() {
 		growlError('An error occured while loading the dashboard.');
 	});
 
+	// Second ajax call
 	$.ajax({
 		url: server_url + '/api/donors/subscriptions.json',
 		type: 'GET',
@@ -50,6 +52,7 @@ function fetchDonorData() {
 		growlError('An error occured while loading the dashboard.');
 	});
 
+	// Third ajax call
 	$.ajax({
 		url: server_url + '/api/endowment/my_endowments.json',
 		type: 'GET',
@@ -101,7 +104,8 @@ function donationHistory(data) {
 		yAxis: {
 			title: {
 				text: '($ USD)'
-			}
+			},
+			min: 0
 		},
 		series: [{
 			name: '$',
@@ -122,7 +126,7 @@ function donationHistory(data) {
 }
 
 // @param subs is an array of endowment objects
-function endowmentsPie(subs, DOMnode, subs_text, extractData) {
+function endowmentsPie(subs, DOMnode, titleText, extractData) {
 	var endowmentData = [];
 
 	extractData(endowmentData, subs);
@@ -132,7 +136,7 @@ function endowmentsPie(subs, DOMnode, subs_text, extractData) {
 			type: 'pie',
 			backgroundColor: '#fbfbfb',
 		},
-		title: { text: subs_text },
+		title: { text: titleText },
 		series: [{
 			name: '$',
 			data: endowmentData,
