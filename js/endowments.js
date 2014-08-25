@@ -505,7 +505,7 @@ function fetchSubscribedEndowments(callback) {
 		var card;
 		if(data.length === 0) {
 			// Display not found card
-			card = "<div class='card'><h3 class='card-heading simple'>No Subscriptions</h3>";
+			card = "<div class='card card-fixed'><h3 class='card-heading simple'>No Subscriptions</h3>";
 			card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
 			card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div>";
 			$("#sub-endowments").append(card);
@@ -529,7 +529,7 @@ function fetchSubscribedEndowments(callback) {
 			// Description
 			add_body += "<p><em>Ready to make a difference?</em></p>";
 			add_body += "<div class='bottom'><button id='add-endowment' class='btn btn-success'>Create Endowment</button></div>";
-			card = "<div class='card'>"+add_body+"</div>";
+			card = "<div class='card card-fixed'>"+add_body+"</div>";
 			$("#sub-endowments .row:last").append(card);
 		}
 	}).fail(function(data) {
@@ -561,6 +561,7 @@ function getCardHTML(sub, featured) {
 	if (featured) {
 		cardBody += "<div class='desc'><strong>"+sub.global_balances.endowment_donations_count+"</strong> individual donations.</div>";
 	}
+	console.log(sub)
 	// Endowment Balance
 	cardBody += "<div class='desc'>Endowment Balance: <strong>$"+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong>.</div>";
 	if (featured) {
@@ -571,7 +572,7 @@ function getCardHTML(sub, featured) {
 	} else {
 		cardBody += "<div class='desc'>Total I have donated: <strong>$"+sub.my_balances.my_donations_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
 		// Endowment Balance & Donations
-		cardBody += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
+		cardBody += "<div class='desc'>Total everyone has donated: <strong>$"+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</strong></div>";
 		// Donation Amount
 		cardBody += "<div class='desc'>Minimum Donation Amount: <strong>$"+sub.minimum_donation_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" ("+sub.my_balances.my_subscription_type+")</strong></div>";
 	}
@@ -586,8 +587,6 @@ function getCardHTML(sub, featured) {
 	} else {
 		// Action Buttons
 		actions = "<div class='bottom'><button data-id='"+sub.endowment_id+"' class='btn btn-primary endowment-details-btn'>More Details</button> ";
-		// Subscription Check
-		actions += "<button data-id='"+sub.endowment_id+"' class='btn btn-danger endowment-unsubscribe-btn'>Unsubscribe</button></div>";
 	}
 
 	// Subscription Check
@@ -596,7 +595,7 @@ function getCardHTML(sub, featured) {
 	} else {
 		actions += "<button data-id='"+sub.id+"' class='btn btn-success endowment-subscribe-btn'>Subscribe</button></div>";
 	}
-	var card_html = "<div class='card'>"+cardBody+"</div>"+actions+"</div>";
+	var card_html = "<div class='card card-fixed'>"+cardBody+"</div>"+actions+"</div>";
 	return card_html;
 
 }
@@ -618,7 +617,7 @@ function fetchFeaturedEndowments(callback) {
 		$("#featured-endowments").html("");
 		if(data.message == "Not found") {
 			// Display not found card
-			var card = "<div class='card'><h3 class='card-heading simple'>No Endowments Yet.</h3>";
+			var card = "<div class='card card-fixed'><h3 class='card-heading simple'>No Endowments Yet.</h3>";
 			card += "<div class='card-body'><p>There are currently no giv2giv endowments yet.</p>";
 			card += "<p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div>";
 			$("#featured-endowments").append(card);

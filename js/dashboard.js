@@ -23,7 +23,30 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		donationHistory(data);
+		console.log(data)
+		balanceGraph(data, $('#balanceHistory'), 'Your Balance History',
+			function(balance, data) {
+				var history = data.donor_balance_history;
+				for (var i = 0; i < history.length; i++) {
+					balance[i] = {};
+					var histDate = Object.keys(history[i]).toString();
+					balance[i].x = new Date(histDate);
+					balance[i].y = history[i][histDate];
+				}
+		});
+		balanceGraph(data, $('#balanceFuture'), 'Your Projected Balance',
+			function(balance, data) {
+				var future = data.donor_projected_balance;
+				for (var j = 0; j < future.length; j++) {
+					balance[j] = {};
+					balance[j].x = new Date(future[j].date);
+					balance[j].y = future[j].balance;
+				}
+			});
+		balanceGraph(data, $('#grantsFuture'), 'Your Projected Grants',
+			function(balance, data) {
+				
+			});
 	})
 	.fail(function(data) {
 		log(data);
@@ -79,22 +102,17 @@ function fetchDonorData() {
 	});
 }
 
-function donationHistory(data) {
-	var donationData = [];
-	var runningTotal = 0;
-	for (var i = 0; i < data.donations.length; i++) {
-		runningTotal += parseFloat(data.donations[i].net_amount);
-		donationData[i] = {};
-		donationData[i].x = new Date(data.donations[i].created_at * 1000);
-		donationData[i].y = runningTotal;
-	}
+function balanceGraph(data, DOMnode, titleText, extractData) {
+	var balance = [];
 
-	$('#donationHistory').highcharts({
+	extractData(balance, data);
+
+	DOMnode.highcharts({
 		chart: {
 			type: 'line',
 			backgroundColor: '#fbfbfb'
 		},
-		title: { text: 'Cumulative Donation History' },
+		title: { text: titleText },
 		xAxis: {
 			type: 'datetime',
 			title: {
@@ -109,7 +127,7 @@ function donationHistory(data) {
 		},
 		series: [{
 			name: '$',
-			data: donationData
+			data: balance
 		}],
 		legend: {
 			enabled: false
@@ -140,6 +158,7 @@ function endowmentsPie(subs, DOMnode, titleText, extractData) {
 		series: [{
 			name: '$',
 			data: endowmentData,
+			cursor: 'pointer'
 		}],
 		plotOptions: {
 			pie: {
@@ -152,7 +171,6 @@ function endowmentsPie(subs, DOMnode, titleText, extractData) {
 						crossroads.parse("/endowment/" + e.point.id);
 						// TODO: Making the URL update correctly via crossroads
 						// TODO: Make the back button work as it should
-						history.pushState(null, null, "/endowment/" + e.point.id);
 					}
 				}
 			}
