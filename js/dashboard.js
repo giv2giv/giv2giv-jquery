@@ -26,16 +26,12 @@ function fetchDonorData() {
 		console.log(data)
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
 			function(balance, data) {
-				var series = {};
-				series.name = '$';
-				series.balance = [];
 				var history = data.donor_balance_history;
 				for (var i = 0; i < history.length; i++) {
-					series.balance[i] = {};
-					series.balance[i].x = new Date(history[i].date);
-					series.balance[i].y = history[i].balance;
+					balance[i] = {};
+					balance[i].x = new Date(history[i].date);
+					balance[i].y = history[i].balance;
 				}
-			return [series];
 		});
 		balanceGraph(data, $('#balanceFuture'), 'My Projected Balance',
 			function(balance, data) {
@@ -110,7 +106,11 @@ function fetchDonorData() {
 	});
 }
 
-function balanceGraph(data, DOMnode, titleText, seriesData) {
+function balanceGraph(data, DOMnode, titleText, extractData) {
+	var balance = [];
+
+	extractData(balance, data);
+
 	DOMnode.highcharts({
 		chart: {
 			type: 'line',
@@ -129,7 +129,10 @@ function balanceGraph(data, DOMnode, titleText, seriesData) {
 			},
 			min: 0
 		},
-		series: seriesData(data),
+		series: [{
+			name: '$',
+			data: balance
+		}],
 		legend: {
 			enabled: false
 		},
