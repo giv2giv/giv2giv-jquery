@@ -12,6 +12,7 @@ DashboardUI.start.add(onStart);
 // (Re)Start Dashboard UI
 function onStart() {
 	fetchDonorData();
+	dashboardSelectors();
 }
 
 function fetchDonorData() {
@@ -207,3 +208,9 @@ Highcharts.setOptions({
 	]
 });
 
+function dashboardSelectors() {
+	$('.find-endowment-btn').on('click', function() {
+		crossroads.parse("/");
+		hasher.setHash("");
+	});
+}

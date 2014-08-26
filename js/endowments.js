@@ -3,11 +3,13 @@
 // Signal Hook
 var EndowmentsUI = {
 	start : new signals.Signal(),
+	newModal : new signals.Signal(),
 	details : new signals.Signal()
 };
 
 // Add Listener
 EndowmentsUI.start.add(onStart);
+EndowmentsUI.newModal.add(cleanAndShowModal);
 EndowmentsUI.details.add(onDetails);
 
 // (Re)Start Endowments UI
@@ -320,20 +322,7 @@ function endowmentSelectors() {
 	$(".add-endowment-btn").off("click");
 	$(".add-endowment-btn").on("click", function(e) {
 		// Clean & Show Modal
-		$("#add-endowment-modal #endowment-name").val("");
-		$("#add-endowment-modal #endowment-desc").val("");
-		$("#add-endowment-modal #add-endowment-charities").val("");
-		$("#add-endowment-modal").modal('show');
-		e.preventDefault();
-	});
-
-	$("#add-endowment").off("click");
-	$("#add-endowment").on("click", function(e) {
-		// Clean & Show Modal
-		$("#add-endowment-modal #endowment-name").val("");
-		$("#add-endowment-modal #endowment-desc").val("");
-		$("#add-endowment-modal #add-endowment-charities").val("");
-		$("#add-endowment-modal").modal('show');
+		cleanAndShowModal();
 		e.preventDefault();
 	});
 
@@ -536,6 +525,13 @@ function fetchSubscribedEndowments(callback) {
 			callback();
 		}
 	});
+}
+
+function cleanAndShowModal() {
+	$("#add-endowment-modal #endowment-name").val("");
+	$("#add-endowment-modal #endowment-desc").val("");
+	$("#add-endowment-modal #add-endowment-charities").val("");
+	$("#add-endowment-modal").modal('show');
 }
 
 // Returns a fully-formed HTML object to be appended to the DOM.

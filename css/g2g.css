@@ -112,7 +112,8 @@ nav.navbar {
 	width: 100%;
 	padding-bottom: 0;
 }
-	.fixed-column-large .col-md-5 {
+	.fixed-column-large .col-md-6,
+	.fixed-column-large .col-xs-12 {
 		padding-bottom: 40px;
 	}
 .main-content {	
@@ -163,6 +164,9 @@ nav.navbar {
 			margin-top: 0;
 			margin-bottom: 0;
 			text-align: center;
+		}
+		h2.featured-endowment {
+			margin-bottom: 1em;
 		}
 .card .info {
 	padding: 4px 8px 10px;
