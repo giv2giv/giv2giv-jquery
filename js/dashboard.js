@@ -78,32 +78,6 @@ function fetchDonorData() {
 		log(data);
 		growlError('An error occured while loading the dashboard.');
 	});
-
-	// Third ajax call
-	$.ajax({
-		url: server_url + '/api/endowment/my_endowments.json',
-		type: 'GET',
-		contentType: 'application/json',
-		dataType: 'json',
-		beforeSend: function(xhr, settings) {
-			xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
-		}
-	})
-	.done(function(data) {
-		endowmentsPie(data, $('#pastEndowments'), 'All My Donations', function(ed, subs) {
-			var subs2 = subs.endowments;
-			for (var i = 0; i < subs2.length; i++) {
-				ed[i] = {};
-				ed[i].id = subs2[i].id;
-				ed[i].name = subs2[i].name;
-				ed[i].y = subs2[i].my_balances.my_endowment_balance;
-			}
-		});
-	})
-	.fail(function(data) {
-		log(data);
-		growlError('An error occured while loading the dashboard.');
-	});
 }
 
 function balanceGraph(data, DOMnode, titleText, extractData) {
