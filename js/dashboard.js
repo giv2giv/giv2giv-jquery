@@ -24,28 +24,36 @@ function fetchDonorData() {
 	})
 	.done(function(data) {
 		console.log(data)
-		balanceGraph(data, $('#balanceHistory'), 'Your Balance History',
+		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
 			function(balance, data) {
+				var series = {};
+				series.name = '$';
+				series.balance = [];
 				var history = data.donor_balance_history;
 				for (var i = 0; i < history.length; i++) {
-					balance[i] = {};
-					var histDate = Object.keys(history[i]).toString();
-					balance[i].x = new Date(histDate);
-					balance[i].y = history[i][histDate];
+					series.balance[i] = {};
+					series.balance[i].x = new Date(history[i].date);
+					series.balance[i].y = history[i].balance;
 				}
+			return [series];
 		});
-		balanceGraph(data, $('#balanceFuture'), 'Your Projected Balance',
+		balanceGraph(data, $('#balanceFuture'), 'My Projected Balance',
 			function(balance, data) {
 				var future = data.donor_projected_balance;
-				for (var j = 0; j < future.length; j++) {
-					balance[j] = {};
-					balance[j].x = new Date(future[j].date);
-					balance[j].y = future[j].balance;
+				for (var i = 0; i < future.length; i++) {
+					balance[i] = {};
+					balance[i].x = new Date(future[i].date);
+					balance[i].y = future[i].balance;
 				}
 			});
-		balanceGraph(data, $('#grantsFuture'), 'Your Projected Grants',
+		balanceGraph(data, $('#grantsFuture'), 'My Projected Grants',
 			function(balance, data) {
-				
+				var future = data.donor_projected_balance;
+				for (var i = 0; i < future.length; i++) {
+					balance[i] = {};
+					balance[i].x = new Date(future[i].date);
+					balance[i].y = future[i].total_grants;
+				}
 			});
 	})
 	.fail(function(data) {
@@ -102,11 +110,7 @@ function fetchDonorData() {
 	});
 }
 
-function balanceGraph(data, DOMnode, titleText, extractData) {
-	var balance = [];
-
-	extractData(balance, data);
-
+function balanceGraph(data, DOMnode, titleText, seriesData) {
 	DOMnode.highcharts({
 		chart: {
 			type: 'line',
@@ -125,10 +129,7 @@ function balanceGraph(data, DOMnode, titleText, extractData) {
 			},
 			min: 0
 		},
-		series: [{
-			name: '$',
-			data: balance
-		}],
+		series: seriesData(data),
 		legend: {
 			enabled: false
 		},

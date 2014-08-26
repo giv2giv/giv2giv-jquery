@@ -24,11 +24,10 @@ function fetchStats(callback) {
 		balanceGraph(data, $('#balanceHistory'), 'giv2giv Total Balance History',
 			function(balance, data) {
 				var history = data.global_balance_history;
-				for (var i = 0; i < history.length; i++) {
-					balance[i] = {};
-					var histDate = Object.keys(history[i]).toString();
-					balance[i].x = new Date(histDate);
-					balance[i].y = history[i][histDate];
+				for (var j = 0; j < history.length; j++) {
+					balance[j] = {};
+					balance[j].x = new Date(history[j].date);
+					balance[j].y = history[j].balance;
 				}
 		});
 		balanceGraph(data, $('#balanceFuture'), 'giv2giv Projected Balance',
