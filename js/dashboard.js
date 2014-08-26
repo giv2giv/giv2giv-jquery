@@ -64,7 +64,7 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		endowmentsPie(data, $('#currentEndowments'), 'My Active Donations', function(ed, subs){
+		endowmentsPie(data, $('#currentEndowments'), 'Endowments', function(ed, subs){
 			for (var i = 0; i < subs.length; i++) {
 				ed[i] = {};
 				ed[i].id = subs[i].endowment_id;
