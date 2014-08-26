@@ -127,7 +127,7 @@ var WebUI = function() {
 		limit: 5
 	}).on("typeahead:selected", function (obj, datum, name) {
 		// Go to Endowment
-		hasher.setHash("/endowment/" + datum.id);
+		hasher.setHash("endowment/" + datum.id);
 	});
 
 	// Show signup panel
@@ -296,7 +296,7 @@ var WebUI = function() {
 		}).done(function (data) {
 			// Delete Cookie
 			$.removeCookie("session");
-			hasher.setHash("/signin");
+			hasher.setHash("signin");
 		});
 		e.preventDefault();
 	});
@@ -353,9 +353,26 @@ var WebUI = function() {
 				log("WebUI: Loading Donor information.");
 				// Load Current URL
 				log(window.location.hash);
-				if (window.location.hash === "#/signin" || window.location.hash === "#/signup" || window.location.hash === "" || window.location.hash === "#/") {
-					crossroads.parse("/dashboard");
-					hasher.setHash("#dashboard");
+				if (window.location.hash === "#signin" || window.location.hash === "#signup" || window.location.hash === "" || window.location.hash === "#/") {
+					// If the user's dashboard is empty, send them to the featured endowments page
+					// Otherwise, send them to the dashboard
+					var donations = 0;
+					$.ajax({
+						url: server_url + "/api/donors/donations.json",
+						type: "GET",
+						contentType: "application/json",
+						dataType: "json",
+					}).done(function(response) {
+						donations = parseFloat(response.total);
+						if (donations > 0) {
+							crossroads.parse("/dashboard");
+							hasher.setHash("dashboard");
+						} else {
+							crossroads.parse("/");
+							hasher.setHash("");
+						}
+					});
+					
 				} else {
 					hasher.setHash(window.location.hash);
 				}
@@ -380,7 +397,7 @@ var WebUI = function() {
 				if (data.statusText === "Unauthorized") {
 					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
 					$.removeCookie("session");
-					hasher.setHash("/signin");
+					hasher.setHash("signin");
 				}
 			});
 		} else {

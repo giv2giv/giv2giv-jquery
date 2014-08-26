@@ -14,7 +14,7 @@ function onStart() {
 	fetchStats();
 }
 
-function fetchStats(callback) {
+function fetchStats() {
 	$.ajax({
 		url: server_url + '/api/donors/balance_information.json',
 		method: 'GET',
@@ -42,11 +42,6 @@ function fetchStats(callback) {
 	}).fail(function(data) {
 			log(data);
 			growlError("An error occured while loading the Numbers.");
-	}).always(function() {
-		// Callbacks
-		if(typeof callback === "function") {
-			callback();
-		}
 	});
 }
 

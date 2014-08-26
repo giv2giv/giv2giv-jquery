@@ -23,7 +23,6 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		console.log(data)
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
 			function(balance, data) {
 				var history = data.donor_balance_history;
@@ -173,8 +172,7 @@ function endowmentsPie(subs, DOMnode, titleText, extractData) {
 				events: {
 					click: function(e) {
 						crossroads.parse("/endowment/" + e.point.id);
-						// TODO: Making the URL update correctly via crossroads
-						// TODO: Make the back button work as it should
+						hasher.setHash("endowment/" + e.point.id);
 					}
 				}
 			}

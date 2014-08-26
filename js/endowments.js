@@ -479,7 +479,7 @@ function endowmentSelectors() {
 	// More Details Button
 	$(".endowment-details-btn").off();
 	$(".endowment-details-btn").on("click", function(e) {
-		hasher.setHash('/endowment/' + $(this).attr("data-id"));
+		hasher.setHash("endowment/" + $(this).attr("data-id"));
 		e.preventDefault();
 	});
 }
