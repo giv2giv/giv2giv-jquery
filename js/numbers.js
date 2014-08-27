@@ -39,6 +39,15 @@ function fetchStats() {
 					balance[j].y = future[j].balance;
 				}
 			});
+
+		var current_fund_balance_all_donors = '$' + data.current_fund_balance_all_donors.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		var total_amount_of_donations = '$' + data.total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		var total_amount_of_grants = '$' + data.total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+		$("#current-fund-balance-all-donors").text(current_fund_balance_all_donors);
+		$("#total-amount-of-donations").text(total_amount_of_donations);
+		$("#total-amount-of-grants").text(total_amount_of_grants);
+		
 	}).fail(function(data) {
 			log(data);
 			growlError("An error occured while loading the Numbers.");

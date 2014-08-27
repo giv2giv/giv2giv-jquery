@@ -113,6 +113,7 @@ nav.navbar {
 	padding-bottom: 0;
 }
 	.fixed-column-large .col-md-6,
+	.fixed-column-large .col-sm-4,
 	.fixed-column-large .col-xs-12 {
 		padding-bottom: 40px;
 	}
