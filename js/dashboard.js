@@ -25,32 +25,11 @@ function fetchDonorData() {
 	})
 	.done(function(data) {
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
-			function(balance, data) {
-				var history = data.donor_balance_history;
-				for (var i = 0; i < history.length; i++) {
-					balance[i] = {};
-					balance[i].x = new Date(history[i].date);
-					balance[i].y = history[i].balance;
-				}
-		});
+			'donor_balance_history', 'balance');
 		balanceGraph(data, $('#balanceFuture'), 'My Projected Balance',
-			function(balance, data) {
-				var future = data.donor_projected_balance;
-				for (var i = 0; i < future.length; i++) {
-					balance[i] = {};
-					balance[i].x = new Date(future[i].date);
-					balance[i].y = future[i].balance;
-				}
-			});
+			'donor_projected_balance', 'balance');
 		balanceGraph(data, $('#grantsFuture'), 'My Projected Grants',
-			function(balance, data) {
-				var future = data.donor_projected_balance;
-				for (var i = 0; i < future.length; i++) {
-					balance[i] = {};
-					balance[i].x = new Date(future[i].date);
-					balance[i].y = future[i].total_grants;
-				}
-			});
+			'donor_projected_balance', 'total_grants');
 
 		var totalBalance = data.donor_current_balance;
 
@@ -86,42 +65,48 @@ function fetchDonorData() {
 // @param subs is an array of endowment objects
 function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 	var endowmentData = [];
+	if (subs.length === 0) {
+		DOMnode.html(
+			'<h3>' + titleText + '</h3>' +
+			'<p>You haven\'t subscribed to any endowments yet.</p>' +
+			'<p><button class="btn btn-success find-endowment-btn">Find an Endowment</button></p>');
+	} else {
+		extractData(endowmentData, subs);
 
-	extractData(endowmentData, subs);
-
-	DOMnode.highcharts({
-		chart: {
-			type: 'pie',
-			backgroundColor: '#fbfbfb',
-		},
-		title: { text: titleText },
-		subtitle: { text: 'Total Balance: ' + totalBalance.toFixed(2) },
-		series: [{
-			name: '$',
-			data: endowmentData,
-			cursor: 'pointer'
-		}],
-		plotOptions: {
-			pie: {
-				dataLabels: {
-					enabled: false
-				},
-				showInLegend: true,
-				events: {
-					click: function(e) {
-						crossroads.parse("/endowment/" + e.point.id);
-						hasher.setHash("endowment/" + e.point.id);
+		DOMnode.highcharts({
+			chart: {
+				type: 'pie',
+				backgroundColor: '#fbfbfb',
+			},
+			title: { text: titleText },
+			subtitle: { text: 'Total Balance: ' + totalBalance.toFixed(2) },
+			series: [{
+				name: '$',
+				data: endowmentData,
+				cursor: 'pointer'
+			}],
+			plotOptions: {
+				pie: {
+					dataLabels: {
+						enabled: false
+					},
+					showInLegend: true,
+					events: {
+						click: function(e) {
+							crossroads.parse("/endowment/" + e.point.id);
+							hasher.setHash("endowment/" + e.point.id);
+						}
 					}
 				}
-			}
-		},
-		tooltip: {
-			formatter: function() {
-				return this.point.name + '<br/>$' + this.point.y.toFixed(2);
-			}
-		},
-		credits: { enabled: false }
-	});
+			},
+			tooltip: {
+				formatter: function() {
+					return this.point.name + '<br/>$' + this.point.y.toFixed(2);
+				}
+			},
+			credits: { enabled: false }
+		});
+	}
 }
 
 function dashboardSelectors() {

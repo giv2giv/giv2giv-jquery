@@ -654,45 +654,60 @@ $(function () {
 //  UTILITY FUNCTIONS  //
 // =================== //
 
-function balanceGraph(data, DOMnode, titleText, extractData) {
+function balanceGraph(data, DOMnode, titleText, series, label) {
 	var balance = [];
+	if (data.donor_balance_history.length === 0 &&
+		data.donor_current_balance === 0 &&
+		series !== 'global_balance_history' &&
+		series !== 'global_projected_balance') {
+		DOMnode.html(
+			'<h3>' + titleText + '</h3>' +
+			'<p>You haven\'t subscribed to any endowments yet.</p>' +
+			'<p><a href="/" class="btn btn-success find-endowment-btn">Find an Endowment</a></p>'
+		);
+	} else {
+		var content = data[series];
+		for (var i = 0; i < content.length; i++) {
+			balance[i] = {};
+			balance[i].x = new Date(content[i].date);
+			balance[i].y = content[i][label];
+		}
 
-	extractData(balance, data);
-
-	DOMnode.highcharts({
-		chart: {
-			type: 'line',
-			backgroundColor: '#fbfbfb'
-		},
-		title: { text: titleText },
-		xAxis: {
-			type: 'datetime',
-			title: {
-				text: 'Date'
-			}
-		},
-		yAxis: {
-			title: {
-				text: '($ USD)'
+		DOMnode.highcharts({
+			chart: {
+				type: 'line',
+				backgroundColor: '#fbfbfb'
 			},
-			min: 0
-		},
-		series: [{
-			name: '$',
-			data: balance
-		}],
-		legend: {
-			enabled: false
-		},
-		tooltip: {
-			formatter: function() {
-				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-				var month = months[this.point.x.getMonth() - 1];
-				return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + '<br/>$' + this.point.y.toFixed(2);
-			}
-		},
-		credits: { enabled: false }
-	});
+			title: { text: titleText },
+			xAxis: {
+				type: 'datetime',
+				title: {
+					text: 'Date'
+				}
+			},
+			yAxis: {
+				title: {
+					text: '($ USD)'
+				},
+				min: 0
+			},
+			series: [{
+				name: '$',
+				data: balance
+			}],
+			legend: {
+				enabled: false
+			},
+			tooltip: {
+				formatter: function() {
+					var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+					var month = months[this.point.x.getMonth() - 1];
+					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + '<br/>$' + this.point.y.toFixed(2);
+				}
+			},
+			credits: { enabled: false }
+		});
+	}
 }
 
 Highcharts.setOptions({
@@ -713,8 +728,5 @@ Highcharts.setOptions({
 		"#01565E",
 		"#9B4900",
 		"#9B0800"
-	],
-	lang: {
-		noData: '<span>You aren\'t subscribed to any endowments.<br/><a href="/" class="btn btn-primary">Find an Endowment</a></span>'
-	}
+	]
 });
