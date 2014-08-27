@@ -51,47 +51,43 @@ function fetchDonorData() {
 					balance[i].y = future[i].total_grants;
 				}
 			});
-	})
-	.fail(function(data) {
-		log(data);
-		growlError('An error occured while loading the dashboard.');
-	});
 
-	// Second ajax call
-	$.ajax({
-		url: server_url + '/api/donors/subscriptions.json',
-		type: 'GET',
-		contentType: 'application/json',
-		dataType: 'json'
-	})
-	.done(function(data) {
-		endowmentsPie(data, $('#currentEndowments'), 'Endowments',
-			function(ed, subs){
-			for (var i = 0; i < subs.length; i++) {
-				ed[i] = {};
-				ed[i].id = subs[i].endowment_id;
-				ed[i].name = subs[i].name;
-				ed[i].y = subs[i].my_balances.my_endowment_balance;
-			}
+		var totalBalance = data.donor_current_balance;
+
+		// Second ajax call
+		$.ajax({
+			url: server_url + '/api/donors/subscriptions.json',
+			type: 'GET',
+			contentType: 'application/json',
+			dataType: 'json'
+		})
+		.done(function(data) {
+			endowmentsPie(data, $('#currentEndowments'), 'Endowments',
+				function(ed, subs){
+				for (var i = 0; i < subs.length; i++) {
+					ed[i] = {};
+					ed[i].id = subs[i].endowment_id;
+					ed[i].name = subs[i].name;
+					ed[i].y = subs[i].my_balances.my_endowment_balance;
+				}
+			}, totalBalance);
+		})
+		.fail(function(data) {
+			log(data);
+			growlError('An error occured while loading the dashboard.');
 		});
-	})
-	.fail(function(data) {
+
+	}).fail(function(data) {
 		log(data);
 		growlError('An error occured while loading the dashboard.');
 	});
 }
 
 // @param subs is an array of endowment objects
-function endowmentsPie(subs, DOMnode, titleText, extractData) {
+function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 	var endowmentData = [];
 
 	extractData(endowmentData, subs);
-
-	var totalBalance = 0;
-	for (var i = 0; i < subs.length; i++) {
-		totalBalance += subs[i].my_balances.my_endowment_balance;
-	}
-
 
 	DOMnode.highcharts({
 		chart: {
