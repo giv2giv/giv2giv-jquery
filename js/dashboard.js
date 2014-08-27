@@ -69,7 +69,7 @@ function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 		DOMnode.html(
 			'<h3>' + titleText + '</h3>' +
 			'<p>You haven\'t subscribed to any endowments yet.</p>' +
-			'<p><button class="btn btn-success find-endowment-btn">Find an Endowment</button></p>');
+			'<p><a href="/" class="btn btn-primary find-endowment-btn">Find an Endowment</a></p>');
 	} else {
 		extractData(endowmentData, subs);
 
@@ -107,11 +107,4 @@ function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 			credits: { enabled: false }
 		});
 	}
-}
-
-function dashboardSelectors() {
-	$('.find-endowment-btn').on('click', function() {
-		crossroads.parse("/");
-		hasher.setHash("");
-	});
 }

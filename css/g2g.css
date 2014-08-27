@@ -57,8 +57,17 @@ code {
 }
 /* Helper class for vertical centering */
 .chart-center {
-	
 }
+	.chart-center h3 {
+		padding-top: 132px;
+	}
+	.chart-center a {
+		margin-bottom: 132px;
+	}
+	.chart-center i {
+		padding-top: 132px;
+		padding-bottom: 132px;
+	}
 
 nav.navbar {
 	margin-bottom: 0;

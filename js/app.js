@@ -656,14 +656,22 @@ $(function () {
 
 function balanceGraph(data, DOMnode, titleText, series, label) {
 	var balance = [];
-	if (data.donor_balance_history.length === 0 &&
-		data.donor_current_balance === 0 &&
-		series !== 'global_balance_history' &&
-		series !== 'global_projected_balance') {
+
+	var zeroData = false;
+	if (typeof data.donor_balance_history !== 'undefined' &&
+		typeof data.donor_current_balance !== 'undefined') {
+		if (data.donor_balance_history.length === 0 &&
+			data.donor_current_balance === 0) {
+			zeroData = true;
+		}
+	}
+
+	if (series !== 'global_balance_history' &&
+		series !== 'global_projected_balance' && zeroData) {
 		DOMnode.html(
 			'<h3>' + titleText + '</h3>' +
 			'<p>You haven\'t subscribed to any endowments yet.</p>' +
-			'<p><a href="/" class="btn btn-success find-endowment-btn">Find an Endowment</a></p>'
+			'<p><a href="/" class="btn btn-primary find-endowment-btn">Find an Endowment</a></p>'
 		);
 	} else {
 		var content = data[series];

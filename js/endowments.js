@@ -188,26 +188,11 @@ function onDetails(endowment) {
 		$("#endowment-details-my-donations-count").html("0");
 		$("#endowment-details-my-grants-amount").html("$0.00");
 	}
+	balanceGraph(endowment.global_balances, $('#balanceHistory'), 'Global Balance History',
+		'endowment_balance_history', 'balance');
 
-	balanceGraph(endowment, $('#balanceHistory'), 'Global Balance History',
-		function(balance, data){
-			var history = data.global_balances.endowment_balance_history;
-			for (var i = 0; i < history.length; i++) {
-				balance[i] = {};
-				balance[i].x = new Date(history[i].date);
-				balance[i].y = history[i].balance;
-			}
-		});
-
-	balanceGraph(endowment, $('#projectedBalance'), 'Projected Balance',
-		function(balance, data){
-			var future = data.global_balances.projected_balance;
-			for (var i = 0; i < future.length; i++) {
-				balance[i] = {};
-				balance[i].x = new Date(future[i].date);
-				balance[i].y = future[i].balance;
-			}
-		});
+	balanceGraph(endowment.global_balances, $('#projectedBalance'), 'Projected Balance',
+		'projected_balance', 'balance');
 
 	// Build Charity Table
 	$.each(endowment.charities, function(k, v) {
