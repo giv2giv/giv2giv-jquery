@@ -5,3 +5,12 @@
 - Pick better fonts and normalize fonts (only two fonts)
 - CSS for gravatar in logged-in navbar
 - Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead
+
+- IMPORTANT: List of trending endowments on the homepage
+- No data condition, add a button so that users can contribute
+- Loading spinner for ALL loading pages, also for endowment search in navbar
+- Why are featured endowments under homescreen not showing up? Take a look at the API?
+- New feed for charities
+- Endowment slug (in URL) should be its name and not its number
+- Fix payment accounts
+- Remove projected graph from endowment_details.html ?

@@ -713,5 +713,8 @@ Highcharts.setOptions({
 		"#01565E",
 		"#9B4900",
 		"#9B0800"
-	]
+	],
+	lang: {
+		noData: '<span>You aren\'t subscribed to any endowments.<br/><a href="/" class="btn btn-primary">Find an Endowment</a></span>'
+	}
 });
