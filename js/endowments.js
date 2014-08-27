@@ -199,6 +199,16 @@ function onDetails(endowment) {
 			}
 		});
 
+	balanceGraph(endowment, $('#projectedBalance'), 'Projected Balance',
+		function(balance, data){
+			var future = data.global_balances.projected_balance;
+			for (var i = 0; i < future.length; i++) {
+				balance[i] = {};
+				balance[i].x = new Date(future[i].date);
+				balance[i].y = future[i].balance;
+			}
+		});
+
 	// Build Charity Table
 	$.each(endowment.charities, function(k, v) {
 		log(v.charity);
