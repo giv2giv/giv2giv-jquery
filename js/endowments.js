@@ -170,27 +170,11 @@ function onDetails(endowment) {
 		});
 		e.preventDefault();
 	});
-	// Selectors
-	$("li a[href='#charities']").on('click', function(e) {
-		// Hide Details Cards
-		$("#endowment-charity-details").addClass("hide");
-	});
-
-	$("li a[href='#subscription']").on('click', function(e) {
-		// Hide Details Cards
-		$("#endowment-charity-details").addClass("hide");
-	});
-
-	$("li a[href='#details']").on('click', function(e) {
-		// Show Details Cards
-		$("#endowment-charity-details").removeClass("hide");
-	});
 
 	// Header
 	$("#endowment-details-header").html(endowment.name);
 	// Lead Description
 	$("#endowment-details-description").html(endowment.description);
-	$("#endowment-details-balance").html("$"+endowment.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$("#endowment-details-donor-count").html(endowment.global_balances.endowment_donor_count);
 	$("#endowment-details-grants").html("$"+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
@@ -205,7 +189,15 @@ function onDetails(endowment) {
 		$("#endowment-details-my-grants-amount").html("$0.00");
 	}
 
-
+	balanceGraph(endowment, $('#balanceHistory'), 'Global Balance History',
+		function(balance, data){
+			var history = data.global_balances.endowment_balance_history;
+			for (var i = 0; i < history.length; i++) {
+				balance[i] = {};
+				balance[i].x = new Date(history[i].date);
+				balance[i].y = history[i].balance;
+			}
+		});
 
 	// Build Charity Table
 	$.each(endowment.charities, function(k, v) {
@@ -654,8 +646,8 @@ function fetchEndowmentDonations(id, callback) {
 				var date = new Date(v.created_at);
 				var $row = $("#donations-table").find('tbody:last').append('<tr></tr>');
 				$row.append("<td>"+date.toLocaleDateString()+"</td>");
-				$row.append("<td>$"+v.gross_amount.replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
-				$row.append("<td>$"+v.net_amount.replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+				$row.append("<td>$"+v.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+				$row.append("<td>$"+v.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
 			});
 		}
 		// Callbacks

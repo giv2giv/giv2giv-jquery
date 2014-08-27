@@ -80,47 +80,6 @@ function fetchDonorData() {
 	});
 }
 
-function balanceGraph(data, DOMnode, titleText, extractData) {
-	var balance = [];
-
-	extractData(balance, data);
-
-	DOMnode.highcharts({
-		chart: {
-			type: 'line',
-			backgroundColor: '#fbfbfb'
-		},
-		title: { text: titleText },
-		xAxis: {
-			type: 'datetime',
-			title: {
-				text: 'Date'
-			}
-		},
-		yAxis: {
-			title: {
-				text: '($ USD)'
-			},
-			min: 0
-		},
-		series: [{
-			name: '$',
-			data: balance
-		}],
-		legend: {
-			enabled: false
-		},
-		tooltip: {
-			formatter: function() {
-				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-				var month = months[this.point.x.getMonth() - 1];
-				return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + '<br/>$' + this.point.y.toFixed(2);
-			}
-		},
-		credits: { enabled: false }
-	});
-}
-
 // @param subs is an array of endowment objects
 function endowmentsPie(subs, DOMnode, titleText, extractData) {
 	var endowmentData = [];
@@ -160,27 +119,6 @@ function endowmentsPie(subs, DOMnode, titleText, extractData) {
 		credits: { enabled: false }
 	});
 }
-
-Highcharts.setOptions({
-	colors: [
-		"#2DC940",
-		"#2697A1",
-		"#FF9639",
-		"#FF4339",
-		"#009913",
-		"#016E78",
-		"#C55D00",
-		"#C50A00",
-		"#97F9A3",
-		"#95ECF4",
-		"#FFCA9A",
-		"#FF9F9A",
-		"#00780F",
-		"#01565E",
-		"#9B4900",
-		"#9B0800"
-	]
-});
 
 function dashboardSelectors() {
 	$('.find-endowment-btn').on('click', function() {
