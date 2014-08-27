@@ -12,7 +12,7 @@ var wish_page;
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @todo - Send serious logs to server?
-var debug = false;
+var debug = true;
 
 log = function () {
 	if (debug && console && typeof console.log === "function") {

@@ -1,3 +1,10 @@
+<!-- Details Tab -->
+<!-- TODO: Am I subscribed to this endowment? -->
+<!-- TODO: Pull Charities and subscriptions behind the fold behind the tabs -->
+<!-- TODO: Your current subscription is: $X.XX -->
+<!-- TODO: How many are subscribed -->
+<!-- TODO: Historical and projected balance -->
+
 <div class="row first-content">
 	<div class="fixed-column card-header-only">
 		<h1 id="endowment-details-header"></h1>
@@ -5,57 +12,40 @@
 </div>
 <div class="row">
 	<div class="fixed-column">
-		<ul class="nav nav-pills" data-toggle="tabs">
-			<li class="active"><a href="#details">Details</a></li>
-			<li><a href="#charities">Charities</a></li>
-			<li id="subscription-tab"><a href="#subscription">Subscription</a></li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane active" id="details">
-				<!-- Details Tab -->
-				<!-- TODO: Am I subscribed to this endowment? -->
-				<!-- TODO: Pull Charities and subscriptions behind the fold behind the tabs -->
-				<!-- TODO: Your current subscription is: $X.XX -->
-				<!-- TODO: How many are subscribed -->
-				<!-- TODO: Historical and projected balance -->
-				<p id="endowment-details-description" class="lead"></p>
-			</div>
-			<div class="tab-pane" id="charities">
-				<!-- Charities Tab -->
-				<table id="charities-table" class="table">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Address</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
-			</div>
-			<div class="tab-pane" id="subscription">
-				<div id="no-subscription" class="hide">
-					<h3>You haven't subscribed to this endowment.</h3>
-					<p><a class="btn btn-success" id="endowment-details-subscribe" data-id="" data-toggle="modal" href="#">Subscribe</a></p>
-				</div>
-				<div id="subscription-details" class="hide">
-					<h4>Past Donations</h4>
-					<table id="donations-table" class="table">
-						<thead>
-							<tr>
-								<th>Date</th>
-								<th>Gross Amount</th>
-								<th>Net Amount</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-					<strong>* Note: Some donations may take a few minutes to appear.</strong>
-					<br/>
-					<br/>
-					<p><a class="btn btn-danger" data-id="" id="endowment-details-unsubscribe" href="#">Unsubscribe</a></p>
-				</div>
-			</div>
+		<h2>Details</h2>
+		<p id="endowment-details-description" class="lead"></p>
+		<h2>Subscription</h2>
+		<div id="no-subscription" class="hide">
+			<h3>You haven't subscribed to this endowment.</h3>
+			<p><a class="btn btn-success" id="endowment-details-subscribe" data-id="" data-toggle="modal" href="#">Subscribe</a></p>
 		</div>
+		<div id="subscription-details" class="hide">
+			<h4>Past Donations</h4>
+			<table id="donations-table" class="table">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Gross Amount</th>
+						<th>Net Amount</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<strong>* Note: Some donations may take a few minutes to appear.</strong>
+			<br/>
+			<br/>
+			<p><a class="btn btn-danger" data-id="" id="endowment-details-unsubscribe" href="#">Unsubscribe</a></p>
+		</div>
+		<h2>Charities</h2>
+		<table id="charities-table" class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Address</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 	</div>
 </div>
 <div id="endowment-charity-details">

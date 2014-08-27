@@ -651,11 +651,11 @@ function fetchEndowmentDonations(id, callback) {
 		log(data);
 		if(data.message === undefined) {
 			$.each(data.donations, function(k, v) {
-				var date = new Date(v.donation.created_at);
+				var date = new Date(v.created_at);
 				var $row = $("#donations-table").find('tbody:last').append('<tr></tr>');
 				$row.append("<td>"+date.toLocaleDateString()+"</td>");
-				$row.append("<td>$"+v.donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
-				$row.append("<td>$"+v.donation.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+				$row.append("<td>$"+v.gross_amount.replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+				$row.append("<td>$"+v.net_amount.replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
 			});
 		}
 		// Callbacks
