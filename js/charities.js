@@ -23,7 +23,6 @@ $(function() {
 			query: $("#charity_search_input").val()
 			},
 			success: function(data) {
-			console.log(data);
 			// did we get anything
 			if(data.message == "Not found") {
 				// Display not found charity

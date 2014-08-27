@@ -65,7 +65,8 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
-		endowmentsPie(data, $('#currentEndowments'), 'Endowments', function(ed, subs){
+		endowmentsPie(data, $('#currentEndowments'), 'Endowments',
+			function(ed, subs){
 			for (var i = 0; i < subs.length; i++) {
 				ed[i] = {};
 				ed[i].id = subs[i].endowment_id;
@@ -86,12 +87,19 @@ function endowmentsPie(subs, DOMnode, titleText, extractData) {
 
 	extractData(endowmentData, subs);
 
+	var totalBalance = 0;
+	for (var i = 0; i < subs.length; i++) {
+		totalBalance += subs[i].my_balances.my_endowment_balance;
+	}
+
+
 	DOMnode.highcharts({
 		chart: {
 			type: 'pie',
 			backgroundColor: '#fbfbfb',
 		},
 		title: { text: titleText },
+		subtitle: { text: 'Total Balance: ' + totalBalance.toFixed(2) },
 		series: [{
 			name: '$',
 			data: endowmentData,
