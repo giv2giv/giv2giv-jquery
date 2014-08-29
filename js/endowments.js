@@ -475,9 +475,9 @@ function fetchSubscribedEndowments(callback) {
 		var card;
 		if(data.length === 0) {
 			// Display not found card
-			card = "<div class='card card-fixed'><h3 class='card-heading simple'>No Subscriptions</h3>";
+			card = "<div class='fixed-column text-center'><h3 class='card-heading simple'>No Subscriptions</h3>";
 			card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
-			card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div>";
+			card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create an Endowment</a></p></div></div>";
 			$("#sub-endowments").append(card);
 		} else {
 			// Parse Results Here
@@ -486,7 +486,7 @@ function fetchSubscribedEndowments(callback) {
 			$.each(data, function(index, sub) {
 				
 
-			log (sub);
+			log(sub);
 			// Add the Card to the Row
 
 			row.prepend(getCardHTML(sub,false));
@@ -599,6 +599,7 @@ function fetchFeaturedEndowments(callback) {
 			// Parse Results Here
 			var endowments = data.endowments;
 			// First Row
+			console.log(endowments)
 
 			$.each(endowments, function(index, sub) {
 				// Now build a card
