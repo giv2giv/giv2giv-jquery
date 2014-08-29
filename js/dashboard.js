@@ -1,5 +1,4 @@
 // Dashboard UI
-// Bill Mei, 2014
 
 // Signal Hook
 var DashboardUI = {

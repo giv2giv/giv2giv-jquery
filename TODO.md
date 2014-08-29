@@ -4,6 +4,7 @@
 - Navbar search loading spinner, also expand to fill width
 share this endowment via fb/twitter
 - Pagination in endowments
+
 endpoints for fb/goog:
 /auth/facebook
 /auth/google_oauth2

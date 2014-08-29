@@ -1,64 +1,14 @@
-// WebUI Application
-// Michael Thomas, 2014
+// =================== //
+// MAIN APPLICATION    //
+// AND ROUTING HANDLER //
+// =================== //
 
-// GLOBAL CONSTANTS
-var GLOBAL = {};
-GLOBAL.MIN_DONATION = 5; // $5.00 minimum donation
-GLOBAL.SERVER_URL = "https://apitest.giv2giv.org";
-
-// Setup Stripe
-GLOBAL.STRIPE_PUB_KEY = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
-Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
-
-// Awesome Logging
-// Only display console log output in debug mode, else nothing.
-// @todo - Send serious logs to server?
-GLOBAL.DEBUG = false;
-
-log = function () {
-	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
-		for (var i = 0, ii = arguments.length; i < ii; i++) {
-			console.log(arguments[i]);
-		}
-	}
-};
-
-// Bootstrap Growl Helpers
-// Growl Error
-function growlError(message) {
-	$.bootstrapGrowl(message + "&nbsp;", {
-		ele: "body", // which element to append to
-		type: "danger", // (null, "info", "danger", "success")
-		offset: {
-			from: "top",
-			amount: 20
-		}, // "top", or "bottom"
-		align: "center", // ("left", "right", or "center")
-		width: "auto", // (integer, or "auto")
-		delay: 5000,
-		allow_dismiss: true,
-		stackup_spacing: 10 // spacing between consecutively stacked growls.
-	});
-}
-// Growl Success
-function growlSuccess(message) {
-	$.bootstrapGrowl(message + "&nbsp;", {
-		ele: "body", // which element to append to
-		type: "success", // (null, "info", "danger", "success")
-		offset: {
-			from: "top",
-			amount: 20
-		}, // "top", or "bottom"
-		align: "center", // ("left", "right", or "center")
-		width: "auto", // (integer, or "auto")
-		delay: 5000,
-		allow_dismiss: true,
-		stackup_spacing: 10 // spacing between consecutively stacked growls.
-	});
-}
-
-// Main Application
 var WebUI = function() {
+
+// ======================= //
+//          VIEWS          //
+// ======================= //
+
 	// Signin Bits
 	// Display the signin screen.
 	var showsignin = function(callback) {
@@ -98,6 +48,175 @@ var WebUI = function() {
 		}
 	};
 
+// ======================= //
+//        HANDLERS         //
+// ======================= //
+
+	/*
+	* Prepares the CSS classes to display the correct page
+	* @param isPublic {boolean}
+	* @param activeTab {jQuery Object} CSS id of the active navbar tab e.g. "#signup-nav"
+	* @param title {string} document.title for the page
+	*/
+	function setPageMetadata(isPublic, activeTab, title) {
+		// Show App Panel
+		$("#app-panel").removeClass("hide");
+
+		$("#signin-panel").addClass("hide");
+		$("#signup-panel").addClass("hide");
+
+		if (isPublic) {
+			// Hide Private Nav
+			$(".private-nav").addClass("hide");
+			// Show Public Nav
+			$(".public-nav").removeClass("hide");
+			// Set Tabs
+			$(".public-nav").siblings().removeClass("active");
+		} else {
+			// Show Private Nav
+			$(".private-nav").removeClass("hide");
+			// Hide Public Nav
+			$(".public-nav").addClass("hide");
+			// Set Tabs
+			$(".private-nav").siblings().removeClass("active");
+		}
+		// Set Tabs
+		if (activeTab !== null) {
+			activeTab.addClass("active");
+		}
+		// Set Title
+		document.title = title;
+	}
+
+	// Start Application
+	// This is only loaded on full page refresh or first visit
+	var startApplication = function (callback) {
+		log("WebUI: Starting Application");
+		if (activeSession()) {
+			// Get Donor Info
+			$.ajax({
+				url: GLOBAL.SERVER_URL + "/api/donors.json",
+				type: "GET",
+				contentType: "application/json",
+				dataType: "json"
+			}).done(function (data) {
+				log("WebUI: Loading Donor information.");
+				// Load Current URL
+				log(window.location.hash);
+				if (window.location.hash === "#signin" || window.location.hash === "#signup" || window.location.hash === "" || window.location.hash === "#/") {
+					// If the user's dashboard is empty, send them to the featured endowments page
+					// Otherwise, send them to the dashboard
+					var donations = 0;
+					$.ajax({
+						url: GLOBAL.SERVER_URL + "/api/donors/donations.json",
+						type: "GET",
+						contentType: "application/json",
+						dataType: "json",
+					}).done(function(response) {
+						donations = parseFloat(response.total);
+						if (donations > 0) {
+							crossroads.parse("/dashboard");
+							hasher.setHash("dashboard");
+						} else {
+							crossroads.parse("/");
+							hasher.setHash("");
+						}
+					});
+					
+				} else {
+					hasher.setHash(window.location.hash);
+				}
+				// Facebook conversion tracking
+				var fb_param = {};
+				fb_param.pixel_id = "6017461958346";
+				fb_param.value = "0.00";
+				fb_param.currency = "USD";
+				var fpw = document.createElement("script");
+				fpw.async = true;
+				fpw.src = "//connect.facebook.net/en_US/fp.js";
+				var ref = document.getElementsByTagName("script")[0];
+				ref.parentNode.insertBefore(fpw, ref);
+				log(ref);
+				// Hide Signin
+				// Show App Panel
+				$("#app-panel").removeClass("hide");
+				// Show Private Nav
+				$(".private-nav").removeClass("hide");
+				hidesignin();
+			}).error(function (data) {
+				if (data.statusText === "Unauthorized") {
+					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
+					$.removeCookie("session");
+					hasher.setHash("signin");
+				}
+			});
+		} else {
+			// Parse URL (Will Show Signin or Public Page)
+			hasher.setHash(window.location.hash);
+		}
+		if (typeof callback === "function") {
+			
+			callback();
+		}
+	};
+
+	// Check if Session is Active
+	// URL parameter is the URL to goto if Session is dead
+	var activeSession = function () {
+		log("WebUI: Checking session.");
+		var status = false;
+		if ($.cookie("session") !== undefined) {
+			$.ajaxSetup({
+				beforeSend: function (xhr, settings) {
+					xhr.setRequestHeader("Authorization", "Token token=" + $.cookie("session"));
+				}
+			});
+			$.ajax({
+				type: "POST",
+				url: GLOBAL.SERVER_URL + "/api/sessions/ping.json",
+				async: false
+			}).done(function (data) {
+				log("WebUI: Session is good.");
+				status = true;
+			}).fail(function (data) {
+				log("WebUI: Session is invalid.");
+				status = false;
+			});
+		} else {
+			status = false;
+		}
+		return status;
+	};
+	
+	// Load HTML Page
+	function loadPage(url, callback) {
+		log("WebUI: Loading Page HTML: " + url);
+		$.get(url, function (data) {
+			log("WebUI: Loaded page.");
+			$("#app-panel").html(data);
+			reloadUI();
+			if (typeof callback === "function") {
+				callback();
+			}
+		}).fail(function (data) {
+			log("WebUI: Failed to load page.");
+		});
+	}
+
+	// Reload UI
+	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
+	function reloadUI() {
+		// Initialize tabs
+		$("[data-toggle='tabs'] a").click(function (e) {
+			e.preventDefault();
+			$(this).tab("show");
+		});
+	}
+
+// ======================= //
+//        SELECTORS        //
+// ======================= //
+
 	// Endowment Search
 	$("#endowment-search").typeahead({
 		remote: {
@@ -129,19 +248,6 @@ var WebUI = function() {
 	}).on("typeahead:selected", function (obj, datum, name) {
 		// Go to Endowment
 		hasher.setHash("endowment/" + datum.id);
-	});
-
-	// Show signup panel
-	$("#display-signup-btn").on("click", function (e) {
-		// Hide Signin Panel
-		$("#signin-panel").addClass("hide");
-		// Clean & Show Sign Up
-		$("#signup-name").val("");
-		$("#signup-email").val("");
-		$("#signup-password").val("");
-		$("#signup-accept-terms").attr("checked", false);
-		$("#signup-panel").removeClass("hide");
-		e.preventDefault();
 	});
 
 	// Terms Button
@@ -306,165 +412,16 @@ var WebUI = function() {
 		e.preventDefault();
 	});
 
-
-	/*
-	* Prepares the CSS classes to display the correct page
-	* @param isPublic {boolean}
-	* @param activeTab {jQuery Object} CSS id of the active navbar tab e.g. "#signup-nav"
-	* @param title {string} document.title for the page
-	*/
-	function setPageMetadata(isPublic, activeTab, title) {
-		// Show App Panel
-		$("#app-panel").removeClass("hide");
-
-		$("#signin-panel").addClass("hide");
-		$("#signup-panel").addClass("hide");
-
-		if (isPublic) {
-			// Hide Private Nav
-			$(".private-nav").addClass("hide");
-			// Show Public Nav
-			$(".public-nav").removeClass("hide");
-			// Set Tabs
-			$(".public-nav").siblings().removeClass("active");
-		} else {
-			// Show Private Nav
-			$(".private-nav").removeClass("hide");
-			// Hide Public Nav
-			$(".public-nav").addClass("hide");
-			// Set Tabs
-			$(".private-nav").siblings().removeClass("active");
-		}
-		// Set Tabs
-		if (activeTab !== null) {
-			activeTab.addClass("active");
-		}
-		// Set Title
-		document.title = title;
-	}
-
-	// Start Application
-	// This is only loaded on full page refresh or first visit
-	var startApplication = function (callback) {
-		log("WebUI: Starting Application");
-		if (activeSession()) {
-			// Get Donor Info
-			$.ajax({
-				url: GLOBAL.SERVER_URL + "/api/donors.json",
-				type: "GET",
-				contentType: "application/json",
-				dataType: "json"
-			}).done(function (data) {
-				log("WebUI: Loading Donor information.");
-				// Load Current URL
-				log(window.location.hash);
-				if (window.location.hash === "#signin" || window.location.hash === "#signup" || window.location.hash === "" || window.location.hash === "#/") {
-					// If the user's dashboard is empty, send them to the featured endowments page
-					// Otherwise, send them to the dashboard
-					var donations = 0;
-					$.ajax({
-						url: GLOBAL.SERVER_URL + "/api/donors/donations.json",
-						type: "GET",
-						contentType: "application/json",
-						dataType: "json",
-					}).done(function(response) {
-						donations = parseFloat(response.total);
-						if (donations > 0) {
-							crossroads.parse("/dashboard");
-							hasher.setHash("dashboard");
-						} else {
-							crossroads.parse("/");
-							hasher.setHash("");
-						}
-					});
-					
-				} else {
-					hasher.setHash(window.location.hash);
-				}
-				// Facebook conversion tracking
-				var fb_param = {};
-				fb_param.pixel_id = "6017461958346";
-				fb_param.value = "0.00";
-				fb_param.currency = "USD";
-				var fpw = document.createElement("script");
-				fpw.async = true;
-				fpw.src = "//connect.facebook.net/en_US/fp.js";
-				var ref = document.getElementsByTagName("script")[0];
-				ref.parentNode.insertBefore(fpw, ref);
-				log(ref);
-				// Hide Signin
-				// Show App Panel
-				$("#app-panel").removeClass("hide");
-				// Show Private Nav
-				$(".private-nav").removeClass("hide");
-				hidesignin();
-			}).error(function (data) {
-				if (data.statusText === "Unauthorized") {
-					log("WebUI: Invalid session, resetting cookie & displaying Signin.");
-					$.removeCookie("session");
-					hasher.setHash("signin");
-				}
-			});
-		} else {
-			// Parse URL (Will Show Signin or Public Page)
-			hasher.setHash(window.location.hash);
-		}
-		if (typeof callback === "function") {
-			
-			callback();
-		}
-	};
-
-	// Check if Session is Active
-	// URL parameter is the URL to goto if Session is dead
-	var activeSession = function () {
-		log("WebUI: Checking session.");
-		var status = false;
-		if ($.cookie("session") !== undefined) {
-			$.ajaxSetup({
-				beforeSend: function (xhr, settings) {
-					xhr.setRequestHeader("Authorization", "Token token=" + $.cookie("session"));
-				}
-			});
-			$.ajax({
-				type: "POST",
-				url: GLOBAL.SERVER_URL + "/api/sessions/ping.json",
-				async: false
-			}).done(function (data) {
-				log("WebUI: Session is good.");
-				status = true;
-			}).fail(function (data) {
-				log("WebUI: Session is invalid.");
-				status = false;
-			});
-		} else {
-			status = false;
-		}
-		return status;
-	};
-
 	// Nav Tabs
 	$(".private-nav a, .public-nav a").on("click", function (e) {
 		hasher.setHash($(this).attr("href"));
 		e.preventDefault();
 	});
 
-	// Load HTML Page
-	function loadPage(url, callback) {
-		log("WebUI: Loading Page HTML: " + url);
-		$.get(url, function (data) {
-			log("WebUI: Loaded page.");
-			$("#app-panel").html(data);
-			reloadUI();
-			if (typeof callback === "function") {
-				callback();
-			}
-		}).fail(function (data) {
-			log("WebUI: Failed to load page.");
-		});
-	}
+// ======================= //
+//         ROUTING         //
+// ======================= //
 
-	// Router
 	// Will Create proper routes based on Active Session
 	var router = function (callback) {
 		log("WebUI: Starting router.");
@@ -621,16 +578,6 @@ var WebUI = function() {
 		callback();
 	}
 
-	// Reload UI
-	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
-	function reloadUI() {
-		// Initialize tabs
-		$("[data-toggle='tabs'] a").click(function (e) {
-			e.preventDefault();
-			$(this).tab("show");
-		});
-	}
-
 	// Finally expose bits
 	return {
 		init: function () {
@@ -655,91 +602,3 @@ $(function () {
 	WebUI.init();
 });
 
-// =================== //
-//  UTILITY FUNCTIONS  //
-// =================== //
-
-function balanceGraph(data, DOMnode, titleText, series, label) {
-	var balance = [];
-
-	var zeroData = false;
-	if (typeof data.donor_balance_history !== 'undefined' &&
-		typeof data.donor_current_balance !== 'undefined') {
-		if (data.donor_balance_history.length === 0 &&
-			data.donor_current_balance === 0) {
-			zeroData = true;
-		}
-	}
-
-	if (series !== 'global_balance_history' &&
-		series !== 'global_projected_balance' && zeroData) {
-		DOMnode.html(
-			'<h3>' + titleText + '</h3>' +
-			'<p>You haven\'t subscribed to any endowments yet.</p>' +
-			'<p><a href="/" class="btn btn-primary find-endowment-btn">Find an Endowment</a></p>'
-		);
-	} else {
-		var content = data[series];
-		for (var i = 0; i < content.length; i++) {
-			balance[i] = {};
-			balance[i].x = new Date(content[i].date);
-			balance[i].y = content[i][label];
-		}
-
-		DOMnode.highcharts({
-			chart: {
-				type: 'line',
-				backgroundColor: '#fbfbfb'
-			},
-			title: { text: titleText },
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: 'Date'
-				}
-			},
-			yAxis: {
-				title: {
-					text: '($ USD)'
-				},
-				min: 0
-			},
-			series: [{
-				name: '$',
-				data: balance
-			}],
-			legend: {
-				enabled: false
-			},
-			tooltip: {
-				formatter: function() {
-					var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-					var month = months[this.point.x.getMonth() - 1];
-					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + '<br/>$' + this.point.y.toFixed(2);
-				}
-			},
-			credits: { enabled: false }
-		});
-	}
-}
-
-Highcharts.setOptions({
-	colors: [
-		"#2DC940",
-		"#2697A1",
-		"#FF9639",
-		"#FF4339",
-		"#009913",
-		"#016E78",
-		"#C55D00",
-		"#C50A00",
-		"#97F9A3",
-		"#95ECF4",
-		"#FFCA9A",
-		"#FF9F9A",
-		"#00780F",
-		"#01565E",
-		"#9B4900",
-		"#9B0800"
-	]
-});

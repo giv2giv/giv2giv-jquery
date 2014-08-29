@@ -22,7 +22,7 @@ giv2giv-jquery
 
 	sudo service nginx start
 
-**Step 5**: Edit `js/app.js` to point to your giv2giv API. Options include:
+**Step 5**: Edit `js/webui.js` to point to your giv2giv API. Options include:
 
 The giv2giv test server:
 
