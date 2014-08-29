@@ -92,8 +92,8 @@ function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 					showInLegend: true,
 					events: {
 						click: function(e) {
-							crossroads.parse("/endowment/" + e.point.id);
-							hasher.setHash("endowment/" + e.point.id);
+							crossroads.parse('/endowment/' + e.point.id);
+							hasher.setHash('endowment/' + e.point.id);
 						}
 					}
 				}
