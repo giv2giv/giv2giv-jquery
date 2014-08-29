@@ -23,30 +23,6 @@ function onStart() {
 	});
 }
 
-// Constructor for SimpleCard Object
-function SimpleCard(heading, body, button) {
-	this.cardHead = heading;
-	this.cardBody = body;
-	this.cardButton = button;
-	var html;
-
-	html += '<div class="card card-fixed">'+ 
-	'<h3 class="card-heading simple">'+ this.cardHead +'</h3>'+
-	'<div class="card-body">'+
-	'<p>'+ this.cardBody +'</p>'+
-	'<p><a class="btn btn-success add-endowment-btn" href="#">'+this.cardButton+'</a></p>'+
-	'</div></div>';
-
-	this.getHTML = function() {
-		return html;
-	};
-}
-
-// TODO: Constructor for DetailedCard Object
-function DetailedCard() {
-
-}
-
 // Get Featured Endowments
 function fetchFeaturedEndowments(callback) {
 	// Clear Old Data
@@ -88,11 +64,11 @@ function handleFeaturedEndowments(data) {
 			// Now build a card
 			log(sub);
 			
-			var row = getCardHTML(sub, true);
+			var row = new DetailedCard(sub, true);
 
 			if(endowments.length === (index + 1)) {
 				// Append Current Row
-				$('#featured-endowments').append(row);
+				$('#featured-endowments').append(row.getHTML());
 			}
 		});
 	}
@@ -135,25 +111,18 @@ function handleSubscribedEndowments(data) {
 		$('#sub-endowments').append(card.getHTML());
 	} else {
 		// Parse Results Here
-		// First Row
-		var row = $('#featured-endowments');
 		$.each(data, function(index, sub) {
 			
-
 		log(sub);
 		// Add the Card to the Row
-
-		row.prepend(getCardHTML(sub,false));
-
-		$('#sub-endowments').append(row);
+		$('#sub-endowments').append(new DetailedCard(sub,false).getHTML());
 		});
 		// Finally Add the Create Endowment Card
-		// Header
-		var add_body = '<div class="info"><div class="title">Create New Endowment</div>';
-		// Description
-		add_body += '<p><em>Ready to make a difference?</em></p>';
-		add_body += '<div class="bottom"><button id="add-endowment" class="btn btn-success">Create Endowment</button></div>';
-		card = '<div class="card card-fixed">'+add_body+'</div>';
+		card = new SimpleCard(
+			'Create New Endowment',
+			'<em>Ready to make a difference?</em>',
+			'Create an Endowment'
+			);
 		$("#sub-endowments .row:last").append(card.getHTML());
 	}
 }
@@ -414,68 +383,105 @@ function endowmentSelectors() {
 	});
 }
 
-
-function Card(sub) {
-	this.name = sub.name;
-	this.description = sub.description;
-	this.plural_donors = sub.global_balances.endowment_donor_count !== 1;
-	this.donor_string = plural_donors ? 'donors' : 'donor';
-}
-
-// Returns a fully-formed HTML object to be appended to the DOM.
-function getCardHTML(sub, featured) {
-	var cardBody = '<div class="info"><div class="title">'+sub.name+'</div>';
-	// Description
-	cardBody += '<p><em>'+sub.description+'</em></p>';
-	var donor_string;
-	// # of donors
-
-	cardBody += '<div class="desc"><strong>'+sub.global_balances.endowment_donor_count+'</strong> individual '+donor_string+'.</div>';
-	if (featured) {
-		cardBody += '<div class="desc"><strong>'+sub.global_balances.endowment_donations_count+'</strong> individual donations.</div>';
-	}
-	// Endowment Balance
-	cardBody += '<div class="desc">Endowment Balance: <strong>$'+sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")+'</strong>.</div>';
-	if (featured) {
-		// Donation Amount
-		// Endowment Balance & Donations
-		cardBody += '<div class="desc">Total everyone has donated: <strong>$'+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")+'</strong></div>';
-	} else {
-		cardBody += '<div class="desc">Total I have donated: <strong>$'+sub.my_balances.my_donations_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")+'</strong></div>';
-		// Endowment Balance & Donations
-		cardBody += '<div class="desc">Total everyone has donated: <strong>$'+sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")+'</strong></div>';
-		// Donation Amount
-	}
-	// Donor Balance
-	cardBody += '<div class="desc">My Current Balance: <strong>$'+sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")+'</strong>.</div>';
-
-	var actions;
-
-	if (featured) {
-		// Action Buttons
-		actions = '<div class="bottom"><button data-id="'+sub.id+'" class="btn btn-primary endowment-details-btn">More Details</button> ';
-	} else {
-		// Action Buttons
-		actions = '<div class="bottom"><button data-id="'+sub.endowment_id+'" class="btn btn-primary endowment-details-btn">More Details</button> ';
-	}
-
-	// Subscription Check
-	if (sub.my_balances.is_subscribed) {
-		actions += '<button data-id="'+sub.id+'" class="btn btn-danger endowment-unsubscribe-btn">Unsubscribe</button></div>';
-	} else {
-		actions += '<button data-id="'+sub.id+'" class="btn btn-success endowment-subscribe-btn">Subscribe</button></div>';
-	}
-	var card_html = '<div class="card card-fixed">'+cardBody+'</div>'+actions+'</div>';
-	return card_html;
-
-}
-
 function cleanAndShowModal() {
 	$('#add-endowment-modal #endowment-name').val('');
 	$('#add-endowment-modal #endowment-desc').val('');
 	$('#add-endowment-modal #add-endowment-charities').val('');
 	$('#add-endowment-modal').modal('show');
 }
+
+// Constructor for SimpleCard Object
+function SimpleCard(heading, body, button) {
+	this.cardHead = heading;
+	this.cardBody = body;
+	this.cardButton = button;
+	var html;
+
+	html += '<div class="card card-fixed">'+ 
+	'<h3 class="card-heading simple">'+ this.cardHead +'</h3>'+
+	'<div class="card-body">'+
+	'<p>'+ this.cardBody +'</p>'+
+	'<p><a class="btn btn-success add-endowment-btn" href="#">'+this.cardButton+'</a></p>'+
+	'</div></div>';
+
+	this.getHTML = function() {
+		return html;
+	};
+}
+
+// Constructor for DetailedCard Object
+function DetailedCard(sub, isFeatured) {
+	this.id = sub.id;
+	this.cardTitle = sub.name;
+	this.cardBody = sub.description;
+	this.isFeatured = isFeatured;
+	this.donorCount = sub.global_balances.endowment_donor_count;
+	this.pluralDonors = this.donorCount !== 1;
+	this.donorString = this.pluralDonors ? ' individual donors' : ' individual donor';
+	this.donationsCount = sub.global_balances.endowment_donations_count;
+	this.totalBalance = sub.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	this.totalDonations = sub.global_balances.endowment_total_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	this.myBalance = sub.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	this.myDonations = sub.my_balances.my_donations_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	this.isSubscribed = sub.my_balances.is_subscribed;
+
+	var div = function(cssClass) {return '<div class="'+cssClass+'">';};
+	var _div = '</div>';
+	var strong = '<strong>';
+	var _strong = '</strong>';
+	var p = '<p>';
+	var _p = '</p>';
+	var em = '<em>';
+	var _em = '</em>';
+
+	var html = '';
+	html += div('card card-fixed')+
+	div('info')+
+		div('title')+
+			this.cardTitle+
+		_div+
+		p+em+
+			this.cardBody+
+		_p+_em+
+
+		div('desc')+strong+
+			this.donorCount+_strong+this.donorString+
+		_div;
+
+		if (this.isFeatured) {
+			html += div('desc')+strong+
+				this.donationsCount +_strong+' individual donations'+_div;
+		}html+=
+
+		div('desc')+'Endowment Balance: '+
+			strong+'$'+
+				this.totalBalance+
+			_strong+
+		_div;
+
+		if (this.isFeatured) {
+			html+=div('desc')+'Total everyone has donated: '+strong+'$'+this.totalDonations+_strong+_div;
+		} else {
+			html+=div('desc')+'Total I have donated: '+strong+'$'+this.myDonations+_strong+_div;
+			html+=div('desc')+'Total everyone has donated: '+strong+'$'+this.totalDonations+_strong+_div;
+		}html+=
+		div('desc')+'My Current Balance: '+strong+'$'+this.myBalance+_strong+_div+
+	_div+
+
+	div('bottom')+
+		'<button data-id="'+this.id+'" class="btn btn-primary endowment-details-btn">More Details</button> ';
+			if (this.isSubscribed) {
+				html+='<button data-id="'+this.id+'" class="btn btn-danger endowment-unsubscribe-btn">Unsubscribe</button>';
+			} else {
+				html+='<button data-id="'+sub.id+'" class="btn btn-success endowment-subscribe-btn">Subscribe</button>';
+			}html+=
+	_div;
+
+	this.getHTML = function() {
+		return html;
+	};
+}
+
 
 // ======================= //
 //  ENDOWMENTS DETAILS UI  //
