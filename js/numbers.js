@@ -28,11 +28,15 @@ function fetchStats() {
 
 		var current_fund_balance_all_donors = '$' + data.current_fund_balance_all_donors.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var total_amount_of_donations = '$' + data.total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		var total_number_of_donations = '$' + data.total_number_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var total_amount_of_grants = '$' + data.total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		var total_amount_of_pending_grants = '$' + data.total_amount_of_pending_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
 		$("#current-fund-balance-all-donors").text(current_fund_balance_all_donors);
 		$("#total-amount-of-donations").text(total_amount_of_donations);
+		$("#total-number-of-donations").text(total_number_of_donations);
 		$("#total-amount-of-grants").text(total_amount_of_grants);
+		$("#total-amount-of-pending-grants").text(total_amount_of_pending_grants);
 		
 	}).fail(function(data) {
 			log(data);
