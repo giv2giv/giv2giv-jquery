@@ -28,7 +28,7 @@ function fetchStats() {
 
 		var current_fund_balance_all_donors = '$' + data.current_fund_balance_all_donors.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var total_amount_of_donations = '$' + data.total_amount_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-		var total_number_of_donations = '$' + data.total_number_of_donations.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		var total_number_of_donations = data.total_number_of_donations;
 		var total_amount_of_grants = '$' + data.total_amount_of_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		var total_amount_of_pending_grants = '$' + data.total_amount_of_pending_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
