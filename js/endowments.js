@@ -17,9 +17,9 @@ function onStart() {
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
 		// Fetch Subscribed Endowments
-		fetchSubscribedEndowments(function() {
+		// fetchSubscribedEndowments(function() {
 			endowmentSelectors();
-		});
+		// });
 	});
 }
 
@@ -233,6 +233,17 @@ function endowmentSelectors() {
 	$('#confirm-subscribe-endowment').on('click', function(e) {
 		$btn = $(this);
 		$btn.button('loading');
+
+
+		if () {
+			$btn.button('reset');
+			return;
+		}
+		// <div class="form-group">
+		// 					<label for="endowment-min-donation">Minimum Monthly Donation Amount</label>
+		// 					<input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount" class="form-control">
+		// 				</div>
+
 		var payload = {};
 		payload.amount = $('#subscribe-endowment-modal #subscribe-endowment-donation').val();
 		payload.endowment_id = $(this).attr('data-id');
@@ -267,7 +278,8 @@ function endowmentSelectors() {
 	// Subscribe Button
 	$('.endowment-subscribe-btn').off('click');
 	$('.endowment-subscribe-btn').on('click', function(e) {
-				// Take ID and get Endowment Details
+		// Take ID and get Endowment Details
+
 		// Set Subscribe Button
 		$('#confirm-subscribe-endowment').attr('data-id', $(this).attr('data-id'));
 		// Now Get Endowment Details
@@ -305,6 +317,8 @@ function endowmentSelectors() {
 				}
 				// Show Modal
 				$('#subscribe-endowment-modal').modal('show');
+			}).fail(function(){
+				growlError('You can\'t subscribe until you set up a payment account under Account Settings -> Payment Accounts');
 			});
 		}).fail(function(data) {
 			log(data);
@@ -387,8 +401,8 @@ function SimpleCard(heading, body, button) {
 	this.cardHead = heading;
 	this.cardBody = body;
 	this.cardButton = button;
-	var html;
 
+	var html = '';
 	html += '<div class="card card-fixed">'+ 
 	'<h3 class="card-heading simple">'+ this.cardHead +'</h3>'+
 	'<div class="card-body">'+
@@ -456,7 +470,7 @@ function DetailedCard(sub, isFeatured) {
 			if (this.isSubscribed) {
 				html+='<button data-id="'+this.id+'" class="btn btn-danger endowment-unsubscribe-btn">Unsubscribe</button>';
 			} else {
-				html+='<button data-id="'+sub.id+'" class="btn btn-success endowment-subscribe-btn">Subscribe</button>';
+				html+='<button data-id="'+this.id+'" class="btn btn-success endowment-subscribe-btn">Subscribe</button>';
 			}html+=
 	'</div>';
 
