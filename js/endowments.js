@@ -28,7 +28,7 @@ function fetchFeaturedEndowments(callback) {
 	// Clear Old Data
 	log('Fetching featured endowments');
 	$.ajax({
-		url: server_url + '/api/endowment.json',
+		url: GLOBAL.SERVER_URL + '/api/endowment.json',
 		method: 'GET',
 		data: {
 			page: '1',
@@ -71,7 +71,7 @@ function fetchSubscribedEndowments(callback) {
 	// Clear Old Data
 	log('Fetching sub endowments');
 	$.ajax({
-		url: server_url + '/api/donors/subscriptions.json',
+		url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
 		method: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -142,7 +142,7 @@ function endowmentSelectors() {
 		multiple: true,
 		minimumInputLength: 3,
 		ajax: {
-			url: server_url + '/api/charity.json',
+			url: GLOBAL.SERVER_URL + '/api/charity.json',
 			dataType: 'json',
 			quietMillis: 500,
 			data: function (term, page) { // page is the one-based page number tracked by Select2
@@ -198,7 +198,7 @@ function endowmentSelectors() {
 		log(request_payload);
 		// Submit & Wait
 		$.ajax({
-			 url: server_url + '/api/endowment.json',
+			 url: GLOBAL.SERVER_URL + '/api/endowment.json',
 			 type: 'POST',
 			 data: request_payload,
 			 contentType: 'application/json',
@@ -237,7 +237,7 @@ function endowmentSelectors() {
 		var subscriptionAmount = $('#subscribe-endowment-donation').val();
 		if (subscriptionAmount < GLOBAL.MIN_DONATION) {
 			$btn.button('reset');
-			growlError('Sorry! The minimum monthly donation is ' + GLOBAL.MIN_DONATION.toFixed(2));
+			growlError('Sorry! The minimum monthly donation is $' + GLOBAL.MIN_DONATION.toFixed(2));
 			return;
 		}
 
@@ -246,7 +246,7 @@ function endowmentSelectors() {
 		payload.endowment_id = $(this).attr('data-id');
 		var request_payload = JSON.stringify(payload);
 		$.ajax({
-			url: server_url + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
 			method: 'POST',
 			contentType: 'application/json',
 			dataType:'json',
@@ -281,7 +281,7 @@ function endowmentSelectors() {
 		$('#confirm-subscribe-endowment').attr('data-id', $(this).attr('data-id'));
 		// Now Get Endowment Details
 		$.ajax({
-			url: server_url + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			// Clean & Prep Modal
@@ -290,7 +290,7 @@ function endowmentSelectors() {
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
-				url: server_url + '/api/donors/payment_accounts.json',
+				url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
@@ -331,7 +331,7 @@ function endowmentSelectors() {
 		$('#confirm-unsubscribe-endowment').attr('data-id', $(this).attr('data-id'));
 		// Now Get Endowment Details
 		$.ajax({
-			url: server_url + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			log(data);
@@ -356,7 +356,7 @@ function endowmentSelectors() {
 		$btn.button('loading');
 		// Now Get Endowment Details
 		$.ajax({
-			url: server_url + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
 			method: 'GET'
 		}).done(function(data) {
 			// Refresh Endowments & Hide Modal
@@ -512,7 +512,7 @@ function onDetails(endowment) {
 		payload.endowment_id = $(this).attr('data-id');
 		var request_payload = JSON.stringify(payload);
 		$.ajax({
-			url: server_url + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
 			method: 'POST',
 			contentType: 'application/json',
 			dataType:'json',
@@ -541,7 +541,7 @@ function onDetails(endowment) {
 		$('#confirm-subscribe-endowment').attr('data-id', $(this).attr('data-id'));
 		// Now Get Endowment Details
 		$.ajax({
-			url: server_url + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			// Clean & Prep Modal
@@ -551,7 +551,7 @@ function onDetails(endowment) {
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
-				url: server_url + '/api/donors/payment_accounts.json',
+				url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
@@ -590,7 +590,7 @@ function onDetails(endowment) {
 		$('#confirm-unsubscribe-endowment').attr('data-id', $(this).attr('data-id'));
 		// Now Get Endowment Details
 		$.ajax({
-			url: server_url + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			log(data);
@@ -614,7 +614,7 @@ function onDetails(endowment) {
 		$btn.button('loading');
 		// Now Get Endowment Details
 		$.ajax({
-			url: server_url + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
 			method: 'GET'
 		}).done(function(data) {
 			$btn.button('reset');
@@ -665,7 +665,7 @@ function onDetails(endowment) {
 function fetchEndowmentDonations(id, callback) {
 	log('Fetching endowment donations.');
 	$.ajax({
-		url: server_url + '/api/donors/donations.json',
+		url: GLOBAL.SERVER_URL + '/api/donors/donations.json',
 		method: 'GET',
 		data: {
 			endowment_id: id

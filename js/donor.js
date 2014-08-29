@@ -25,7 +25,7 @@ function onStart() {
 function fetchPaymentAccounts(callback) {
 	// Get Payment Accounts
 	$.ajax({
-		url: server_url + '/api/donors/payment_accounts.json',
+		url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
 		method: 'GET',
 		contentType: "application/json",
 		dataType: "json"
@@ -87,7 +87,7 @@ function fetchPaymentAccounts(callback) {
 // Fetch Donor Profile
 function fetchDonorProfile(callback) {
 	$.ajax({
-		url: server_url + '/api/donors.json',
+		url: GLOBAL.SERVER_URL + '/api/donors.json',
 		method: 'GET',
 		dataType: "json",
 		contentType: "application/json"
@@ -157,7 +157,7 @@ function loadUI() {
 	$("#confirm-payment-removal").on("click", function(e) {
 		$btn = $(this).button('loading');
 		$.ajax({
-			url: server_url + '/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$(this).attr("data-id")+'.json',
 			method: 'DELETE',
 			contentType: "application/json",
 			dataType:"json"
@@ -208,7 +208,7 @@ function loadUI() {
 		var payload = JSON.stringify(donor);
 
 		$.ajax({
-			url: server_url + "/api/donors.json",
+			url: GLOBAL.SERVER_URL + "/api/donors.json",
 			type: "PUT",
 			data: payload,
 			contentType: "application/json",
@@ -272,7 +272,7 @@ function loadUI() {
 
 			// Get donor info
 			$.ajax({
-				url: server_url + '/api/donors.json',
+				url: GLOBAL.SERVER_URL + '/api/donors.json',
 				method: 'GET',
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
@@ -286,7 +286,7 @@ function loadUI() {
 
 			// Get donation info
 			$.ajax({
-				url: server_url + '/api/donors/donations.json',
+				url: GLOBAL.SERVER_URL + '/api/donors/donations.json',
 				method: 'GET',
 				data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 				contentType: "application/json",
@@ -334,7 +334,7 @@ function loadUI() {
 	// 	*/
 
  //  	$.ajax({
-	// 	  url: server_url + '/api/donors/donations.json',
+	// 	  url: GLOBAL.SERVER_URL + '/api/donors/donations.json',
 	// 	  method: 'GET',
 	// 	  data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 	// 		contentType: "application/json",
@@ -379,7 +379,7 @@ var stripeResponseHandler = function(status, response) {
 		var payload = JSON.stringify(payment);
 
 		$.ajax({
-			url: server_url + "/api/donors/payment_accounts.json",
+			url: GLOBAL.SERVER_URL + "/api/donors/payment_accounts.json",
 			type: "POST",
 			data: payload,
 			contentType: "application/json",

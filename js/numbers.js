@@ -16,7 +16,7 @@ function onStart() {
 
 function fetchStats() {
 	$.ajax({
-		url: server_url + '/api/donors/balance_information.json',
+		url: GLOBAL.SERVER_URL + '/api/donors/balance_information.json',
 		method: 'GET',
 		contentType: "application/json",
 		dataType: "json"

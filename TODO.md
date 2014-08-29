@@ -2,7 +2,6 @@
 
 - When you create a new endowment, you should automatically subscribe to it (Make crossroads redirect you immediately to the endowment you just created, also show a growl message prompting the user to subscribe to it.)
 - Navbar search loading spinner, also expand to fill width
-login w/ fb, g+
 share this endowment via fb/twitter
 - Pagination in endowments
 endpoints for fb/goog:
@@ -14,7 +13,6 @@ endpoints for fb/goog:
 - Landing Page
 	- Add FB / Twitter Links
 	- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
-- Terms of Service
 - Pick better fonts and normalize fonts (only two fonts)
 - CSS for gravatar in logged-in navbar
 - Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead

@@ -17,7 +17,7 @@ function onStart() {
 function fetchDonorData() {
 	// First ajax call
 	$.ajax({
-		url: server_url + '/api/donors/balance_information.json',
+		url: GLOBAL.SERVER_URL + '/api/donors/balance_information.json',
 		type: 'GET',
 		contentType: 'application/json',
 		dataType: 'json'
@@ -34,7 +34,7 @@ function fetchDonorData() {
 
 		// Second ajax call
 		$.ajax({
-			url: server_url + '/api/donors/subscriptions.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
 			type: 'GET',
 			contentType: 'application/json',
 			dataType: 'json'

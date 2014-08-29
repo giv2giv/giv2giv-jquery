@@ -20,7 +20,7 @@ $(document).ready(function () {
 
 		$.ajax({
 
-			url: server_url + '/api/donors/donations.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/donations.json',
 			method: 'GET',
 			data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
 			contentType: "application/json",

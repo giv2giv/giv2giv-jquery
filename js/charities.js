@@ -15,7 +15,7 @@ $(function() {
 
 		//Search charities
 		$.ajax({
-			url: server_url + '/api/charities.json',
+			url: GLOBAL.SERVER_URL + '/api/charities.json',
 			method: 'GET',
 			data: {
 			page: '1',

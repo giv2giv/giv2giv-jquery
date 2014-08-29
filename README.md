@@ -26,10 +26,10 @@ giv2giv-jquery
 
 The giv2giv test server:
 
-	var server_url = "https://apitest.giv2giv.org"
+	GLOBAL.SERVER_URL = "https://apitest.giv2giv.org"
 
 A local development copy of the giv2giv Ruby on Rails API from [giv2giv-rails](https://github.com/giv2giv/giv2giv-rails):
 
-	var server_url = "http://localhost:3000"
+	GLOBAL.SERVER_URL = "http://localhost:3000"
 
 **Step 6**: Using a browser navigate to `http://localhost`. If you get a `403` error try `sudo chmod -R 755 *`

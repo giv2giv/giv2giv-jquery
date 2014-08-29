@@ -1,21 +1,22 @@
 // WebUI Application
 // Michael Thomas, 2014
-var server_url = "https://apitest.giv2giv.org";
+
+// GLOBAL CONSTANTS
+var GLOBAL = {};
+GLOBAL.MIN_DONATION = 5; // $5.00 minimum donation
+GLOBAL.SERVER_URL = "https://apitest.giv2giv.org";
 
 // Setup Stripe
-var stripe_pub_key = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
-Stripe.setPublishableKey(stripe_pub_key);
-
-// Wish Page ID
-var wish_page;
+GLOBAL.STRIPE_PUB_KEY = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
+Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @todo - Send serious logs to server?
-var debug = false;
+GLOBAL.DEBUG = false;
 
 log = function () {
-	if (debug && console && typeof console.log === "function") {
+	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {
 			console.log(arguments[i]);
 		}
@@ -102,7 +103,7 @@ var WebUI = function() {
 		remote: {
 			name: "endowments",
 			rateLimitWait: 500,
-			url: server_url + "/api/endowment.json?page=1&per_page=5&query=%QUERY",
+			url: GLOBAL.SERVER_URL + "/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function (response) {
 				var results = [];
 				log(response);
@@ -145,7 +146,9 @@ var WebUI = function() {
 
 	// Terms Button
 	$("#terms-btn").on("click", function (e) {
-		$("#terms-div").load("/ui/terms.html", function () {
+		$("#terms-body").load("/ui/terms.html", function () {
+			$("#user-name").html($("#signup-name").val());
+			$("#user-email").html($("#signup-email").val());
 			$("#terms-modal").modal("show");
 		});
 		e.preventDefault();
@@ -159,7 +162,7 @@ var WebUI = function() {
 		log(payload);
 		var request = JSON.stringify(payload);
 		$.ajax({
-			url: server_url + "/api/wishes.json",
+			url: GLOBAL.SERVER_URL + "/api/wishes.json",
 			method: "POST",
 			data: request,
 			dataType: "json",
@@ -192,7 +195,7 @@ var WebUI = function() {
 
 		var request = JSON.stringify(payload);
 		$.ajax({
-			url: server_url + "/api/donors.json",
+			url: GLOBAL.SERVER_URL + "/api/donors.json",
 			method: "POST",
 			data: request,
 			dataType: "json",
@@ -204,7 +207,7 @@ var WebUI = function() {
 				"password": $("#signup-password").val()
 			});
 			$.ajax({
-				url: server_url + "/api/sessions/create.json",
+				url: GLOBAL.SERVER_URL + "/api/sessions/create.json",
 				type: "POST",
 				data: payload,
 				contentType: "application/json",
@@ -258,7 +261,7 @@ var WebUI = function() {
 			"password": $("#signin-password").val()
 		});
 		$.ajax({
-			url: server_url + "/api/sessions/create.json",
+			url: GLOBAL.SERVER_URL + "/api/sessions/create.json",
 			type: "POST",
 			data: payload,
 			contentType: "application/json",
@@ -289,7 +292,7 @@ var WebUI = function() {
 	$("#logout-btn").on("click", function (e) {
 		log("WebUI: Logout.");
 		$.ajax({
-			url: server_url + "/api/sessions/destroy.json",
+			url: GLOBAL.SERVER_URL + "/api/sessions/destroy.json",
 			type: "POST",
 			contentType: "application/json",
 			dataType: "json"
@@ -347,7 +350,7 @@ var WebUI = function() {
 		if (activeSession()) {
 			// Get Donor Info
 			$.ajax({
-				url: server_url + "/api/donors.json",
+				url: GLOBAL.SERVER_URL + "/api/donors.json",
 				type: "GET",
 				contentType: "application/json",
 				dataType: "json"
@@ -360,7 +363,7 @@ var WebUI = function() {
 					// Otherwise, send them to the dashboard
 					var donations = 0;
 					$.ajax({
-						url: server_url + "/api/donors/donations.json",
+						url: GLOBAL.SERVER_URL + "/api/donors/donations.json",
 						type: "GET",
 						contentType: "application/json",
 						dataType: "json",
@@ -425,7 +428,7 @@ var WebUI = function() {
 			});
 			$.ajax({
 				type: "POST",
-				url: server_url + "/api/sessions/ping.json",
+				url: GLOBAL.SERVER_URL + "/api/sessions/ping.json",
 				async: false
 			}).done(function (data) {
 				log("WebUI: Session is good.");
@@ -535,7 +538,7 @@ var WebUI = function() {
 		if (activeSession()) {
 			// Load Endowment Details First
 			$.ajax({
-				url: server_url + "/api/endowment/" + id + ".json",
+				url: GLOBAL.SERVER_URL + "/api/endowment/" + id + ".json",
 				type: "GET",
 				contentType: "application/json",
 				dataType: "json"
@@ -552,7 +555,7 @@ var WebUI = function() {
 		} else {
 			// Load Endowment Details First
 			$.ajax({
-				url: server_url + "/api/endowment/" + id + ".json",
+				url: GLOBAL.SERVER_URL + "/api/endowment/" + id + ".json",
 				type: "GET",
 				contentType: "application/json",
 				dataType: "json"
@@ -619,7 +622,7 @@ var WebUI = function() {
 	}
 
 	// Reload UI
-	// Some jQuery Selectors can"t delegate & need to be applied to dynamic HTML
+	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
 	function reloadUI() {
 		// Initialize tabs
 		$("[data-toggle='tabs'] a").click(function (e) {
@@ -740,7 +743,3 @@ Highcharts.setOptions({
 		"#9B0800"
 	]
 });
-
-// GLOBAL CONSTANTS
-var GLOBAL = {};
-GLOBAL.MIN_DONATION = 5;
