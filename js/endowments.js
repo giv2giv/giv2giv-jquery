@@ -17,9 +17,9 @@ function onStart() {
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
 		// Fetch Subscribed Endowments
-		fetchSubscribedEndowments(function() {
+		// fetchSubscribedEndowments(function() {
 			endowmentSelectors();
-		});
+		// });
 	});
 }
 
@@ -48,9 +48,10 @@ function fetchFeaturedEndowments(callback) {
 
 function handleFeaturedEndowments(data) {
 	$('#featured-endowments').html('');
+	var card;
 	if(data.message === 'Not found') {
 		// Display not found card
-		var card = new SimpleCard(
+		card = new SimpleCard(
 			'No Endowments Yet',
 			'There are currently no giv2giv endowments yet.',
 			'Create an Endowment');
@@ -58,19 +59,10 @@ function handleFeaturedEndowments(data) {
 	} else {
 		// Parse Results Here
 		var endowments = data.endowments;
-		// First Row
-
-		$.each(endowments, function(index, sub) {
-			// Now build a card
-			log(sub);
-			
-			var row = new DetailedCard(sub, true);
-
-			if(endowments.length === (index + 1)) {
-				// Append Current Row
-				$('#featured-endowments').append(row.getHTML());
-			}
-		});
+		for (var i = 0; i < endowments.length; i++) {
+			card = new DetailedCard(endowments[i], true);
+			$('#featured-endowments').append(card.getHTML());
+		}
 	}
 }
 
@@ -426,47 +418,38 @@ function DetailedCard(sub, isFeatured) {
 	this.isSubscribed = sub.my_balances.is_subscribed;
 
 	var div = function(cssClass) {return '<div class="'+cssClass+'">';};
-	var _div = '</div>';
-	var strong = '<strong>';
-	var _strong = '</strong>';
-	var p = '<p>';
-	var _p = '</p>';
-	var em = '<em>';
-	var _em = '</em>';
 
 	var html = '';
 	html += div('card card-fixed')+
 	div('info')+
 		div('title')+
 			this.cardTitle+
-		_div+
-		p+em+
+		'</div><p><em>'+
 			this.cardBody+
-		_p+_em+
+		'</p></em>'+
 
-		div('desc')+strong+
-			this.donorCount+_strong+this.donorString+
-		_div;
+		div('desc')+'<strong>'+
+			this.donorCount+'</strong>'+this.donorString+
+		'</div>';
 
 		if (this.isFeatured) {
-			html += div('desc')+strong+
-				this.donationsCount +_strong+' individual donations'+_div;
+			html += div('desc')+'<strong>'+
+				this.donationsCount +'</strong> individual donations</div>';
 		}html+=
 
 		div('desc')+'Endowment Balance: '+
-			strong+'$'+
+			'<strong>$'+
 				this.totalBalance+
-			_strong+
-		_div;
+		'</strong></div>';
 
 		if (this.isFeatured) {
-			html+=div('desc')+'Total everyone has donated: '+strong+'$'+this.totalDonations+_strong+_div;
+			html+=div('desc')+'Total everyone has donated: <strong>$'+this.totalDonations+'</strong></div>';
 		} else {
-			html+=div('desc')+'Total I have donated: '+strong+'$'+this.myDonations+_strong+_div;
-			html+=div('desc')+'Total everyone has donated: '+strong+'$'+this.totalDonations+_strong+_div;
+			html+=div('desc')+'Total I have donated: <strong>$'+this.myDonations+'</strong></div>';
+			html+=div('desc')+'Total everyone has donated: <strong>$'+this.totalDonations+'</strong></div>';
 		}html+=
-		div('desc')+'My Current Balance: '+strong+'$'+this.myBalance+_strong+_div+
-	_div+
+		div('desc')+'My Current Balance: <strong>$'+this.myBalance+'</strong></div>'+
+	'</div>'+
 
 	div('bottom')+
 		'<button data-id="'+this.id+'" class="btn btn-primary endowment-details-btn">More Details</button> ';
@@ -475,13 +458,12 @@ function DetailedCard(sub, isFeatured) {
 			} else {
 				html+='<button data-id="'+sub.id+'" class="btn btn-success endowment-subscribe-btn">Subscribe</button>';
 			}html+=
-	_div;
+	'</div>';
 
 	this.getHTML = function() {
 		return html;
 	};
 }
-
 
 // ======================= //
 //  ENDOWMENTS DETAILS UI  //
