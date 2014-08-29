@@ -14,9 +14,8 @@ Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
-// @todo - Send serious logs to server?
+// @TODO - Send serious logs to server?
 GLOBAL.DEBUG = false;
-
 log = function () {
 	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {
@@ -123,6 +122,7 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 	}
 }
 
+// Highcharts colors
 Highcharts.setOptions({
 	colors: [
 		"#2DC940",

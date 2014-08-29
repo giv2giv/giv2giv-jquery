@@ -334,7 +334,7 @@ var WebUI = function() {
 				var res = JSON.parse(data.responseText);
 				$btn.button("reset");
 				if (res.message == "unauthorized") {
-					growlError("Could not login with that Email or Password");
+					growlError("Could not login with that email or password");
 				} else {
 					growlError(res.message);
 					log("WebUI: Signin Error - " + res.message);
@@ -344,7 +344,7 @@ var WebUI = function() {
 			var res = JSON.parse(data.responseText);
 			$btn.button("reset");
 			if (res.message == "unauthorized") {
-				growlError("Could not login with that Email or Password");
+				growlError("Could not login with that email or password");
 			} else if (res.message) {
 				growlError(res.message);
 				log("WebUI: Signin Error - " + res.message);
@@ -386,7 +386,7 @@ var WebUI = function() {
 			$btn.button("reset");
 			var res = JSON.parse(data.responseText);
 			if (res.message == "unauthorized") {
-				$("#signin-message").html("Could not login with that Email or Password");
+				$("#signin-message").html("Could not login with that email or password");
 			} else {
 				log("WebUI: Signin Error - " + res.message);
 			}
@@ -408,6 +408,8 @@ var WebUI = function() {
 			growlSuccess("You have successfully signed out of giv2giv");
 			crossroads.parse("signin");
 			hasher.setHash("signin");
+			EndowmentsUI.start.halt();
+			DashboardUI.start.halt();
 		});
 		e.preventDefault();
 	});
@@ -435,8 +437,7 @@ var WebUI = function() {
 			loadPage("/ui/endowments.html", function () {
 				$("#app-container").attr("data-page-id", "endowments");
 				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
-				// Load JS
-				EndowmentsUI.start.dispatch();
+				EndowmentsUI.start.dispatch(); // Load JS
 			});
 		} else {
 			loadPage("/ui/landing.html", function () {
