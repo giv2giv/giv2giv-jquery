@@ -9,6 +9,8 @@ endpoints for fb/goog:
 /auth/facebook
 /auth/google_oauth2
 
+- Subscriptions not showing up properly
+
 # OTHER STUFF #
 
 - Landing Page

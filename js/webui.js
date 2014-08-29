@@ -252,16 +252,17 @@ var WebUI = function() {
 
 	// Terms Button
 	$("#terms-btn").on("click", function (e) {
+		e.preventDefault();
 		$("#terms-body").load("/ui/terms.html", function () {
 			$("#user-name").html($("#signup-name").val());
 			$("#user-email").html($("#signup-email").val());
 			$("#terms-modal").modal("show");
 		});
-		e.preventDefault();
 	});
 
 	// Wish Modal
 	$("#make-wish-form").on("submit", function (e) {
+		e.preventDefault();
 		var payload = {};
 		payload.wish_text = $("#wish").val();
 		payload.page = $("#app-container").attr("data-page-id");
@@ -279,18 +280,11 @@ var WebUI = function() {
 		}).fail(function (data) {
 			growlError("There was an error making this wish.");
 		});
-		e.preventDefault();
-	});
-
-	// Hide sign-up & return to signin
-	$("#cancel-signup-btn").on("click", function (e) {
-		$("#signup-panel").addClass("hide");
-		$("#signin-panel").removeClass("hide");
-		e.preventDefault();
 	});
 
 	// Signup Form
 	$("#signup-form").on("submit", function (e) {
+		e.preventDefault();
 		$btn = $("#signup-btn");
 		$btn.button("loading");
 		var payload = {};
@@ -354,11 +348,11 @@ var WebUI = function() {
 				});
 			}
 		});
-		e.preventDefault();
 	});
 
 	// Signin Form
 	$("#signin-form").on("submit", function (e) {
+		e.preventDefault();
 		// Build Payload
 		$btn = $("#signin-btn");
 		$btn.button("loading");
@@ -391,8 +385,39 @@ var WebUI = function() {
 				log("WebUI: Signin Error - " + res.message);
 			}
 		});
-		e.preventDefault();
 	});
+
+	// var authWindow;
+	// $("#gplus-signup")
+	// $("#facebook-signup").on('click', function(e) {
+	// 	e.preventDefault();
+	// 	console.log('here')
+
+	// 	authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
+	// 	setTimeout(CheckLoginStatus, 1000);
+	// 	authWindow.focus();
+	// 	return false;
+	// });
+
+	// function CheckLoginStatus() {
+	// 	if (authWindow.closed) {
+	// 		console.log('Success')
+	// 	} else {
+	// 		setTimeout(CheckLoginStatus, 1000);
+	// 	}
+	// }
+
+	// $("#gplus-signin")
+	// $("#facebook-signin").on('click', function(e) {
+		// e.preventDefault();
+		// console.log('here')
+		// window.location.href = GLOBAL.SERVER_URL + "/auth/facebook";
+		// authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
+		// setTimeout(CheckLoginStatus, 1000);
+		// authWindow.focus();
+	// 	return false;
+	// });
+			// growlError("There was an error connecting to Facebook");
 
 	// Handle Logout Button
 	$("#logout-btn").on("click", function (e) {
