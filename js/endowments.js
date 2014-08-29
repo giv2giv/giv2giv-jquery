@@ -234,18 +234,15 @@ function endowmentSelectors() {
 		$btn = $(this);
 		$btn.button('loading');
 
-
-		if () {
+		var subscriptionAmount = $('#subscribe-endowment-donation').val();
+		if (subscriptionAmount < GLOBAL.MIN_DONATION) {
 			$btn.button('reset');
+			growlError('Sorry! The minimum monthly donation is ' + GLOBAL.MIN_DONATION.toFixed(2));
 			return;
 		}
-		// <div class="form-group">
-		// 					<label for="endowment-min-donation">Minimum Monthly Donation Amount</label>
-		// 					<input type="text" id="endowment-min-donation" placeholder="Minimum Donation Amount" class="form-control">
-		// 				</div>
 
 		var payload = {};
-		payload.amount = $('#subscribe-endowment-modal #subscribe-endowment-donation').val();
+		payload.amount = subscriptionAmount;
 		payload.endowment_id = $(this).attr('data-id');
 		var request_payload = JSON.stringify(payload);
 		$.ajax({

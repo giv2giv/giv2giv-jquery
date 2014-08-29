@@ -739,3 +739,7 @@ Highcharts.setOptions({
 		"#9B0800"
 	]
 });
+
+// GLOBAL CONSTANTS
+var GLOBAL = {};
+GLOBAL.MIN_DONATION = 5;
