@@ -23,6 +23,29 @@ function onStart() {
 	});
 }
 
+// Constructor for SimpleCard Object
+function SimpleCard(heading, body, button) {
+	this.cardHead = heading;
+	this.cardBody = body;
+	this.cardButton = button;
+	var html;
+
+	html += '<div class="card card-fixed">'+ 
+	'<h3 class="card-heading simple">'+ this.cardHead +'</h3>'+
+	'<div class="card-body">'+
+	'<p>'+ this.cardBody +'</p>'+
+	'<p><a class="btn btn-success add-endowment-btn" href="#">'+this.cardButton+'</a></p>'+
+	'</div></div>';
+
+	this.getHTML = function() {
+		return html;
+	};
+}
+
+// TODO: Constructor for DetailedCard Object
+function DetailedCard() {
+
+}
 
 // Get Featured Endowments
 function fetchFeaturedEndowments(callback) {
@@ -47,26 +70,34 @@ function fetchFeaturedEndowments(callback) {
 	});
 }
 
+function handleFeaturedEndowments(data) {
+	$("#featured-endowments").html("");
+	if(data.message === "Not found") {
+		// Display not found card
+		var card = new SimpleCard(
+			"No Endowments Yet",
+			"There are currently no giv2giv endowments yet.",
+			"Create an Endowment");
+		$("#featured-endowments").append(card.getHTML());
+	} else {
+		// Parse Results Here
+		var endowments = data.endowments;
+		// First Row
+		console.log(endowments)
 
-function fetchEndowmentDonations(id, callback) {
-	log("Fetching endowment donations.");
-	$.ajax({
-		url: server_url + '/api/donors/donations.json',
-		method: 'GET',
-		data: {
-			endowment_id: id
-		},
-		dataType: "json",
-		contentType: "application/json"
-	}).done(function(data) {
-		handleEndowmentDonations(data);
-	}).fail(function(data) {
-		growlError("There was an error loading your donations.");
-	}).always(function() {
-		callback();
-	});
+		$.each(endowments, function(index, sub) {
+			// Now build a card
+			log(sub);
+			
+			var row = getCardHTML(sub, true);
+
+			if(endowments.length === (index + 1)) {
+				// Append Current Row
+				$("#featured-endowments").append(row);
+			}
+		});
+	}
 }
-
 
 // Get Subscribed Endowments
 function fetchSubscribedEndowments(callback) {
@@ -91,56 +122,18 @@ function fetchSubscribedEndowments(callback) {
 	});
 }
 
-function handleFeaturedEndowments(data) {
-	$("#featured-endowments").html("");
-	if(data.message == "Not found") {
-		// Display not found card
-		var card = "<div class='card card-fixed'><h3 class='card-heading simple'>No Endowments Yet.</h3>";
-		card += "<div class='card-body'><p>There are currently no giv2giv endowments yet.</p>";
-		card += "<p><a class='btn btn-success add-endowment-btn' href='#'>Create Endowment</a></p></div></div>";
-		$("#featured-endowments").append(card);
-	} else {
-		// Parse Results Here
-		var endowments = data.endowments;
-		// First Row
-		console.log(endowments)
-
-		$.each(endowments, function(index, sub) {
-			// Now build a card
-			log(sub);
-			
-			var row = getCardHTML(sub, true);
-
-			if(endowments.length === (index + 1)) {
-				// Append Current Row
-				$("#featured-endowments").append(row);
-			}
-		});
-	}
-}
-
-function handleEndowmentDonations(data) {
-	if(data.message === undefined) {
-		$.each(data.donations, function(k, v) {
-			var date = new Date(v.created_at);
-			var $row = $("#donations-table").find('tbody:last').append('<tr></tr>');
-			$row.append("<td>"+date.toLocaleDateString()+"</td>");
-			$row.append("<td>$"+v.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
-			$row.append("<td>$"+v.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
-		});
-	}
-}
-
 function handleSubscribedEndowments(data) {
 	$("#sub-endowments").html("");
 	// did we get anything
 	var card;
 	if(data.length === 0) {
 		// Display not found card
-		card = "<div class='fixed-column text-center'><h3 class='card-heading simple'>No Subscriptions</h3>";
-		card += "<div class='card-body'><p>You have not subscribed to any endowments yet.";
-		card += "</p><p><a class='btn btn-success add-endowment-btn' href='#'>Create an Endowment</a></p></div></div>";
-		$("#sub-endowments").append(card);
+		card = new SimpleCard(
+			"No Subscriptions",
+			"You have not subscribed to any endowments yet.",
+			"Create an Endowment"
+			);
+		$("#sub-endowments").append(card.getHTML());
 	} else {
 		// Parse Results Here
 		// First Row
@@ -162,7 +155,7 @@ function handleSubscribedEndowments(data) {
 		add_body += "<p><em>Ready to make a difference?</em></p>";
 		add_body += "<div class='bottom'><button id='add-endowment' class='btn btn-success'>Create Endowment</button></div>";
 		card = "<div class='card card-fixed'>"+add_body+"</div>";
-		$("#sub-endowments .row:last").append(card);
+		$("#sub-endowments .row:last").append(card.getHTML());
 	}
 }
 
@@ -433,6 +426,7 @@ function getCardHTML(sub, featured) {
 	if(sub.global_balances.endowment_donor_count === 1) {
 		donor_string = "donor";
 	} else {
+
 		donor_string = "donors";
 	}
 
@@ -667,4 +661,35 @@ function onDetails(endowment) {
 		$row.append("<td>"+v.charity.name+"</td>");
 		$row.append("<td>"+v.charity.address+" "+v.charity.city+", "+v.charity.state+" "+v.charity.zip+"</td>");
 	});
+}
+
+function fetchEndowmentDonations(id, callback) {
+	log("Fetching endowment donations.");
+	$.ajax({
+		url: server_url + '/api/donors/donations.json',
+		method: 'GET',
+		data: {
+			endowment_id: id
+		},
+		dataType: "json",
+		contentType: "application/json"
+	}).done(function(data) {
+		handleEndowmentDonations(data);
+	}).fail(function(data) {
+		growlError("There was an error loading your donations.");
+	}).always(function() {
+		callback();
+	});
+}
+
+function handleEndowmentDonations(data) {
+	if(data.message === undefined) {
+		$.each(data.donations, function(k, v) {
+			var date = new Date(v.created_at);
+			var $row = $("#donations-table").find('tbody:last').append('<tr></tr>');
+			$row.append("<td>"+date.toLocaleDateString()+"</td>");
+			$row.append("<td>$"+v.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+			$row.append("<td>$"+v.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+		});
+	}
 }
