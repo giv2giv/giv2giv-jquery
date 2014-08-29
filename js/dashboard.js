@@ -12,7 +12,6 @@ DashboardUI.start.add(onStart);
 // (Re)Start Dashboard UI
 function onStart() {
 	fetchDonorData();
-	dashboardSelectors();
 }
 
 function fetchDonorData() {
