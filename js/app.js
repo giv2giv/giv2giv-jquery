@@ -296,6 +296,7 @@ var WebUI = function() {
 		}).done(function (data) {
 			// Delete Cookie
 			$.removeCookie("session");
+			crossroads.parse("signin");
 			hasher.setHash("signin");
 		});
 		e.preventDefault();

@@ -13,3 +13,14 @@
 - Endowment slug (in URL) should be its name and not its number
 - Fix payment accounts
 - Remove projected graph from endowment_details.html ?
+
+login w/ fb, g+
+share this endowment via fb/twitter
+trending endowments somewhere on /
+More details in projected tooltip (date, total_donations, total_grants, total_fees, balance)
+Pending grants on #numbers
+
+Endowment details:
+show active subscription amount (e.g. $30/month)
+
+I put pending grants on #numbers; would be cool to have it on endowment_details too.

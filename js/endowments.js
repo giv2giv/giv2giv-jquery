@@ -17,9 +17,9 @@ function onStart() {
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
 		// Fetch Subscribed Endowments
-		// fetchSubscribedEndowments(function() {
+		fetchSubscribedEndowments(function() {
 			endowmentSelectors();
-		// });
+		});
 	});
 }
 
