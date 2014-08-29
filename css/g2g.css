@@ -69,6 +69,31 @@ code {
 		padding-bottom: 132px;
 	}
 
+.flair-lines {
+	font-style: italic;
+	color: #555;
+	overflow: hidden;
+	text-align: center;
+}
+.flair-lines:before,
+.flair-lines:after {
+	background-color: #555;
+	content: "";
+	display: inline-block;
+	height: 1px;
+	position: relative;
+	vertical-align: middle;
+	width: 50%;
+}
+.flair-lines:before {
+	right: 0.5em;
+	margin-left: -50%;
+}
+.flair-lines:after {
+	left: 0.5em;
+	margin-right: -50%;
+}
+
 nav.navbar {
 	margin-bottom: 0;
 }

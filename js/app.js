@@ -25,7 +25,7 @@ log = function () {
 // Bootstrap Growl Helpers
 // Growl Error
 function growlError(message) {
-	$.bootstrapGrowl(message, {
+	$.bootstrapGrowl(message + "&nbsp;", {
 		ele: "body", // which element to append to
 		type: "danger", // (null, "info", "danger", "success")
 		offset: {
@@ -41,7 +41,7 @@ function growlError(message) {
 }
 // Growl Success
 function growlSuccess(message) {
-	$.bootstrapGrowl(message, {
+	$.bootstrapGrowl(message + "&nbsp;", {
 		ele: "body", // which element to append to
 		type: "success", // (null, "info", "danger", "success")
 		offset: {
@@ -225,7 +225,7 @@ var WebUI = function() {
 				var res = JSON.parse(data.responseText);
 				$btn.button("reset");
 				if (res.message == "unauthorized") {
-					growlError("Incorrect Email or Password");
+					growlError("Could not login with that Email or Password");
 				} else {
 					growlError(res.message);
 					log("WebUI: Signin Error - " + res.message);
@@ -235,7 +235,7 @@ var WebUI = function() {
 			var res = JSON.parse(data.responseText);
 			$btn.button("reset");
 			if (res.message == "unauthorized") {
-				growlError("Incorrect Email or Password");
+				growlError("Could not login with that Email or Password");
 			} else if (res.message) {
 				growlError(res.message);
 				log("WebUI: Signin Error - " + res.message);
@@ -277,7 +277,7 @@ var WebUI = function() {
 			$btn.button("reset");
 			var res = JSON.parse(data.responseText);
 			if (res.message == "unauthorized") {
-				$("#signin-message").html("Incorrect Email or Password");
+				$("#signin-message").html("Could not login with that Email or Password");
 			} else {
 				log("WebUI: Signin Error - " + res.message);
 			}
@@ -296,6 +296,7 @@ var WebUI = function() {
 		}).done(function (data) {
 			// Delete Cookie
 			$.removeCookie("session");
+			growlSuccess("You have successfully signed out of giv2giv");
 			crossroads.parse("signin");
 			hasher.setHash("signin");
 		});

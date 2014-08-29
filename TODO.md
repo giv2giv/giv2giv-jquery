@@ -1,10 +1,13 @@
 # IMPORTANT STUFF #
 
-- When you create a new endowment, you should automatically subscribe to it
+- When you create a new endowment, you should automatically subscribe to it (Make crossroads redirect you immediately to the endowment you just created, also show a growl message prompting the user to subscribe to it.)
 - Navbar search loading spinner, also expand to fill width
 login w/ fb, g+
 share this endowment via fb/twitter
 - Pagination in endowments
+endpoints for fb/goog:
+/auth/facebook
+/auth/google_oauth2
 
 # OTHER STUFF #
 
