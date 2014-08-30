@@ -1,6 +1,6 @@
 # IMPORTANT STUFF #
 
-- Navbar search loading spinner, also expand to fill width
+- Navbar search loading spinner
 - Pagination in endowments
 
 endpoints for fb/goog:

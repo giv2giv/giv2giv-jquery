@@ -4,23 +4,22 @@
 var EndowmentsUI = {
 	start : new signals.Signal(),
 	newModal : new signals.Signal(),
-	details : new signals.Signal()
+	details : new signals.Signal(),
+	subscriptions: new signals.Signal(),
 };
 
 // Add Listener
 EndowmentsUI.start.add(onStart);
 EndowmentsUI.newModal.add(onModal);
 EndowmentsUI.details.add(onDetails);
+EndowmentsUI.subscriptions.add(onSubscriptions);
 
 function onModal() {
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
-		// Fetch Subscribed Endowments
-		fetchSubscribedEndowments(function() {
-			endowmentSelectors();
-			cleanAndShowModal();
+		endowmentSelectors();
+		cleanAndShowModal();
 		});
-	});
 	initSocialShare();
 }
 
@@ -28,10 +27,14 @@ function onModal() {
 function onStart() {
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
-		// Fetch Subscribed Endowments
-		fetchSubscribedEndowments(function() {
-			endowmentSelectors();
-		});
+		endowmentSelectors();
+	});
+	initSocialShare();
+}
+
+function onSubscriptions() {
+	fetchSubscribedEndowments(function() {
+		endowmentSelectors();
 	});
 	initSocialShare();
 }
@@ -120,7 +123,7 @@ function handleSubscribedEndowments(data) {
 			
 		log(sub);
 		// Add the Card to the Row
-		$('#sub-endowments').append(new DetailedCard(sub,false).getHTML());
+		$('#sub-endowments').append(new DetailedCard(sub, false).getHTML());
 		});
 		// Finally Add the Create Endowment Card
 		card = new SimpleCard(
@@ -292,8 +295,8 @@ function endowmentSelectors() {
 	// More Details Button
 	$('.endowment-details-btn').off();
 	$('.endowment-details-btn').on('click', function(e) {
-		hasher.setHash('endowment/' + $(this).attr('data-id'));
 		e.preventDefault();
+		hasher.setHash('endowment/' + $(this).attr('data-id'));
 	});
 }
 
@@ -325,7 +328,8 @@ function SimpleCard(heading, body, button) {
 
 // Constructor for DetailedCard Object
 function DetailedCard(sub, isFeatured) {
-	this.id = sub.id;
+	// Delete sub.endowment_id once Rails is update
+	this.id = sub.id || sub.endowment_id;
 	this.cardTitle = sub.name;
 	this.cardBody = sub.description;
 	this.isFeatured = isFeatured;

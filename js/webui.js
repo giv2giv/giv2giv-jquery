@@ -525,7 +525,7 @@ var WebUI = function() {
 			loadPage("/ui/subscriptions.html", function () {
 				$("#app-container").attr("data-page-id", "subscriptions");
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
-				EndowmentsUI.start.dispatch(); // Load JS
+				EndowmentsUI.subscriptions.dispatch(); // Load JS
 			});
 		} else {
 			crossroads.parse("/signin");
