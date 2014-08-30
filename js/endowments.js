@@ -21,6 +21,7 @@ function onModal() {
 			cleanAndShowModal();
 		});
 	});
+	initSocialShare();
 }
 
 // (Re)Start Endowments UI
@@ -411,6 +412,7 @@ function onDetails(endowment) {
 	}
 
 	subscribeSelectors();
+	initSocialShare();
 
 	// Subscribe Button
 	$('#endowment-details-subscribe').off('click');
