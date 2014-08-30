@@ -116,6 +116,12 @@ nav.navbar {
 	.navbar-text {
 		font-size: 12px;
 	}
+	#endowment-search,
+	nav .twitter-typeahead,
+	.navbar-form .form-group,
+	.navbar-form {
+		width: 100%;
+	}
 .dropdown-toggle {
 	color: #777;
 	text-shadow: 0 1px 0 rgba(255,255,255,.25);
@@ -812,7 +818,15 @@ nav.navbar {
 		width: 1200px;
 	}
 }
+@media (min-width: 500px) {
+	.navbar-form {
+		width: 300px;
+	}
+}
 @media (min-width: 992px) {
+	.navbar-form {
+		width: 400px;
+	}
 	.dropdown-toggle {
 		padding-top: 15px;
 		padding-bottom: 15px;
@@ -824,7 +838,6 @@ nav.navbar {
 		padding-bottom: 15px;
 	}
 }
-
 @media (max-width: 767px) {
 	#signup-nav a, #signin-nav a {
 		padding: 7px 0 7px 14px;
