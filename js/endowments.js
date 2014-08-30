@@ -241,9 +241,10 @@ function endowmentSelectors() {
 	$('.endowment-subscribe-btn').off('click');
 	$('.endowment-subscribe-btn').on('click', function(e) {
 		e.preventDefault();
+		var endowmentId = $(this).attr('data-id') || $('#endowment-details-unsubscribe').attr('data-id');
 		// Now Get Endowment Details
 		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + endowmentId + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			// Clean & Prep Modal
@@ -585,11 +586,12 @@ function unsubscribeSelectors() {
 	$('.endowment-unsubscribe-btn').on('click', function(e) {
 		e.preventDefault();
 		// Take ID and get Endowment Details
+		var endowmentId = $(this).attr('data-id') || $('#endowment-details-subscribe').attr('data-id');
 		// Set Subscribe Button
-		$('#confirm-unsubscribe-endowment').attr('data-id', $(this).attr('data-id'));
+		$('#confirm-unsubscribe-endowment').attr('data-id', endowmentId);
 		// Now Get Endowment Details
 		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + endowmentId + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			log(data);
@@ -609,8 +611,8 @@ function unsubscribeSelectors() {
 	$('#confirm-unsubscribe-endowment').off('click');
 	$('#confirm-unsubscribe-endowment').on('click', function(e) {
 		e.preventDefault();
-		$btn = $(this);
-		$btn.button('loading');
+		self = $(this);
+		self.button('loading');
 		// Now Get Endowment Details
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
@@ -620,7 +622,7 @@ function unsubscribeSelectors() {
 			fetchFeaturedEndowments(function() {
 				// Fetch Subscribed Endowments
 				fetchSubscribedEndowments(function() {
-					$btn.button('reset');
+					self.button('reset');
 					growlSuccess('Successfully unsubscribed from endowment.');
 					endowmentSelectors();
 					$('#no-subscription').removeClass('hide');
@@ -630,7 +632,7 @@ function unsubscribeSelectors() {
 				});
 			});
 		}).fail(function(data) {
-			$btn.button('reset');
+			self.button('reset');
 			growlError('There was an error unsubscribing from this endowment.');
 		});
 	});
