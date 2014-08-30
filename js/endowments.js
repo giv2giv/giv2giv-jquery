@@ -207,24 +207,18 @@ function endowmentSelectors() {
 		});
 
 		var request_payload = JSON.stringify(payload);
-		log(request_payload);
+
 		// Submit & Wait
 		$.ajax({
-			 url: GLOBAL.SERVER_URL + '/api/endowment.json',
-			 type: 'POST',
-			 data: request_payload,
-			 contentType: 'application/json',
-			 dataType: 'json'
+			url: GLOBAL.SERVER_URL + '/api/endowment.json',
+			type: 'POST',
+			data: request_payload,
+			contentType: 'application/json',
+			dataType: 'json'
 		}).done(function(data) {
-			// Refresh Endowments & Hide Modal
-			fetchFeaturedEndowments(function() {
-				// Fetch Subscribed Endowments
-				fetchSubscribedEndowments(function() {
-					endowmentSelectors();
-					// Hide Modal
-					$('#add-endowment-modal').modal('hide');
-				});
-			});
+			$('#add-endowment-modal').modal('hide');
+			hasher.setHash('endowment/'+data.endowment.id);
+			growlSuccess('Successfully created your endowment! Subscribe to it on this page.');
 		}).fail(function(data) {
 			log(data);
 			growlError('An error occured while adding this endowment.');
