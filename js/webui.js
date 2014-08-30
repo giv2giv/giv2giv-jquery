@@ -519,6 +519,19 @@ var WebUI = function() {
 		}
 	});
 
+	// My Subscriptions Route
+	crossroads.addRoute("/subscriptions", function () {
+		if (activeSession()) {
+			loadPage("/ui/subscriptions.html", function () {
+				$("#app-container").attr("data-page-id", "subscriptions");
+				setPageMetadata(!activeSession(), null, "giv2giv.org");
+				EndowmentsUI.start.dispatch(); // Load JS
+			});
+		} else {
+			crossroads.parse("/signin");
+		}
+	});
+
 	// Endowment Details Route
 	crossroads.addRoute("/endowment/{id}", function (id) {
 		if (activeSession()) {
