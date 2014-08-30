@@ -238,10 +238,7 @@ function endowmentSelectors() {
 	// Subscribe Button
 	$('.endowment-subscribe-btn').off('click');
 	$('.endowment-subscribe-btn').on('click', function(e) {
-		// Take ID and get Endowment Details
-
-		// Set Subscribe Button
-		$('#confirm-subscribe-endowment').attr('data-id', $(this).attr('data-id'));
+		e.preventDefault();
 		// Now Get Endowment Details
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
@@ -251,6 +248,8 @@ function endowmentSelectors() {
 			$('#subscribe-endowment-payment-accounts').html('');
 			$('#subscribe-endowment-donation').val('');
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
+			$('#confirm-subscribe-endowment').attr('data-id', data.endowment.id);
+			$('#confirm-subscribe-endowment').attr('data-name', data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
 				url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
@@ -262,7 +261,7 @@ function endowmentSelectors() {
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {
 					$.each(data, function(k, v) {
-						// for the love of god man make this prettier!
+						// @TODO: Warning: Magic
 						var i = v[0];
 						var ii = Object.keys(i);
 						var iii = i[ii[0]];
@@ -283,7 +282,6 @@ function endowmentSelectors() {
 		}).fail(function(data) {
 			log(data);
 		});
-		e.preventDefault();
 	});
 
 	unsubscribeSelectors();
@@ -416,19 +414,17 @@ function onDetails(endowment) {
 	// Subscribe Button
 	$('#endowment-details-subscribe').off('click');
 	$('#endowment-details-subscribe').on('click', function(e) {
-				// Take ID and get Endowment Details
-		// Set Subscribe Button
-		$('#confirm-subscribe-endowment').attr('data-id', $(this).attr('data-id'));
 		// Now Get Endowment Details
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
 			method: 'GET'
 		}).done(function(data) {
 			// Clean & Prep Modal
-			$('#confirm-subscribe-endowment').attr('data-id', data.endowment.id);
 			$('#subscribe-endowment-payment-accounts').html('');
 			$('#subscribe-endowment-donation').val('');
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
+			$('#confirm-subscribe-endowment').attr('data-id', data.endowment.id);
+			$('#confirm-subscribe-endowment').attr('data-name', data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
 				url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
@@ -535,19 +531,19 @@ function subscribeSelectors() {
 	$('#confirm-subscribe-endowment').off('click');
 	$('#confirm-subscribe-endowment').on('click', function(e) {
 		e.preventDefault();
-		$btn = $(this);
-		$btn.button('loading');
+		self = $(this);
+		self.button('loading');
 
 		var subscriptionAmount = $('#subscribe-endowment-donation').val();
 		if (subscriptionAmount < GLOBAL.MIN_DONATION) {
-			$btn.button('reset');
+			self.button('reset');
 			growlError('Sorry! The minimum monthly donation is $' + GLOBAL.MIN_DONATION.toFixed(2));
 			return;
 		}
 
 		var payload = {};
 		payload.amount = subscriptionAmount;
-		payload.endowment_id = $(this).attr('data-id');
+		payload.endowment_id = self.attr('data-id');
 		var request_payload = JSON.stringify(payload);
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
@@ -563,16 +559,18 @@ function subscribeSelectors() {
 				// Fetch Subscribed Endowments
 				fetchSubscribedEndowments(function() {
 					endowmentSelectors();
-					growlSuccess('You have successfully subscribed to this endowment.');
-					$btn.button('reset');
+					self.button('reset');
 					$('#no-subscription').addClass('hide');
 					$('#subscription-details').removeClass('hide');
 					$('#subscribe-endowment-modal').modal('hide');
+					$('#social-share-modal').modal('show');
+					$('#share-buttons div').attr('data-url', 'https://www.giv2giv.org/#endowment/'+payload.endowment_id);
+					$('#share-buttons div').attr('data-text', 'I\'m contributing to ' + self.attr('data-name') + ' on giv2giv.org, join me!');
 				});
 			});
 		}).fail(function(data) {
 			log(data);
-			$btn.button('reset');
+			self.button('reset');
 			growlError('There was an error subscribing to this endowment.');
 		});
 	});
@@ -633,4 +631,44 @@ function unsubscribeSelectors() {
 			growlError('There was an error unsubscribing from this endowment.');
 		});
 	});
+
+	// From http://sharrre.com/example6.html
+	$('#twitter').sharrre({
+	  share: {
+	    twitter: true
+	  },
+	  template: '<a class="box" href="#"><div class="count" href="#">{total}</div><div class="share">Tweet</div></a>',
+	  enableHover: false,
+	  enableTracking: true,
+	  buttons: { twitter: {via: 'giv2giv'}},
+	  click: function(api, options){
+	    api.simulateClick();
+	    api.openPopup('twitter');
+	  }
+	});
+	$('#facebook').sharrre({
+	  share: {
+	    facebook: true
+	  },
+	  template: '<a class="box" href="#"><div class="count" href="#">{total}</div><div class="share">Like</div></a>',
+	  enableHover: false,
+	  enableTracking: true,
+	  click: function(api, options){
+	    api.simulateClick();
+	    api.openPopup('facebook');
+	  }
+	});
+	$('#googleplus').sharrre({
+	  share: {
+	    googlePlus: true
+	  },
+	  template: '<a class="box" href="#"><div class="count" href="#">{total}</div><div class="share">+1</div></a>',
+	  enableHover: false,
+	  enableTracking: true,
+	  click: function(api, options){
+	    api.simulateClick();
+	    api.openPopup('googlePlus');
+	  }
+	});
+
 }
