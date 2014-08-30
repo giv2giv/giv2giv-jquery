@@ -539,7 +539,7 @@ function subscribeSelectors() {
 	$('#confirm-subscribe-endowment').off('click');
 	$('#confirm-subscribe-endowment').on('click', function(e) {
 		e.preventDefault();
-		self = $(this);
+		var self = $(this);
 		self.button('loading');
 
 		var subscriptionAmount = $('#subscribe-endowment-donation').val();
@@ -615,7 +615,7 @@ function unsubscribeSelectors() {
 	$('#confirm-unsubscribe-endowment').off('click');
 	$('#confirm-unsubscribe-endowment').on('click', function(e) {
 		e.preventDefault();
-		self = $(this);
+		var self = $(this);
 		self.button('loading');
 		// Now Get Endowment Details
 		$.ajax({
@@ -678,4 +678,30 @@ function initSocialShare() {
 	// 		api.openPopup('googlePlus');
 	// 	}
 	// });
+
+	$('#share-via-email').on('click', function(e) {
+		e.preventDefault();
+		var self = $(this);
+		self.button('loading');
+
+		var payload = {};
+		payload.email = $('#friend-email').val();
+
+		$.ajax({
+			url: GLOBAL.SERVER_URL + '/api/donors/send_invite.json',
+			type: 'POST',
+			data: JSON.stringify(payload),
+			dataType: 'json',
+			contentType: 'application/json',
+			beforeSend: function(xhr, settings) {
+				xhr.setRequestHeader("Authorization", "Token token=" + $.cookie('session'));
+			}
+		}).done(function(data) {
+			growlSuccess('Your email was sent! Thanks for sharing :)');
+		}).fail(function() {
+			growlError('We couldn\'t send your email for some reason. Please try again later.');
+		}).always(function() {
+			self.button('reset');
+		});
+	});
 }

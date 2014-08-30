@@ -67,7 +67,7 @@
 		<form id="subcribe-endowment-modal-form" class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h3 id="subscribe-endowment-header">Subscribe to </h3>
+				<h3 class="modal-title" id="subscribe-endowment-header">Subscribe to </h3>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -99,7 +99,7 @@
 		<form id="social-share-form" class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h3 id="social-share-header">Success!</h3>
+				<h3 class="modal-title" id="social-share-header">Success!</h3>
 			</div>
 			<div class="modal-body">
 				<p>You have successfully subscribed to this endowment. Want to increase your inpact even more? Share this endowment and invite friends to contribute!</p>
@@ -109,12 +109,12 @@
 					<!-- <div id="googleplus" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="+1"></div> -->
 				</div>
 				<span class="clearfix"></span>
-				<h4>Share this endowment via email:</h4>
+				<h4 class="first-content">Share this endowment via email:</h4>
 				<div class="form-group">
 					<label for="friend-email">Your friend's email address</label>
 					<input type="email" class="form-control" id="friend-email" placeholder="Email address">
 				</div>
-				<input type="submit" value="Send" class="btn btn-success">
+				<button data-loading-text="<i class='fa fa-leaf fa-spin'></i> Sending" class="btn btn-success" id="share-via-email">Send</button>
 			</div>
 		</form>
 	</div>
