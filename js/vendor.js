@@ -13,689 +13,689 @@
 (function () {
 var factory = function (signals) {
 
-    var crossroads,
-        _hasOptionalGroupBug,
-        UNDEF;
-
-    // Helpers -----------
-    //====================
-
-    // IE 7-8 capture optional groups as empty strings while other browsers
-    // capture as `undefined`
-    _hasOptionalGroupBug = (/t(.+)?/).exec('t')[1] === '';
-
-    function arrayIndexOf(arr, val) {
-        if (arr.indexOf) {
-            return arr.indexOf(val);
-        } else {
-            //Array.indexOf doesn't work on IE 6-7
-            var n = arr.length;
-            while (n--) {
-                if (arr[n] === val) {
-                    return n;
-                }
-            }
-            return -1;
-        }
-    }
-
-    function arrayRemove(arr, item) {
-        var i = arrayIndexOf(arr, item);
-        if (i !== -1) {
-            arr.splice(i, 1);
-        }
-    }
-
-    function isKind(val, kind) {
-        return '[object '+ kind +']' === Object.prototype.toString.call(val);
-    }
-
-    function isRegExp(val) {
-        return isKind(val, 'RegExp');
-    }
-
-    function isArray(val) {
-        return isKind(val, 'Array');
-    }
-
-    function isFunction(val) {
-        return typeof val === 'function';
-    }
-
-    //borrowed from AMD-utils
-    function typecastValue(val) {
-        var r;
-        if (val === null || val === 'null') {
-            r = null;
-        } else if (val === 'true') {
-            r = true;
-        } else if (val === 'false') {
-            r = false;
-        } else if (val === UNDEF || val === 'undefined') {
-            r = UNDEF;
-        } else if (val === '' || isNaN(val)) {
-            //isNaN('') returns false
-            r = val;
-        } else {
-            //parseFloat(null || '') returns NaN
-            r = parseFloat(val);
-        }
-        return r;
-    }
-
-    function typecastArrayValues(values) {
-        var n = values.length,
-            result = [];
-        while (n--) {
-            result[n] = typecastValue(values[n]);
-        }
-        return result;
-    }
-
-    //borrowed from AMD-Utils
-    function decodeQueryString(str, shouldTypecast) {
-        var queryArr = (str || '').replace('?', '').split('&'),
-            n = queryArr.length,
-            obj = {},
-            item, val;
-        while (n--) {
-            item = queryArr[n].split('=');
-            val = shouldTypecast ? typecastValue(item[1]) : item[1];
-            obj[item[0]] = (typeof val === 'string')? decodeURIComponent(val) : val;
-        }
-        return obj;
-    }
-
-
-    // Crossroads --------
-    //====================
-
-    /**
-     * @constructor
-     */
-    function Crossroads() {
-        this.bypassed = new signals.Signal();
-        this.routed = new signals.Signal();
-        this._routes = [];
-        this._prevRoutes = [];
-        this._piped = [];
-        this.resetState();
-    }
-
-    Crossroads.prototype = {
-
-        greedy : false,
-
-        greedyEnabled : true,
-
-        ignoreCase : true,
-
-        ignoreState : false,
-
-        shouldTypecast : false,
-
-        normalizeFn : null,
-
-        resetState : function(){
-            this._prevRoutes.length = 0;
-            this._prevMatchedRequest = null;
-            this._prevBypassedRequest = null;
-        },
-
-        create : function () {
-            return new Crossroads();
-        },
-
-        addRoute : function (pattern, callback, priority) {
-            var route = new Route(pattern, callback, priority, this);
-            this._sortedInsert(route);
-            return route;
-        },
-
-        removeRoute : function (route) {
-            arrayRemove(this._routes, route);
-            route._destroy();
-        },
-
-        removeAllRoutes : function () {
-            var n = this.getNumRoutes();
-            while (n--) {
-                this._routes[n]._destroy();
-            }
-            this._routes.length = 0;
-        },
-
-        parse : function (request, defaultArgs) {
-            request = request || '';
-            defaultArgs = defaultArgs || [];
-
-            // should only care about different requests if ignoreState isn't true
-            if ( !this.ignoreState &&
-                (request === this._prevMatchedRequest ||
-                 request === this._prevBypassedRequest) ) {
-                return;
-            }
-
-            var routes = this._getMatchedRoutes(request),
-                i = 0,
-                n = routes.length,
-                cur;
-
-            if (n) {
-                this._prevMatchedRequest = request;
-
-                this._notifyPrevRoutes(routes, request);
-                this._prevRoutes = routes;
-                //should be incremental loop, execute routes in order
-                while (i < n) {
-                    cur = routes[i];
-                    cur.route.matched.dispatch.apply(cur.route.matched, defaultArgs.concat(cur.params));
-                    cur.isFirst = !i;
-                    this.routed.dispatch.apply(this.routed, defaultArgs.concat([request, cur]));
-                    i += 1;
-                }
-            } else {
-                this._prevBypassedRequest = request;
-                this.bypassed.dispatch.apply(this.bypassed, defaultArgs.concat([request]));
-            }
-
-            this._pipeParse(request, defaultArgs);
-        },
-
-        _notifyPrevRoutes : function(matchedRoutes, request) {
-            var i = 0, prev;
-            while (prev = this._prevRoutes[i++]) {
-                //check if switched exist since route may be disposed
-                if(prev.route.switched && this._didSwitch(prev.route, matchedRoutes)) {
-                    prev.route.switched.dispatch(request);
-                }
-            }
-        },
-
-        _didSwitch : function (route, matchedRoutes){
-            var matched,
-                i = 0;
-            while (matched = matchedRoutes[i++]) {
-                // only dispatch switched if it is going to a different route
-                if (matched.route === route) {
-                    return false;
-                }
-            }
-            return true;
-        },
-
-        _pipeParse : function(request, defaultArgs) {
-            var i = 0, route;
-            while (route = this._piped[i++]) {
-                route.parse(request, defaultArgs);
-            }
-        },
-
-        getNumRoutes : function () {
-            return this._routes.length;
-        },
-
-        _sortedInsert : function (route) {
-            //simplified insertion sort
-            var routes = this._routes,
-                n = routes.length;
-            do { --n; } while (routes[n] && route._priority <= routes[n]._priority);
-            routes.splice(n+1, 0, route);
-        },
-
-        _getMatchedRoutes : function (request) {
-            var res = [],
-                routes = this._routes,
-                n = routes.length,
-                route;
-            //should be decrement loop since higher priorities are added at the end of array
-            while (route = routes[--n]) {
-                if ((!res.length || this.greedy || route.greedy) && route.match(request)) {
-                    res.push({
-                        route : route,
-                        params : route._getParamsArray(request)
-                    });
-                }
-                if (!this.greedyEnabled && res.length) {
-                    break;
-                }
-            }
-            return res;
-        },
-
-        pipe : function (otherRouter) {
-            this._piped.push(otherRouter);
-        },
-
-        unpipe : function (otherRouter) {
-            arrayRemove(this._piped, otherRouter);
-        },
-
-        toString : function () {
-            return '[crossroads numRoutes:'+ this.getNumRoutes() +']';
-        }
-    };
-
-    //"static" instance
-    crossroads = new Crossroads();
-    crossroads.VERSION = '0.12.0';
-
-    crossroads.NORM_AS_ARRAY = function (req, vals) {
-        return [vals.vals_];
-    };
-
-    crossroads.NORM_AS_OBJECT = function (req, vals) {
-        return [vals];
-    };
-
-
-    // Route --------------
-    //=====================
-
-    /**
-     * @constructor
-     */
-    function Route(pattern, callback, priority, router) {
-        var isRegexPattern = isRegExp(pattern),
-            patternLexer = router.patternLexer;
-        this._router = router;
-        this._pattern = pattern;
-        this._paramsIds = isRegexPattern? null : patternLexer.getParamIds(pattern);
-        this._optionalParamsIds = isRegexPattern? null : patternLexer.getOptionalParamsIds(pattern);
-        this._matchRegexp = isRegexPattern? pattern : patternLexer.compilePattern(pattern, router.ignoreCase);
-        this.matched = new signals.Signal();
-        this.switched = new signals.Signal();
-        if (callback) {
-            this.matched.add(callback);
-        }
-        this._priority = priority || 0;
-    }
-
-    Route.prototype = {
-
-        greedy : false,
-
-        rules : void(0),
-
-        match : function (request) {
-            request = request || '';
-            return this._matchRegexp.test(request) && this._validateParams(request); //validate params even if regexp because of `request_` rule.
-        },
-
-        _validateParams : function (request) {
-            var rules = this.rules,
-                values = this._getParamsObject(request),
-                key;
-            for (key in rules) {
-                // normalize_ isn't a validation rule... (#39)
-                if(key !== 'normalize_' && rules.hasOwnProperty(key) && ! this._isValidParam(request, key, values)){
-                    return false;
-                }
-            }
-            return true;
-        },
-
-        _isValidParam : function (request, prop, values) {
-            var validationRule = this.rules[prop],
-                val = values[prop],
-                isValid = false,
-                isQuery = (prop.indexOf('?') === 0);
-
-            if (val === null && this._optionalParamsIds && arrayIndexOf(this._optionalParamsIds, prop) !== -1) {
-                isValid = true;
-            }
-            else if (isRegExp(validationRule)) {
-                if (isQuery) {
-                    val = values[prop +'_']; //use raw string
-                }
-                isValid = validationRule.test(val);
-            }
-            else if (isArray(validationRule)) {
-                if (isQuery) {
-                    val = values[prop +'_']; //use raw string
-                }
-                isValid = this._isValidArrayRule(validationRule, val);
-            }
-            else if (isFunction(validationRule)) {
-                isValid = validationRule(val, request, values);
-            }
-
-            return isValid; //fail silently if validationRule is from an unsupported type
-        },
-
-        _isValidArrayRule : function (arr, val) {
-            if (! this._router.ignoreCase) {
-                return arrayIndexOf(arr, val) !== -1;
-            }
-
-            if (typeof val === 'string') {
-                val = val.toLowerCase();
-            }
-
-            var n = arr.length,
-                item,
-                compareVal;
-
-            while (n--) {
-                item = arr[n];
-                compareVal = (typeof item === 'string')? item.toLowerCase() : item;
-                if (compareVal === val) {
-                    return true;
-                }
-            }
-            return false;
-        },
-
-        _getParamsObject : function (request) {
-            var shouldTypecast = this._router.shouldTypecast,
-                values = this._router.patternLexer.getParamValues(request, this._matchRegexp, shouldTypecast),
-                o = {},
-                n = values.length,
-                param, val;
-            while (n--) {
-                val = values[n];
-                if (this._paramsIds) {
-                    param = this._paramsIds[n];
-                    if (param.indexOf('?') === 0 && val) {
-                        //make a copy of the original string so array and
-                        //RegExp validation can be applied properly
-                        o[param +'_'] = val;
-                        //update vals_ array as well since it will be used
-                        //during dispatch
-                        val = decodeQueryString(val, shouldTypecast);
-                        values[n] = val;
-                    }
-                    // IE will capture optional groups as empty strings while other
-                    // browsers will capture `undefined` so normalize behavior.
-                    // see: #gh-58, #gh-59, #gh-60
-                    if ( _hasOptionalGroupBug && val === '' && arrayIndexOf(this._optionalParamsIds, param) !== -1 ) {
-                        val = void(0);
-                        values[n] = val;
-                    }
-                    o[param] = val;
-                }
-                //alias to paths and for RegExp pattern
-                o[n] = val;
-            }
-            o.request_ = shouldTypecast? typecastValue(request) : request;
-            o.vals_ = values;
-            return o;
-        },
-
-        _getParamsArray : function (request) {
-            var norm = this.rules? this.rules.normalize_ : null,
-                params;
-            norm = norm || this._router.normalizeFn; // default normalize
-            if (norm && isFunction(norm)) {
-                params = norm(request, this._getParamsObject(request));
-            } else {
-                params = this._getParamsObject(request).vals_;
-            }
-            return params;
-        },
-
-        interpolate : function(replacements) {
-            var str = this._router.patternLexer.interpolate(this._pattern, replacements);
-            if (! this._validateParams(str) ) {
-                throw new Error('Generated string doesn\'t validate against `Route.rules`.');
-            }
-            return str;
-        },
-
-        dispose : function () {
-            this._router.removeRoute(this);
-        },
-
-        _destroy : function () {
-            this.matched.dispose();
-            this.switched.dispose();
-            this.matched = this.switched = this._pattern = this._matchRegexp = null;
-        },
-
-        toString : function () {
-            return '[Route pattern:"'+ this._pattern +'", numListeners:'+ this.matched.getNumListeners() +']';
-        }
-
-    };
-
-
-
-    // Pattern Lexer ------
-    //=====================
-
-    Crossroads.prototype.patternLexer = (function () {
-
-        var
-            //match chars that should be escaped on string regexp
-            ESCAPE_CHARS_REGEXP = /[\\.+*?\^$\[\](){}\/'#]/g,
-
-            //trailing slashes (begin/end of string)
-            LOOSE_SLASHES_REGEXP = /^\/|\/$/g,
-            LEGACY_SLASHES_REGEXP = /\/$/g,
-
-            //params - everything between `{ }` or `: :`
-            PARAMS_REGEXP = /(?:\{|:)([^}:]+)(?:\}|:)/g,
-
-            //used to save params during compile (avoid escaping things that
-            //shouldn't be escaped).
-            TOKENS = {
-                'OS' : {
-                    //optional slashes
-                    //slash between `::` or `}:` or `\w:` or `:{?` or `}{?` or `\w{?`
-                    rgx : /([:}]|\w(?=\/))\/?(:|(?:\{\?))/g,
-                    save : '$1{{id}}$2',
-                    res : '\\/?'
-                },
-                'RS' : {
-                    //required slashes
-                    //used to insert slash between `:{` and `}{`
-                    rgx : /([:}])\/?(\{)/g,
-                    save : '$1{{id}}$2',
-                    res : '\\/'
-                },
-                'RQ' : {
-                    //required query string - everything in between `{? }`
-                    rgx : /\{\?([^}]+)\}/g,
-                    //everything from `?` till `#` or end of string
-                    res : '\\?([^#]+)'
-                },
-                'OQ' : {
-                    //optional query string - everything in between `:? :`
-                    rgx : /:\?([^:]+):/g,
-                    //everything from `?` till `#` or end of string
-                    res : '(?:\\?([^#]*))?'
-                },
-                'OR' : {
-                    //optional rest - everything in between `: *:`
-                    rgx : /:([^:]+)\*:/g,
-                    res : '(.*)?' // optional group to avoid passing empty string as captured
-                },
-                'RR' : {
-                    //rest param - everything in between `{ *}`
-                    rgx : /\{([^}]+)\*\}/g,
-                    res : '(.+)'
-                },
-                // required/optional params should come after rest segments
-                'RP' : {
-                    //required params - everything between `{ }`
-                    rgx : /\{([^}]+)\}/g,
-                    res : '([^\\/?]+)'
-                },
-                'OP' : {
-                    //optional params - everything between `: :`
-                    rgx : /:([^:]+):/g,
-                    res : '([^\\/?]+)?\/?'
-                }
-            },
-
-            LOOSE_SLASH = 1,
-            STRICT_SLASH = 2,
-            LEGACY_SLASH = 3,
-
-            _slashMode = LOOSE_SLASH;
-
-
-        function precompileTokens(){
-            var key, cur;
-            for (key in TOKENS) {
-                if (TOKENS.hasOwnProperty(key)) {
-                    cur = TOKENS[key];
-                    cur.id = '__CR_'+ key +'__';
-                    cur.save = ('save' in cur)? cur.save.replace('{{id}}', cur.id) : cur.id;
-                    cur.rRestore = new RegExp(cur.id, 'g');
-                }
-            }
-        }
-        precompileTokens();
-
-
-        function captureVals(regex, pattern) {
-            var vals = [], match;
-            // very important to reset lastIndex since RegExp can have "g" flag
-            // and multiple runs might affect the result, specially if matching
-            // same string multiple times on IE 7-8
-            regex.lastIndex = 0;
-            while (match = regex.exec(pattern)) {
-                vals.push(match[1]);
-            }
-            return vals;
-        }
-
-        function getParamIds(pattern) {
-            return captureVals(PARAMS_REGEXP, pattern);
-        }
-
-        function getOptionalParamsIds(pattern) {
-            return captureVals(TOKENS.OP.rgx, pattern);
-        }
-
-        function compilePattern(pattern, ignoreCase) {
-            pattern = pattern || '';
-
-            if(pattern){
-                if (_slashMode === LOOSE_SLASH) {
-                    pattern = pattern.replace(LOOSE_SLASHES_REGEXP, '');
-                }
-                else if (_slashMode === LEGACY_SLASH) {
-                    pattern = pattern.replace(LEGACY_SLASHES_REGEXP, '');
-                }
-
-                //save tokens
-                pattern = replaceTokens(pattern, 'rgx', 'save');
-                //regexp escape
-                pattern = pattern.replace(ESCAPE_CHARS_REGEXP, '\\$&');
-                //restore tokens
-                pattern = replaceTokens(pattern, 'rRestore', 'res');
-
-                if (_slashMode === LOOSE_SLASH) {
-                    pattern = '\\/?'+ pattern;
-                }
-            }
-
-            if (_slashMode !== STRICT_SLASH) {
-                //single slash is treated as empty and end slash is optional
-                pattern += '\\/?';
-            }
-            return new RegExp('^'+ pattern + '$', ignoreCase? 'i' : '');
-        }
-
-        function replaceTokens(pattern, regexpName, replaceName) {
-            var cur, key;
-            for (key in TOKENS) {
-                if (TOKENS.hasOwnProperty(key)) {
-                    cur = TOKENS[key];
-                    pattern = pattern.replace(cur[regexpName], cur[replaceName]);
-                }
-            }
-            return pattern;
-        }
-
-        function getParamValues(request, regexp, shouldTypecast) {
-            var vals = regexp.exec(request);
-            if (vals) {
-                vals.shift();
-                if (shouldTypecast) {
-                    vals = typecastArrayValues(vals);
-                }
-            }
-            return vals;
-        }
-
-        function interpolate(pattern, replacements) {
-            if (typeof pattern !== 'string') {
-                throw new Error('Route pattern should be a string.');
-            }
-
-            var replaceFn = function(match, prop){
-                    var val;
-                    prop = (prop.substr(0, 1) === '?')? prop.substr(1) : prop;
-                    if (replacements[prop] !== null) {
-                        if (typeof replacements[prop] === 'object') {
-                            var queryParts = [];
-                            for(var key in replacements[prop]) {
-                                queryParts.push(encodeURI(key + '=' + replacements[prop][key]));
-                            }
-                            val = '?' + queryParts.join('&');
-                        } else {
-                            // make sure value is a string see #gh-54
-                            val = String(replacements[prop]);
-                        }
-
-                        if (match.indexOf('*') === -1 && val.indexOf('/') !== -1) {
-                            throw new Error('Invalid value "'+ val +'" for segment "'+ match +'".');
-                        }
-                    }
-                    else if (match.indexOf('{') !== -1) {
-                        throw new Error('The segment '+ match +' is required.');
-                    }
-                    else {
-                        val = '';
-                    }
-                    return val;
-                };
-
-            if (! TOKENS.OS.trail) {
-                TOKENS.OS.trail = new RegExp('(?:'+ TOKENS.OS.id +')+$');
-            }
-
-            return pattern
-                        .replace(TOKENS.OS.rgx, TOKENS.OS.save)
-                        .replace(PARAMS_REGEXP, replaceFn)
-                        .replace(TOKENS.OS.trail, '') // remove trailing
-                        .replace(TOKENS.OS.rRestore, '/'); // add slash between segments
-        }
-
-        //API
-        return {
-            strict : function(){
-                _slashMode = STRICT_SLASH;
-            },
-            loose : function(){
-                _slashMode = LOOSE_SLASH;
-            },
-            legacy : function(){
-                _slashMode = LEGACY_SLASH;
-            },
-            getParamIds : getParamIds,
-            getOptionalParamsIds : getOptionalParamsIds,
-            getParamValues : getParamValues,
-            compilePattern : compilePattern,
-            interpolate : interpolate
-        };
-
-    }());
-
-
-    return crossroads;
+	var crossroads,
+		_hasOptionalGroupBug,
+		UNDEF;
+
+	// Helpers -----------
+	//====================
+
+	// IE 7-8 capture optional groups as empty strings while other browsers
+	// capture as `undefined`
+	_hasOptionalGroupBug = (/t(.+)?/).exec('t')[1] === '';
+
+	function arrayIndexOf(arr, val) {
+		if (arr.indexOf) {
+			return arr.indexOf(val);
+		} else {
+			//Array.indexOf doesn't work on IE 6-7
+			var n = arr.length;
+			while (n--) {
+				if (arr[n] === val) {
+					return n;
+				}
+			}
+			return -1;
+		}
+	}
+
+	function arrayRemove(arr, item) {
+		var i = arrayIndexOf(arr, item);
+		if (i !== -1) {
+			arr.splice(i, 1);
+		}
+	}
+
+	function isKind(val, kind) {
+		return '[object '+ kind +']' === Object.prototype.toString.call(val);
+	}
+
+	function isRegExp(val) {
+		return isKind(val, 'RegExp');
+	}
+
+	function isArray(val) {
+		return isKind(val, 'Array');
+	}
+
+	function isFunction(val) {
+		return typeof val === 'function';
+	}
+
+	//borrowed from AMD-utils
+	function typecastValue(val) {
+		var r;
+		if (val === null || val === 'null') {
+			r = null;
+		} else if (val === 'true') {
+			r = true;
+		} else if (val === 'false') {
+			r = false;
+		} else if (val === UNDEF || val === 'undefined') {
+			r = UNDEF;
+		} else if (val === '' || isNaN(val)) {
+			//isNaN('') returns false
+			r = val;
+		} else {
+			//parseFloat(null || '') returns NaN
+			r = parseFloat(val);
+		}
+		return r;
+	}
+
+	function typecastArrayValues(values) {
+		var n = values.length,
+			result = [];
+		while (n--) {
+			result[n] = typecastValue(values[n]);
+		}
+		return result;
+	}
+
+	//borrowed from AMD-Utils
+	function decodeQueryString(str, shouldTypecast) {
+		var queryArr = (str || '').replace('?', '').split('&'),
+			n = queryArr.length,
+			obj = {},
+			item, val;
+		while (n--) {
+			item = queryArr[n].split('=');
+			val = shouldTypecast ? typecastValue(item[1]) : item[1];
+			obj[item[0]] = (typeof val === 'string')? decodeURIComponent(val) : val;
+		}
+		return obj;
+	}
+
+
+	// Crossroads --------
+	//====================
+
+	/**
+	 * @constructor
+	 */
+	function Crossroads() {
+		this.bypassed = new signals.Signal();
+		this.routed = new signals.Signal();
+		this._routes = [];
+		this._prevRoutes = [];
+		this._piped = [];
+		this.resetState();
+	}
+
+	Crossroads.prototype = {
+
+		greedy : false,
+
+		greedyEnabled : true,
+
+		ignoreCase : true,
+
+		ignoreState : false,
+
+		shouldTypecast : false,
+
+		normalizeFn : null,
+
+		resetState : function(){
+			this._prevRoutes.length = 0;
+			this._prevMatchedRequest = null;
+			this._prevBypassedRequest = null;
+		},
+
+		create : function () {
+			return new Crossroads();
+		},
+
+		addRoute : function (pattern, callback, priority) {
+			var route = new Route(pattern, callback, priority, this);
+			this._sortedInsert(route);
+			return route;
+		},
+
+		removeRoute : function (route) {
+			arrayRemove(this._routes, route);
+			route._destroy();
+		},
+
+		removeAllRoutes : function () {
+			var n = this.getNumRoutes();
+			while (n--) {
+				this._routes[n]._destroy();
+			}
+			this._routes.length = 0;
+		},
+
+		parse : function (request, defaultArgs) {
+			request = request || '';
+			defaultArgs = defaultArgs || [];
+
+			// should only care about different requests if ignoreState isn't true
+			if ( !this.ignoreState &&
+				(request === this._prevMatchedRequest ||
+				 request === this._prevBypassedRequest) ) {
+				return;
+			}
+
+			var routes = this._getMatchedRoutes(request),
+				i = 0,
+				n = routes.length,
+				cur;
+
+			if (n) {
+				this._prevMatchedRequest = request;
+
+				this._notifyPrevRoutes(routes, request);
+				this._prevRoutes = routes;
+				//should be incremental loop, execute routes in order
+				while (i < n) {
+					cur = routes[i];
+					cur.route.matched.dispatch.apply(cur.route.matched, defaultArgs.concat(cur.params));
+					cur.isFirst = !i;
+					this.routed.dispatch.apply(this.routed, defaultArgs.concat([request, cur]));
+					i += 1;
+				}
+			} else {
+				this._prevBypassedRequest = request;
+				this.bypassed.dispatch.apply(this.bypassed, defaultArgs.concat([request]));
+			}
+
+			this._pipeParse(request, defaultArgs);
+		},
+
+		_notifyPrevRoutes : function(matchedRoutes, request) {
+			var i = 0, prev;
+			while (prev = this._prevRoutes[i++]) {
+				//check if switched exist since route may be disposed
+				if(prev.route.switched && this._didSwitch(prev.route, matchedRoutes)) {
+					prev.route.switched.dispatch(request);
+				}
+			}
+		},
+
+		_didSwitch : function (route, matchedRoutes){
+			var matched,
+				i = 0;
+			while (matched = matchedRoutes[i++]) {
+				// only dispatch switched if it is going to a different route
+				if (matched.route === route) {
+					return false;
+				}
+			}
+			return true;
+		},
+
+		_pipeParse : function(request, defaultArgs) {
+			var i = 0, route;
+			while (route = this._piped[i++]) {
+				route.parse(request, defaultArgs);
+			}
+		},
+
+		getNumRoutes : function () {
+			return this._routes.length;
+		},
+
+		_sortedInsert : function (route) {
+			//simplified insertion sort
+			var routes = this._routes,
+				n = routes.length;
+			do { --n; } while (routes[n] && route._priority <= routes[n]._priority);
+			routes.splice(n+1, 0, route);
+		},
+
+		_getMatchedRoutes : function (request) {
+			var res = [],
+				routes = this._routes,
+				n = routes.length,
+				route;
+			//should be decrement loop since higher priorities are added at the end of array
+			while (route = routes[--n]) {
+				if ((!res.length || this.greedy || route.greedy) && route.match(request)) {
+					res.push({
+						route : route,
+						params : route._getParamsArray(request)
+					});
+				}
+				if (!this.greedyEnabled && res.length) {
+					break;
+				}
+			}
+			return res;
+		},
+
+		pipe : function (otherRouter) {
+			this._piped.push(otherRouter);
+		},
+
+		unpipe : function (otherRouter) {
+			arrayRemove(this._piped, otherRouter);
+		},
+
+		toString : function () {
+			return '[crossroads numRoutes:'+ this.getNumRoutes() +']';
+		}
+	};
+
+	//"static" instance
+	crossroads = new Crossroads();
+	crossroads.VERSION = '0.12.0';
+
+	crossroads.NORM_AS_ARRAY = function (req, vals) {
+		return [vals.vals_];
+	};
+
+	crossroads.NORM_AS_OBJECT = function (req, vals) {
+		return [vals];
+	};
+
+
+	// Route --------------
+	//=====================
+
+	/**
+	 * @constructor
+	 */
+	function Route(pattern, callback, priority, router) {
+		var isRegexPattern = isRegExp(pattern),
+			patternLexer = router.patternLexer;
+		this._router = router;
+		this._pattern = pattern;
+		this._paramsIds = isRegexPattern? null : patternLexer.getParamIds(pattern);
+		this._optionalParamsIds = isRegexPattern? null : patternLexer.getOptionalParamsIds(pattern);
+		this._matchRegexp = isRegexPattern? pattern : patternLexer.compilePattern(pattern, router.ignoreCase);
+		this.matched = new signals.Signal();
+		this.switched = new signals.Signal();
+		if (callback) {
+			this.matched.add(callback);
+		}
+		this._priority = priority || 0;
+	}
+
+	Route.prototype = {
+
+		greedy : false,
+
+		rules : void(0),
+
+		match : function (request) {
+			request = request || '';
+			return this._matchRegexp.test(request) && this._validateParams(request); //validate params even if regexp because of `request_` rule.
+		},
+
+		_validateParams : function (request) {
+			var rules = this.rules,
+				values = this._getParamsObject(request),
+				key;
+			for (key in rules) {
+				// normalize_ isn't a validation rule... (#39)
+				if(key !== 'normalize_' && rules.hasOwnProperty(key) && ! this._isValidParam(request, key, values)){
+					return false;
+				}
+			}
+			return true;
+		},
+
+		_isValidParam : function (request, prop, values) {
+			var validationRule = this.rules[prop],
+				val = values[prop],
+				isValid = false,
+				isQuery = (prop.indexOf('?') === 0);
+
+			if (val === null && this._optionalParamsIds && arrayIndexOf(this._optionalParamsIds, prop) !== -1) {
+				isValid = true;
+			}
+			else if (isRegExp(validationRule)) {
+				if (isQuery) {
+					val = values[prop +'_']; //use raw string
+				}
+				isValid = validationRule.test(val);
+			}
+			else if (isArray(validationRule)) {
+				if (isQuery) {
+					val = values[prop +'_']; //use raw string
+				}
+				isValid = this._isValidArrayRule(validationRule, val);
+			}
+			else if (isFunction(validationRule)) {
+				isValid = validationRule(val, request, values);
+			}
+
+			return isValid; //fail silently if validationRule is from an unsupported type
+		},
+
+		_isValidArrayRule : function (arr, val) {
+			if (! this._router.ignoreCase) {
+				return arrayIndexOf(arr, val) !== -1;
+			}
+
+			if (typeof val === 'string') {
+				val = val.toLowerCase();
+			}
+
+			var n = arr.length,
+				item,
+				compareVal;
+
+			while (n--) {
+				item = arr[n];
+				compareVal = (typeof item === 'string')? item.toLowerCase() : item;
+				if (compareVal === val) {
+					return true;
+				}
+			}
+			return false;
+		},
+
+		_getParamsObject : function (request) {
+			var shouldTypecast = this._router.shouldTypecast,
+				values = this._router.patternLexer.getParamValues(request, this._matchRegexp, shouldTypecast),
+				o = {},
+				n = values.length,
+				param, val;
+			while (n--) {
+				val = values[n];
+				if (this._paramsIds) {
+					param = this._paramsIds[n];
+					if (param.indexOf('?') === 0 && val) {
+						//make a copy of the original string so array and
+						//RegExp validation can be applied properly
+						o[param +'_'] = val;
+						//update vals_ array as well since it will be used
+						//during dispatch
+						val = decodeQueryString(val, shouldTypecast);
+						values[n] = val;
+					}
+					// IE will capture optional groups as empty strings while other
+					// browsers will capture `undefined` so normalize behavior.
+					// see: #gh-58, #gh-59, #gh-60
+					if ( _hasOptionalGroupBug && val === '' && arrayIndexOf(this._optionalParamsIds, param) !== -1 ) {
+						val = void(0);
+						values[n] = val;
+					}
+					o[param] = val;
+				}
+				//alias to paths and for RegExp pattern
+				o[n] = val;
+			}
+			o.request_ = shouldTypecast? typecastValue(request) : request;
+			o.vals_ = values;
+			return o;
+		},
+
+		_getParamsArray : function (request) {
+			var norm = this.rules? this.rules.normalize_ : null,
+				params;
+			norm = norm || this._router.normalizeFn; // default normalize
+			if (norm && isFunction(norm)) {
+				params = norm(request, this._getParamsObject(request));
+			} else {
+				params = this._getParamsObject(request).vals_;
+			}
+			return params;
+		},
+
+		interpolate : function(replacements) {
+			var str = this._router.patternLexer.interpolate(this._pattern, replacements);
+			if (! this._validateParams(str) ) {
+				throw new Error('Generated string doesn\'t validate against `Route.rules`.');
+			}
+			return str;
+		},
+
+		dispose : function () {
+			this._router.removeRoute(this);
+		},
+
+		_destroy : function () {
+			this.matched.dispose();
+			this.switched.dispose();
+			this.matched = this.switched = this._pattern = this._matchRegexp = null;
+		},
+
+		toString : function () {
+			return '[Route pattern:"'+ this._pattern +'", numListeners:'+ this.matched.getNumListeners() +']';
+		}
+
+	};
+
+
+
+	// Pattern Lexer ------
+	//=====================
+
+	Crossroads.prototype.patternLexer = (function () {
+
+		var
+			//match chars that should be escaped on string regexp
+			ESCAPE_CHARS_REGEXP = /[\\.+*?\^$\[\](){}\/'#]/g,
+
+			//trailing slashes (begin/end of string)
+			LOOSE_SLASHES_REGEXP = /^\/|\/$/g,
+			LEGACY_SLASHES_REGEXP = /\/$/g,
+
+			//params - everything between `{ }` or `: :`
+			PARAMS_REGEXP = /(?:\{|:)([^}:]+)(?:\}|:)/g,
+
+			//used to save params during compile (avoid escaping things that
+			//shouldn't be escaped).
+			TOKENS = {
+				'OS' : {
+					//optional slashes
+					//slash between `::` or `}:` or `\w:` or `:{?` or `}{?` or `\w{?`
+					rgx : /([:}]|\w(?=\/))\/?(:|(?:\{\?))/g,
+					save : '$1{{id}}$2',
+					res : '\\/?'
+				},
+				'RS' : {
+					//required slashes
+					//used to insert slash between `:{` and `}{`
+					rgx : /([:}])\/?(\{)/g,
+					save : '$1{{id}}$2',
+					res : '\\/'
+				},
+				'RQ' : {
+					//required query string - everything in between `{? }`
+					rgx : /\{\?([^}]+)\}/g,
+					//everything from `?` till `#` or end of string
+					res : '\\?([^#]+)'
+				},
+				'OQ' : {
+					//optional query string - everything in between `:? :`
+					rgx : /:\?([^:]+):/g,
+					//everything from `?` till `#` or end of string
+					res : '(?:\\?([^#]*))?'
+				},
+				'OR' : {
+					//optional rest - everything in between `: *:`
+					rgx : /:([^:]+)\*:/g,
+					res : '(.*)?' // optional group to avoid passing empty string as captured
+				},
+				'RR' : {
+					//rest param - everything in between `{ *}`
+					rgx : /\{([^}]+)\*\}/g,
+					res : '(.+)'
+				},
+				// required/optional params should come after rest segments
+				'RP' : {
+					//required params - everything between `{ }`
+					rgx : /\{([^}]+)\}/g,
+					res : '([^\\/?]+)'
+				},
+				'OP' : {
+					//optional params - everything between `: :`
+					rgx : /:([^:]+):/g,
+					res : '([^\\/?]+)?\/?'
+				}
+			},
+
+			LOOSE_SLASH = 1,
+			STRICT_SLASH = 2,
+			LEGACY_SLASH = 3,
+
+			_slashMode = LOOSE_SLASH;
+
+
+		function precompileTokens(){
+			var key, cur;
+			for (key in TOKENS) {
+				if (TOKENS.hasOwnProperty(key)) {
+					cur = TOKENS[key];
+					cur.id = '__CR_'+ key +'__';
+					cur.save = ('save' in cur)? cur.save.replace('{{id}}', cur.id) : cur.id;
+					cur.rRestore = new RegExp(cur.id, 'g');
+				}
+			}
+		}
+		precompileTokens();
+
+
+		function captureVals(regex, pattern) {
+			var vals = [], match;
+			// very important to reset lastIndex since RegExp can have "g" flag
+			// and multiple runs might affect the result, specially if matching
+			// same string multiple times on IE 7-8
+			regex.lastIndex = 0;
+			while (match = regex.exec(pattern)) {
+				vals.push(match[1]);
+			}
+			return vals;
+		}
+
+		function getParamIds(pattern) {
+			return captureVals(PARAMS_REGEXP, pattern);
+		}
+
+		function getOptionalParamsIds(pattern) {
+			return captureVals(TOKENS.OP.rgx, pattern);
+		}
+
+		function compilePattern(pattern, ignoreCase) {
+			pattern = pattern || '';
+
+			if(pattern){
+				if (_slashMode === LOOSE_SLASH) {
+					pattern = pattern.replace(LOOSE_SLASHES_REGEXP, '');
+				}
+				else if (_slashMode === LEGACY_SLASH) {
+					pattern = pattern.replace(LEGACY_SLASHES_REGEXP, '');
+				}
+
+				//save tokens
+				pattern = replaceTokens(pattern, 'rgx', 'save');
+				//regexp escape
+				pattern = pattern.replace(ESCAPE_CHARS_REGEXP, '\\$&');
+				//restore tokens
+				pattern = replaceTokens(pattern, 'rRestore', 'res');
+
+				if (_slashMode === LOOSE_SLASH) {
+					pattern = '\\/?'+ pattern;
+				}
+			}
+
+			if (_slashMode !== STRICT_SLASH) {
+				//single slash is treated as empty and end slash is optional
+				pattern += '\\/?';
+			}
+			return new RegExp('^'+ pattern + '$', ignoreCase? 'i' : '');
+		}
+
+		function replaceTokens(pattern, regexpName, replaceName) {
+			var cur, key;
+			for (key in TOKENS) {
+				if (TOKENS.hasOwnProperty(key)) {
+					cur = TOKENS[key];
+					pattern = pattern.replace(cur[regexpName], cur[replaceName]);
+				}
+			}
+			return pattern;
+		}
+
+		function getParamValues(request, regexp, shouldTypecast) {
+			var vals = regexp.exec(request);
+			if (vals) {
+				vals.shift();
+				if (shouldTypecast) {
+					vals = typecastArrayValues(vals);
+				}
+			}
+			return vals;
+		}
+
+		function interpolate(pattern, replacements) {
+			if (typeof pattern !== 'string') {
+				throw new Error('Route pattern should be a string.');
+			}
+
+			var replaceFn = function(match, prop){
+					var val;
+					prop = (prop.substr(0, 1) === '?')? prop.substr(1) : prop;
+					if (replacements[prop] !== null) {
+						if (typeof replacements[prop] === 'object') {
+							var queryParts = [];
+							for(var key in replacements[prop]) {
+								queryParts.push(encodeURI(key + '=' + replacements[prop][key]));
+							}
+							val = '?' + queryParts.join('&');
+						} else {
+							// make sure value is a string see #gh-54
+							val = String(replacements[prop]);
+						}
+
+						if (match.indexOf('*') === -1 && val.indexOf('/') !== -1) {
+							throw new Error('Invalid value "'+ val +'" for segment "'+ match +'".');
+						}
+					}
+					else if (match.indexOf('{') !== -1) {
+						throw new Error('The segment '+ match +' is required.');
+					}
+					else {
+						val = '';
+					}
+					return val;
+				};
+
+			if (! TOKENS.OS.trail) {
+				TOKENS.OS.trail = new RegExp('(?:'+ TOKENS.OS.id +')+$');
+			}
+
+			return pattern
+						.replace(TOKENS.OS.rgx, TOKENS.OS.save)
+						.replace(PARAMS_REGEXP, replaceFn)
+						.replace(TOKENS.OS.trail, '') // remove trailing
+						.replace(TOKENS.OS.rRestore, '/'); // add slash between segments
+		}
+
+		//API
+		return {
+			strict : function(){
+				_slashMode = STRICT_SLASH;
+			},
+			loose : function(){
+				_slashMode = LOOSE_SLASH;
+			},
+			legacy : function(){
+				_slashMode = LEGACY_SLASH;
+			},
+			getParamIds : getParamIds,
+			getOptionalParamsIds : getOptionalParamsIds,
+			getParamValues : getParamValues,
+			compilePattern : compilePattern,
+			interpolate : interpolate
+		};
+
+	}());
+
+
+	return crossroads;
 };
 
 if (typeof define === 'function' && define.amd) {
-    define(['signals'], factory);
+	define(['signals'], factory);
 } else if (typeof module !== 'undefined' && module.exports) { //Node
-    module.exports = factory(require('signals'));
+	module.exports = factory(require('signals'));
 } else {
-    /*jshint sub:true */
-    window['crossroads'] = factory(window['signals']);
+	/*jshint sub:true */
+	window['crossroads'] = factory(window['signals']);
 }
 
 }());
@@ -754,463 +754,463 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
  */
  var Hogan = {};
 (function(Hogan, useArrayBuffer) {
-    Hogan.Template = function(renderFunc, text, compiler, options) {
-        this.r = renderFunc || this.r;
-        this.c = compiler;
-        this.options = options;
-        this.text = text || '';
-        this.buf = (useArrayBuffer) ? [] : ''
-    }
-    Hogan.Template.prototype = {
-        r: function(context, partials, indent) {
-            return ''
-        },
-        v: hoganEscape,
-        t: coerceToString,
-        render: function render(context, partials, indent) {
-            return this.ri([context], partials || {}, indent)
-        },
-        ri: function(context, partials, indent) {
-            return this.r(context, partials, indent)
-        },
-        rp: function(name, context, partials, indent) {
-            var partial = partials[name];
-            if (!partial) {
-                return ''
-            }
-            if (this.c && typeof partial == 'string') {
-                partial = this.c.compile(partial, this.options)
-            }
-            return partial.ri(context, partials, indent)
-        },
-        rs: function(context, partials, section) {
-            var tail = context[context.length - 1];
-            if (!isArray(tail)) {
-                section(context, partials, this);
-                return
-            }
-            for (var i = 0; i < tail.length; i++) {
-                context.push(tail[i]);
-                section(context, partials, this);
-                context.pop()
-            }
-        },
-        s: function(val, ctx, partials, inverted, start, end, tags) {
-            var pass;
-            if (isArray(val) && val.length === 0) {
-                return false
-            }
-            if (typeof val == 'function') {
-                val = this.ls(val, ctx, partials, inverted, start, end, tags)
-            }
-            pass = (val === '') || !!val;
-            if (!inverted && pass && ctx) {
-                ctx.push((typeof val == 'object') ? val : ctx[ctx.length - 1])
-            }
-            return pass
-        },
-        d: function(key, ctx, partials, returnFound) {
-            var names = key.split('.'),
-                val = this.f(names[0], ctx, partials, returnFound),
-                cx = null;
-            if (key === '.' && isArray(ctx[ctx.length - 2])) {
-                return ctx[ctx.length - 1]
-            }
-            for (var i = 1; i < names.length; i++) {
-                if (val && typeof val == 'object' && names[i] in val) {
-                    cx = val;
-                    val = val[names[i]]
-                } else {
-                    val = ''
-                }
-            }
-            if (returnFound && !val) {
-                return false
-            }
-            if (!returnFound && typeof val == 'function') {
-                ctx.push(cx);
-                val = this.lv(val, ctx, partials);
-                ctx.pop()
-            }
-            return val
-        },
-        f: function(key, ctx, partials, returnFound) {
-            var val = false,
-                v = null,
-                found = false;
-            for (var i = ctx.length - 1; i >= 0; i--) {
-                v = ctx[i];
-                if (v && typeof v == 'object' && key in v) {
-                    val = v[key];
-                    found = true;
-                    break
-                }
-            }
-            if (!found) {
-                return (returnFound) ? false : ""
-            }
-            if (!returnFound && typeof val == 'function') {
-                val = this.lv(val, ctx, partials)
-            }
-            return val
-        },
-        ho: function(val, cx, partials, text, tags) {
-            var compiler = this.c;
-            var options = this.options;
-            options.delimiters = tags;
-            var text = val.call(cx, text);
-            text = (text == null) ? String(text) : text.toString();
-            this.b(compiler.compile(text, options).render(cx, partials));
-            return false
-        },
-        b: (useArrayBuffer) ? function(s) {
-            this.buf.push(s)
-        } : function(s) {
-            this.buf += s
-        },
-        fl: (useArrayBuffer) ? function() {
-            var r = this.buf.join('');
-            this.buf = [];
-            return r
-        } : function() {
-            var r = this.buf;
-            this.buf = '';
-            return r
-        },
-        ls: function(val, ctx, partials, inverted, start, end, tags) {
-            var cx = ctx[ctx.length - 1],
-                t = null;
-            if (!inverted && this.c && val.length > 0) {
-                return this.ho(val, cx, partials, this.text.substring(start, end), tags)
-            }
-            t = val.call(cx);
-            if (typeof t == 'function') {
-                if (inverted) {
-                    return true
-                } else if (this.c) {
-                    return this.ho(t, cx, partials, this.text.substring(start, end), tags)
-                }
-            }
-            return t
-        },
-        lv: function(val, ctx, partials) {
-            var cx = ctx[ctx.length - 1];
-            var result = val.call(cx);
-            if (typeof result == 'function') {
-                result = coerceToString(result.call(cx));
-                if (this.c && ~result.indexOf("{\u007B")) {
-                    return this.c.compile(result, this.options).render(cx, partials)
-                }
-            }
-            return coerceToString(result)
-        }
-    };
-    var rAmp = /&/g,
-        rLt = /</g,
-        rGt = />/g,
-        rApos = /\'/g,
-        rQuot = /\"/g,
-        hChars = /[&<>\"\']/;
+	Hogan.Template = function(renderFunc, text, compiler, options) {
+		this.r = renderFunc || this.r;
+		this.c = compiler;
+		this.options = options;
+		this.text = text || '';
+		this.buf = (useArrayBuffer) ? [] : ''
+	}
+	Hogan.Template.prototype = {
+		r: function(context, partials, indent) {
+			return ''
+		},
+		v: hoganEscape,
+		t: coerceToString,
+		render: function render(context, partials, indent) {
+			return this.ri([context], partials || {}, indent)
+		},
+		ri: function(context, partials, indent) {
+			return this.r(context, partials, indent)
+		},
+		rp: function(name, context, partials, indent) {
+			var partial = partials[name];
+			if (!partial) {
+				return ''
+			}
+			if (this.c && typeof partial == 'string') {
+				partial = this.c.compile(partial, this.options)
+			}
+			return partial.ri(context, partials, indent)
+		},
+		rs: function(context, partials, section) {
+			var tail = context[context.length - 1];
+			if (!isArray(tail)) {
+				section(context, partials, this);
+				return
+			}
+			for (var i = 0; i < tail.length; i++) {
+				context.push(tail[i]);
+				section(context, partials, this);
+				context.pop()
+			}
+		},
+		s: function(val, ctx, partials, inverted, start, end, tags) {
+			var pass;
+			if (isArray(val) && val.length === 0) {
+				return false
+			}
+			if (typeof val == 'function') {
+				val = this.ls(val, ctx, partials, inverted, start, end, tags)
+			}
+			pass = (val === '') || !!val;
+			if (!inverted && pass && ctx) {
+				ctx.push((typeof val == 'object') ? val : ctx[ctx.length - 1])
+			}
+			return pass
+		},
+		d: function(key, ctx, partials, returnFound) {
+			var names = key.split('.'),
+				val = this.f(names[0], ctx, partials, returnFound),
+				cx = null;
+			if (key === '.' && isArray(ctx[ctx.length - 2])) {
+				return ctx[ctx.length - 1]
+			}
+			for (var i = 1; i < names.length; i++) {
+				if (val && typeof val == 'object' && names[i] in val) {
+					cx = val;
+					val = val[names[i]]
+				} else {
+					val = ''
+				}
+			}
+			if (returnFound && !val) {
+				return false
+			}
+			if (!returnFound && typeof val == 'function') {
+				ctx.push(cx);
+				val = this.lv(val, ctx, partials);
+				ctx.pop()
+			}
+			return val
+		},
+		f: function(key, ctx, partials, returnFound) {
+			var val = false,
+				v = null,
+				found = false;
+			for (var i = ctx.length - 1; i >= 0; i--) {
+				v = ctx[i];
+				if (v && typeof v == 'object' && key in v) {
+					val = v[key];
+					found = true;
+					break
+				}
+			}
+			if (!found) {
+				return (returnFound) ? false : ""
+			}
+			if (!returnFound && typeof val == 'function') {
+				val = this.lv(val, ctx, partials)
+			}
+			return val
+		},
+		ho: function(val, cx, partials, text, tags) {
+			var compiler = this.c;
+			var options = this.options;
+			options.delimiters = tags;
+			var text = val.call(cx, text);
+			text = (text == null) ? String(text) : text.toString();
+			this.b(compiler.compile(text, options).render(cx, partials));
+			return false
+		},
+		b: (useArrayBuffer) ? function(s) {
+			this.buf.push(s)
+		} : function(s) {
+			this.buf += s
+		},
+		fl: (useArrayBuffer) ? function() {
+			var r = this.buf.join('');
+			this.buf = [];
+			return r
+		} : function() {
+			var r = this.buf;
+			this.buf = '';
+			return r
+		},
+		ls: function(val, ctx, partials, inverted, start, end, tags) {
+			var cx = ctx[ctx.length - 1],
+				t = null;
+			if (!inverted && this.c && val.length > 0) {
+				return this.ho(val, cx, partials, this.text.substring(start, end), tags)
+			}
+			t = val.call(cx);
+			if (typeof t == 'function') {
+				if (inverted) {
+					return true
+				} else if (this.c) {
+					return this.ho(t, cx, partials, this.text.substring(start, end), tags)
+				}
+			}
+			return t
+		},
+		lv: function(val, ctx, partials) {
+			var cx = ctx[ctx.length - 1];
+			var result = val.call(cx);
+			if (typeof result == 'function') {
+				result = coerceToString(result.call(cx));
+				if (this.c && ~result.indexOf("{\u007B")) {
+					return this.c.compile(result, this.options).render(cx, partials)
+				}
+			}
+			return coerceToString(result)
+		}
+	};
+	var rAmp = /&/g,
+		rLt = /</g,
+		rGt = />/g,
+		rApos = /\'/g,
+		rQuot = /\"/g,
+		hChars = /[&<>\"\']/;
 
-    function coerceToString(val) {
-        return String((val === null || val === undefined) ? '' : val)
-    }
+	function coerceToString(val) {
+		return String((val === null || val === undefined) ? '' : val)
+	}
 
-    function hoganEscape(str) {
-        str = coerceToString(str);
-        return hChars.test(str) ? str.replace(rAmp, '&amp;').replace(rLt, '&lt;').replace(rGt, '&gt;').replace(rApos, '&#39;').replace(rQuot, '&quot;') : str
-    }
-    var isArray = Array.isArray || function(a) {
-        return Object.prototype.toString.call(a) === '[object Array]'
-    }
+	function hoganEscape(str) {
+		str = coerceToString(str);
+		return hChars.test(str) ? str.replace(rAmp, '&amp;').replace(rLt, '&lt;').replace(rGt, '&gt;').replace(rApos, '&#39;').replace(rQuot, '&quot;') : str
+	}
+	var isArray = Array.isArray || function(a) {
+		return Object.prototype.toString.call(a) === '[object Array]'
+	}
 })(typeof exports !== 'undefined' ? exports : Hogan);
 (function(Hogan) {
-    var rIsWhitespace = /\S/,
-        rQuot = /\"/g,
-        rNewline = /\n/g,
-        rCr = /\r/g,
-        rSlash = /\\/g,
-        tagTypes = {
-            '#': 1,
-            '^': 2,
-            '/': 3,
-            '!': 4,
-            '>': 5,
-            '<': 6,
-            '=': 7,
-            '_v': 8,
-            '{': 9,
-            '&': 10
-        };
-    Hogan.scan = function scan(text, delimiters) {
-        var len = text.length,
-            IN_TEXT = 0,
-            IN_TAG_TYPE = 1,
-            IN_TAG = 2,
-            state = IN_TEXT,
-            tagType = null,
-            tag = null,
-            buf = '',
-            tokens = [],
-            seenTag = false,
-            i = 0,
-            lineStart = 0,
-            otag = '{{',
-            ctag = '}}';
+	var rIsWhitespace = /\S/,
+		rQuot = /\"/g,
+		rNewline = /\n/g,
+		rCr = /\r/g,
+		rSlash = /\\/g,
+		tagTypes = {
+			'#': 1,
+			'^': 2,
+			'/': 3,
+			'!': 4,
+			'>': 5,
+			'<': 6,
+			'=': 7,
+			'_v': 8,
+			'{': 9,
+			'&': 10
+		};
+	Hogan.scan = function scan(text, delimiters) {
+		var len = text.length,
+			IN_TEXT = 0,
+			IN_TAG_TYPE = 1,
+			IN_TAG = 2,
+			state = IN_TEXT,
+			tagType = null,
+			tag = null,
+			buf = '',
+			tokens = [],
+			seenTag = false,
+			i = 0,
+			lineStart = 0,
+			otag = '{{',
+			ctag = '}}';
 
-        function addBuf() {
-            if (buf.length > 0) {
-                tokens.push(new String(buf));
-                buf = ''
-            }
-        }
+		function addBuf() {
+			if (buf.length > 0) {
+				tokens.push(new String(buf));
+				buf = ''
+			}
+		}
 
-        function lineIsWhitespace() {
-            var isAllWhitespace = true;
-            for (var j = lineStart; j < tokens.length; j++) {
-                isAllWhitespace = (tokens[j].tag && tagTypes[tokens[j].tag] < tagTypes['_v']) || (!tokens[j].tag && tokens[j].match(rIsWhitespace) === null);
-                if (!isAllWhitespace) {
-                    return false
-                }
-            }
-            return isAllWhitespace
-        }
+		function lineIsWhitespace() {
+			var isAllWhitespace = true;
+			for (var j = lineStart; j < tokens.length; j++) {
+				isAllWhitespace = (tokens[j].tag && tagTypes[tokens[j].tag] < tagTypes['_v']) || (!tokens[j].tag && tokens[j].match(rIsWhitespace) === null);
+				if (!isAllWhitespace) {
+					return false
+				}
+			}
+			return isAllWhitespace
+		}
 
-        function filterLine(haveSeenTag, noNewLine) {
-            addBuf();
-            if (haveSeenTag && lineIsWhitespace()) {
-                for (var j = lineStart, next; j < tokens.length; j++) {
-                    if (!tokens[j].tag) {
-                        if ((next = tokens[j + 1]) && next.tag == '>') {
-                            next.indent = tokens[j].toString()
-                        }
-                        tokens.splice(j, 1)
-                    }
-                }
-            } else if (!noNewLine) {
-                tokens.push({
-                    tag: '\n'
-                })
-            }
-            seenTag = false;
-            lineStart = tokens.length
-        }
+		function filterLine(haveSeenTag, noNewLine) {
+			addBuf();
+			if (haveSeenTag && lineIsWhitespace()) {
+				for (var j = lineStart, next; j < tokens.length; j++) {
+					if (!tokens[j].tag) {
+						if ((next = tokens[j + 1]) && next.tag == '>') {
+							next.indent = tokens[j].toString()
+						}
+						tokens.splice(j, 1)
+					}
+				}
+			} else if (!noNewLine) {
+				tokens.push({
+					tag: '\n'
+				})
+			}
+			seenTag = false;
+			lineStart = tokens.length
+		}
 
-        function changeDelimiters(text, index) {
-            var close = '=' + ctag,
-                closeIndex = text.indexOf(close, index),
-                delimiters = trim(text.substring(text.indexOf('=', index) + 1, closeIndex)).split(' ');
-            otag = delimiters[0];
-            ctag = delimiters[1];
-            return closeIndex + close.length - 1
-        }
-        if (delimiters) {
-            delimiters = delimiters.split(' ');
-            otag = delimiters[0];
-            ctag = delimiters[1]
-        }
-        for (i = 0; i < len; i++) {
-            if (state == IN_TEXT) {
-                if (tagChange(otag, text, i)) {
-                    --i;
-                    addBuf();
-                    state = IN_TAG_TYPE
-                } else {
-                    if (text.charAt(i) == '\n') {
-                        filterLine(seenTag)
-                    } else {
-                        buf += text.charAt(i)
-                    }
-                }
-            } else if (state == IN_TAG_TYPE) {
-                i += otag.length - 1;
-                tag = tagTypes[text.charAt(i + 1)];
-                tagType = tag ? text.charAt(i + 1) : '_v';
-                if (tagType == '=') {
-                    i = changeDelimiters(text, i);
-                    state = IN_TEXT
-                } else {
-                    if (tag) {
-                        i++
-                    }
-                    state = IN_TAG
-                }
-                seenTag = i
-            } else {
-                if (tagChange(ctag, text, i)) {
-                    tokens.push({
-                        tag: tagType,
-                        n: trim(buf),
-                        otag: otag,
-                        ctag: ctag,
-                        i: (tagType == '/') ? seenTag - ctag.length : i + otag.length
-                    });
-                    buf = '';
-                    i += ctag.length - 1;
-                    state = IN_TEXT;
-                    if (tagType == '{') {
-                        if (ctag == '}}') {
-                            i++
-                        } else {
-                            cleanTripleStache(tokens[tokens.length - 1])
-                        }
-                    }
-                } else {
-                    buf += text.charAt(i)
-                }
-            }
-        }
-        filterLine(seenTag, true);
-        return tokens
-    }
+		function changeDelimiters(text, index) {
+			var close = '=' + ctag,
+				closeIndex = text.indexOf(close, index),
+				delimiters = trim(text.substring(text.indexOf('=', index) + 1, closeIndex)).split(' ');
+			otag = delimiters[0];
+			ctag = delimiters[1];
+			return closeIndex + close.length - 1
+		}
+		if (delimiters) {
+			delimiters = delimiters.split(' ');
+			otag = delimiters[0];
+			ctag = delimiters[1]
+		}
+		for (i = 0; i < len; i++) {
+			if (state == IN_TEXT) {
+				if (tagChange(otag, text, i)) {
+					--i;
+					addBuf();
+					state = IN_TAG_TYPE
+				} else {
+					if (text.charAt(i) == '\n') {
+						filterLine(seenTag)
+					} else {
+						buf += text.charAt(i)
+					}
+				}
+			} else if (state == IN_TAG_TYPE) {
+				i += otag.length - 1;
+				tag = tagTypes[text.charAt(i + 1)];
+				tagType = tag ? text.charAt(i + 1) : '_v';
+				if (tagType == '=') {
+					i = changeDelimiters(text, i);
+					state = IN_TEXT
+				} else {
+					if (tag) {
+						i++
+					}
+					state = IN_TAG
+				}
+				seenTag = i
+			} else {
+				if (tagChange(ctag, text, i)) {
+					tokens.push({
+						tag: tagType,
+						n: trim(buf),
+						otag: otag,
+						ctag: ctag,
+						i: (tagType == '/') ? seenTag - ctag.length : i + otag.length
+					});
+					buf = '';
+					i += ctag.length - 1;
+					state = IN_TEXT;
+					if (tagType == '{') {
+						if (ctag == '}}') {
+							i++
+						} else {
+							cleanTripleStache(tokens[tokens.length - 1])
+						}
+					}
+				} else {
+					buf += text.charAt(i)
+				}
+			}
+		}
+		filterLine(seenTag, true);
+		return tokens
+	}
 
-    function cleanTripleStache(token) {
-        if (token.n.substr(token.n.length - 1) === '}') {
-            token.n = token.n.substring(0, token.n.length - 1)
-        }
-    }
+	function cleanTripleStache(token) {
+		if (token.n.substr(token.n.length - 1) === '}') {
+			token.n = token.n.substring(0, token.n.length - 1)
+		}
+	}
 
-    function trim(s) {
-        if (s.trim) {
-            return s.trim()
-        }
-        return s.replace(/^\s*|\s*$/g, '')
-    }
+	function trim(s) {
+		if (s.trim) {
+			return s.trim()
+		}
+		return s.replace(/^\s*|\s*$/g, '')
+	}
 
-    function tagChange(tag, text, index) {
-        if (text.charAt(index) != tag.charAt(0)) {
-            return false
-        }
-        for (var i = 1, l = tag.length; i < l; i++) {
-            if (text.charAt(index + i) != tag.charAt(i)) {
-                return false
-            }
-        }
-        return true
-    }
+	function tagChange(tag, text, index) {
+		if (text.charAt(index) != tag.charAt(0)) {
+			return false
+		}
+		for (var i = 1, l = tag.length; i < l; i++) {
+			if (text.charAt(index + i) != tag.charAt(i)) {
+				return false
+			}
+		}
+		return true
+	}
 
-    function buildTree(tokens, kind, stack, customTags) {
-        var instructions = [],
-            opener = null,
-            token = null;
-        while (tokens.length > 0) {
-            token = tokens.shift();
-            if (token.tag == '#' || token.tag == '^' || isOpener(token, customTags)) {
-                stack.push(token);
-                token.nodes = buildTree(tokens, token.tag, stack, customTags);
-                instructions.push(token)
-            } else if (token.tag == '/') {
-                if (stack.length === 0) {
-                    throw new Error('Closing tag without opener: /' + token.n)
-                }
-                opener = stack.pop();
-                if (token.n != opener.n && !isCloser(token.n, opener.n, customTags)) {
-                    throw new Error('Nesting error: ' + opener.n + ' vs. ' + token.n)
-                }
-                opener.end = token.i;
-                return instructions
-            } else {
-                instructions.push(token)
-            }
-        }
-        if (stack.length > 0) {
-            throw new Error('missing closing tag: ' + stack.pop().n)
-        }
-        return instructions
-    }
+	function buildTree(tokens, kind, stack, customTags) {
+		var instructions = [],
+			opener = null,
+			token = null;
+		while (tokens.length > 0) {
+			token = tokens.shift();
+			if (token.tag == '#' || token.tag == '^' || isOpener(token, customTags)) {
+				stack.push(token);
+				token.nodes = buildTree(tokens, token.tag, stack, customTags);
+				instructions.push(token)
+			} else if (token.tag == '/') {
+				if (stack.length === 0) {
+					throw new Error('Closing tag without opener: /' + token.n)
+				}
+				opener = stack.pop();
+				if (token.n != opener.n && !isCloser(token.n, opener.n, customTags)) {
+					throw new Error('Nesting error: ' + opener.n + ' vs. ' + token.n)
+				}
+				opener.end = token.i;
+				return instructions
+			} else {
+				instructions.push(token)
+			}
+		}
+		if (stack.length > 0) {
+			throw new Error('missing closing tag: ' + stack.pop().n)
+		}
+		return instructions
+	}
 
-    function isOpener(token, tags) {
-        for (var i = 0, l = tags.length; i < l; i++) {
-            if (tags[i].o == token.n) {
-                token.tag = '#';
-                return true
-            }
-        }
-    }
+	function isOpener(token, tags) {
+		for (var i = 0, l = tags.length; i < l; i++) {
+			if (tags[i].o == token.n) {
+				token.tag = '#';
+				return true
+			}
+		}
+	}
 
-    function isCloser(close, open, tags) {
-        for (var i = 0, l = tags.length; i < l; i++) {
-            if (tags[i].c == close && tags[i].o == open) {
-                return true
-            }
-        }
-    }
-    Hogan.generate = function(tree, text, options) {
-        var code = 'var _=this;_.b(i=i||"");' + walk(tree) + 'return _.fl();';
-        if (options.asString) {
-            return 'function(c,p,i){' + code + ';}'
-        }
-        return new Hogan.Template(new Function('c', 'p', 'i', code), text, Hogan, options)
-    }
+	function isCloser(close, open, tags) {
+		for (var i = 0, l = tags.length; i < l; i++) {
+			if (tags[i].c == close && tags[i].o == open) {
+				return true
+			}
+		}
+	}
+	Hogan.generate = function(tree, text, options) {
+		var code = 'var _=this;_.b(i=i||"");' + walk(tree) + 'return _.fl();';
+		if (options.asString) {
+			return 'function(c,p,i){' + code + ';}'
+		}
+		return new Hogan.Template(new Function('c', 'p', 'i', code), text, Hogan, options)
+	}
 
-    function esc(s) {
-        return s.replace(rSlash, '\\\\').replace(rQuot, '\\\"').replace(rNewline, '\\n').replace(rCr, '\\r')
-    }
+	function esc(s) {
+		return s.replace(rSlash, '\\\\').replace(rQuot, '\\\"').replace(rNewline, '\\n').replace(rCr, '\\r')
+	}
 
-    function chooseMethod(s) {
-        return (~s.indexOf('.')) ? 'd' : 'f'
-    }
+	function chooseMethod(s) {
+		return (~s.indexOf('.')) ? 'd' : 'f'
+	}
 
-    function walk(tree) {
-        var code = '';
-        for (var i = 0, l = tree.length; i < l; i++) {
-            var tag = tree[i].tag;
-            if (tag == '#') {
-                code += section(tree[i].nodes, tree[i].n, chooseMethod(tree[i].n), tree[i].i, tree[i].end, tree[i].otag + " " + tree[i].ctag)
-            } else if (tag == '^') {
-                code += invertedSection(tree[i].nodes, tree[i].n, chooseMethod(tree[i].n))
-            } else if (tag == '<' || tag == '>') {
-                code += partial(tree[i])
-            } else if (tag == '{' || tag == '&') {
-                code += tripleStache(tree[i].n, chooseMethod(tree[i].n))
-            } else if (tag == '\n') {
-                code += text('"\\n"' + (tree.length - 1 == i ? '' : ' + i'))
-            } else if (tag == '_v') {
-                code += variable(tree[i].n, chooseMethod(tree[i].n))
-            } else if (tag === undefined) {
-                code += text('"' + esc(tree[i]) + '"')
-            }
-        }
-        return code
-    }
+	function walk(tree) {
+		var code = '';
+		for (var i = 0, l = tree.length; i < l; i++) {
+			var tag = tree[i].tag;
+			if (tag == '#') {
+				code += section(tree[i].nodes, tree[i].n, chooseMethod(tree[i].n), tree[i].i, tree[i].end, tree[i].otag + " " + tree[i].ctag)
+			} else if (tag == '^') {
+				code += invertedSection(tree[i].nodes, tree[i].n, chooseMethod(tree[i].n))
+			} else if (tag == '<' || tag == '>') {
+				code += partial(tree[i])
+			} else if (tag == '{' || tag == '&') {
+				code += tripleStache(tree[i].n, chooseMethod(tree[i].n))
+			} else if (tag == '\n') {
+				code += text('"\\n"' + (tree.length - 1 == i ? '' : ' + i'))
+			} else if (tag == '_v') {
+				code += variable(tree[i].n, chooseMethod(tree[i].n))
+			} else if (tag === undefined) {
+				code += text('"' + esc(tree[i]) + '"')
+			}
+		}
+		return code
+	}
 
-    function section(nodes, id, method, start, end, tags) {
-        return 'if(_.s(_.' + method + '("' + esc(id) + '",c,p,1),' + 'c,p,0,' + start + ',' + end + ',"' + tags + '")){' + '_.rs(c,p,' + 'function(c,p,_){' + walk(nodes) + '});c.pop();}'
-    }
+	function section(nodes, id, method, start, end, tags) {
+		return 'if(_.s(_.' + method + '("' + esc(id) + '",c,p,1),' + 'c,p,0,' + start + ',' + end + ',"' + tags + '")){' + '_.rs(c,p,' + 'function(c,p,_){' + walk(nodes) + '});c.pop();}'
+	}
 
-    function invertedSection(nodes, id, method) {
-        return 'if(!_.s(_.' + method + '("' + esc(id) + '",c,p,1),c,p,1,0,0,"")){' + walk(nodes) + '};'
-    }
+	function invertedSection(nodes, id, method) {
+		return 'if(!_.s(_.' + method + '("' + esc(id) + '",c,p,1),c,p,1,0,0,"")){' + walk(nodes) + '};'
+	}
 
-    function partial(tok) {
-        return '_.b(_.rp("' + esc(tok.n) + '",c,p,"' + (tok.indent || '') + '"));'
-    }
+	function partial(tok) {
+		return '_.b(_.rp("' + esc(tok.n) + '",c,p,"' + (tok.indent || '') + '"));'
+	}
 
-    function tripleStache(id, method) {
-        return '_.b(_.t(_.' + method + '("' + esc(id) + '",c,p,0)));'
-    }
+	function tripleStache(id, method) {
+		return '_.b(_.t(_.' + method + '("' + esc(id) + '",c,p,0)));'
+	}
 
-    function variable(id, method) {
-        return '_.b(_.v(_.' + method + '("' + esc(id) + '",c,p,0)));'
-    }
+	function variable(id, method) {
+		return '_.b(_.v(_.' + method + '("' + esc(id) + '",c,p,0)));'
+	}
 
-    function text(id) {
-        return '_.b(' + id + ');'
-    }
-    Hogan.parse = function(tokens, text, options) {
-        options = options || {};
-        return buildTree(tokens, '', [], options.sectionTags || [])
-    }, Hogan.cache = {};
-    Hogan.compile = function(text, options) {
-        options = options || {};
-        var key = text + '||' + !!options.asString;
-        var t = this.cache[key];
-        if (t) {
-            return t
-        }
-        t = this.generate(this.parse(this.scan(text, options.delimiters), text, options), text, options);
-        return this.cache[key] = t
-    }
+	function text(id) {
+		return '_.b(' + id + ');'
+	}
+	Hogan.parse = function(tokens, text, options) {
+		options = options || {};
+		return buildTree(tokens, '', [], options.sectionTags || [])
+	}, Hogan.cache = {};
+	Hogan.compile = function(text, options) {
+		options = options || {};
+		var key = text + '||' + !!options.asString;
+		var t = this.cache[key];
+		if (t) {
+			return t
+		}
+		t = this.generate(this.parse(this.scan(text, options.delimiters), text, options), text, options);
+		return this.cache[key] = t
+	}
 })(typeof exports !== 'undefined' ? exports : Hogan);
 /*!
  * typeahead.js 0.9.3

@@ -32,6 +32,7 @@ function onStart() {
 			endowmentSelectors();
 		});
 	});
+	initSocialShare();
 }
 
 // Get Featured Endowments
@@ -631,44 +632,42 @@ function unsubscribeSelectors() {
 			growlError('There was an error unsubscribing from this endowment.');
 		});
 	});
+}
 
-	// From http://sharrre.com/example6.html
+function initSocialShare() {
+	// From http://sharrre.com/example1.html
 	$('#twitter').sharrre({
-	  share: {
-	    twitter: true
-	  },
-	  template: '<a class="box" href="#"><div class="count" href="#">{total}</div><div class="share">Tweet</div></a>',
-	  enableHover: false,
-	  enableTracking: true,
-	  buttons: { twitter: {via: 'giv2giv'}},
-	  click: function(api, options){
-	    api.simulateClick();
-	    api.openPopup('twitter');
-	  }
+		share: {
+			twitter: true
+		},
+		enableHover: false,
+		enableTracking: true,
+		buttons: { twitter: {via: 'giv2giv'}},
+		click: function(api, options){
+			api.simulateClick();
+			api.openPopup('twitter');
+		}
 	});
 	$('#facebook').sharrre({
-	  share: {
-	    facebook: true
-	  },
-	  template: '<a class="box" href="#"><div class="count" href="#">{total}</div><div class="share">Like</div></a>',
-	  enableHover: false,
-	  enableTracking: true,
-	  click: function(api, options){
-	    api.simulateClick();
-	    api.openPopup('facebook');
-	  }
+		share: {
+			facebook: true
+		},
+		enableHover: false,
+		enableTracking: true,
+		click: function(api, options){
+			api.simulateClick();
+			api.openPopup('facebook');
+		}
 	});
-	$('#googleplus').sharrre({
-	  share: {
-	    googlePlus: true
-	  },
-	  template: '<a class="box" href="#"><div class="count" href="#">{total}</div><div class="share">+1</div></a>',
-	  enableHover: false,
-	  enableTracking: true,
-	  click: function(api, options){
-	    api.simulateClick();
-	    api.openPopup('googlePlus');
-	  }
-	});
-
+	// $('#googleplus').sharrre({
+	// 	share: {
+	// 		googlePlus: true
+	// 	},
+	// 	enableHover: false,
+	// 	enableTracking: true,
+	// 	click: function(api, options){
+	// 		api.simulateClick();
+	// 		api.openPopup('googlePlus');
+	// 	}
+	// });
 }

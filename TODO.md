@@ -11,13 +11,8 @@ endpoints for fb/goog:
 # OTHER STUFF #
 
 - Add FB / Twitter Links on the landing page
-- Pick better fonts and normalize fonts (only two fonts)
-- CSS for gravatar in logged-in navbar
-- Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead
-
 - New feed for charities
 - Endowment slug (in URL) should be its name and not its number
-- Remove projected graph from endowment_details.html ?
 
 More details in projected tooltip (date, total_donations, total_grants, total_fees, balance)
 Pending grants on #numbers
