@@ -86,7 +86,13 @@
 		<div id="signup-panel" class="row hide last-content">
 			<div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 card registration">
 				<h2>Sign Up</h2>
-				<button id="gplus-signup" class="btn btn-block btn-social btn-google-plus">
+				<button id="gplus-signup" class="btn btn-block btn-social btn-google-plus g-signin"
+    data-scope="https://www.googleapis.com/auth/plus.login"
+    data-clientid="YOUR_CLIENT_ID"
+    data-redirecturi="postmessage"
+    data-accesstype="offline"
+    data-cookiepolicy="single_host_origin"
+    data-callback="signInCallback">
 					<i class="fa fa-google-plus"></i> Sign Up with Google+
 				</button>
 				<button id="facebook-signup" class="btn btn-block btn-social btn-facebook">

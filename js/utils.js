@@ -15,7 +15,7 @@ Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @TODO - Send serious logs to server?
-GLOBAL.DEBUG = false;
+GLOBAL.DEBUG = true;
 log = function () {
 	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {
@@ -143,3 +143,14 @@ Highcharts.setOptions({
 		"#9B0800"
 	]
 });
+
+// Google Plus Sign-In
+// (function () {
+// 	var po = document.createElement('script');
+// 	po.type = 'text/javascript';
+// 	po.async = true;
+// 	po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
+// 	var s = document.getElementsByTagName('script')[0];
+// 	s.parentNode.insertBefore(po, s);
+// })();
+

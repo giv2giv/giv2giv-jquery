@@ -115,12 +115,11 @@ var WebUI = function() {
 					}).done(function(response) {
 						donations = parseFloat(response.total);
 						if (donations > 0) {
-							crossroads.parse("/dashboard");
 							hasher.setHash("dashboard");
 						} else {
-							crossroads.parse("/");
 							hasher.setHash("");
 						}
+						LandingUI.start.halt();
 					});
 					
 				} else {
@@ -388,10 +387,14 @@ var WebUI = function() {
 	});
 
 	// var authWindow;
-	// $("#gplus-signup")
+	$("#gplus-signup")
 	// $("#facebook-signup").on('click', function(e) {
 	// 	e.preventDefault();
 	// 	console.log('here')
+		// TODO: Throw the user to a new page to get them to accept the terms
+		// and conditions
+		// TODO: Pull signin and signup out of app.html and into their own
+		// separate crossroads routes
 
 	// 	authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
 	// 	setTimeout(CheckLoginStatus, 1000);

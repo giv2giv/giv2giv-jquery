@@ -9,8 +9,19 @@ var EndowmentsUI = {
 
 // Add Listener
 EndowmentsUI.start.add(onStart);
-EndowmentsUI.newModal.add(cleanAndShowModal);
+EndowmentsUI.newModal.add(onModal);
 EndowmentsUI.details.add(onDetails);
+
+function onModal() {
+	// Load Featured Endowments
+	fetchFeaturedEndowments(function() {
+		// Fetch Subscribed Endowments
+		fetchSubscribedEndowments(function() {
+			endowmentSelectors();
+			cleanAndShowModal();
+		});
+	});
+}
 
 // (Re)Start Endowments UI
 function onStart() {
@@ -177,6 +188,7 @@ function endowmentSelectors() {
 	// Go to Charity List
 	$('#add-endowment-modal-save').off('click');
 	$('#add-endowment-modal-save').on('click', function(e) {
+		e.preventDefault();
 		// Payload
 		var payload = {};
 		payload.name = $('#add-endowment-modal #endowment-name').val();
@@ -204,7 +216,6 @@ function endowmentSelectors() {
 			 contentType: 'application/json',
 			 dataType: 'json'
 		}).done(function(data) {
-			log(data);
 			// Refresh Endowments & Hide Modal
 			fetchFeaturedEndowments(function() {
 				// Fetch Subscribed Endowments
@@ -677,7 +688,9 @@ function fetchEndowmentDonations(id, callback) {
 	}).fail(function(data) {
 		growlError('There was an error loading your donations.');
 	}).always(function() {
-		callback();
+		if (typeof callback === 'function') {
+			callback();
+		}
 	});
 }
 

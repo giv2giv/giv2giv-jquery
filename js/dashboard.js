@@ -11,6 +11,11 @@ DashboardUI.start.add(onStart);
 // (Re)Start Dashboard UI
 function onStart() {
 	fetchDonorData();
+	$('.create-endowment-btn').on('click', function(e) {
+		e.preventDefault();
+		hasher.setHash('/');
+		EndowmentsUI.newModal.dispatch();
+	});
 }
 
 function fetchDonorData() {
@@ -91,7 +96,6 @@ function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 					showInLegend: true,
 					events: {
 						click: function(e) {
-							crossroads.parse('/endowment/' + e.point.id);
 							hasher.setHash('endowment/' + e.point.id);
 						}
 					}

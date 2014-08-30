@@ -9,13 +9,10 @@ endpoints for fb/goog:
 /auth/facebook
 /auth/google_oauth2
 
-- Subscriptions not showing up properly
 
 # OTHER STUFF #
 
-- Landing Page
-	- Add FB / Twitter Links
-	- Make the red cross transform to a smile upon receipt of funds? Or pulse with life like a heart?
+- Add FB / Twitter Links on the landing page
 - Pick better fonts and normalize fonts (only two fonts)
 - CSS for gravatar in logged-in navbar
 - Search for CHARITIES upon login, not ENDOWMENTS. Make endowments optional, and call them "TEAMS" instead

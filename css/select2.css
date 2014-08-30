@@ -1,3 +1,7 @@
+.select2-container {
+    display: block !important;
+}
+
 .select2-container .select2-choice {
     display: inline;
     height: 26px;
