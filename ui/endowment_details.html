@@ -91,6 +91,7 @@
 
 <!-- Modals -->
 <!-- Subscribe Modal -->
+<!-- Subscribe Modal -->
 <div id="subscribe-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="subscribe-endowment-header" aria-hidden="true">
 	<div class="modal-dialog">
 		<form id="subcribe-endowment-modal-form" class="modal-content">
@@ -104,11 +105,19 @@
 					<select id="subscribe-endowment-payment-accounts">
 					</select class="form-control">
 				</div>
+				<div class="form-group">
+					<label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
+					<div class="input-group">
+						<span class="input-group-addon">$</span>
+						<input type="text" id="subscribe-endowment-donation" class="form-control">
+					</div>
+					<p class="text-muted">The minimum monthly donation is $5.00</p>
+				</div>
 				<p>Your subscription can be stopped at any time with no additional payments or fees on the Endowments homepage of your account.</p>
 			</div>
 			<div class="modal-footer">
 				<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-				<a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>    
+				<a href="#" id="confirm-subscribe-endowment" data-id="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Subscribe</a>
 			</div>
 		</form>
 	</div>

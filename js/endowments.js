@@ -233,49 +233,7 @@ function endowmentSelectors() {
 		e.preventDefault();
 	});
 
-	// Confirm Endowment Subscription
-	$('#confirm-subscribe-endowment').off('click');
-	$('#confirm-subscribe-endowment').on('click', function(e) {
-		$btn = $(this);
-		$btn.button('loading');
-
-		var subscriptionAmount = $('#subscribe-endowment-donation').val();
-		if (subscriptionAmount < GLOBAL.MIN_DONATION) {
-			$btn.button('reset');
-			growlError('Sorry! The minimum monthly donation is $' + GLOBAL.MIN_DONATION.toFixed(2));
-			return;
-		}
-
-		var payload = {};
-		payload.amount = subscriptionAmount;
-		payload.endowment_id = $(this).attr('data-id');
-		var request_payload = JSON.stringify(payload);
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
-			method: 'POST',
-			contentType: 'application/json',
-			dataType:'json',
-			data: request_payload
-		}).done(function(data) {
-			growlSuccess('Donation scheduled. Thank you! You\'ll see your endowment balance update in a minute or two.');
-			// Success
-			// Refresh Endowments & Hide Modal
-			fetchFeaturedEndowments(function() {
-				// Fetch Subscribed Endowments
-				fetchSubscribedEndowments(function() {
-					endowmentSelectors();
-					growlSuccess('You have successfully subscribed to this endowment.');
-					$btn.button('reset');
-					$('#subscribe-endowment-modal').modal('hide');
-				});
-			});
-		}).fail(function(data) {
-			log(data);
-			$btn.button('reset');
-			growlError('There was an error subscribing to this endowment.');
-		});
-		e.preventDefault();
-	});
+	subscribeSelectors();
 
 	// Subscribe Button
 	$('.endowment-subscribe-btn').off('click');
@@ -328,60 +286,7 @@ function endowmentSelectors() {
 		e.preventDefault();
 	});
 
-	// Unsubscribe Button
-	$('.endowment-unsubscribe-btn').off('click');
-	$('.endowment-unsubscribe-btn').on('click', function(e) {
-		// Take ID and get Endowment Details
-		// Set Subscribe Button
-		$('#confirm-unsubscribe-endowment').attr('data-id', $(this).attr('data-id'));
-		// Now Get Endowment Details
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
-			method: 'GET'
-		}).done(function(data) {
-			log(data);
-
-			// Clean & Prep Modal
-			$('#unsubscribe-endowment-header').html('Unsubscribe to ' + data.endowment.name);
-			// Set Confirm Button
-			$('#confirm-unsubscribe-endowment').attr('data-id', data.endowment.my_balances.my_subscription_id);
-			// Now Show Modal
-			$('#unsubscribe-endowment-modal').modal('show');
-
-		}).fail(function(data) {
-			log(data);
-		});
-		e.preventDefault();
-	});
-
-	// Unsubscribe confirmation click
-	$('#confirm-unsubscribe-endowment').off('click');
-	$('#confirm-unsubscribe-endowment').on('click', function(e) {
-				$btn = $(this);
-		$btn.button('loading');
-		// Now Get Endowment Details
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
-			method: 'GET'
-		}).done(function(data) {
-			// Refresh Endowments & Hide Modal
-			fetchFeaturedEndowments(function() {
-				// Fetch Subscribed Endowments
-				fetchSubscribedEndowments(function() {
-					$btn.button('reset');
-					growlSuccess('Successfully unsubscribed from endowment.');
-					endowmentSelectors();
-					// Hide Modal
-					$('#unsubscribe-endowment-modal').modal('hide');
-				});
-			});
-
-		}).fail(function(data) {
-			$btn.button('reset');
-			growlError('There was an error unsubscribing from this endowment.');
-		});
-		e.preventDefault();
-		});
+	unsubscribeSelectors();
 
 	// More Details Button
 	$('.endowment-details-btn').off();
@@ -506,37 +411,7 @@ function onDetails(endowment) {
 		$('#subscription-tab').addClass('hide');
 	}
 
-	// Subscription Buttons
-	// Confirm Endowment Subscription
-	$('#confirm-subscribe-endowment').off('click');
-	$('#confirm-subscribe-endowment').on('click', function(e) {
-		$btn = $(this);
-		$btn.button('loading');
-		var payload = {};
-		payload.amount = $('#subscribe-endowment-modal #subscribe-endowment-donation').val();
-		payload.endowment_id = $(this).attr('data-id');
-		var request_payload = JSON.stringify(payload);
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
-			method: 'POST',
-			contentType: 'application/json',
-			dataType:'json',
-			data: request_payload
-		}).done(function(data) {
-			growlSuccess('Donation scheduled. Thank you! You\'ll see your endowment balance update in a minute or two.');
-			$btn.button('reset');
-			fetchEndowmentDonations($('#confirm-subscribe-endowment').attr('data-id'), function() {
-				$('#no-subscription').addClass('hide');
-				$('#subscription-details').removeClass('hide');
-				$('#subscribe-endowment-modal').modal('hide');
-			});
-		}).fail(function(data) {
-			log(data);
-			$btn.button('reset');
-			growlError('There was an error subscribing to this endowment.');
-		});
-		e.preventDefault();
-	});
+	subscribeSelectors();
 
 	// Subscribe Button
 	$('#endowment-details-subscribe').off('click');
@@ -587,52 +462,7 @@ function onDetails(endowment) {
 		e.preventDefault();
 	});
 
-	// Unsubscribe Button
-	$('#endowment-details-unsubscribe').off('click');
-	$('#endowment-details-unsubscribe').on('click', function(e) {
-				// Take ID and get Endowment Details
-		// Set Subscribe Button
-		$('#confirm-unsubscribe-endowment').attr('data-id', $(this).attr('data-id'));
-		// Now Get Endowment Details
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
-			method: 'GET'
-		}).done(function(data) {
-			log(data);
-			// Clean & Prep Modal
-			// $('#unsubscribe-endowment-donation').val('');
-			$('#unsubscribe-endowment-header').html('Unsubscribe to ' + data.endowment.name);
-			// Set Confirm Button
-			$('#confirm-unsubscribe-endowment').attr('data-id', data.endowment.my_balances.my_subscription_id);
-			// Now Show Modal
-			$('#unsubscribe-endowment-modal').modal('show');
-		}).fail(function(data) {
-			log(data);
-		});
-		e.preventDefault();
-	});
-
-	// Unsubscribe confirmation click
-	$('#confirm-unsubscribe-endowment').off('click');
-	$('#confirm-unsubscribe-endowment').on('click', function(e) {
-				$btn = $(this);
-		$btn.button('loading');
-		// Now Get Endowment Details
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
-			method: 'GET'
-		}).done(function(data) {
-			$btn.button('reset');
-			growlSuccess('Successfully unsubscribed from endowment.');
-			$('#no-subscription').removeClass('hide');
-			$('#subscription-details').addClass('hide');
-			$('#unsubscribe-endowment-modal').modal('hide');
-		}).fail(function(data) {
-			$btn.button('reset');
-			growlError('There was an error unsubscribing from this endowment.');
-		});
-		e.preventDefault();
-	});
+	unsubscribeSelectors();
 
 	// Header
 	$('#endowment-details-header').html(endowment.name);
@@ -698,4 +528,109 @@ function handleEndowmentDonations(data) {
 			$row.append('<td>$'+v.net_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+'</td>');
 		});
 	}
+}
+
+function subscribeSelectors() {
+	// Confirm Endowment Subscription
+	$('#confirm-subscribe-endowment').off('click');
+	$('#confirm-subscribe-endowment').on('click', function(e) {
+		e.preventDefault();
+		$btn = $(this);
+		$btn.button('loading');
+
+		var subscriptionAmount = $('#subscribe-endowment-donation').val();
+		if (subscriptionAmount < GLOBAL.MIN_DONATION) {
+			$btn.button('reset');
+			growlError('Sorry! The minimum monthly donation is $' + GLOBAL.MIN_DONATION.toFixed(2));
+			return;
+		}
+
+		var payload = {};
+		payload.amount = subscriptionAmount;
+		payload.endowment_id = $(this).attr('data-id');
+		var request_payload = JSON.stringify(payload);
+		$.ajax({
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
+			method: 'POST',
+			contentType: 'application/json',
+			dataType:'json',
+			data: request_payload
+		}).done(function(data) {
+			growlSuccess('Donation scheduled. Thank you! You\'ll see your endowment balance update in a minute or two.');
+			// Success
+			// Refresh Endowments & Hide Modal
+			fetchFeaturedEndowments(function() {
+				// Fetch Subscribed Endowments
+				fetchSubscribedEndowments(function() {
+					endowmentSelectors();
+					growlSuccess('You have successfully subscribed to this endowment.');
+					$btn.button('reset');
+					$('#no-subscription').addClass('hide');
+					$('#subscription-details').removeClass('hide');
+					$('#subscribe-endowment-modal').modal('hide');
+				});
+			});
+		}).fail(function(data) {
+			log(data);
+			$btn.button('reset');
+			growlError('There was an error subscribing to this endowment.');
+		});
+	});
+}
+
+function unsubscribeSelectors() {
+	// Unsubscribe Button
+	$('.endowment-unsubscribe-btn').off('click');
+	$('.endowment-unsubscribe-btn').on('click', function(e) {
+		e.preventDefault();
+		// Take ID and get Endowment Details
+		// Set Subscribe Button
+		$('#confirm-unsubscribe-endowment').attr('data-id', $(this).attr('data-id'));
+		// Now Get Endowment Details
+		$.ajax({
+			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
+			method: 'GET'
+		}).done(function(data) {
+			log(data);
+			// Clean & Prep Modal
+			$('#unsubscribe-endowment-header').html('Unsubscribe to ' + data.endowment.name);
+			// Set Confirm Button
+			$('#confirm-unsubscribe-endowment').attr('data-id', data.endowment.my_balances.my_subscription_id);
+			// Now Show Modal
+			$('#unsubscribe-endowment-modal').modal('show');
+
+		}).fail(function(data) {
+			log(data);
+		});
+	});
+
+	// Unsubscribe confirmation click
+	$('#confirm-unsubscribe-endowment').off('click');
+	$('#confirm-unsubscribe-endowment').on('click', function(e) {
+		e.preventDefault();
+		$btn = $(this);
+		$btn.button('loading');
+		// Now Get Endowment Details
+		$.ajax({
+			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/' + $('#confirm-unsubscribe-endowment').attr('data-id') + '/cancel_subscription.json',
+			method: 'GET'
+		}).done(function(data) {
+			// Refresh Endowments & Hide Modal
+			fetchFeaturedEndowments(function() {
+				// Fetch Subscribed Endowments
+				fetchSubscribedEndowments(function() {
+					$btn.button('reset');
+					growlSuccess('Successfully unsubscribed from endowment.');
+					endowmentSelectors();
+					$('#no-subscription').removeClass('hide');
+					$('#subscription-details').addClass('hide');
+					// Hide Modal
+					$('#unsubscribe-endowment-modal').modal('hide');
+				});
+			});
+		}).fail(function(data) {
+			$btn.button('reset');
+			growlError('There was an error unsubscribing from this endowment.');
+		});
+	});
 }
