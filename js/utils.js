@@ -83,6 +83,9 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 			balance[i] = {};
 			balance[i].x = new Date(content[i].date);
 			balance[i].y = content[i][label];
+			balance[i].donations = content[i].total_donations || null;
+			balance[i].fees = content[i].total_fees || null;
+			balance[i].grants = content[i].total_grants || null;
 		}
 
 		DOMnode.highcharts({
@@ -112,9 +115,26 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 			},
 			tooltip: {
 				formatter: function() {
+					var donations = '';
+					var fees = '';
+					var grants = '';
+					// The following formats stuff to a correct currency value
+					// .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+					// via http://stackoverflow.com/a/14428340
+					if (this.point.donations) {
+						donations += '<br/>Donations: $' + this.point.donations.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					}
+					if (this.point.fees) {
+						fees += '<br/>Fees: $' + this.point.fees.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					}
+					if (this.point.grants) {
+						grants += '<br/>Grants: $' + this.point.grants.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					}
 					var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 					var month = months[this.point.x.getMonth() - 1];
-					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + '<br/>$' + this.point.y.toFixed(2);
+					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() +
+					'<br/>Balance: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+					donations + fees + grants;
 				}
 			},
 			credits: { enabled: false }
