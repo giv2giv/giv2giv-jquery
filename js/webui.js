@@ -387,7 +387,7 @@ var WebUI = function() {
 	});
 
 	// var authWindow;
-	$("#gplus-signup")
+	// $("#gplus-signup")
 	// $("#facebook-signup").on('click', function(e) {
 	// 	e.preventDefault();
 	// 	console.log('here')
@@ -424,6 +424,7 @@ var WebUI = function() {
 
 	// Handle Logout Button
 	$("#logout-btn").on("click", function (e) {
+		e.preventDefault();
 		log("WebUI: Logout.");
 		$.ajax({
 			url: GLOBAL.SERVER_URL + "/api/sessions/destroy.json",
@@ -436,9 +437,10 @@ var WebUI = function() {
 			growlSuccess("You have successfully signed out of giv2giv");
 			hasher.setHash("signin");
 			EndowmentsUI.start.halt();
+			EndowmentsUI.details.halt();
+			EndowmentsUI.subscriptions.halt();
 			DashboardUI.start.halt();
 		});
-		e.preventDefault();
 	});
 
 	// Nav Tabs
