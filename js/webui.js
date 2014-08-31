@@ -434,7 +434,6 @@ var WebUI = function() {
 			// Delete Cookie
 			$.removeCookie("session");
 			growlSuccess("You have successfully signed out of giv2giv");
-			crossroads.parse("signin");
 			hasher.setHash("signin");
 			EndowmentsUI.start.halt();
 			DashboardUI.start.halt();
