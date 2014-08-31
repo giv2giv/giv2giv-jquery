@@ -17,6 +17,8 @@
 			<div class="col-sm-4 text-center">
 				<p>giv2giv Current Balance</p>
 				<p id="current-fund-balance-all-donors"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</p>
+				<p>Projection Assumptions</p>
+				<a id="open-assumptions-modal" href='#assumptions-modal' class='' data-toggle="modal">Click to View</a>
 			</div>
 			<div class="col-sm-4 text-center">
 				<p>giv2giv Total Donations</p>
@@ -29,6 +31,27 @@
 				<p id="total-amount-of-grants"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</p>
         <p>giv2giv In-Process Grants</p>
         <p id="total-amount-of-pending-grants"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="assumptions-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="assumptions-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="assumptions-label">
+					Chart Assumptions
+				</h3>
+			</div>
+			<div class="modal-body">
+				<ul>
+					<li>Current donations continue</li>
+					<li>7% rate of return</li>
+					<li>Granting 1.25% of all endowments every 90 days</li>
+					<li>Service grant of 0.125% every 90 days to giv2giv</li>
+				</ul>
 			</div>
 		</div>
 	</div>

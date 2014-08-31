@@ -115,13 +115,13 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 			},
 			tooltip: {
 				formatter: function() {
+					// The following regex formats stuff to a correct currency value
+					// .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+					// via http://stackoverflow.com/a/14428340
 					var donations = '';
 					var fees = '';
 					var grants = '';
 					var balance = '<br/>Balance: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					// The following formats stuff to a correct currency value
-					// .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-					// via http://stackoverflow.com/a/14428340
 					if (this.point.donations) {
 						donations += '<br/>Donations: $' + this.point.donations.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 					}
