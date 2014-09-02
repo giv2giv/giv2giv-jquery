@@ -7,63 +7,93 @@
 	<div class="fixed-column">
 		<div class="row">
 			<div class="col-sm-6">
-				<h2>Details</h2>
-				<p id="endowment-details-description"></p>
-				<p>Number of donors: &nbsp;<span id="endowment-details-donor-count"></span></p>
-			</div>
-			<div class="col-sm-6">
-				<h2>Subscription</h2>
-				<div id="no-subscription" class="hide text-center">
-					<p>You haven't subscribed to this endowment.</p>
-					<p><a class="btn btn-success" id="endowment-details-subscribe" data-toggle="modal" href="#">Subscribe</a></p>
+	      <ul class="social-buttons cf">
+
+          <li>
+          	<a href="https://twitter.com/share" class="socialite twitter-share" data-text="I'm building a legacy for good @giv2giv. Join me!" data-url="https://giv2giv.org" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+          </li>
+          <li>
+              <a href="https://plus.google.com/share?url=https://giv2giv.org" class="socialite googleplus-one" data-size="tall" data-href="https://giv2giv.org" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+          </li>
+          <li>
+              <a href="https://www.facebook.com/sharer.php?s=100&p[url]=https://giv2giv.org&p[title]=mygiv2giv.orgTitle&p[summary]=ThisIsMine" class="socialite facebook-like" data-href="https://giv2giv.org" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+          </li>
+          <li>
+              <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org&amp;title=giv2giv.org" class="socialite linkedin-share" data-url="https://giv2giv.org" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+          </li>
+	      </ul>
+	    </div>
+      <div class="col-sm-6">
+				<h4 class="first-content">Share this endowment via email:</h4>
+				<div class="form-group">
+					<!--<label for="friend-email"></label>-->
+					<input type="email" class="form-control" id="friend-email" placeholder="Your friend's email address">
 				</div>
-				<div id="subscription-details" class="hide text-center">
-					<p>You are subscribed to this endowment.</p>
-					<p>Your current balance is: </p>
-					<p id="endowment-details-my-balance"></p>
-					<p><a class="btn btn-danger endowment-unsubscribe-btn" id="endowment-details-unsubscribe" href="#unsubscribe-endowment-modal" data-toggle="modal">Unsubscribe</a></p>
+				<button data-loading-text="<i class='fa fa-leaf fa-spin'></i> Sending" class="btn btn-success" id="share-via-email">Send</button>
+			</div>
+		</div>	
+		<div class="row">
+			<div class="row">
+				<div class="col-sm-6">
+					<h2>Details</h2>
+					<p id="endowment-details-description"></p>
+					<p>Number of donors: &nbsp;<span id="endowment-details-donor-count"></span></p>
+				</div>
+				<div class="col-sm-6">
+					<h2>Subscription</h2>
+					<div id="no-subscription" class="hide text-center">
+						<p>You haven't subscribed to this endowment.</p>
+						<p><a class="btn btn-success" id="endowment-details-subscribe" data-toggle="modal" href="#">Subscribe</a></p>
+					</div>
+					<div id="subscription-details" class="hide text-center">
+						<p>You are subscribed to this endowment.</p>
+						<p>Your current balance is: </p>
+						<p id="endowment-details-my-balance"></p>
+						<p><a class="btn btn-danger endowment-unsubscribe-btn" id="endowment-details-unsubscribe" href="#unsubscribe-endowment-modal" data-toggle="modal">Unsubscribe</a></p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row first-content">
-			<div class="col-xs-12">
-				<h2>Past Donations</h2>
-				<table id="donations-table" class="table">
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Gross Amount</th>
-							<th>Net Amount</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-					<tfoot>
-						<tr>
-							<td colspan="3">Number of times I have donated:&nbsp;
-							<span id="endowment-details-my-donations-count"></span>
-							</td>
-						</tr>
-					</tfoot>
-				</table>
-			<!-- 	<strong>* Note: Some donations may take a few minutes to appear.</strong> -->
+			<div class="row first-content">
+				<div class="col-xs-12">
+					<h2>Past Donations</h2>
+					<table id="donations-table" class="table">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Gross Amount</th>
+								<th>Net Amount</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3">Number of times I have donated:&nbsp;
+								<span id="endowment-details-my-donations-count"></span>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				<!-- 	<strong>* Note: Some donations may take a few minutes to appear.</strong> -->
+				</div>
 			</div>
-		</div>
-		<div class="row first-content">
-			<div class="col-xs-12">
-				<h2>Charities</h2>
-				<table id="charities-table" class="table">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Address</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
+			<div class="row first-content">
+				<div class="col-xs-12">
+					<h2>Charities</h2>
+					<table id="charities-table" class="table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <div class="row first-content last-content">
 	<div class="fixed-column">
 		<div class="row">
@@ -132,18 +162,22 @@
 			</div>
 			<div class="modal-body">
 				<p>You have successfully subscribed to this endowment. Want to increase your inpact even more? Share this endowment and invite friends to contribute!</p>
-				<div id="share-buttons">
-					<div id="twitter" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="Tweet"></div>
-					<div id="facebook" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="Like"></div>
-					<!-- <div id="googleplus" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="+1"></div> -->
-				</div>
-				<span class="clearfix"></span>
-				<h4 class="first-content">Share this endowment via email:</h4>
-				<div class="form-group">
-					<label for="friend-email">Your friend's email address</label>
-					<input type="email" class="form-control" id="friend-email" placeholder="Email address">
-				</div>
-				<button data-loading-text="<i class='fa fa-leaf fa-spin'></i> Sending" class="btn btn-success" id="share-via-email">Send</button>
+				<div class="row">
+		      <ul class="social-buttons cf">
+	          <li>
+	          	<a href="https://twitter.com/share" class="socialite twitter-share" data-text="I'm building a legacy for good @giv2giv. Join me!" data-url="https://giv2giv.org" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+	          </li>
+	          <li>
+	              <a href="https://plus.google.com/share?url=https://giv2giv.org" class="socialite googleplus-one" data-size="tall" data-href="https://giv2giv.org" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+	          </li>
+	          <li>
+	              <a href="https://www.facebook.com/sharer.php?s=100&p[url]=https://giv2giv.org&p[title]=mygiv2giv.orgTitle&p[summary]=ThisIsMine" class="socialite facebook-like" data-href="https://giv2giv.org" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+	          </li>
+	          <li>
+	              <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org&amp;title=giv2giv.org" class="socialite linkedin-share" data-url="https://giv2giv.org" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+	          </li>
+		      </ul>
+		    </div>
 			</div>
 		</form>
 	</div>

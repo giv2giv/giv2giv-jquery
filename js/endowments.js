@@ -643,41 +643,8 @@ function unsubscribeSelectors() {
 }
 
 function initSocialShare() {
-	// From http://sharrre.com/example1.html
-	$('#twitter').sharrre({
-		share: {
-			twitter: true
-		},
-		enableHover: false,
-		enableTracking: true,
-		buttons: { twitter: {via: 'giv2giv'}},
-		click: function(api, options){
-			api.simulateClick();
-			api.openPopup('twitter');
-		}
-	});
-	$('#facebook').sharrre({
-		share: {
-			facebook: true
-		},
-		enableHover: false,
-		enableTracking: true,
-		click: function(api, options){
-			api.simulateClick();
-			api.openPopup('facebook');
-		}
-	});
-	// $('#googleplus').sharrre({
-	// 	share: {
-	// 		googlePlus: true
-	// 	},
-	// 	enableHover: false,
-	// 	enableTracking: true,
-	// 	click: function(api, options){
-	// 		api.simulateClick();
-	// 		api.openPopup('googlePlus');
-	// 	}
-	// });
+
+  Socialite.load('.social-buttons');
 
 	$('#share-via-email').on('click', function(e) {
 		e.preventDefault();
