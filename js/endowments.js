@@ -329,7 +329,7 @@ function SimpleCard(heading, body, button) {
 // Constructor for DetailedCard Object
 function DetailedCard(sub, isFeatured) {
 	// Delete sub.endowment_id once Rails is update
-	this.id = sub.id || sub.endowment_id;
+	this.id = sub.id;
 	this.cardTitle = sub.name;
 	this.cardBody = sub.description;
 	this.isFeatured = isFeatured;
@@ -401,9 +401,11 @@ function onDetails(endowment) {
 		// Subscription Info
 	if(WebUI.activeSession()) {
 		$('#subscription-tab').removeClass('hide');
+
+		fetchEndowmentDonations(endowment.id);
+
 		if (endowment.my_balances.is_subscribed) {
 			// Subscribed
-			fetchEndowmentDonations(endowment.id);
 			$('#endowment-details-unsubscribe').attr('data-id', endowment.id);
 			$('#subscription-details').removeClass('hide');      
 		} else {
@@ -488,10 +490,23 @@ function onDetails(endowment) {
 	balanceGraph(endowment.global_balances, $('#balanceHistory'), 'Global Balance History',
 		'endowment_balance_history', 'balance');
 
-	balanceGraph(endowment.global_balances, $('#projectedBalance'), 'Projected Balance',
+	balanceGraph(endowment.global_balances, $('#projectedBalance'), 'Projected Global Impact',
 		'projected_balance', 'balance');
 
 	// Build Charity Table
+
+/*	function initialize() {
+    var map_canvas = document.getElementById('map_canvas');
+    var mapOptions = {
+      center: new google.maps.LatLng(44.5403, -78.5463),
+      zoom: 8,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(map_canvas);
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);*/
+  
+
 	$.each(endowment.charities, function(k, v) {
 		log(v.charity);
 		// Create table row & append

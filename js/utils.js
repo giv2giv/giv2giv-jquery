@@ -41,6 +41,7 @@ function growlError(message) {
 		stackup_spacing: 10 // spacing between consecutively stacked growls.
 	});
 }
+
 // Growl Success
 function growlSuccess(message) {
 	$.bootstrapGrowl(message + "&nbsp;", {
@@ -131,12 +132,11 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 					if (this.point.grants && this.point.y !== this.point.grants) {
 						grants += '<br/>Grants: $' + this.point.grants.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 					} else {
-						balance = '<br/>Grants: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+						balance = '<br/>Balance: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 					}
 					var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 					var month = months[this.point.x.getMonth() - 1];
-					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() +
-					balance + donations + fees + grants;
+					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + donations + grants + fees + balance;
 				}
 			},
 			credits: { enabled: false }

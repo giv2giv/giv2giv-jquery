@@ -1,5 +1,19 @@
 // Dashboard UI
 
+
+/*	function initialize() {
+    var map_canvas = document.getElementById('map_canvas');
+    var mapOptions = {
+      center: new google.maps.LatLng(44.5403, -78.5463),
+      zoom: 8,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(map_canvas);
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);*/
+
+
+
 // Signal Hook
 var DashboardUI = {
 	start : new signals.Signal() 
@@ -27,12 +41,14 @@ function fetchDonorData() {
 		dataType: 'json'
 	})
 	.done(function(data) {
+		balanceGraph(data, $('#balanceFuture'), 'My Projected Impact',
+			'donor_projected_balance', 'balance');
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
 			'donor_balance_history', 'balance');
-		balanceGraph(data, $('#balanceFuture'), 'My Projected Balance',
-			'donor_projected_balance', 'balance');
-		balanceGraph(data, $('#grantsFuture'), 'My Projected Grants',
-			'donor_projected_balance', 'total_grants');
+
+		//http://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
+		//balanceGraph(data, $('#grantsFuture'), 'My Projected Grants',
+			//'donor_projected_balance', 'total_grants');
 
 		var totalBalance = data.donor_current_balance;
 
