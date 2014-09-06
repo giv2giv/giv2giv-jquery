@@ -1,19 +1,6 @@
 // Dashboard UI
 
 
-/*	function initialize() {
-    var map_canvas = document.getElementById('map_canvas');
-    var mapOptions = {
-      center: new google.maps.LatLng(44.5403, -78.5463),
-      zoom: 8,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    var map = new google.maps.Map(map_canvas);
-  }
-  google.maps.event.addDomListener(window, 'load', initialize);*/
-
-
-
 // Signal Hook
 var DashboardUI = {
 	start : new signals.Signal() 
@@ -30,7 +17,32 @@ function onStart() {
 		hasher.setHash('/');
 		EndowmentsUI.newModal.dispatch();
 	});
+	// Load Google maps JavaScript
+	$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize');
 }
+
+function initialize() {
+// Check if user allows geo-location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      makeMap(position.coords.latitude, position.coords.longitude, 'Your GPS Location');
+    });
+  }
+}
+
+function makeMap(lat,lng,text) {
+	var point = new google.maps.LatLng(lat, lng);
+  var map_canvas = document.getElementById('map_canvas');
+
+  var mapOptions = {
+    center: point,
+    zoom: 4,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  window.map = new google.maps.Map(map_canvas, mapOptions);
+  window.geocoder = new google.maps.Geocoder(); 
+}
+
 
 function fetchDonorData() {
 	// First ajax call
@@ -69,6 +81,34 @@ function fetchDonorData() {
 					ed[i].y = subs[i].my_balances.my_endowment_balance;
 				}
 			}, totalBalance);
+
+			// add charity data to google map
+			
+			window.latlngbounds = new google.maps.LatLngBounds();
+			$.each(data, function(k, v) {
+				$.each(v.charities, function (array_id, charityArray) {
+					$.each(charityArray, function (charityKey, charity) {
+						geocoder.geocode({'address': charity.address + " " + charity.city}, function (res1, status) {
+      				if (status == google.maps.GeocoderStatus.OK) {
+      					latlngbounds.extend(res1[0].geometry.location);
+								// Set bounds of map to hold markers
+								map.setCenter(latlngbounds.getCenter());
+								map.fitBounds(latlngbounds);
+		            new google.maps.Marker({
+		              position: res1[0].geometry.location,
+		              map: map,
+		              title: charity.name
+		            });
+							}
+						});
+					});
+				});
+
+
+
+			});		
+
+			
 		})
 		.fail(function(data) {
 			log(data);

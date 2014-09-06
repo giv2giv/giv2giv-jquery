@@ -15,7 +15,7 @@ Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @TODO - Send serious logs to server?
-GLOBAL.DEBUG = false;
+GLOBAL.DEBUG = true;
 log = function () {
 	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {

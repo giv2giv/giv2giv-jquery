@@ -175,29 +175,6 @@ function loadUI() {
 		e.preventDefault();
 	});
 
-	$("#reset-password-btn").on('click', function(e) {
-		e.preventDefault();
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors.json',
-			type: 'GET',
-		}).done(function(donor) {
-			var jsonEmail = JSON.stringify(donor.email); 
-			$.ajax({
-				url: GLOBAL.SERVER_URL + '/api/donors/forgot_password.json',
-				type: 'POST',
-				data: jsonEmail,
-				contentType: "application/json",
-				dataType:"json"
-			}).done(function() {
-				growlSuccess("Password reset instructions have been sent to the email address listed on your profile. Follow the instructions in the email to change your password.");
-			}).fail(function() {
-				growlError("There was an error trying to reset your email");
-			});
-		}).fail(function() {
-			growlError("There was an error trying to reset your email");
-		});
-	});
-
 	// Edit Account Button
 	// Add account button
 	$('#add-account-btn').on("click", function(e) {
@@ -284,7 +261,7 @@ function loadUI() {
 	// Statement Rendering Handlers
 	$("#donor-statement-button").on("click", function(e) {
 
-// {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
+//    {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
 
 		// Get statement HTML
 		var popup = window.open();
@@ -305,7 +282,7 @@ function loadUI() {
 					// Close Window
 					popup.close();
 					growlError('There was an error loading your Statement.');
-			});
+			 });
 
 			// Get donation info
 			$.ajax({
