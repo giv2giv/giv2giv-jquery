@@ -463,7 +463,7 @@ var WebUI = function() {
 			contentType: "application/json",
 			dataType:"json"
 		}).done(function() {
-			growlSuccess("Password reset instructions have been sent to the email address " + $("#signup-email").val() + "<br>Follow the instructions in the email to change your password.");
+			growlSuccess("Password reset instructions have been sent to your email address " + $("#signup-email").val() + "<br>Follow the instructions in the email to change your password.");
 		}).fail(function() {
 			growlError("There was an error trying to reset your email.");
 		});
@@ -482,9 +482,9 @@ var WebUI = function() {
 			// Delete Cookie
 			$.removeCookie("session");
 			// Delete Facebook token
-			FB.logout(function(response) {
-  			// user is now logged out
-			});
+			// FB.logout(function(response) {
+  	// 		// user is now logged out
+			// });
 			growlSuccess("You have successfully signed out of giv2giv");
 			hasher.setHash("signin");
 			EndowmentsUI.start.halt();
@@ -652,26 +652,15 @@ var WebUI = function() {
 	});
 
 	// Password Reset Form
-	crossroads.addRoute("/reset_password", function() {
-		// $.ajax({
-		// 	url: '/api/reset_password.json',
-		// 	type: 'POST',
-		// 	contentType: 'application/json',
-		// 	dataType: 'json',
-		// 	data: request
-		// }).done(function() {
-		// 	console.log("success");
-		// }).fail(function() {
-		// 	growlError('There was an error trying to reset your password');
-		// });
-		
-		loadPage("/ui/reset_password.html", function() {
-			$("#app-container").attr("data-page-id", "dashboard");
-			setPageMetadata(!activeSession(), null, "giv2giv.org");
-			RestPassUI.start.dispatch();
-		});
+	crossroads.addRoute("/reset_password?{token}", function(token) {		
 		// TODO: Check whether or not the reset password token is expired,
-		// and if it is, redirect the user to the landing page.
+		// and if it is, redirect the user to the sign-in page. Also, display
+		// growlError('Sorry, that password reset link has expired.') 
+		loadPage("/ui/reset_password.html", function() {
+			$("#app-container").attr("data-page-id", "reset-password");
+			setPageMetadata(!activeSession(), null, "giv2giv.org");
+			ResetPassUI.start.dispatch(token);
+		});
 	});
 
 	// Not found route - send to Dashboard

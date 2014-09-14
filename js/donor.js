@@ -100,6 +100,7 @@ function fetchDonorProfile(callback) {
 		$("#donor-profile-state").val(data.donor.state);
 		$("#donor-profile-zip").val(data.donor.zip);
 		$("#donor-profile-phone").val(data.donor.phone_number);
+		$("#donor-profile-contact").prop('checked', data.donor.subscribed)
 	}).fail(function(data) {
 		log(data);
 		growlError("An error occured while loading your Donor Profile.");
@@ -225,8 +226,10 @@ function loadUI() {
 		e.preventDefault();
 	});
 
-	$('#donor-profile-contact').change(function () {
+
+	$('#donor-profile-contact').change(function (e) {
 		e.preventDefault();
+
 		contact_me = $("#donor-profile-contact").prop("checked");
 		if (contact_me) {
 			endpoint='subscribe.json'
@@ -234,23 +237,20 @@ function loadUI() {
 		else {
 			endpoint='unsubscribe.json'	
 		}
+
 		$.ajax({
 			url: GLOBAL.SERVER_URL + "/api/donors/" + endpoint,
-			type: "PUT",
+			type: "POST",
 //			data: payload,
 			contentType: "application/json",
 			dataType:"json"
 		}).done(function (data) {
-			growlSuccess("Success! Profile updated.");
-			$btn.button('reset');
+			growlSuccess(data.message);
 		}).fail(function(data) {
 			growlError("An error occurred while updating your Donor Profile.");
 			var res = JSON.parse(data.responseText);
 			log("[error]: " + res.message);
-			$btn.button('reset');
 		});
-
-
 	});
 
 	/**

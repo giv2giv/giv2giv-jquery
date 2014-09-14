@@ -9,29 +9,25 @@ var ResetPassUI = {
 ResetPassUI.start.add(onStart);
 
 // (Re)Start Dashboard UI
-function onStart() {
-	initialize();
-}
-
-function initialize() {
+function onStart(token) {
 	$('#reset-password-btn').on('click', function(e) {
 		e.preventDefault();
 		if ($('#new-password').val() === $('#new-password2').val()) {
-			var request = {};
-			request.reset_token = window.location.search.slice(1);
-			request.password = $('#new-password').val();
-
+			var payload = {};
+			payload.reset_token = token;
+			payload.password = $('#new-password').val();
+			payload = JSON.stringify(payload);
 			$.ajax({
-				url: '/api/reset_password.json',
+				url: GLOBAL.SERVER_URL + '/donors/reset_password.json',
 				type: 'POST',
 				contentType: 'application/json',
 				dataType: 'json',
-				data: request
+				data: payload
 			}).done(function() {
 				hasher.setHash('signin');
 				growlSuccess('Your password was successfully reset! Login again.');
 			}).fail(function() {
-				growlError('There was an error trying to reset your password');
+				growlError('Sorry, the password reset link you clicked on appears to be expired.');
 			});
 		} else {
 			growlError('Sorry, those passwords don\'t match. Try again.');

@@ -16,6 +16,15 @@ function onStart() {
 		hasher.setHash('/');
 		EndowmentsUI.newModal.dispatch();
 	});
+
+	// Find Endowments Button
+	$('.find-endowment-btn').off('click');
+	$('.find-endowment-btn').on('click', function(e) {
+		// Set Hasher
+		hasher.setHash('/');
+		e.preventDefault();
+	});
+
 	// Load Google maps JavaScript - done in app.html.
 	initialize();
 }
