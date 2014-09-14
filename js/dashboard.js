@@ -24,31 +24,6 @@ function onStart() {
 		hasher.setHash('/');
 		e.preventDefault();
 	});
-
-	// Load Google maps JavaScript - done in app.html.
-	initGMaps();
-}
-
-function initGMaps() {
-// Check if user allows geo-location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      makeMap(position.coords.latitude, position.coords.longitude, 'Your GPS Location');
-    });
-  }
-}
-
-function makeMap(lat,lng,text) {
-	var point = new google.maps.LatLng(lat, lng);
-  var map_canvas = document.getElementById('map_canvas');
-
-  var mapOptions = {
-    center: point,
-    zoom: 4,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  }
-  window.map = new google.maps.Map(map_canvas, mapOptions);
-  window.geocoder = new google.maps.Geocoder(); 
 }
 
 
@@ -59,8 +34,7 @@ function fetchDonorData() {
 		type: 'GET',
 		contentType: 'application/json',
 		dataType: 'json'
-	})
-	.done(function(data) {
+	}).done(function(data) {
 		balanceGraph(data, $('#balanceFuture'), 'My Projected Impact',
 			'donor_projected_balance', 'balance');
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
@@ -69,11 +43,15 @@ function fetchDonorData() {
 		var totalBalance = data.donor_current_balance;
 
 		// Second ajax call
+		var payload = {};
+		payload.group = true;
+		var request_payload = JSON.stringify(payload);
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
 			type: 'GET',
 			contentType: 'application/json',
-			dataType: 'json'
+			dataType: 'json',
+			data: request_payload
 		})
 		.done(function(data) {
 			endowmentsPie(data, $('#currentEndowments'), 'Endowments',
@@ -87,29 +65,15 @@ function fetchDonorData() {
 			}, totalBalance);
 
 			// add charity data to google map
-			
-			window.latlngbounds = new google.maps.LatLngBounds();
-			$.each(data, function(k, v) {
-				$.each(v.charities, function (array_id, charityArray) {
-					$.each(charityArray, function (charityKey, charity) {
-						geocoder.geocode({'address': charity.address + " " + charity.city + " " + charity.state}, function (res1, status) {
-      				if (status == google.maps.GeocoderStatus.OK) {
-      					latlngbounds.extend(res1[0].geometry.location);
-								// Set bounds of map to hold markers
-								map.setCenter(latlngbounds.getCenter());
-								map.fitBounds(latlngbounds);
-		            new google.maps.Marker({
-		              position: res1[0].geometry.location,
-		              map: map,
-		              title: charity.name
-		            });
-							}
-						});
-					});
+			var d = [];
+			$.each(data, function(index, val) {
+				$.each(val.charities, function(index, val) {
+					d.push(val);
 				});
 			});
-		})
-		.fail(function(data) {
+			MapsUI.start.dispatch(d);
+
+		}).fail(function(data) {
 			log(data);
 			growlError('An error occured while loading the dashboard.');
 		});

@@ -8,7 +8,7 @@ var ResetPassUI = {
 // Add Listener
 ResetPassUI.start.add(onStart);
 
-// (Re)Start Dashboard UI
+// (Re)Start Password UI
 function onStart(token) {
 	$('#reset-password-btn').on('click', function(e) {
 		e.preventDefault();

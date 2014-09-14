@@ -33,29 +33,6 @@ function onStart() {
 	initSocialShare();
 }
 
-function initialize() {
-// Check if user allows geo-location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      makeMap(position.coords.latitude, position.coords.longitude, 'Your GPS Location');
-    });
-  }
-}
-
-function makeMap(lat,lng,text) {
-	var point = new google.maps.LatLng(lat, lng);
-  var map_canvas = document.getElementById('map_canvas');
-
-  var mapOptions = {
-    center: point,
-    zoom: 4,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  window.map = new google.maps.Map(map_canvas, mapOptions);
-  window.geocoder = new google.maps.Geocoder();
-  window.latlngbounds = new google.maps.LatLngBounds();
-}
-
 function onSubscriptions() {
 	fetchSubscribedEndowments(function() {
 		endowmentSelectors();
@@ -247,7 +224,7 @@ function endowmentSelectors() {
 		}).done(function(data) {
 			$('#add-endowment-modal').modal('hide');
 			hasher.setHash('endowment/'+data.endowment.id);
-			growlSuccess('Successfully created your endowment! Subscribe to it on this page.');
+			growlSuccess('Successfully created your endowment. Now subscribe, and share your endowment to maximize your impact!');
 		}).fail(function(data) {
 			log(data);
 			growlError('An error occured while adding this endowment.');
@@ -279,6 +256,7 @@ function endowmentSelectors() {
 			$('#subscribe-endowment-donation').val('');
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
 			$('#confirm-subscribe-endowment').attr('data-id', data.endowment.id);
+			$('#confirm-subscribe-endowment').attr('data-slug', data.endowment.slug);
 			$('#confirm-subscribe-endowment').attr('data-name', data.endowment.name);
 			// Now Get Payment Accounts
 			$.ajax({
@@ -424,11 +402,6 @@ function DetailedCard(sub, isFeatured) {
 
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
-    makeMap();
-
-	// Load Google maps JavaScript
-	//$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize');
-
 	// Subscription Info
 	if(WebUI.activeSession()) {
 		fetchEndowmentDonations(endowment.id);
@@ -448,11 +421,11 @@ function onDetails(endowment) {
 	}
 
 	// Add social sharing text
-	$('.twitter-share').attr('data-text', "Join me at https://giv2giv.org/#endowment/" + endowment.slug + " Support my endowment " + endowment.name + " #impinv #socint");
-  $('.facebook-like').attr('href', "https://www.facebook.com/sharer.php?s=100p[url]=https://giv2giv.org/#endowment/"+endowment.slug+"&p[title]=Join me at giv2giv.org&p[summary]=Join me at https://giv2giv.org/#endowment/" + endowment.slug + " Support my endowment " + endowment.name + " Thanks!");
-  $('.facebook-like').attr('data-href', "https://giv2giv.org/#endowment/"+endowment.slug);
-//"http://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org&amp;title=giv2giv.org"
-  $('.linkedin-share').attr('data-url', "https://giv2giv.org/#endowment/"+endowment.slug);
+	$('.twitter-share').attr('data-text', "Join me at giv2giv and support my endowment \"" + endowment.name + "\" #impinv #socint");
+	$('.facebook-like').attr('href', "https://www.facebook.com/sharer.php?s=100p[url]=https://giv2giv.org/#endowment/"+endowment.slug+"&p[title]=Joinmeatgiv2giv.org&p[summary]=Joinmeathttps://giv2giv.org/#endowment/" + endowment.slug + "Supportmyendowment" + endowment.name + "Thanks");
+	$('.facebook-like').attr('data-href', "https://giv2giv.org/#endowment/"+endowment.slug);
+	$('.linkedin-share').attr('href', "http://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org/#endowment/"+endowment.slug+"&amp;title=giv2giv.org");
+	$('.linkedin-share').attr('data-url', "https://giv2giv.org/#endowment/"+endowment.slug);
 
 	subscribeSelectors();
 	initSocialShare();
@@ -470,6 +443,7 @@ function onDetails(endowment) {
 			$('#subscribe-endowment-donation').val('');
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
 			$('#confirm-subscribe-endowment').attr('data-id', data.endowment.id);
+			$('#confirm-subscribe-endowment').attr('data-slug', data.endowment.slug);
 			$('#confirm-subscribe-endowment').attr('data-name', data.endowment.name);
 
 			// Now Get Payment Accounts
@@ -530,30 +504,7 @@ function onDetails(endowment) {
 	balanceGraph(endowment.global_balances, $('#projectedBalance'), 'Projected Global Impact',
 		'projected_balance', 'balance');
 
-	// Add charities to map
-
-	$.each(endowment.charities, function(k, v) {
-		geocoder.geocode({'address': v.charity.address + " " + v.charity.city + " " + v.charity.state}, function (res1, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				latlngbounds.extend(res1[0].geometry.location);
-				// Set bounds of map to hold markers
-				map.setCenter(latlngbounds.getCenter());
-				map.fitBounds(latlngbounds);
-        new google.maps.Marker({
-          position: res1[0].geometry.location,
-          map: map,
-          title: v.charity.name
-        });
-			}
-		});
-
-		log(v.charity);
-		// Create table row & append
-		//var $row = $('#charities-table').find('tbody:last').append('<tr></tr>');
-		//$row.append('<td>'+v.charity.name+'</td>');
-		//$row.append('<td>'+v.charity.address+' '+v.charity.city+', '+v.charity.state+' '+v.charity.zip+'</td>');
-	});
-
+	MapsUI.start.dispatch(endowment.charities);
 }
 
 function fetchEndowmentDonations(id, callback) {
@@ -627,8 +578,9 @@ function subscribeSelectors() {
 					$('#subscription-details').removeClass('hide');
 					$('#subscribe-endowment-modal').modal('hide');
 					$('#social-share-modal').modal('show');
-					$('#share-buttons div').attr('data-url', 'https://www.giv2giv.org/#endowment/'+payload.endowment_id);
-					$('#share-buttons div').attr('data-text', 'I\'m contributing to ' + self.attr('data-name') + ' on giv2giv.org, join me!');
+					initSocialShare();
+					$('#share-buttons div').attr('data-url', 'https://www.giv2giv.org/#endowment/'+self.attr('data-slug'));
+					$('#share-buttons div').attr('data-text', "Join me at giv2giv and support my endowment \"" + self.attr('data-name') + "\"");
 				});
 			});
 		}).fail(function(data) {
@@ -699,7 +651,7 @@ function unsubscribeSelectors() {
 
 function initSocialShare() {
 
-  Socialite.load('.social-buttons');
+	Socialite.load('.social-buttons');
 
 	$('#share-via-email').on('click', function(e) {
 		e.preventDefault();

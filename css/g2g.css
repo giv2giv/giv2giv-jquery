@@ -239,9 +239,8 @@ nav.navbar {
 	text-align: center;
 }
 
-#map_canvas {
-  width: 500px;
-  height: 400px;
+#impact-map {
+	width: 100%;
 }
 
 /*
@@ -728,6 +727,11 @@ nav.navbar {
 @media (min-width: 500px) {
 	.navbar-form {
 		width: 300px;
+	}
+	#impact-map {
+		text-align: center;
+		width: 500px;
+		height: 400px;
 	}
 }
 @media (min-width: 992px) {
