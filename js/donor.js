@@ -13,7 +13,7 @@ function onStart() {
 	// Load Donor Profile
 	fetchDonorProfile(function() {
 		// Load Payment Accounts
-		fetchPaymentAccounts(function () {
+		fetchPaymentAccounts(function() {
 			// Load UI
 			loadUI();
 		});
@@ -100,6 +100,7 @@ function fetchDonorProfile(callback) {
 		$("#donor-profile-state").val(data.donor.state);
 		$("#donor-profile-zip").val(data.donor.zip);
 		$("#donor-profile-phone").val(data.donor.phone_number);
+		$("#donor-profile-contact").prop('checked', data.donor.subscribed)
 	}).fail(function(data) {
 		log(data);
 		growlError("An error occured while loading your Donor Profile.");
@@ -175,29 +176,6 @@ function loadUI() {
 		e.preventDefault();
 	});
 
-	$("#reset-password-btn").on('click', function(e) {
-		e.preventDefault();
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors.json',
-			type: 'GET',
-		}).done(function(donor) {
-			var jsonEmail = JSON.stringify(donor.email); 
-			$.ajax({
-				url: GLOBAL.SERVER_URL + '/api/donors/forgot_password.json',
-				type: 'POST',
-				data: jsonEmail,
-				contentType: "application/json",
-				dataType:"json"
-			}).done(function() {
-				growlSuccess("Password reset instructions have been sent to the email address listed on your profile. Follow the instructions in the email to change your password.");
-			}).fail(function() {
-				growlError("There was an error trying to reset your email");
-			});
-		}).fail(function() {
-			growlError("There was an error trying to reset your email");
-		});
-	});
-
 	// Edit Account Button
 	// Add account button
 	$('#add-account-btn').on("click", function(e) {
@@ -248,6 +226,33 @@ function loadUI() {
 		e.preventDefault();
 	});
 
+
+	$('#donor-profile-contact').change(function (e) {
+		e.preventDefault();
+
+		contact_me = $("#donor-profile-contact").prop("checked");
+		if (contact_me) {
+			endpoint='subscribe.json'
+		}
+		else {
+			endpoint='unsubscribe.json'	
+		}
+
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/donors/" + endpoint,
+			type: "POST",
+//			data: payload,
+			contentType: "application/json",
+			dataType:"json"
+		}).done(function (data) {
+			growlSuccess(data.message);
+		}).fail(function(data) {
+			growlError("An error occurred while updating your Donor Profile.");
+			var res = JSON.parse(data.responseText);
+			log("[error]: " + res.message);
+		});
+	});
+
 	/**
 	 * Return a timestamp with the format "m/d/yy h:MM:ss TT"
 	 * @type {Date}
@@ -284,7 +289,7 @@ function loadUI() {
 	// Statement Rendering Handlers
 	$("#donor-statement-button").on("click", function(e) {
 
-// {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
+//    {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
 
 		// Get statement HTML
 		var popup = window.open();
@@ -305,7 +310,7 @@ function loadUI() {
 					// Close Window
 					popup.close();
 					growlError('There was an error loading your Statement.');
-			});
+			 });
 
 			// Get donation info
 			$.ajax({
@@ -317,13 +322,13 @@ function loadUI() {
 					$.each(response.donations, function(k, donation) {
 						var $row = $statement.find('tbody:last').append('<tr></tr>');		
 						// And stamp each bit for our row
-						ugly_timestamp = new Date(donation.created_at * 1000);
-						pretty_timestamp = prettify_timestamp(ugly_timestamp);
+						timestamp = new Date(donation.created_at);
 						var $col = $statement.find('tr:last');
-						$col.append('<td>' + pretty_timestamp + '</td>');
+						$col.append('<td>' + timestamp.toString() + '</td>');
 						$col.append('<td>Endowment Name: ' + donation.endowment_name + '</td>');
 						$col.append('<td>$' + donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + '</td>');
 					});
+
 					$statement.find('#statement-total').html("<span>Total: $" + response.total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span>");
 					ugly_statement_timestamp = new Date(response.timestamp * 1000);
 					pretty_statement_timestamp = prettify_timestamp(ugly_statement_timestamp);

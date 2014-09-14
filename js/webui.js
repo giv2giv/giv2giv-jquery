@@ -3,15 +3,62 @@
 // AND ROUTING HANDLER //
 // =================== //
 
-var WebUI = function() {
+// Facebook Bits
+window.fbAsyncInit = function() {
+	FB.init({
+		appId      : '453893384741267',
+		cookie     : true,  // enable cookies to allow the server to access 
+												// the session
+		xfbml      : true,  // parse social plugins on this page
+		version    : 'v2.1' // use version 2.1
+	});
 
+
+	FB.getLoginStatus(function(response) {
+		if(response.status == 'connected') {
+			FB.api('/me', function(response) {
+				// Enable Button
+				$("#facebook-signin").prop('disabled', false);
+				$("#facebook-signin").html('<i class="fa fa-facebook"></i> Sign In as ' + response.name);
+			});
+		} else {
+			// Enable Button
+			$("#facebook-signin").prop('disabled', false);
+			$("#facebook-signin").html('<i class="fa fa-facebook"></i> Sign Up with Facebook');
+		}
+	});
+};
+
+// Load the SDK asynchronously
+(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js";
+	fjs.parentNode.insertBefore(js, fjs);
+} (document, 'script', 'facebook-jssdk'));
+
+var WebUI = function() {
+	var isFacebookAuthorized = false;
+
+	// Sample Function
+	var cake = function(callback) {
+			// It's a lie
+			console.log("srry bro, it's a lie");
+			
+			// Not needed, but good if you're loading data and you need to inform UI/another function you're done.
+			if (typeof callback === "function") {
+		callback();
+	}
+ };
+		
 // ======================= //
 //          VIEWS          //
 // ======================= //
 
 	// Signin Bits
 	// Display the signin screen.
-	var showsignin = function(callback) {
+	function showsignin(callback) {
 		// Hide App Panel
 		$("#app-panel").addClass("hide");
 		$("#app-panel").html("");
@@ -19,18 +66,41 @@ var WebUI = function() {
 		$(".private-nav").addClass("hide");
 		// Show Public Nav
 		$(".public-nav").removeClass("hide");
+		
 		// Set Title
 		document.title = "giv2giv - Signin";
 		// Show Signin Panel
 		$("#signin-panel").removeClass("hide");
 		$("#app-container").attr("data-page-id", "signin");
+
+		// Setup Facebook
+		$("#facebook-signup").on('click', function(e) {
+			e.preventDefault();
+			accepted_terms = $("#social-signup-accept-terms").prop("checked");
+
+			if (!accepted_terms) {
+				growlError("You must accept the terms and conditions to use giv2giv.org");
+				return;
+			}
+
+			FB.login(function(response) {
+				statusChangeCallback(response, accepted_terms);
+			}, {scope: 'public_profile,email'});
+		});
+
+		$("#facebook-signin").on('click', function(e) {
+			e.preventDefault();
+			FB.login(function(response) {
+				statusChangeCallback(response);
+			}, {scope: 'public_profile,email'});
+		});
 		if (typeof callback === "function") {
 			callback();
 		}
-	};
+	}
 
 	// Hide the signin screen
-	var hidesignin = function (callback) {
+	function hidesignin(callback) {
 		// Show Private Nav
 		$(".private-nav").removeClass("hide");
 		// Hide Public Nav
@@ -46,7 +116,7 @@ var WebUI = function() {
 		if (typeof callback === "function") {
 			callback();
 		}
-	};
+	}
 
 // ======================= //
 //        HANDLERS         //
@@ -88,9 +158,65 @@ var WebUI = function() {
 		document.title = title;
 	}
 
+	// Facebook Helpers
+	function statusChangeCallback(response, accepted_terms) {
+		// The response object is returned with a status field that lets the
+		// app know the current login status of the person.
+		// Full docs on the response object can be found in the documentation
+		// for FB.getLoginStatus().
+		if (response.status === 'connected') {
+			WebUI.isFacebookAuthorized = true;
+			handleFacebookLogin(response, true);
+		} else if (response.status === 'not_authorized') {
+			// The person is logged into Facebook, but not your app.
+			WebUI.isFacebookAuthorized = false;
+		} else {
+			// The person is not logged into Facebook, so we're not sure if
+			// they are logged into this app or not.
+			WebUI.isFacebookAuthorized = false;
+		}
+	}
+
+	function handleFacebookLogin(authResponse, accepted_terms) {
+
+	// send token to server, receive g2g session ID back
+	console.log(authResponse.authResponse.accessToken);
+
+	FB.api('/me', function(response) {
+		var payload = JSON.stringify({
+			"token": authResponse.authResponse.accessToken,
+			"accepted_terms": accepted_terms
+		});
+
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/sessions/create_facebook.json",
+			type: "POST",
+			data: payload,
+			contentType: "application/json",
+			dataType: "json"
+		}).done(function (data) {
+			$.ajaxSetup({
+				beforeSend: function (xhr, settings) {
+					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
+				}
+			});
+			// Set Cookie
+			$.cookie("session", data.session.token);
+			WebUI.startApplication();
+		}).fail(function (data) {
+			var res = JSON.parse(data.responseText);
+			if (res.message == "unauthorized") {
+				growlError("Could not authorize using that Facebook token");
+			} else {
+				log("WebUI: Signin Error - " + res.message);
+			}
+		});
+	}); // FB.api end
+} // hendleFacebookLogin END
+
 	// Start Application
 	// This is only loaded on full page refresh or first visit
-	var startApplication = function (callback) {
+	function startApplication(callback) {
 		log("WebUI: Starting Application");
 		if (activeSession()) {
 			// Get Donor Info
@@ -157,11 +283,11 @@ var WebUI = function() {
 			
 			callback();
 		}
-	};
+	}
 
 	// Check if Session is Active
 	// URL parameter is the URL to goto if Session is dead
-	var activeSession = function () {
+	function activeSession() {
 		log("WebUI: Checking session.");
 		var status = false;
 		if ($.cookie("session") !== undefined) {
@@ -185,7 +311,7 @@ var WebUI = function() {
 			status = false;
 		}
 		return status;
-	};
+	}
 	
 	// Load HTML Page
 	function loadPage(url, callback) {
@@ -202,6 +328,14 @@ var WebUI = function() {
 		});
 	}
 
+	function loadModals() {
+		$.get('/ui/modals.html', function (data) {
+			$("#modal-container").html(data);
+		}).fail(function (data) {
+			log("WebUI: Failed to load modals.");
+		});
+	}
+
 	// Reload UI
 	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
 	function reloadUI() {
@@ -210,6 +344,11 @@ var WebUI = function() {
 			e.preventDefault();
 			$(this).tab("show");
 		});
+	}
+
+	// Functions that are deffered until after the WebUI is initialized
+	function deferredFunctions() {
+		loadModals();
 	}
 
 // ======================= //
@@ -229,7 +368,7 @@ var WebUI = function() {
 					$.each(response.endowments, function (key, value) {
 						var endowment = {};
 						log(value);
-						endowment.id = value.id;
+						endowment.id = value.slug;
 						endowment.value = value.name;
 						endowment.desc = value.description;
 						results.push(endowment);
@@ -252,7 +391,17 @@ var WebUI = function() {
 	// Terms Button
 	$("#terms-btn").on("click", function (e) {
 		e.preventDefault();
-		$("#terms-body").load("/ui/terms.html", function () {
+		$("#terms-body").load("/ui/terms.html", function() {
+			$("#user-name").html($("#signup-name").val());
+			$("#user-email").html($("#signup-email").val());
+			$("#terms-modal").modal("show");
+		});
+	});
+
+		// Terms Button
+	$("#social-terms-btn").on("click", function (e) {
+		e.preventDefault();
+		$("#terms-body").load("/ui/terms.html", function() {
 			$("#user-name").html($("#signup-name").val());
 			$("#user-email").html($("#signup-email").val());
 			$("#terms-modal").modal("show");
@@ -292,6 +441,12 @@ var WebUI = function() {
 		payload.name = $("#signup-name").val();
 		payload.accepted_terms = $("#signup-accept-terms").prop("checked");
 
+		if (!payload.accepted_terms) {
+			growlError("Must accept terms and conditions");
+			$btn.button("reset");
+			return;
+		}
+
 		var request = JSON.stringify(payload);
 		$.ajax({
 			url: GLOBAL.SERVER_URL + "/api/donors.json",
@@ -314,13 +469,13 @@ var WebUI = function() {
 			}).done(function (data) {
 				$.ajaxSetup({
 					beforeSend: function (xhr, settings) {
-						xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
+						xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
 					}
 				});
 				// Hide Signup
 				$("#signup-panel").addClass("hide");
 				// Set Cookie
-				$.cookie("session", data.session.session.token);
+				$.cookie("session", data.session.token);
 				startApplication();
 				$btn.button("reset");
 			}).fail(function (data) {
@@ -368,11 +523,11 @@ var WebUI = function() {
 		}).done(function (data) {
 			$.ajaxSetup({
 				beforeSend: function (xhr, settings) {
-					xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
+					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
 				}
 			});
 			// Set Cookie
-			$.cookie("session", data.session.session.token);
+			$.cookie("session", data.session.token);
 			startApplication();
 			$btn.button("reset");
 		}).fail(function (data) {
@@ -386,41 +541,24 @@ var WebUI = function() {
 		});
 	});
 
-	// var authWindow;
-	// $("#gplus-signup")
-	// $("#facebook-signup").on('click', function(e) {
-	// 	e.preventDefault();
-	// 	console.log('here')
-		// TODO: Throw the user to a new page to get them to accept the terms
-		// and conditions
-		// TODO: Pull signin and signup out of app.html and into their own
-		// separate crossroads routes
-
-	// 	authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
-	// 	setTimeout(CheckLoginStatus, 1000);
-	// 	authWindow.focus();
-	// 	return false;
-	// });
-
-	// function CheckLoginStatus() {
-	// 	if (authWindow.closed) {
-	// 		console.log('Success')
-	// 	} else {
-	// 		setTimeout(CheckLoginStatus, 1000);
-	// 	}
-	// }
-
-	// $("#gplus-signin")
-	// $("#facebook-signin").on('click', function(e) {
-		// e.preventDefault();
-		// console.log('here')
-		// window.location.href = GLOBAL.SERVER_URL + "/auth/facebook";
-		// authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
-		// setTimeout(CheckLoginStatus, 1000);
-		// authWindow.focus();
-	// 	return false;
-	// });
-			// growlError("There was an error connecting to Facebook");
+	$("#reset-password-btn").on('click', function(e) {
+		e.preventDefault();
+		if (!$("#signin-email").val()) {
+			growlError("Enter your email address then click \"Reset My Password\"");
+		} else {
+			$.ajax({
+				url: GLOBAL.SERVER_URL + '/api/donors/forgot_password.json',
+				type: 'POST',
+				data: JSON.stringify({"email":$("#signin-email").val()}),
+				contentType: "application/json",
+				dataType:"json"
+			}).done(function() {
+				growlSuccess("Password reset instructions have been sent to your email address " + $("#signup-email").val() + "<br>Follow the instructions in the email to change your password.");
+			}).fail(function() {
+				growlError("There was an error trying to reset your email.");
+			});
+		}
+	});
 
 	// Handle Logout Button
 	$("#logout-btn").on("click", function (e) {
@@ -434,12 +572,16 @@ var WebUI = function() {
 		}).done(function (data) {
 			// Delete Cookie
 			$.removeCookie("session");
+			// Delete Facebook token
+			// FB.logout(function(response) {
+		// 		// user is now logged out
+			// });
 			growlSuccess("You have successfully signed out of giv2giv");
-			hasher.setHash("signin");
-			EndowmentsUI.start.halt();
-			EndowmentsUI.details.halt();
-			EndowmentsUI.subscriptions.halt();
-			DashboardUI.start.halt();
+			hasher.setHash("/");
+			// EndowmentsUI.start.halt();
+			// EndowmentsUI.details.halt();
+			// EndowmentsUI.subscriptions.halt();
+			// DashboardUI.start.halt();
 		});
 	});
 
@@ -461,15 +603,15 @@ var WebUI = function() {
 	};
 
 	// Landing Page Route
-	crossroads.addRoute("/", function () {
+	crossroads.addRoute("/", function() {
 		if (activeSession()) {
-			loadPage("/ui/endowments.html", function () {
+			loadPage("/ui/endowments.html", function() {
 				$("#app-container").attr("data-page-id", "endowments");
 				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
 				EndowmentsUI.start.dispatch(); // Load JS
 			});
 		} else {
-			loadPage("/ui/landing.html", function () {
+			loadPage("/ui/landing.html", function() {
 				$("#app-container").attr("data-page-id", "landing");
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				LandingUI.start.dispatch(); // Load JS
@@ -478,7 +620,7 @@ var WebUI = function() {
 	});
 
 	// Signin Route
-	crossroads.addRoute("/signin", function () {
+	crossroads.addRoute("/signin", function() {
 		// Set Tabs
 		$(".public-nav").siblings().removeClass("active");
 		// Hide Signup Panel
@@ -488,7 +630,7 @@ var WebUI = function() {
 	});
 
 	// Sign-Up Route
-	crossroads.addRoute("/signup", function () {
+	crossroads.addRoute("/signup", function() {
 		// Set Tabs
 		$(".public-nav").siblings().removeClass("active");
 		// Hide Signin Panel
@@ -503,14 +645,15 @@ var WebUI = function() {
 		$("#signup-email").val("");
 		$("#signup-password").val("");
 		$("#signup-accept-terms").attr("checked", false);
+		$("#social-signup-accept-terms").attr("checked", false);
 		$("#signup-panel").removeClass("hide");
 		$(".public-nav").removeClass("hide");
 	});
 
 	// Dashboard Route
-	crossroads.addRoute("/dashboard", function () {
+	crossroads.addRoute("/dashboard", function() {
 		if (activeSession()) {
-			loadPage("/ui/dashboard.html", function () {
+			loadPage("/ui/dashboard.html", function() {
 				$("#app-container").attr("data-page-id", "dashboard");
 				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
 				DashboardUI.start.dispatch(); // Load JS
@@ -521,9 +664,9 @@ var WebUI = function() {
 	});
 
 	// My Subscriptions Route
-	crossroads.addRoute("/subscriptions", function () {
+	crossroads.addRoute("/subscriptions", function() {
 		if (activeSession()) {
-			loadPage("/ui/subscriptions.html", function () {
+			loadPage("/ui/subscriptions.html", function() {
 				$("#app-container").attr("data-page-id", "subscriptions");
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				EndowmentsUI.subscriptions.dispatch(); // Load JS
@@ -543,7 +686,7 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				loadPage("/ui/endowment_details.html", function () {
+				loadPage("/ui/endowment_details.html", function() {
 					$("#app-container").attr("data-page-id", "endowment-details");
 					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
@@ -560,7 +703,7 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				loadPage("/ui/endowment_details.html", function () {
+				loadPage("/ui/endowment_details.html", function() {
 					$("#app-container").attr("data-page-id", "endowment-details");
 					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
@@ -574,9 +717,9 @@ var WebUI = function() {
 	});
 
 	// Donor Route
-	crossroads.addRoute("/donor", function () {
+	crossroads.addRoute("/donor", function() {
 		if (activeSession()) {
-			loadPage("/ui/donor.html", function () {
+			loadPage("/ui/donor.html", function() {
 				$("#app-container").attr("data-page-id", "donor");
 				setPageMetadata(false, $("#donor-nav"), "giv2giv- Donor");
 				// Load JS
@@ -588,16 +731,27 @@ var WebUI = function() {
 	});
 
 	// Numbers Route
-	crossroads.addRoute("/numbers", function () {
+	crossroads.addRoute("/numbers", function() {
 		var navTab = activeSession() ? $("#numbers-nav") : $("#pub-numbers-nav");
 
-		loadPage("/ui/numbers.html", function () {
+		loadPage("/ui/numbers.html", function() {
 			$("#app-container").attr("data-page-id", "numbers");
 			setPageMetadata(!activeSession(), navTab, "giv2giv - Numbers");
 			// Load JS
 			NumbersUI.start.dispatch();
 		});
+	});
 
+	// Password Reset Form
+	crossroads.addRoute("/reset_password?reset_token={token}", function(token) {		
+		// TODO: Check whether or not the reset password token is expired,
+		// and if it is, redirect the user to the sign-in page. Also, display
+		// growlError('Sorry, that password reset link has expired.') 
+		loadPage("/ui/reset_password.html", function() {
+			$("#app-container").attr("data-page-id", "reset-password");
+			setPageMetadata(!activeSession(), null, "giv2giv.org");
+			ResetPassUI.start.dispatch(token);
+		});
 	});
 
 	// Not found route - send to Dashboard
@@ -623,25 +777,39 @@ var WebUI = function() {
 
 	// Finally expose bits
 	return {
-		init: function () {
+		init: function() {
 			// History Adapter
 			log("WebUI: Init Start");
-			router(function () {
+			router(function() {
 				startApplication();
 			});
 			log("WebUI: Init Complete");
 		},
+		// Expose our sample function to the outside world
+		cake: function (callback) {
+			return cake(callback);
+		},
+		deferredLoad: function() {
+			deferredFunctions();
+		},
 		showAlert: function (type, message, timeout) {
 			showAlert(type, message, timeout);
 		},
-		activeSession: function () {
+		activeSession: function() {
 			return activeSession();
+		},
+		statusChangeCallback: function(response, accepted_terms) {
+			return statusChangeCallback(response, accepted_terms);
+		},
+		startApplication: function() {
+			return startApplication();
 		}
 	};
 }();
 
 // DOM Loaded
-$(function () {
+$(function() {
 	WebUI.init();
+	WebUI.deferredLoad();
 });
 

@@ -12,11 +12,16 @@ GLOBAL.SERVER_URL = "https://apitest.giv2giv.org";
 GLOBAL.STRIPE_PUB_KEY = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
 Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 
+GLOBAL.GMAPS_API_URL = "http://maps.googleapis.com/maps/api/staticmap";
+GLOBAL.GMAPS_API_KEY = "AIzaSyCn3EJtFHyCKM1BJ5Aevdt_i0llh-PwQ34";
+GLOBAL.GMAPS_PUB_URL = "https://www.google.com/maps/embed/v1/search";
+GLOBAL.GMAPS_DEFAULT_ZOOM = 6;
+
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.
 // @TODO - Send serious logs to server?
-GLOBAL.DEBUG = false;
-log = function () {
+GLOBAL.DEBUG = true;
+log = function() {
 	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {
 			console.log(arguments[i]);
@@ -41,6 +46,7 @@ function growlError(message) {
 		stackup_spacing: 10 // spacing between consecutively stacked growls.
 	});
 }
+
 // Growl Success
 function growlSuccess(message) {
 	$.bootstrapGrowl(message + "&nbsp;", {
@@ -90,7 +96,7 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 
 		DOMnode.highcharts({
 			chart: {
-				type: 'line',
+				type: 'spline',
 				backgroundColor: '#fbfbfb'
 			},
 			title: { text: titleText },
@@ -131,12 +137,11 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 					if (this.point.grants && this.point.y !== this.point.grants) {
 						grants += '<br/>Grants: $' + this.point.grants.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 					} else {
-						balance = '<br/>Grants: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+						balance = '<br/>Balance: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 					}
 					var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 					var month = months[this.point.x.getMonth() - 1];
-					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() +
-					balance + donations + fees + grants;
+					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + donations + grants + fees + balance;
 				}
 			},
 			credits: { enabled: false }
@@ -167,7 +172,7 @@ Highcharts.setOptions({
 });
 
 // Google Plus Sign-In
-// (function () {
+// (function() {
 // 	var po = document.createElement('script');
 // 	po.type = 'text/javascript';
 // 	po.async = true;

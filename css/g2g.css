@@ -232,12 +232,16 @@ nav.navbar {
 	color: #737373;
 	text-overflow: ellipsis;
 }
-	.card .bottom {
-		width: 100%;
-		padding: 10px 20px;
-		line-height: 29px;
-		text-align: center;
-	}
+.card .bottom {
+	width: 100%;
+	padding: 10px 20px;
+	line-height: 29px;
+	text-align: center;
+}
+
+#impact-map {
+	width: 100%;
+}
 
 /*
  * Creditly Gray Theme (gray-theme)
@@ -723,6 +727,11 @@ nav.navbar {
 @media (min-width: 500px) {
 	.navbar-form {
 		width: 300px;
+	}
+	#impact-map {
+		text-align: center;
+		width: 500px;
+		height: 400px;
 	}
 }
 @media (min-width: 992px) {

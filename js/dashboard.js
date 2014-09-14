@@ -16,7 +16,16 @@ function onStart() {
 		hasher.setHash('/');
 		EndowmentsUI.newModal.dispatch();
 	});
+
+	// Find Endowments Button
+	$('.find-endowment-btn').off('click');
+	$('.find-endowment-btn').on('click', function(e) {
+		// Set Hasher
+		hasher.setHash('/');
+		e.preventDefault();
+	});
 }
+
 
 function fetchDonorData() {
 	// First ajax call
@@ -25,22 +34,22 @@ function fetchDonorData() {
 		type: 'GET',
 		contentType: 'application/json',
 		dataType: 'json'
-	})
-	.done(function(data) {
+	}).done(function(data) {
+		balanceGraph(data, $('#balanceFuture'), 'My Projected Impact',
+			'donor_projected_balance', 'balance');
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
 			'donor_balance_history', 'balance');
-		balanceGraph(data, $('#balanceFuture'), 'My Projected Balance',
-			'donor_projected_balance', 'balance');
-		balanceGraph(data, $('#grantsFuture'), 'My Projected Grants',
-			'donor_projected_balance', 'total_grants');
 
 		var totalBalance = data.donor_current_balance;
 
 		// Second ajax call
 		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json', //just to launch, this is terrible
 			type: 'GET',
 			contentType: 'application/json',
+			data: {
+				group: true
+			},
 			dataType: 'json'
 		})
 		.done(function(data) {
@@ -48,13 +57,22 @@ function fetchDonorData() {
 				function(ed, subs){
 				for (var i = 0; i < subs.length; i++) {
 					ed[i] = {};
-					ed[i].id = subs[i].endowment_id;
+					ed[i].id = subs[i].slug;
 					ed[i].name = subs[i].name;
 					ed[i].y = subs[i].my_balances.my_endowment_balance;
 				}
 			}, totalBalance);
-		})
-		.fail(function(data) {
+
+			// add charity data to google map
+			var d = [];
+			$.each(data, function(index, val) {
+				$.each(val.charities, function(index, val) {
+					d.push(val);
+				});
+			});
+			MapsUI.start.dispatch(d);
+
+		}).fail(function(data) {
 			log(data);
 			growlError('An error occured while loading the dashboard.');
 		});

@@ -1,0 +1,47 @@
+<!-- Add Endowment Modal -->
+<div id="add-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<form action="" id="add-endowment-step-one" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="add-label">Create New Endowment</h3>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="endowment-name">Name</label>
+					<input type="text" id="endowment-name" placeholder="Endowment Name" class="form-control">
+					<span class="help-block">Your endowment name will be what people search on. Be creative!</span>
+				</div>
+				<h4>Charities</h4>
+				<div class="form-group">
+					<label for="charity-city">Limit to city:</label>
+					<input type='text' id="charity-city" class="form-control">
+				</div>
+				<div class="form-group">
+					<label for="add-endowment-charities">Search for Charities by Name</label>
+					<input type='hidden' id="add-endowment-charities">
+				</div>
+				<div class="radio">
+					<strong>Visibility</strong><br/>
+					<label>
+						<input type="radio" name="visibility-radios" id="public-radio" value="public" checked>
+						Public - Everyone on giv2giv can see and participate in this endowment.
+					</label>
+					<label>
+						<input type="radio" name="visibility-radios" id="private-radio" value="private">
+						Private - Only I can see and participate in this endowment.
+					</label>
+				</div>
+				<div class="form-group">
+					<label for="endowment-description">Description</label>
+					<textarea id="endowment-description" rows="3" class="form-control"></textarea>
+						<span class="help-block">Describe the purpose for your endowment - The more compelling you are the more donations your causes will receive!</span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="add-endowment-modal-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				<button id="add-endowment-modal-save" class="btn btn-success">Save &amp; Complete</button>
+			</div>
+		</form>
+	</div>
+</div>
