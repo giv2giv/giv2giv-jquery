@@ -597,7 +597,10 @@ var WebUI = function() {
 			// Load JS
 			NumbersUI.start.dispatch();
 		});
+	});
 
+	crossroads.addRoute("/reset_password", function () {
+		
 	});
 
 	// Not found route - send to Dashboard
