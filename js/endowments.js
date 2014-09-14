@@ -28,8 +28,32 @@ function onStart() {
 	// Load Featured Endowments
 	fetchFeaturedEndowments(function() {
 		endowmentSelectors();
+		
 	});
 	initSocialShare();
+}
+
+function initialize() {
+// Check if user allows geo-location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      makeMap(position.coords.latitude, position.coords.longitude, 'Your GPS Location');
+    });
+  }
+}
+
+function makeMap(lat,lng,text) {
+	var point = new google.maps.LatLng(lat, lng);
+  var map_canvas = document.getElementById('map_canvas');
+
+  var mapOptions = {
+    center: point,
+    zoom: 4,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  window.map = new google.maps.Map(map_canvas, mapOptions);
+  window.geocoder = new google.maps.Geocoder();
+  window.latlngbounds = new google.maps.LatLngBounds();
 }
 
 function onSubscriptions() {
@@ -262,7 +286,7 @@ function endowmentSelectors() {
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
-					growlError('You can\'t subscribe until you set up a payment account under Account Settings -> Payment Accounts');
+					growlError("You can't subscribe until you set up a method of payment. <a href='https://wwwtest.giv2giv.org/#donor'>Add a card</a> to get started");
 					$('#subscribe-endowment-payment-accounts').append('<option>No Payment Accounts</option>');
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {
@@ -279,11 +303,12 @@ function endowmentSelectors() {
 						var $select = $('#subscribe-endowment-payment-accounts');
 						$select.append('<option value="'+ii+'">'+card.type+' - '+card.last4+' ('+card.exp_month+'/'+card.exp_year+')</option>');
 					});
+					// Show Modal
+					$('#subscribe-endowment-modal').modal('show');
 				}
-				// Show Modal
-				$('#subscribe-endowment-modal').modal('show');
+
 			}).fail(function(){
-				growlError('You can\'t subscribe until you set up a payment account under Account Settings -> Payment Accounts');
+				growlError("You can't subscribe until you set up a method of payment. <a href='https://wwwtest.giv2giv.org/#donor'>Add a card</a> to get started");
 			});
 		}).fail(function(data) {
 			log(data);
@@ -398,7 +423,12 @@ function DetailedCard(sub, isFeatured) {
 
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
-		// Subscription Info
+    makeMap();
+    
+	// Load Google maps JavaScript
+	//$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize');
+
+	// Subscription Info
 	if(WebUI.activeSession()) {
 		$('#subscription-tab').removeClass('hide');
 
@@ -441,7 +471,7 @@ function onDetails(endowment) {
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
-					growlError('You can\'t subscribe until you set up a payment account under Account Settings -> Payment Accounts');
+					growlError("You can't subscribe until you set up a method of payment. <a href='https://wwwtest.giv2giv.org/#donor'>Add a card</a> to get started");
 					$('#subscribe-endowment-payment-accounts').append('<option>No Payment Accounts</option>');
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {
@@ -458,9 +488,9 @@ function onDetails(endowment) {
 						var $select = $('#subscribe-endowment-payment-accounts');
 						$select.append('<option value='+ii+'>'+card.type+' - '+card.last4+' ('+card.exp_month+'/'+card.exp_year+')</option>');
 					});
+					// Show Modal
+					$('#subscribe-endowment-modal').modal('show');
 				}
-				// Show Modal
-				$('#subscribe-endowment-modal').modal('show');
 			});
 		}).fail(function(data) {
 			log(data);
@@ -493,26 +523,28 @@ function onDetails(endowment) {
 	balanceGraph(endowment.global_balances, $('#projectedBalance'), 'Projected Global Impact',
 		'projected_balance', 'balance');
 
-	// Build Charity Table
-
-/*	function initialize() {
-    var map_canvas = document.getElementById('map_canvas');
-    var mapOptions = {
-      center: new google.maps.LatLng(44.5403, -78.5463),
-      zoom: 8,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    var map = new google.maps.Map(map_canvas);
-  }
-  google.maps.event.addDomListener(window, 'load', initialize);*/
-  
+	// Add charities to map
 
 	$.each(endowment.charities, function(k, v) {
+		geocoder.geocode({'address': v.charity.address + " " + v.charity.city + " " + v.charity.state}, function (res1, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				latlngbounds.extend(res1[0].geometry.location);
+				// Set bounds of map to hold markers
+				map.setCenter(latlngbounds.getCenter());
+				map.fitBounds(latlngbounds);
+        new google.maps.Marker({
+          position: res1[0].geometry.location,
+          map: map,
+          title: v.charity.name
+        });
+			}
+		});
+
 		log(v.charity);
 		// Create table row & append
-		var $row = $('#charities-table').find('tbody:last').append('<tr></tr>');
-		$row.append('<td>'+v.charity.name+'</td>');
-		$row.append('<td>'+v.charity.address+' '+v.charity.city+', '+v.charity.state+' '+v.charity.zip+'</td>');
+		//var $row = $('#charities-table').find('tbody:last').append('<tr></tr>');
+		//$row.append('<td>'+v.charity.name+'</td>');
+		//$row.append('<td>'+v.charity.address+' '+v.charity.city+', '+v.charity.state+' '+v.charity.zip+'</td>');
 	});
 }
 

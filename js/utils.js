@@ -16,7 +16,7 @@ Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 // Only display console log output in debug mode, else nothing.
 // @TODO - Send serious logs to server?
 GLOBAL.DEBUG = true;
-log = function () {
+log = function() {
 	if (GLOBAL.DEBUG && console && typeof console.log === "function") {
 		for (var i = 0, ii = arguments.length; i < ii; i++) {
 			console.log(arguments[i]);
@@ -91,7 +91,7 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 
 		DOMnode.highcharts({
 			chart: {
-				type: 'line',
+				type: 'spline',
 				backgroundColor: '#fbfbfb'
 			},
 			title: { text: titleText },
@@ -167,7 +167,7 @@ Highcharts.setOptions({
 });
 
 // Google Plus Sign-In
-// (function () {
+// (function() {
 // 	var po = document.createElement('script');
 // 	po.type = 'text/javascript';
 // 	po.async = true;

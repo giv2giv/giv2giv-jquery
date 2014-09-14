@@ -1,7 +1,7 @@
 // Statement Renderer
 // Michael Dream Team, 2014
 
-$(document).ready(function () {     
+$(document).ready(function() {     
 	$("#statement-print").on("click", function(e) {
 		window.print();
 	});

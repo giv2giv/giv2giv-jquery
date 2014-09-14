@@ -4,7 +4,17 @@
 // =================== //
 
 var WebUI = function() {
-
+    // Sample Function
+    var cake = function(callback) {
+        // It's a lie
+        console.log("srry bro, it's a lie");
+        
+        // Not needed, but good if you're loading data and you need to inform UI/another function you're done.
+        if (typeof callback === "function") {
+			callback();
+		}
+    };
+    
 // ======================= //
 //          VIEWS          //
 // ======================= //
@@ -161,7 +171,7 @@ var WebUI = function() {
 
 	// Check if Session is Active
 	// URL parameter is the URL to goto if Session is dead
-	var activeSession = function () {
+	var activeSession = function() {
 		log("WebUI: Checking session.");
 		var status = false;
 		if ($.cookie("session") !== undefined) {
@@ -252,7 +262,17 @@ var WebUI = function() {
 	// Terms Button
 	$("#terms-btn").on("click", function (e) {
 		e.preventDefault();
-		$("#terms-body").load("/ui/terms.html", function () {
+		$("#terms-body").load("/ui/terms.html", function() {
+			$("#user-name").html($("#signup-name").val());
+			$("#user-email").html($("#signup-email").val());
+			$("#terms-modal").modal("show");
+		});
+	});
+
+		// Terms Button
+	$("#social-terms-btn").on("click", function (e) {
+		e.preventDefault();
+		$("#terms-body").load("/ui/terms.html", function() {
 			$("#user-name").html($("#signup-name").val());
 			$("#user-email").html($("#signup-email").val());
 			$("#terms-modal").modal("show");
@@ -292,6 +312,12 @@ var WebUI = function() {
 		payload.name = $("#signup-name").val();
 		payload.accepted_terms = $("#signup-accept-terms").prop("checked");
 
+		if (!payload.accepted_terms) {
+			growlError("Must accept terms and conditions");
+			$btn.button("reset");
+			return;
+		}
+
 		var request = JSON.stringify(payload);
 		$.ajax({
 			url: GLOBAL.SERVER_URL + "/api/donors.json",
@@ -314,13 +340,13 @@ var WebUI = function() {
 			}).done(function (data) {
 				$.ajaxSetup({
 					beforeSend: function (xhr, settings) {
-						xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
+						xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
 					}
 				});
 				// Hide Signup
 				$("#signup-panel").addClass("hide");
 				// Set Cookie
-				$.cookie("session", data.session.session.token);
+				$.cookie("session", data.session.token);
 				startApplication();
 				$btn.button("reset");
 			}).fail(function (data) {
@@ -368,11 +394,11 @@ var WebUI = function() {
 		}).done(function (data) {
 			$.ajaxSetup({
 				beforeSend: function (xhr, settings) {
-					xhr.setRequestHeader("Authorization", "Token token=" + data.session.session.token);
+					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
 				}
 			});
 			// Set Cookie
-			$.cookie("session", data.session.session.token);
+			$.cookie("session", data.session.token);
 			startApplication();
 			$btn.button("reset");
 		}).fail(function (data) {
@@ -385,6 +411,8 @@ var WebUI = function() {
 			}
 		});
 	});
+
+
 
 	// var authWindow;
 	// $("#gplus-signup")
@@ -422,6 +450,25 @@ var WebUI = function() {
 	// });
 			// growlError("There was an error connecting to Facebook");
 
+	$("#reset-password-btn").on('click', function(e) {
+		e.preventDefault();
+		if (!$("#signin-email").val()) {
+			growlError("Enter your email address then click 'Reset My Password");
+			return;
+		}
+		$.ajax({
+			url: GLOBAL.SERVER_URL + '/api/donors/forgot_password.json',
+			type: 'POST',
+			data: JSON.stringify({"email":$("#signin-email").val()}),
+			contentType: "application/json",
+			dataType:"json"
+		}).done(function() {
+			growlSuccess("Password reset instructions have been sent to the email address " + $("#signup-email").val() + "<br>Follow the instructions in the email to change your password.");
+		}).fail(function() {
+			growlError("There was an error trying to reset your email.");
+		});
+	});
+
 	// Handle Logout Button
 	$("#logout-btn").on("click", function (e) {
 		e.preventDefault();
@@ -434,6 +481,10 @@ var WebUI = function() {
 		}).done(function (data) {
 			// Delete Cookie
 			$.removeCookie("session");
+			// Delete Facebook token
+			FB.logout(function(response) {
+  			// user is now logged out
+			});
 			growlSuccess("You have successfully signed out of giv2giv");
 			hasher.setHash("signin");
 			EndowmentsUI.start.halt();
@@ -461,15 +512,15 @@ var WebUI = function() {
 	};
 
 	// Landing Page Route
-	crossroads.addRoute("/", function () {
+	crossroads.addRoute("/", function() {
 		if (activeSession()) {
-			loadPage("/ui/endowments.html", function () {
+			loadPage("/ui/endowments.html", function() {
 				$("#app-container").attr("data-page-id", "endowments");
 				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
 				EndowmentsUI.start.dispatch(); // Load JS
 			});
 		} else {
-			loadPage("/ui/landing.html", function () {
+			loadPage("/ui/landing.html", function() {
 				$("#app-container").attr("data-page-id", "landing");
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				LandingUI.start.dispatch(); // Load JS
@@ -478,7 +529,7 @@ var WebUI = function() {
 	});
 
 	// Signin Route
-	crossroads.addRoute("/signin", function () {
+	crossroads.addRoute("/signin", function() {
 		// Set Tabs
 		$(".public-nav").siblings().removeClass("active");
 		// Hide Signup Panel
@@ -488,7 +539,7 @@ var WebUI = function() {
 	});
 
 	// Sign-Up Route
-	crossroads.addRoute("/signup", function () {
+	crossroads.addRoute("/signup", function() {
 		// Set Tabs
 		$(".public-nav").siblings().removeClass("active");
 		// Hide Signin Panel
@@ -503,14 +554,15 @@ var WebUI = function() {
 		$("#signup-email").val("");
 		$("#signup-password").val("");
 		$("#signup-accept-terms").attr("checked", false);
+		$("#social-signup-accept-terms").attr("checked", false);
 		$("#signup-panel").removeClass("hide");
 		$(".public-nav").removeClass("hide");
 	});
 
 	// Dashboard Route
-	crossroads.addRoute("/dashboard", function () {
+	crossroads.addRoute("/dashboard", function() {
 		if (activeSession()) {
-			loadPage("/ui/dashboard.html", function () {
+			loadPage("/ui/dashboard.html", function() {
 				$("#app-container").attr("data-page-id", "dashboard");
 				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
 				DashboardUI.start.dispatch(); // Load JS
@@ -521,9 +573,9 @@ var WebUI = function() {
 	});
 
 	// My Subscriptions Route
-	crossroads.addRoute("/subscriptions", function () {
+	crossroads.addRoute("/subscriptions", function() {
 		if (activeSession()) {
-			loadPage("/ui/subscriptions.html", function () {
+			loadPage("/ui/subscriptions.html", function() {
 				$("#app-container").attr("data-page-id", "subscriptions");
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				EndowmentsUI.subscriptions.dispatch(); // Load JS
@@ -543,7 +595,7 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				loadPage("/ui/endowment_details.html", function () {
+				loadPage("/ui/endowment_details.html", function() {
 					$("#app-container").attr("data-page-id", "endowment-details");
 					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
@@ -560,7 +612,7 @@ var WebUI = function() {
 				contentType: "application/json",
 				dataType: "json"
 			}).done(function (data) {
-				loadPage("/ui/endowment_details.html", function () {
+				loadPage("/ui/endowment_details.html", function() {
 					$("#app-container").attr("data-page-id", "endowment-details");
 					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
 					// Load JS
@@ -574,9 +626,9 @@ var WebUI = function() {
 	});
 
 	// Donor Route
-	crossroads.addRoute("/donor", function () {
+	crossroads.addRoute("/donor", function() {
 		if (activeSession()) {
-			loadPage("/ui/donor.html", function () {
+			loadPage("/ui/donor.html", function() {
 				$("#app-container").attr("data-page-id", "donor");
 				setPageMetadata(false, $("#donor-nav"), "giv2giv- Donor");
 				// Load JS
@@ -588,10 +640,10 @@ var WebUI = function() {
 	});
 
 	// Numbers Route
-	crossroads.addRoute("/numbers", function () {
+	crossroads.addRoute("/numbers", function() {
 		var navTab = activeSession() ? $("#numbers-nav") : $("#pub-numbers-nav");
 
-		loadPage("/ui/numbers.html", function () {
+		loadPage("/ui/numbers.html", function() {
 			$("#app-container").attr("data-page-id", "numbers");
 			setPageMetadata(!activeSession(), navTab, "giv2giv - Numbers");
 			// Load JS
@@ -599,8 +651,32 @@ var WebUI = function() {
 		});
 	});
 
-	crossroads.addRoute("/reset_password", function () {
-		
+	// Password Reset Form
+	crossroads.addRoute("/reset_password", function() {
+		loadPage("/ui/reset_password.html", function() {
+			
+		});
+
+		$.ajax({
+			url: GLOBAL.SERVER_URL + '/api/reset_password.json',
+			type: 'POST',
+			dataType: '',
+			data: {param1: 'value1'},
+		}).done(function() {
+			console.log("success");
+		}).fail(function() {
+			console.log("error");
+		});
+
+		if (activeSession()) {
+			loadPage("/ui/dashboard.html", function() {
+				$("#app-container").attr("data-page-id", "dashboard");
+				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
+				DashboardUI.start.dispatch(); // Load JS
+			});
+		} else {
+			crossroads.parse("/signin");
+		}
 	});
 
 	// Not found route - send to Dashboard
@@ -626,25 +702,32 @@ var WebUI = function() {
 
 	// Finally expose bits
 	return {
-		init: function () {
+		init: function() {
 			// History Adapter
 			log("WebUI: Init Start");
-			router(function () {
+			router(function() {
 				startApplication();
 			});
 			log("WebUI: Init Complete");
 		},
+		// Expose our sample function to the outside world
+		cake: function (callback) {
+		    return cake(callback);
+		},
 		showAlert: function (type, message, timeout) {
 			showAlert(type, message, timeout);
 		},
-		activeSession: function () {
+		activeSession: function() {
 			return activeSession();
+		},
+		startApplication: function() {
+		    return startApplication();
 		}
 	};
 }();
 
 // DOM Loaded
-$(function () {
+$(function() {
 	WebUI.init();
 });
 

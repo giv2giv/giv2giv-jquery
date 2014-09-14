@@ -1,6 +1,5 @@
 // Dashboard UI
 
-
 // Signal Hook
 var DashboardUI = {
 	start : new signals.Signal() 
@@ -17,8 +16,8 @@ function onStart() {
 		hasher.setHash('/');
 		EndowmentsUI.newModal.dispatch();
 	});
-	// Load Google maps JavaScript
-	$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize');
+	// Load Google maps JavaScript - done in app.html.
+	initialize();
 }
 
 function initialize() {
@@ -58,10 +57,6 @@ function fetchDonorData() {
 		balanceGraph(data, $('#balanceHistory'), 'My Balance History',
 			'donor_balance_history', 'balance');
 
-		//http://stackoverflow.com/questions/19640055/multiple-markers-google-map-api-v3-from-array-of-addresses-and-avoid-over-query
-		//balanceGraph(data, $('#grantsFuture'), 'My Projected Grants',
-			//'donor_projected_balance', 'total_grants');
-
 		var totalBalance = data.donor_current_balance;
 
 		// Second ajax call
@@ -88,7 +83,7 @@ function fetchDonorData() {
 			$.each(data, function(k, v) {
 				$.each(v.charities, function (array_id, charityArray) {
 					$.each(charityArray, function (charityKey, charity) {
-						geocoder.geocode({'address': charity.address + " " + charity.city}, function (res1, status) {
+						geocoder.geocode({'address': charity.address + " " + charity.city + " " + charity.state}, function (res1, status) {
       				if (status == google.maps.GeocoderStatus.OK) {
       					latlngbounds.extend(res1[0].geometry.location);
 								// Set bounds of map to hold markers
@@ -103,12 +98,7 @@ function fetchDonorData() {
 						});
 					});
 				});
-
-
-
-			});		
-
-			
+			});
 		})
 		.fail(function(data) {
 			log(data);
