@@ -653,30 +653,25 @@ var WebUI = function() {
 
 	// Password Reset Form
 	crossroads.addRoute("/reset_password", function() {
+		// $.ajax({
+		// 	url: '/api/reset_password.json',
+		// 	type: 'POST',
+		// 	contentType: 'application/json',
+		// 	dataType: 'json',
+		// 	data: request
+		// }).done(function() {
+		// 	console.log("success");
+		// }).fail(function() {
+		// 	growlError('There was an error trying to reset your password');
+		// });
+		
 		loadPage("/ui/reset_password.html", function() {
-			
+			$("#app-container").attr("data-page-id", "dashboard");
+			setPageMetadata(!activeSession(), null, "giv2giv.org");
+			RestPassUI.start.dispatch();
 		});
-
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/reset_password.json',
-			type: 'POST',
-			dataType: '',
-			data: {param1: 'value1'},
-		}).done(function() {
-			console.log("success");
-		}).fail(function() {
-			console.log("error");
-		});
-
-		if (activeSession()) {
-			loadPage("/ui/dashboard.html", function() {
-				$("#app-container").attr("data-page-id", "dashboard");
-				setPageMetadata(!activeSession(), $("#dashboard-nav"), "giv2giv.org");
-				DashboardUI.start.dispatch(); // Load JS
-			});
-		} else {
-			crossroads.parse("/signin");
-		}
+		// TODO: Check whether or not the reset password token is expired,
+		// and if it is, redirect the user to the landing page.
 	});
 
 	// Not found route - send to Dashboard

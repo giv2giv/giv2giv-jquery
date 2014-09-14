@@ -225,6 +225,34 @@ function loadUI() {
 		e.preventDefault();
 	});
 
+	$('#donor-profile-contact').change(function () {
+		e.preventDefault();
+		contact_me = $("#donor-profile-contact").prop("checked");
+		if (contact_me) {
+			endpoint='subscribe.json'
+		}
+		else {
+			endpoint='unsubscribe.json'	
+		}
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/donors/" + endpoint,
+			type: "PUT",
+//			data: payload,
+			contentType: "application/json",
+			dataType:"json"
+		}).done(function (data) {
+			growlSuccess("Success! Profile updated.");
+			$btn.button('reset');
+		}).fail(function(data) {
+			growlError("An error occurred while updating your Donor Profile.");
+			var res = JSON.parse(data.responseText);
+			log("[error]: " + res.message);
+			$btn.button('reset');
+		});
+
+
+	});
+
 	/**
 	 * Return a timestamp with the format "m/d/yy h:MM:ss TT"
 	 * @type {Date}

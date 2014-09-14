@@ -28,7 +28,8 @@ function initialize() {
 				dataType: 'json',
 				data: request
 			}).done(function() {
-				console.log("success");
+				hasher.setHash('signin');
+				growlSuccess('Your password was successfully reset! Login again.');
 			}).fail(function() {
 				growlError('There was an error trying to reset your password');
 			});

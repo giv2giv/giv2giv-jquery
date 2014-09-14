@@ -424,14 +424,12 @@ function DetailedCard(sub, isFeatured) {
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
     makeMap();
-    
+
 	// Load Google maps JavaScript
 	//$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initialize');
 
 	// Subscription Info
 	if(WebUI.activeSession()) {
-		$('#subscription-tab').removeClass('hide');
-
 		fetchEndowmentDonations(endowment.id);
 
 		if (endowment.my_balances.is_subscribed) {
@@ -445,7 +443,7 @@ function onDetails(endowment) {
 		}
 	} else {
 		// Hide tab
-		$('#subscription-tab').addClass('hide');
+		$('#subscription-signup').removeClass('hide');
 	}
 
 	subscribeSelectors();
@@ -465,6 +463,7 @@ function onDetails(endowment) {
 			$('#subscribe-endowment-header').html('Subscribe to ' + data.endowment.name);
 			$('#confirm-subscribe-endowment').attr('data-id', data.endowment.id);
 			$('#confirm-subscribe-endowment').attr('data-name', data.endowment.name);
+
 			// Now Get Payment Accounts
 			$.ajax({
 				url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
@@ -546,6 +545,9 @@ function onDetails(endowment) {
 		//$row.append('<td>'+v.charity.name+'</td>');
 		//$row.append('<td>'+v.charity.address+' '+v.charity.city+', '+v.charity.state+' '+v.charity.zip+'</td>');
 	});
+
+	// Add social sharing text
+	$('.twitter-share').attr('data-text', "Awesome if I could change this.");
 }
 
 function fetchEndowmentDonations(id, callback) {
