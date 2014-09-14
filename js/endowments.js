@@ -91,6 +91,9 @@ function fetchSubscribedEndowments(callback) {
 		url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
 		method: 'GET',
 		dataType: 'json',
+		data: {
+			current_only: true
+		},
 		contentType: 'application/json'
 	}).done(function(data) {
 		handleSubscribedEndowments(data);
@@ -264,7 +267,7 @@ function endowmentSelectors() {
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
-					growlError("You can't subscribe until you set up a method of payment. <a href='https://wwwtest.giv2giv.org/#donor'>Add a card</a> to get started");
+					growlError("You can't subscribe until you set up a method of payment. <a href='https://giv2giv.org/#donor'>Add a card</a> to get started");
 					$('#subscribe-endowment-payment-accounts').append('<option>No Payment Accounts</option>');
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {
@@ -452,7 +455,7 @@ function onDetails(endowment) {
 				method: 'GET'
 			}).done(function(data) {
 				if(data.length === 0) {
-					growlError("You can't subscribe until you set up a method of payment. <a href='https://wwwtest.giv2giv.org/#donor'>Add a card</a> to get started");
+					growlError("You can't subscribe until you set up a method of payment. <a href='https://giv2giv.org/#donor'>Add a card</a> to get started");
 					$('#subscribe-endowment-payment-accounts').append('<option>No Payment Accounts</option>');
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {

@@ -43,15 +43,14 @@ function fetchDonorData() {
 		var totalBalance = data.donor_current_balance;
 
 		// Second ajax call
-		var payload = {};
-		payload.group = true;
-		var request_payload = JSON.stringify(payload);
 		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
+			url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json', //just to launch, this is terrible
 			type: 'GET',
 			contentType: 'application/json',
-			dataType: 'json',
-			data: request_payload
+			data: {
+				group: true
+			},
+			dataType: 'json'
 		})
 		.done(function(data) {
 			endowmentsPie(data, $('#currentEndowments'), 'Endowments',

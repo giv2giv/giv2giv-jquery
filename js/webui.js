@@ -3,7 +3,44 @@
 // AND ROUTING HANDLER //
 // =================== //
 
+// Facebook Bits
+window.fbAsyncInit = function() {
+	FB.init({
+		appId      : '453893384741267',
+		cookie     : true,  // enable cookies to allow the server to access 
+												// the session
+		xfbml      : true,  // parse social plugins on this page
+		version    : 'v2.1' // use version 2.1
+	});
+
+
+	FB.getLoginStatus(function(response) {
+		if(response.status == 'connected') {
+			FB.api('/me', function(response) {
+				// Enable Button
+				$("#facebook-signin").prop('disabled', false);
+				$("#facebook-signin").html('<i class="fa fa-facebook"></i> Sign In as ' + response.name);
+			});
+		} else {
+			// Enable Button
+			$("#facebook-signin").prop('disabled', false);
+			$("#facebook-signin").html('<i class="fa fa-facebook"></i> Sign Up with Facebook');
+		}
+	});
+};
+
+// Load the SDK asynchronously
+(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js";
+	fjs.parentNode.insertBefore(js, fjs);
+} (document, 'script', 'facebook-jssdk'));
+
 var WebUI = function() {
+	var isFacebookAuthorized = false;
+
 	// Sample Function
 	var cake = function(callback) {
 			// It's a lie
@@ -29,11 +66,34 @@ var WebUI = function() {
 		$(".private-nav").addClass("hide");
 		// Show Public Nav
 		$(".public-nav").removeClass("hide");
+		
 		// Set Title
 		document.title = "giv2giv - Signin";
 		// Show Signin Panel
 		$("#signin-panel").removeClass("hide");
 		$("#app-container").attr("data-page-id", "signin");
+
+		// Setup Facebook
+		$("#facebook-signup").on('click', function(e) {
+			e.preventDefault();
+			accepted_terms = $("#social-signup-accept-terms").prop("checked");
+
+			if (!accepted_terms) {
+				growlError("You must accept the terms and conditions to use giv2giv.org");
+				return;
+			}
+
+			FB.login(function(response) {
+				statusChangeCallback(response, accepted_terms);
+			}, {scope: 'public_profile,email'});
+		});
+
+		$("#facebook-signin").on('click', function(e) {
+			e.preventDefault();
+			FB.login(function(response) {
+				statusChangeCallback(response);
+			}, {scope: 'public_profile,email'});
+		});
 		if (typeof callback === "function") {
 			callback();
 		}
@@ -97,6 +157,62 @@ var WebUI = function() {
 		// Set Title
 		document.title = title;
 	}
+
+	// Facebook Helpers
+	function statusChangeCallback(response, accepted_terms) {
+		// The response object is returned with a status field that lets the
+		// app know the current login status of the person.
+		// Full docs on the response object can be found in the documentation
+		// for FB.getLoginStatus().
+		if (response.status === 'connected') {
+			WebUI.isFacebookAuthorized = true;
+			handleFacebookLogin(response, true);
+		} else if (response.status === 'not_authorized') {
+			// The person is logged into Facebook, but not your app.
+			WebUI.isFacebookAuthorized = false;
+		} else {
+			// The person is not logged into Facebook, so we're not sure if
+			// they are logged into this app or not.
+			WebUI.isFacebookAuthorized = false;
+		}
+	}
+
+	function handleFacebookLogin(authResponse, accepted_terms) {
+
+	// send token to server, receive g2g session ID back
+	console.log(authResponse.authResponse.accessToken);
+
+	FB.api('/me', function(response) {
+		var payload = JSON.stringify({
+			"token": authResponse.authResponse.accessToken,
+			"accepted_terms": accepted_terms
+		});
+
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/sessions/create_facebook.json",
+			type: "POST",
+			data: payload,
+			contentType: "application/json",
+			dataType: "json"
+		}).done(function (data) {
+			$.ajaxSetup({
+				beforeSend: function (xhr, settings) {
+					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
+				}
+			});
+			// Set Cookie
+			$.cookie("session", data.session.token);
+			WebUI.startApplication();
+		}).fail(function (data) {
+			var res = JSON.parse(data.responseText);
+			if (res.message == "unauthorized") {
+				growlError("Could not authorize using that Facebook token");
+			} else {
+				log("WebUI: Signin Error - " + res.message);
+			}
+		});
+	}); // FB.api end
+} // hendleFacebookLogin END
 
 	// Start Application
 	// This is only loaded on full page refresh or first visit
@@ -461,11 +577,11 @@ var WebUI = function() {
 		// 		// user is now logged out
 			// });
 			growlSuccess("You have successfully signed out of giv2giv");
-			hasher.setHash("signin");
-			EndowmentsUI.start.halt();
-			EndowmentsUI.details.halt();
-			EndowmentsUI.subscriptions.halt();
-			DashboardUI.start.halt();
+			hasher.setHash("/");
+			// EndowmentsUI.start.halt();
+			// EndowmentsUI.details.halt();
+			// EndowmentsUI.subscriptions.halt();
+			// DashboardUI.start.halt();
 		});
 	});
 
@@ -681,6 +797,9 @@ var WebUI = function() {
 		},
 		activeSession: function() {
 			return activeSession();
+		},
+		statusChangeCallback: function(response, accepted_terms) {
+			return statusChangeCallback(response, accepted_terms);
 		},
 		startApplication: function() {
 			return startApplication();
