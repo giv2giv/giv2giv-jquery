@@ -1,0 +1,256 @@
+<!-- Social Share Modal -->
+<div id="social-share-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="social-share-header" aria-hidden="true">
+	<div class="modal-dialog">
+		<form id="social-share-form" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="social-share-header">Success!</h3>
+			</div>
+			<div class="modal-body">
+				<p>You have successfully subscribed to this endowment. Want to increase your inpact even more? Share this endowment and invite friends to contribute!</p>
+				<div id="share-buttons">
+					<div id="twitter" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="Tweet"></div>
+					<div id="facebook" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="Like"></div>
+					<!-- <div id="googleplus" data-url="https://www.giv2giv.org/" data-text="I'm contributing on giv2giv.org, join me!" data-title="+1"></div> -->
+				</div>
+				<span class="clearfix"></span>
+				<h4 class="first-content">Share this endowment via email:</h4>
+				<div class="form-group">
+					<label for="friend-email">Your friend's email address</label>
+					<input type="email" class="form-control" id="friend-email" placeholder="Email address">
+				</div>
+				<button data-loading-text="<i class='fa fa-leaf fa-spin'></i> Sending" class="btn btn-success" id="share-via-email">Send</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- Add Payment Modal -->
+<div id="add-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-payment-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<form method="post" id="add-payment-form" class="modal-content form-inline">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="add-payment-label">
+					Add Payment
+				</h3>
+			</div>
+			<div class="modal-body">
+				<span class="payment-errors"></span>
+				<div class="creditly-wrapper">
+					<div class="first-row form-group">
+						<div class="col-sm-8 controls">
+							<label class="control-label">Card Number</label>
+							<input class="number credit-card-number form-control" type="text" name="number" pattern="(\d*\s){3}\d*" inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number" x-autocompletetype="cc-number" id="add-card-number" data-stripe="number" placeholder="&#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149;">
+						</div>
+						<div class="col-sm-2 controls card-type">
+							<img src='' id="card-type">
+						</div>
+						<div class="col-sm-2 controls">
+							<label class="control-label">CVC</label>
+							<input class="security-code form-control" inputmode="numeric" data-stripe="cvc" pattern="\d*" id="add-card-cvc" type="text" name="security-code" placeholder="&#149;&#149;&#149;">
+						</div>
+					</div>
+					<div class="second-row form-group">
+						<div class="col-sm-8 controls">
+							<label class="control-label">Name on Card</label>
+							<input class="billing-address-name form-control" type="text" name="name" placeholder="John Smith">
+						</div>
+						<div class="col-sm-2 controls">
+							<label class="control-label">Exp.&nbsp;Month</label>
+							<input class="expiration-month form-control" data-stripe="exp-month" type="text" name="expiration-month"placeholder="MM">
+						</div>
+						<div class="col-sm-2 controls">
+							<label class="control-label">Exp.&nbsp;Year</label>
+							<input class="expiration-year form-control"  data-stripe="exp-year" type="text" name="expiration-year" placeholder="YYYY">
+						</div>
+					</div>
+				</div>
+				<p><strong>giv2giv uses Stripe.com to process credit cards. giv2giv never sees or stores your card information.</strong></p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				<button id="add-account-btn" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Adding" class="btn btn-success">Add Account</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- Remove Card Modal -->
+<div id="remove-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="remove-payment-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="remove-payment-label">
+					Confirm Removal
+				</h3>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you would like to delete the payment account that ends in <strong id="remove-card-last-four"></strong>?</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+				<a href="#" id="confirm-payment-removal" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Removing" data-id="" class="btn btn-success">Yes</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Subscribe Modal -->
+<div id="subscribe-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="subscribe-endowment-header" aria-hidden="true">
+	<div class="modal-dialog">
+		<form id="subcribe-endowment-modal-form" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="subscribe-endowment-header">Subscribe to </h3>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label class="control-label" for="subscribe-endowment-payment-accounts">Payment Account</label>
+					<select id="subscribe-endowment-payment-accounts">
+					</select class="form-control">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="subscribe-endowment-donation">Monthly Donation Amount</label>
+					<div class="input-group">
+						<span class="input-group-addon">$</span>
+						<input type="text" id="subscribe-endowment-donation" class="form-control">
+					</div>
+					<p class="text-muted">We recommend a minimum donation of $25.00/month</p>
+				</div>
+				<p>Your subscription can be stopped at any time.</p><p>Your credit card will be charged once you click on the "Confirm Donation" button.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+				<a href="#" id="confirm-subscribe-endowment" data-name="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Confirm Donation</a>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- Unsubscribe Modal -->
+<div id="unsubscribe-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unsubscribe-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="unsubscribe-label">Are you sure you would like to unsubscribe to this endowment?</h3>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-default">Cancel</a>
+				<a href="#" id="confirm-unsubscribe-endowment" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-danger">Unsubscribe</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Chart Projection Assumptions -->
+<div id="assumptions-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="assumptions-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="assumptions-label">
+					Chart Assumptions
+				</h3>
+			</div>
+			<div class="modal-body">
+				<ul>
+					<li>Current donations continue</li>
+					<li>7% annual rate of return</li>
+					<li>Granting 1.25% of all endowments every 90 days</li>
+					<li>Admin fee of 0.125% every 90 days to giv2giv</li>
+					<li><strong>Past performance is not indicative of future returns.</strong></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Add Endowment Modal -->
+<div id="add-endowment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<form action="" id="add-endowment-step-one" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="add-label">Create New Endowment</h3>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="endowment-name">Name</label>
+					<input type="text" id="endowment-name" placeholder="Endowment Name" class="form-control">
+					<span class="help-block">Your endowment name will be what people search on. Be creative!</span>
+				</div>
+				<h4>Charities</h4>
+				<div class="form-group">
+					<label for="charity-city">Limit to city:</label>
+					<input type='text' id="charity-city" class="form-control">
+				</div>
+				<div class="form-group">
+					<label for="add-endowment-charities">Search for Charities by Name</label>
+					<input type='hidden' id="add-endowment-charities">
+				</div>
+				<div class="radio">
+					<strong>Visibility</strong><br/>
+					<label>
+						<input type="radio" name="visibility-radios" id="public-radio" value="public" checked>
+						Public - Everyone on giv2giv can see and participate in this endowment.
+					</label>
+					<label>
+						<input type="radio" name="visibility-radios" id="private-radio" value="private">
+						Private - Only I can see and participate in this endowment.
+					</label>
+				</div>
+				<div class="form-group">
+					<label for="endowment-description">Description</label>
+					<textarea id="endowment-description" rows="3" class="form-control"></textarea>
+						<span class="help-block">Describe the purpose for your endowment - The more compelling you are the more donations your causes will receive!</span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="add-endowment-modal-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				<button id="add-endowment-modal-save" class="btn btn-success">Save &amp; Complete</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- Terms and Conditions Modal -->
+<div id="terms-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="terms-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="terms-label">
+					Terms &amp; Conditions
+				</h3>
+			</div>
+			<div class="modal-body" id="terms-body">
+				<p></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Make a Wish Modal -->
+<div id="wish-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="wish-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<form id="make-wish-form" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="wish-label">
+					Feedback
+				</h3>
+			</div>
+			<div class="modal-body">
+				<p>Have an idea to make giv2giv.org better? Let us know&mdash;Popular wishes will be implemented first!</p>
+				<textarea id="wish" rows="5"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success" data-loading-text="<i class='fa fa-leaf fa-spin'></i>&nbsp;Making Wish">Make A Wish</button>
+				<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

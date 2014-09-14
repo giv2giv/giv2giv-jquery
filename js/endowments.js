@@ -448,10 +448,12 @@ function onDetails(endowment) {
 	}
 
 	// Add social sharing text
-	$('.twitter-share').attr('data-text', "Join me at " + "https://giv2giv.org/#endowment/" + endowment.slug + " Support my endowment " + endowment.name + " #impinv #socint");
-	/*
-  $('.facebook-like').attr('p[url]=https://giv2giv.org&p[title]=mygiv2giv.orgTitle&p[summary]=ThisIsMine');
-*/
+	$('.twitter-share').attr('data-text', "Join me at https://giv2giv.org/#endowment/" + endowment.slug + " Support my endowment " + endowment.name + " #impinv #socint");
+  $('.facebook-like').attr('href', "https://www.facebook.com/sharer.php?s=100p[url]=https://giv2giv.org/#endowment/"+endowment.slug+"&p[title]=Join me at giv2giv.org&p[summary]=Join me at https://giv2giv.org/#endowment/" + endowment.slug + " Support my endowment " + endowment.name + " Thanks!");
+  $('.facebook-like').attr('data-href', "https://giv2giv.org/#endowment/"+endowment.slug);
+//"http://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org&amp;title=giv2giv.org"
+  $('.linkedin-share').attr('data-url', "https://giv2giv.org/#endowment/"+endowment.slug);
+
 	subscribeSelectors();
 	initSocialShare();
 

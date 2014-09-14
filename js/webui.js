@@ -21,7 +21,7 @@ var WebUI = function() {
 
 	// Signin Bits
 	// Display the signin screen.
-	var showsignin = function(callback) {
+	function showsignin(callback) {
 		// Hide App Panel
 		$("#app-panel").addClass("hide");
 		$("#app-panel").html("");
@@ -37,10 +37,10 @@ var WebUI = function() {
 		if (typeof callback === "function") {
 			callback();
 		}
-	};
+	}
 
 	// Hide the signin screen
-	var hidesignin = function (callback) {
+	function hidesignin(callback) {
 		// Show Private Nav
 		$(".private-nav").removeClass("hide");
 		// Hide Public Nav
@@ -56,7 +56,7 @@ var WebUI = function() {
 		if (typeof callback === "function") {
 			callback();
 		}
-	};
+	}
 
 // ======================= //
 //        HANDLERS         //
@@ -100,7 +100,7 @@ var WebUI = function() {
 
 	// Start Application
 	// This is only loaded on full page refresh or first visit
-	var startApplication = function (callback) {
+	function startApplication(callback) {
 		log("WebUI: Starting Application");
 		if (activeSession()) {
 			// Get Donor Info
@@ -167,11 +167,11 @@ var WebUI = function() {
 			
 			callback();
 		}
-	};
+	}
 
 	// Check if Session is Active
 	// URL parameter is the URL to goto if Session is dead
-	var activeSession = function() {
+	function activeSession() {
 		log("WebUI: Checking session.");
 		var status = false;
 		if ($.cookie("session") !== undefined) {
@@ -195,7 +195,7 @@ var WebUI = function() {
 			status = false;
 		}
 		return status;
-	};
+	}
 	
 	// Load HTML Page
 	function loadPage(url, callback) {
@@ -212,12 +212,9 @@ var WebUI = function() {
 		});
 	}
 
-	function loadModal(url, callback) {
-		$.get(url, function (data) {
+	function loadModals() {
+		$.get('/ui/modals.html', function (data) {
 			$("#modal-container").html(data);
-			if (typeof callback === "function") {
-				callback();
-			}
 		}).fail(function (data) {
 			log("WebUI: Failed to load modals.");
 		});
@@ -231,6 +228,11 @@ var WebUI = function() {
 			e.preventDefault();
 			$(this).tab("show");
 		});
+	}
+
+	// Functions that are deffered until after the WebUI is initialized
+	function deferredFunctions() {
+		loadModals();
 	}
 
 // ======================= //
@@ -492,9 +494,6 @@ var WebUI = function() {
 				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
 				EndowmentsUI.start.dispatch(); // Load JS
 			});
-			loadModal("/ui/modals/add_endowment.html");
-			loadModal("/ui/modals/social_share.html");
-			loadModal("/ui/modals/sub_unsub.html");
 		} else {
 			loadPage("/ui/landing.html", function() {
 				$("#app-container").attr("data-page-id", "landing");
@@ -556,8 +555,6 @@ var WebUI = function() {
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				EndowmentsUI.subscriptions.dispatch(); // Load JS
 			});
-			loadModal("/ui/modals/social_share.html");
-			loadModal("/ui/modals/sub_unsub.html");
 		} else {
 			crossroads.parse("/signin");
 		}
@@ -579,8 +576,6 @@ var WebUI = function() {
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
-				loadModal("/ui/modals/social_share.html");
-				loadModal("/ui/modals/sub_unsub.html");
 			}).fail(function (data) {
 				growlError("There was an error loading the Endowment Details.");
 			});
@@ -598,8 +593,6 @@ var WebUI = function() {
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
-				loadModal("/ui/modals/social_share.html");
-				loadModal("/ui/modals/sub_unsub.html");
 			}).fail(function (data) {
 				growlError("There was an error loading the Endowment Details.");
 			});
@@ -616,7 +609,6 @@ var WebUI = function() {
 				// Load JS
 				DonorUI.start.dispatch();
 			});
-			loadModal("/ui/modals/payments.html");
 		} else {
 			crossroads.parse("/signin");
 		}
@@ -632,7 +624,6 @@ var WebUI = function() {
 			// Load JS
 			NumbersUI.start.dispatch();
 		});
-		loadModal("/ui/modals/assumptions.html");
 	});
 
 	// Password Reset Form
@@ -680,7 +671,10 @@ var WebUI = function() {
 		},
 		// Expose our sample function to the outside world
 		cake: function (callback) {
-				return cake(callback);
+			return cake(callback);
+		},
+		deferredLoad: function() {
+			deferredFunctions();
 		},
 		showAlert: function (type, message, timeout) {
 			showAlert(type, message, timeout);
@@ -689,7 +683,7 @@ var WebUI = function() {
 			return activeSession();
 		},
 		startApplication: function() {
-				return startApplication();
+			return startApplication();
 		}
 	};
 }();
@@ -697,5 +691,6 @@ var WebUI = function() {
 // DOM Loaded
 $(function() {
 	WebUI.init();
+	WebUI.deferredLoad();
 });
 
