@@ -5,7 +5,7 @@
 </div>
 <div class="row">
 	<div class="fixed-column">
-		<div class="row first-content">
+		<div class="row">
 			<div class="col-sm-6">
 				<h2>Details</h2>
 				<p id="endowment-details-description"></p>
@@ -24,19 +24,18 @@
 					<p><a class="btn btn-danger endowment-unsubscribe-btn" id="endowment-details-unsubscribe" href="#unsubscribe-endowment-modal" data-toggle="modal">Unsubscribe</a></p>
 				</div>
 				<div id="subscription-signup" class="hide text-center">
-					
-						<a href="signin"><button class="btn btn-success">Sign In</button></a>
+					<a href="signin"><button class="btn btn-success">Sign In</button></a>
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row first-content">
 			<div class="col-xs-12">
 				<h2>Sharing</h2>
 			</div>
 			<div class="col-sm-6">
 	      <ul class="social-buttons cf">
           <li>
-          	<a href="https://twitter.com/share" class="socialite twitter-share" data-text="I'm building a legacy for good @giv2giv. Join me!" data-url="https://giv2giv.org" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+          	<a href="https://twitter.com/share" class="socialite twitter-share" data-text="Building a legacy for good @giv2giv. Join me!" data-url="https://giv2giv.org" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
           </li>
           <li>
               <a href="https://plus.google.com/share?url=https://giv2giv.org" class="socialite googleplus-one" data-size="tall" data-href="https://giv2giv.org" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
@@ -50,7 +49,7 @@
 	      </ul>
 	    </div>
       <div class="col-sm-6">
-				<h4 class="first-content">Share this endowment via email:</h4>
+				<h4>Share this endowment via email:</h4>
 				<div class="form-group">
 					<!--<label for="friend-email"></label>-->
 					<input type="email" class="form-control" id="friend-email" placeholder="Your friend's email address">
@@ -59,7 +58,7 @@
 				
 			</div>
 		</div>
-		<div class="row">
+		<div class="row first-content">
 			<div class="col-xs-12">
 				<h2>My Past Donations</h2>
 				<table id="donations-table" class="table">
@@ -82,40 +81,28 @@
 			<!-- 	<strong>* Note: Some donations may take a few minutes to appear.</strong> -->
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12">
+		<div class="row first-content">
+			<div class="col-xs-12 text-center">
 				<div id="projectedBalance" class="text-center"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</div>
+				<a id="open-assumptions-modal" href='#assumptions-modal' class='' data-toggle="modal">Click to View Projection Assumptions</a>
 			</div>
-			<a id="open-assumptions-modal" href='#assumptions-modal' class='' data-toggle="modal">Click to View Projection Assumptions</a>
+		</div>
+		<div class="row first-content">
+			<div class="col-xs-12">
+				<h2>Benefit Charities</h2>
+				<div id="map_canvas"></div>
+			</div>
 		</div>
 		<div class="row">
-			<div class="row first-content">
-				<div class="col-xs-12">
-					<h2>Benefit Charities</h2>
-					<div id="map_canvas"></div>
-					<!--
-					<table id="charities-table" class="table">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Address</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-					-->
-				</div>
+			<div class="col-sm-6 text-center">
+				<h3>Global Grants Paid</h3>
+				<p id="endowment-details-grants"></p>
 			</div>
-			<div class="row">
-				<div class="col-sm-6 text-center">
-					<h3>Global Grants Paid</h3>
-					<p id="endowment-details-grants"></p>
-				</div>
-				<div class="col-sm-6 text-center">
-					<h3>My Grants Paid</h3>
-					<p id="endowment-details-my-grants-amount"></p>
-				</div>
+			<div class="col-sm-6 text-center">
+				<h3>My Grants Paid</h3>
+				<p id="endowment-details-my-grants-amount"></p>
 			</div>
+		</div>
 	</div>
 </div>
 
@@ -126,7 +113,6 @@
 				<div id="balanceHistory" class="text-center"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</div>
 			</div>
 		</div>
-
 	</div>
 </div>
 

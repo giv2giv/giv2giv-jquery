@@ -169,43 +169,46 @@
 			</div>
 	</footer>
 
-	<!-- Modals -->
-	<div id="terms-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="terms-label" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h3 class="modal-title" id="terms-label">
-						Terms &amp; Conditions
-					</h3>
-				</div>
-				<div class="modal-body" id="terms-body">
-					<p></p>
-				</div>
+<!-- Modals -->
+<div id="modal-container"></div>
+
+<!-- These modals are outside of #modal-container because they're common to the whole site -->
+<div id="terms-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="terms-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="terms-label">
+					Terms &amp; Conditions
+				</h3>
+			</div>
+			<div class="modal-body" id="terms-body">
+				<p></p>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<div id="wish-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="wish-label" aria-hidden="true">
-		<div class="modal-dialog">
-			<form id="make-wish-form" class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h3 class="modal-title" id="wish-label">
-						Feedback
-					</h3>
-				</div>
-				<div class="modal-body">
-					<p>Have an idea to make giv2giv.org better? Let us know&mdash;Popular wishes will be implemented first!</p>
-					<textarea id="wish" rows="5"></textarea>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-success" data-loading-text="<i class='fa fa-leaf fa-spin'></i>&nbsp;Making Wish">Make A Wish</button>
-					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
-				</div>
-			</form>
-		</div>
+<div id="wish-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="wish-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<form id="make-wish-form" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h3 class="modal-title" id="wish-label">
+					Feedback
+				</h3>
+			</div>
+			<div class="modal-body">
+				<p>Have an idea to make giv2giv.org better? Let us know&mdash;Popular wishes will be implemented first!</p>
+				<textarea id="wish" rows="5"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success" data-loading-text="<i class='fa fa-leaf fa-spin'></i>&nbsp;Making Wish">Make A Wish</button>
+				<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</form>
 	</div>
+</div>
 
 	<!-- GOOGLE Maps -->
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>

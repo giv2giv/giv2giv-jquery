@@ -26,10 +26,10 @@ function onStart() {
 	});
 
 	// Load Google maps JavaScript - done in app.html.
-	initialize();
+	initGMaps();
 }
 
-function initialize() {
+function initGMaps() {
 // Check if user allows geo-location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -80,7 +80,7 @@ function fetchDonorData() {
 				function(ed, subs){
 				for (var i = 0; i < subs.length; i++) {
 					ed[i] = {};
-					ed[i].id = subs[i].endowment_id;
+					ed[i].id = subs[i].slug;
 					ed[i].name = subs[i].name;
 					ed[i].y = subs[i].my_balances.my_endowment_balance;
 				}

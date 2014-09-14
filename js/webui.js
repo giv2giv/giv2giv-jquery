@@ -4,17 +4,17 @@
 // =================== //
 
 var WebUI = function() {
-    // Sample Function
-    var cake = function(callback) {
-        // It's a lie
-        console.log("srry bro, it's a lie");
-        
-        // Not needed, but good if you're loading data and you need to inform UI/another function you're done.
-        if (typeof callback === "function") {
-			callback();
-		}
-    };
-    
+	// Sample Function
+	var cake = function(callback) {
+			// It's a lie
+			console.log("srry bro, it's a lie");
+			
+			// Not needed, but good if you're loading data and you need to inform UI/another function you're done.
+			if (typeof callback === "function") {
+		callback();
+	}
+ };
+		
 // ======================= //
 //          VIEWS          //
 // ======================= //
@@ -212,6 +212,17 @@ var WebUI = function() {
 		});
 	}
 
+	function loadModal(url, callback) {
+		$.get(url, function (data) {
+			$("#modal-container").html(data);
+			if (typeof callback === "function") {
+				callback();
+			}
+		}).fail(function (data) {
+			log("WebUI: Failed to load modals.");
+		});
+	}
+
 	// Reload UI
 	// Some jQuery Selectors can't delegate & need to be applied to dynamic HTML
 	function reloadUI() {
@@ -239,7 +250,7 @@ var WebUI = function() {
 					$.each(response.endowments, function (key, value) {
 						var endowment = {};
 						log(value);
-						endowment.id = value.id;
+						endowment.id = value.slug;
 						endowment.value = value.name;
 						endowment.desc = value.description;
 						results.push(endowment);
@@ -412,61 +423,23 @@ var WebUI = function() {
 		});
 	});
 
-
-
-	// var authWindow;
-	// $("#gplus-signup")
-	// $("#facebook-signup").on('click', function(e) {
-	// 	e.preventDefault();
-	// 	console.log('here')
-		// TODO: Throw the user to a new page to get them to accept the terms
-		// and conditions
-		// TODO: Pull signin and signup out of app.html and into their own
-		// separate crossroads routes
-
-	// 	authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
-	// 	setTimeout(CheckLoginStatus, 1000);
-	// 	authWindow.focus();
-	// 	return false;
-	// });
-
-	// function CheckLoginStatus() {
-	// 	if (authWindow.closed) {
-	// 		console.log('Success')
-	// 	} else {
-	// 		setTimeout(CheckLoginStatus, 1000);
-	// 	}
-	// }
-
-	// $("#gplus-signin")
-	// $("#facebook-signin").on('click', function(e) {
-		// e.preventDefault();
-		// console.log('here')
-		// window.location.href = GLOBAL.SERVER_URL + "/auth/facebook";
-		// authWindow = window.open(GLOBAL.SERVER_URL + "/auth/facebook");
-		// setTimeout(CheckLoginStatus, 1000);
-		// authWindow.focus();
-	// 	return false;
-	// });
-			// growlError("There was an error connecting to Facebook");
-
 	$("#reset-password-btn").on('click', function(e) {
 		e.preventDefault();
 		if (!$("#signin-email").val()) {
-			growlError("Enter your email address then click 'Reset My Password");
-			return;
+			growlError("Enter your email address then click \"Reset My Password\"");
+		} else {
+			$.ajax({
+				url: GLOBAL.SERVER_URL + '/api/donors/forgot_password.json',
+				type: 'POST',
+				data: JSON.stringify({"email":$("#signin-email").val()}),
+				contentType: "application/json",
+				dataType:"json"
+			}).done(function() {
+				growlSuccess("Password reset instructions have been sent to your email address " + $("#signup-email").val() + "<br>Follow the instructions in the email to change your password.");
+			}).fail(function() {
+				growlError("There was an error trying to reset your email.");
+			});
 		}
-		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/forgot_password.json',
-			type: 'POST',
-			data: JSON.stringify({"email":$("#signin-email").val()}),
-			contentType: "application/json",
-			dataType:"json"
-		}).done(function() {
-			growlSuccess("Password reset instructions have been sent to your email address " + $("#signup-email").val() + "<br>Follow the instructions in the email to change your password.");
-		}).fail(function() {
-			growlError("There was an error trying to reset your email.");
-		});
 	});
 
 	// Handle Logout Button
@@ -483,7 +456,7 @@ var WebUI = function() {
 			$.removeCookie("session");
 			// Delete Facebook token
 			// FB.logout(function(response) {
-  	// 		// user is now logged out
+		// 		// user is now logged out
 			// });
 			growlSuccess("You have successfully signed out of giv2giv");
 			hasher.setHash("signin");
@@ -519,6 +492,9 @@ var WebUI = function() {
 				setPageMetadata(!activeSession(), null, "giv2giv - Endowments");
 				EndowmentsUI.start.dispatch(); // Load JS
 			});
+			loadModal("/ui/modals/add_endowment.html");
+			loadModal("/ui/modals/social_share.html");
+			loadModal("/ui/modals/sub_unsub.html");
 		} else {
 			loadPage("/ui/landing.html", function() {
 				$("#app-container").attr("data-page-id", "landing");
@@ -580,6 +556,8 @@ var WebUI = function() {
 				setPageMetadata(!activeSession(), null, "giv2giv.org");
 				EndowmentsUI.subscriptions.dispatch(); // Load JS
 			});
+			loadModal("/ui/modals/social_share.html");
+			loadModal("/ui/modals/sub_unsub.html");
 		} else {
 			crossroads.parse("/signin");
 		}
@@ -601,6 +579,8 @@ var WebUI = function() {
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
+				loadModal("/ui/modals/social_share.html");
+				loadModal("/ui/modals/sub_unsub.html");
 			}).fail(function (data) {
 				growlError("There was an error loading the Endowment Details.");
 			});
@@ -618,6 +598,8 @@ var WebUI = function() {
 					// Load JS
 					EndowmentsUI.details.dispatch(data.endowment);
 				});
+				loadModal("/ui/modals/social_share.html");
+				loadModal("/ui/modals/sub_unsub.html");
 			}).fail(function (data) {
 				growlError("There was an error loading the Endowment Details.");
 			});
@@ -634,6 +616,7 @@ var WebUI = function() {
 				// Load JS
 				DonorUI.start.dispatch();
 			});
+			loadModal("/ui/modals/payments.html");
 		} else {
 			crossroads.parse("/signin");
 		}
@@ -649,10 +632,11 @@ var WebUI = function() {
 			// Load JS
 			NumbersUI.start.dispatch();
 		});
+		loadModal("/ui/modals/assumptions.html");
 	});
 
 	// Password Reset Form
-	crossroads.addRoute("/reset_password?{token}", function(token) {		
+	crossroads.addRoute("/reset_password?reset_token={token}", function(token) {		
 		// TODO: Check whether or not the reset password token is expired,
 		// and if it is, redirect the user to the sign-in page. Also, display
 		// growlError('Sorry, that password reset link has expired.') 
@@ -696,7 +680,7 @@ var WebUI = function() {
 		},
 		// Expose our sample function to the outside world
 		cake: function (callback) {
-		    return cake(callback);
+				return cake(callback);
 		},
 		showAlert: function (type, message, timeout) {
 			showAlert(type, message, timeout);
@@ -705,7 +689,7 @@ var WebUI = function() {
 			return activeSession();
 		},
 		startApplication: function() {
-		    return startApplication();
+				return startApplication();
 		}
 	};
 }();

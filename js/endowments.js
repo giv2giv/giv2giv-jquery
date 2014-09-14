@@ -353,8 +353,9 @@ function SimpleCard(heading, body, button) {
 
 // Constructor for DetailedCard Object
 function DetailedCard(sub, isFeatured) {
-	// Delete sub.endowment_id once Rails is update
+	// TODO: Delete sub.endowment_id once Rails is update
 	this.id = sub.id;
+	this.slug = sub.slug;
 	this.cardTitle = sub.name;
 	this.cardBody = sub.description;
 	this.isFeatured = isFeatured;
@@ -403,7 +404,7 @@ function DetailedCard(sub, isFeatured) {
 	'</div>'+
 
 	div('bottom')+
-		'<button data-id="'+this.id+'" class="btn btn-primary endowment-details-btn">More Details</button> ';
+		'<button data-id="'+this.slug+'" class="btn btn-primary endowment-details-btn">More Details</button> ';
 			if (this.isSubscribed) {
 				html+='<button data-id="'+this.id+'" class="btn btn-danger endowment-unsubscribe-btn">Unsubscribe</button>';
 			} else {
@@ -446,6 +447,11 @@ function onDetails(endowment) {
 		$('#subscription-signup').removeClass('hide');
 	}
 
+	// Add social sharing text
+	$('.twitter-share').attr('data-text', "Join me at " + "https://giv2giv.org/#endowment/" + endowment.slug + " Support my endowment " + endowment.name + " #impinv #socint");
+	/*
+  $('.facebook-like').attr('p[url]=https://giv2giv.org&p[title]=mygiv2giv.orgTitle&p[summary]=ThisIsMine');
+*/
 	subscribeSelectors();
 	initSocialShare();
 
@@ -546,8 +552,6 @@ function onDetails(endowment) {
 		//$row.append('<td>'+v.charity.address+' '+v.charity.city+', '+v.charity.state+' '+v.charity.zip+'</td>');
 	});
 
-	// Add social sharing text
-	$('.twitter-share').attr('data-text', "Awesome if I could change this.");
 }
 
 function fetchEndowmentDonations(id, callback) {

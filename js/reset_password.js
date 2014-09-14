@@ -18,7 +18,7 @@ function onStart(token) {
 			payload.password = $('#new-password').val();
 			payload = JSON.stringify(payload);
 			$.ajax({
-				url: GLOBAL.SERVER_URL + '/donors/reset_password.json',
+				url: GLOBAL.SERVER_URL + '/api/donors/reset_password.json',
 				type: 'POST',
 				contentType: 'application/json',
 				dataType: 'json',
