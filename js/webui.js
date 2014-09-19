@@ -13,7 +13,6 @@ window.fbAsyncInit = function() {
 		version    : 'v2.1' // use version 2.1
 	});
 
-
 	FB.getLoginStatus(function(response) {
 		if(response.status == 'connected') {
 			FB.api('/me', function(response) {
@@ -30,13 +29,15 @@ window.fbAsyncInit = function() {
 };
 
 // Load the SDK asynchronously
+
 (function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0];
-	if (d.getElementById(id)) return;
-	js = d.createElement(s); js.id = id;
-	js.src = "//connect.facebook.net/en_US/sdk.js";
-	fjs.parentNode.insertBefore(js, fjs);
-} (document, 'script', 'facebook-jssdk'));
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=453893384741267&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
 
 var WebUI = function() {
 	var isFacebookAuthorized = false;
@@ -72,21 +73,6 @@ var WebUI = function() {
 		// Show Signin Panel
 		$("#signin-panel").removeClass("hide");
 		$("#app-container").attr("data-page-id", "signin");
-
-		// Setup Facebook
-		$("#facebook-signup").on('click', function(e) {
-			e.preventDefault();
-			accepted_terms = $("#social-signup-accept-terms").prop("checked");
-
-			if (!accepted_terms) {
-				growlError("You must accept the terms and conditions to use giv2giv.org");
-				return;
-			}
-
-			FB.login(function(response) {
-				statusChangeCallback(response, accepted_terms);
-			}, {scope: 'public_profile,email'});
-		});
 
 		$("#facebook-signin").on('click', function(e) {
 			e.preventDefault();
@@ -648,6 +634,22 @@ var WebUI = function() {
 		$("#social-signup-accept-terms").attr("checked", false);
 		$("#signup-panel").removeClass("hide");
 		$(".public-nav").removeClass("hide");
+
+		// Setup Facebook
+		$("#facebook-signup").on('click', function(e) {
+			e.preventDefault();
+			accepted_terms = $("#social-signup-accept-terms").prop("checked");
+
+			if (!accepted_terms) {
+				growlError("You must accept the terms and conditions to use giv2giv.org");
+				return;
+			}
+
+			FB.login(function(response) {
+				statusChangeCallback(response, accepted_terms);
+			}, {scope: 'public_profile,email'});
+		});
+
 	});
 
 	// Dashboard Route

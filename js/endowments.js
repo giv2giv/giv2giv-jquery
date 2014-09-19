@@ -427,7 +427,7 @@ function onDetails(endowment) {
 	$('.twitter-share').attr('data-text', "Join me at giv2giv and support my endowment \"" + endowment.name + "\" #impinv #socint");
 	$('.facebook-like').attr('href', "https://www.facebook.com/sharer.php?s=100p[url]=https://giv2giv.org/#endowment/"+endowment.slug+"&p[title]=Joinmeatgiv2giv.org&p[summary]=Joinmeathttps://giv2giv.org/#endowment/" + endowment.slug + "Supportmyendowment" + endowment.name + "Thanks");
 	$('.facebook-like').attr('data-href', "https://giv2giv.org/#endowment/"+endowment.slug);
-	$('.linkedin-share').attr('href', "http://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org/#endowment/"+endowment.slug+"&amp;title=giv2giv.org");
+	$('.linkedin-share').attr('href', "https://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org/#endowment/"+endowment.slug+"&amp;title=giv2giv.org");
 	$('.linkedin-share').attr('data-url', "https://giv2giv.org/#endowment/"+endowment.slug);
 
 	subscribeSelectors();
