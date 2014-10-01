@@ -244,6 +244,24 @@ nav.navbar {
 }
 
 /*
+ * Leaflet.js
+ */
+#map { height: 400px; }
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+}
+
+.leaflet-map-pane {
+    z-index: 2 !important;
+}
+
+.leaflet-google-layer {
+    z-index: 1 !important;
+}
+
+/*
  * Creditly Gray Theme (gray-theme)
  */
 .creditly-wrapper .card_type {

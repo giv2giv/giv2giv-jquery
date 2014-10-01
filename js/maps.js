@@ -5,33 +5,58 @@ var MapsUI = {
 	start : new signals.Signal() 
 };
 
+// Nampspacing needs love all around
+var map;
+var locations = [];
+
+// Leaflet Icon Path
+L.Icon.Default.imagePath = "../css/images/";
+
 // Listeners
 MapsUI.start.add(onStart);
 
+function codeAddress(name, address) {
+  geocoder.geocode( { 'address': address }, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+    	var location = new L.latLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+    	locations.push(location);
+    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<b>"+name+"</b><br>"+address);
+    	var bounds = new L.LatLngBounds(locations);
+		map.fitBounds(bounds);
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+
 // Initialize
 function onStart(charities) {
-	if (charities.length > 0) {
-		var mapURL = GLOBAL.GMAPS_API_URL + '?size=500x400';
-		for (var i = 0; i < charities.length; i++) {
-			mapURL += '&markers=';
-			mapURL += charities[i].charity.address + ', ';
-			mapURL += charities[i].charity.city + ', ';
-			mapURL += charities[i].charity.state;
-		}
-		if (charities.length === 1) {
-			mapURL += '&zoom=' + GLOBAL.GMAPS_DEFAULT_ZOOM;
-		}
-		mapURL += '&key=' + GLOBAL.GMAPS_API_KEY;
-		mapURL = encodeURI(mapURL);
 
-		$('#impact-link').html('<img src="' + mapURL + '" alt="" id="impact-map" />');
+	geocoder = new google.maps.Geocoder();
+
+	map = new L.Map('map', {center: new L.LatLng(38.44, -78.87), zoom: 9});
+	var googleLayer = new L.Google('ROADMAP');
+	map.addLayer(googleLayer);
+
+	if (charities.length > 0) {
+		for (var i = 0; i < charities.length; i++) {
+			mapAddress = charities[i].charity.address + ', ';
+			mapAddress += charities[i].charity.city + ', ';
+			mapAddress += charities[i].charity.state;
+			codeAddress(charities[i].charity.name, mapAddress);
+		}
+	}
+
+/*
+		//$('#impact-link').html('<img src="' + mapURL + '" alt="" id="impact-map" />');
 
 	} else {
 		$('#impact-link').html(
 			'<p>You haven\'t subscribed to any endowments yet.</p>' +
 			'<p><a href="/" class="btn btn-primary find-endowment-btn">Find an Endowment</a></p>');
 	}
-
+*/
 	
 	// Check if user allows geo-location
 	// if (navigator.geolocation) {
