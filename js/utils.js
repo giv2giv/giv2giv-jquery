@@ -12,10 +12,6 @@ GLOBAL.SERVER_URL = "https://apitest.giv2giv.org";
 GLOBAL.STRIPE_PUB_KEY = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
 Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
 
-GLOBAL.GMAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap";
-GLOBAL.GMAPS_API_KEY = "AIzaSyCn3EJtFHyCKM1BJ5Aevdt_i0llh-PwQ34";
-GLOBAL.GMAPS_PUB_URL = "https://www.google.com/maps/embed/v1/search";
-GLOBAL.GMAPS_DEFAULT_ZOOM = 6;
 
 // Awesome Logging
 // Only display console log output in debug mode, else nothing.

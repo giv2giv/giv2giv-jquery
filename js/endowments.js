@@ -302,7 +302,7 @@ function endowmentSelectors() {
 	$('.endowment-details-btn').off();
 	$('.endowment-details-btn').on('click', function(e) {
 		e.preventDefault();
-		hasher.setHash('endowment/' + $(this).attr('data-id'));
+		hasher.setHash('endowment/' + $(this).attr('data-slug'));
 	});
 }
 
@@ -412,9 +412,15 @@ function onDetails(endowment) {
 		if (endowment.my_balances.is_subscribed) {
 			// Subscribed
 			$('#endowment-details-unsubscribe').attr('data-id', endowment.id);
-			$('#subscription-details').removeClass('hide');      
-		} else {
-			// Not subscribed
+			$('#subscription-details').removeClass('hide');  
+		}
+		else if (endowment.my_balances.my_donations_amount > 0) {
+			// Balance but not subscribed
+			$('#subscription-balance').removeClass('hide');
+			$('#endowment-details-balance-subscribe').attr('data-id', endowment.id);
+		}
+		else {
+			// No balance, not subscribed
 			$('#no-subscription').removeClass('hide');
 			$('#endowment-details-subscribe').attr('data-id', endowment.id);
 		}
@@ -434,8 +440,9 @@ function onDetails(endowment) {
 	initSocialShare();
 
 	// Subscribe Button
-	$('#endowment-details-subscribe').off('click');
-	$('#endowment-details-subscribe').on('click', function(e) {
+	$('.endowment-details-subscribe').off('click');
+	$('.endowment-details-subscribe').on('click', function(e) {
+
 		// Now Get Endowment Details
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
@@ -551,19 +558,28 @@ function subscribeSelectors() {
 		var self = $(this);
 		self.button('loading');
 
-		var subscriptionAmount = $('#subscribe-endowment-donation').val();
-		if (subscriptionAmount < GLOBAL.MIN_DONATION) {
+		var amount = $('#subscribe-endowment-donation').val();
+		if (amount < GLOBAL.MIN_DONATION) {
 			self.button('reset');
-			growlError('Sorry! The minimum monthly donation is $' + GLOBAL.MIN_DONATION.toFixed(2));
+			growlError('Sorry! The minimum donation is $' + GLOBAL.MIN_DONATION.toFixed(2));
 			return;
 		}
 
+		var frequency = $('#subscribe-endowment-frequency').val();
+		if (frequency == 'per-month') {
+			endpoint = '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json'	
+		}
+		else {
+			endpoint = '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/one_time_payment.json'	
+		}
+
 		var payload = {};
-		payload.amount = subscriptionAmount;
+		payload.amount = amount;
+		payload.frequency = frequency;
 		payload.endowment_id = self.attr('data-id');
 		var request_payload = JSON.stringify(payload);
 		$.ajax({
-			url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json',
+			url: GLOBAL.SERVER_URL + endpoint,
 			method: 'POST',
 			contentType: 'application/json',
 			dataType:'json',
@@ -578,7 +594,12 @@ function subscribeSelectors() {
 					endowmentSelectors();
 					self.button('reset');
 					$('#no-subscription').addClass('hide');
-					$('#subscription-details').removeClass('hide');
+					if (frequency=='per-month') {
+					  $('#subscription-details').removeClass('hide');
+					}
+					else {
+						$('#subscription-balance').removeClass('hide');
+					}
 					$('#subscribe-endowment-modal').modal('hide');
 					$('#social-share-modal').modal('show');
 					initSocialShare();
