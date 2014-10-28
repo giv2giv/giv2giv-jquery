@@ -12,10 +12,15 @@
 				<p>Number of donors: &nbsp;<span id="endowment-details-donor-count"></span></p>
 			</div>
 			<div class="col-sm-6">
-				<h2>Subscription</h2>
+				<h2>Donations</h2>
 				<div id="no-subscription" class="hide text-center">
-					<p>Subscribe to this endowment!</p>
-					<p><a class="btn btn-success" id="endowment-details-subscribe" data-toggle="modal" href="#">Subscribe</a></p>
+					<p>Donate to this endowment!</p>
+					<p><a class="btn btn-success endowment-details-subscribe" id="endowment-details-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
+				</div>
+				<div id="subscription-balance" class="hide text-center">
+					<p>Your current balance is: </p>
+					<p id="endowment-details-my-balance"></p>
+					<p><a class="btn btn-success endowment-details-subscribe" id="endowment-details-balance-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
 				</div>
 				<div id="subscription-details" class="hide text-center">
 					<p>You are subscribed to this endowment.</p>
