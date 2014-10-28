@@ -1,0 +1,128 @@
+<div class="row first-content">
+	<div class="fixed-column card-header-only">
+		<h1 id="charity-details-header"></h1>
+	</div>
+</div>
+<div class="row">
+	<div class="fixed-column">
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>Details</h2>
+				<p id="charity-details-description"></p>
+				<p>Number of donors: &nbsp;<span id="charity-details-donor-count"></span></p>
+			</div>
+			<div class="col-sm-6">
+				<h2>Donations</h2>
+				<div id="no-subscription" class="hide text-center">
+					<p>Donate to this charity!</p>
+					<p><a class="btn btn-success charity-details-subscribe" id="charity-details-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
+				</div>
+				<div id="subscription-balance" class="hide text-center">
+					<p>Your current balance is: </p>
+					<p id="charity-details-my-balance"></p>
+					<p><a class="btn btn-success charity-details-subscribe" id="charity-details-balance-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
+				</div>
+				<div id="subscription-details" class="hide text-center">
+					<p>You are subscribed to this charity.</p>
+					<p>Your current balance is: </p>
+					<p id="charity-details-my-balance"></p>
+					<p><a class="btn btn-danger charity-unsubscribe-btn" id="charity-details-unsubscribe" href="#unsubscribe-charity-modal" data-toggle="modal">Unsubscribe</a></p>
+				</div>
+				<div id="subscription-signup" class="hide text-center">
+					<a href="#signin"><button class="btn btn-success">Sign In</button></a>
+				</div>
+			</div>
+		</div>
+		<div class="row first-content">
+			<div class="col-xs-12">
+				<h2>Sharing</h2>
+			</div>
+			<div class="col-sm-6">
+	      <ul class="social-buttons cf">
+          <li>
+          	<a href="https://twitter.com/share" class="socialite twitter-share" data-text="" data-url="" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+          </li>
+          <li>
+              <a href="https://plus.google.com/share?url=https://giv2giv.org" class="socialite googleplus-one" data-size="tall" data-href="https://giv2giv.org" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+          </li>
+          <li>
+              <a href="" class="socialite facebook-like" data-href="" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+          </li>
+          <li>
+              <a href="" class="socialite linkedin-share" data-url="" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+          </li>
+	      </ul>
+	    </div>
+      <div class="col-sm-6">
+				<h4>Share this charity via email:</h4>
+				<div class="form-group">
+					<!--<label for="friend-email"></label>-->
+					<input type="email" class="form-control" id="friend-email" placeholder="Your friend's email address">
+					<button data-loading-text="<i class='fa fa-leaf fa-spin'></i> Sending" class="btn btn-success" id="share-via-email">Send</button>
+				</div>
+				
+			</div>
+		</div>
+		<div class="row first-content">
+			<div class="col-xs-12">
+				<h2>My Past Donations</h2>
+				<table id="donations-table" class="table">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Gross Amount</th>
+							<th>Net Amount</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+					<tfoot>
+						<tr>
+							<td colspan="3">Number of times I have donated:&nbsp;
+							<span id="charity-details-my-donations-count"></span>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			<!-- 	<strong>* Note: Some donations may take a few minutes to appear.</strong> -->
+			</div>
+		</div>
+		<div class="row first-content">
+			<div class="col-xs-12 text-center">
+				<div id="projectedBalance" class="text-center"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</div>
+				<a id="open-assumptions-modal" href='#assumptions-modal' class='' data-toggle="modal">Click to View Projection Assumptions</a>
+			</div>
+		</div>
+		<div class="row first-content">
+			<div class="col-xs-12">
+				<h2>Benefit Charities</h2>
+
+<!--				<div id="impact-link" class="text-center">
+					<i class="fa fa-leaf fa-spin"></i>&nbsp;Loading Data&hellip;
+				</div>
+-->
+				<div id="map">
+				 	<i class="fa fa-leaf fa-spin"></i>&nbsp;Loading Data&hellip;
+				 </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 text-center">
+				<h3>Global Grants Paid</h3>
+				<p id="charity-details-grants"></p>
+			</div>
+			<div class="col-sm-6 text-center">
+				<h3>My Grants Paid</h3>
+				<p id="charity-details-my-grants-amount"></p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row first-content last-content">
+	<div class="fixed-column">
+		<div class="row">
+			<div class="col-xs-12">
+				<div id="balanceHistory" class="text-center"><i class='fa fa-leaf fa-spin'></i>&nbsp;Loading Data&hellip;</div>
+			</div>
+		</div>
+	</div>
+</div>

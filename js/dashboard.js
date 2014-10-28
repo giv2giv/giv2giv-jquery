@@ -63,14 +63,35 @@ function fetchDonorData() {
 				}
 			}, totalBalance);
 
-			// add charity data to google map
+			// Clear out previous data
+			$("#current-subscriptions-table").find('tbody:last').html("");
+
 			var d = [];
 			$.each(data, function(index, val) {
+				// add charity data to google map
 				$.each(val.charities, function(index, val) {
 					d.push(val);
 				});
+				var $row = $("#current-subscriptions-table").find('tbody:last').append('<tr></tr>');
+				$row.append("<td align=left><a href=https://www.giv2giv.org/#endowment/"+val.slug+">"+val.name+"</a></td>");
+				$row.append("<td align=left>$"+val.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
+
+				if (val.canceled_at) {
+					ugly_statement_timestamp = new Date(val.canceled_timestamp * 1000);
+					pretty_statement_timestamp = prettify_timestamp(ugly_statement_timestamp);
+					$row.append("<td align=left>Canceled "+pretty_statement_timestamp+"</td>");	
+				}
+				else {
+					$row.append("<td align=left>Donating $"+val.my_balances.my_subscription_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" per month</td>");	
+				}
+				
 			});
+
 			MapsUI.start.dispatch(d);
+
+
+
+
 
 		}).fail(function(data) {
 			log(data);

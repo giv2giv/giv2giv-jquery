@@ -505,6 +505,7 @@ var WebUI = function() {
 			contentType: "application/json",
 			dataType: "json"
 		}).done(function (data) {
+			log(data);
 			$.ajaxSetup({
 				beforeSend: function (xhr, settings) {
 					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
@@ -714,6 +715,26 @@ var WebUI = function() {
 			});
 		}
 
+	});
+
+	// Charity Details Route
+	crossroads.addRoute("/charity/{id}", function (id) {
+		// Load Endowment Details First
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/charity/" + id + ".json",
+			type: "GET",
+			contentType: "application/json",
+			dataType: "json"
+		}).done(function (data) {
+			loadPage("/ui/charity_details.html", function() {
+				$("#app-container").attr("data-page-id", "charity-details");
+				setPageMetadata(!activeSession(), null, "giv2giv - " + data.charity.name + " Details");
+				// Load JS
+				CharityUI.details.dispatch(data.charity);
+			});
+		}).fail(function (data) {
+			growlError("There was an error loading the Endowment Details.");
+		});
 	});
 
 	// Donor Route

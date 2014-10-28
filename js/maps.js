@@ -17,6 +17,7 @@ L.Icon.Default.imagePath = "../css/images/";
 MapsUI.start.add(onStart);
 
 function codeAddress(name, address) {
+  
   geocoder.geocode( { 'address': address }, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
     	var location = new L.latLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
@@ -31,7 +32,6 @@ function codeAddress(name, address) {
   });
 }
 
-
 // Initialize
 function onStart(charities) {
 
@@ -44,10 +44,20 @@ function onStart(charities) {
 
 	if (charities.length > 0) {
 		for (var i = 0; i < charities.length; i++) {
-			mapAddress = charities[i].charity.address + ', ';
-			mapAddress += charities[i].charity.city + ', ';
-			mapAddress += charities[i].charity.state;
-			codeAddress(charities[i].charity.name, mapAddress);
+			mapAddress = charities[i].address + ', ';
+			mapAddress += charities[i].city + ', ';
+			mapAddress += charities[i].state;
+			if (typeof charities[i].latitude !== 'undefined') {
+				var location = new L.latLng(charities[i].latitude, charities[i].longitude);
+	    	locations.push(location);
+	    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<b>"+charities[i].name+"</b><br>"+charities[i].address);
+	  	  oms.addMarker(marker);
+	    	var bounds = new L.LatLngBounds(locations);
+				map.fitBounds(bounds);
+			}
+			else  {
+				codeAddress(charities[i].name, mapAddress);
+			}
 		}
 	}
 

@@ -302,7 +302,7 @@ function endowmentSelectors() {
 	$('.endowment-details-btn').off();
 	$('.endowment-details-btn').on('click', function(e) {
 		e.preventDefault();
-		hasher.setHash('endowment/' + $(this).attr('data-slug'));
+		hasher.setHash('endowment/' + $(this).attr('data-id'));
 	});
 }
 
@@ -359,7 +359,7 @@ function DetailedCard(sub, isFeatured) {
 			this.cardTitle+
 		'</div><p><em>'+
 			this.cardBody+
-		'</p></em>'+
+		'</em></p>'+
 
 		div('desc')+'<strong>'+
 			this.donorCount+'</strong>'+this.donorString+
@@ -498,7 +498,8 @@ function onDetails(endowment) {
 	$('#endowment-details-donor-count').html(endowment.global_balances.endowment_donor_count);
 	$('#endowment-details-grants').html('$'+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
-	if (endowment.my_balances) {
+	if (endowment.my_balances !== 'undefined') {
+	    
 		$('#endowment-details-my-balance').html('$'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 		$('#endowment-details-my-donations-count').html(endowment.my_balances.my_donations_count);
 		$('#endowment-details-my-grants-amount').html('$'+endowment.my_balances.my_grants_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -539,6 +540,7 @@ function fetchEndowmentDonations(id, callback) {
 }
 
 function handleEndowmentDonations(data) {
+	log(data);
 	if(data.message === undefined) {
 		$.each(data.donations, function(k, v) {
 			var date = new Date(v.created_at);

@@ -10,6 +10,10 @@ DonorUI.start.add(onStart);
 
 // (Re)Start Donor UI
 function onStart() {
+
+	// Set token for verify_knox account
+//	$("#knox_payments_script").attr("response_url", GLOBAL.SERVER_URL+"/api/payment_accounts/verify_knox.json?token="+$.cookie("session"));
+	
 	// Load Donor Profile
 	fetchDonorProfile(function() {
 		// Load Payment Accounts
@@ -93,6 +97,7 @@ function fetchDonorProfile(callback) {
 		contentType: "application/json"
 	}).done(function(data) {
 		// fill out profile form
+		log(data);
 		$("#donor-profile-email").val(data.donor.email);
 		$("#donor-profile-name").val(data.donor.name);
 		$("#donor-profile-address").val(data.donor.address);
@@ -253,38 +258,6 @@ function loadUI() {
 		});
 	});
 
-	/**
-	 * Return a timestamp with the format "m/d/yy h:MM:ss TT"
-	 * @type {Date}
-	 */
-	 
-	function prettify_timestamp(stamp) {
-		 
-	// Create an array with the current month, day and time
-		var date = [ stamp.getMonth() + 1, stamp.getDate(), stamp.getFullYear() ];
-	 
-	// Create an array with the current hour, minute and second
-		var time = [ stamp.getHours(), stamp.getMinutes(), stamp.getSeconds() ];
-	 
-	// Determine AM or PM suffix based on the hour
-		var suffix = ( time[0] < 12 ) ? "AM" : "PM";
-	 
-	// Convert hour from military time
-		time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
-	 
-	// If hour is 0, set it to 12
-		time[0] = time[0] || 12;
-	 
-	// If seconds and minutes are less than 10, add a zero
-		for ( var i = 1; i < 3; i++ ) {
-			if ( time[i] < 10 ) {
-				time[i] = "0" + time[i];
-			}
-		}
-	 
-	// Return the formatted string
-		return date.join("/") + " " + time.join(":") + " " + suffix;
-	}
 
 	// Statement Rendering Handlers
 	$("#donor-statement-button").on("click", function(e) {
