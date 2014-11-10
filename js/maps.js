@@ -18,9 +18,7 @@ L.Icon.Default.imagePath = "../css/images/";
 MapsUI.start.add(onStart);
 
 function codeAddress(name, slug, address) {
-  log(name);
-  log(slug);
-  log(address);
+  
   geocoder.geocode( { 'address': address }, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
     	var location = new L.latLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());

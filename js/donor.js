@@ -12,7 +12,7 @@ DonorUI.start.add(onStart);
 function onStart() {
 
 	// Set token for verify_knox account
-	$("#knox_payments_script").attr("response_url", GLOBAL.SERVER_URL+"/api/donors/payment_accounts/verify_knox.json?token="+$.cookie("session"));
+	//$("#knox_payments_script").attr("response_url", GLOBAL.SERVER_URL+"/api/donors/payment_accounts/verify_knox.json?token="+$.cookie("session"));
 	
 	// Load Donor Profile
 	fetchDonorProfile(function() {

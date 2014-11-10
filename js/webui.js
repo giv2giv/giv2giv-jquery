@@ -724,7 +724,6 @@ var WebUI = function() {
 		});
 	});
 
-
 	// Charity Details Route
 	crossroads.addRoute("/charity/{id}", function (id) {
 		// Load Endowment Details First

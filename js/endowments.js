@@ -499,7 +499,6 @@ function onDetails(endowment) {
 	$('#endowment-details-grants').html('$'+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
 	if (endowment.my_balances) {
-	    
 		$('#endowment-details-my-balance').html('$'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 		$('#endowment-details-my-donations-count').html(endowment.my_balances.my_donations_count);
 		$('#endowment-details-my-grants-amount').html('$'+endowment.my_balances.my_grants_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));

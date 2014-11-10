@@ -90,7 +90,6 @@ function fetchDonorData() {
 
 			MapsUI.start.dispatch(d);
 
-
 		}).fail(function(data) {
 			log(data);
 			growlError('An error occured while loading the dashboard.');

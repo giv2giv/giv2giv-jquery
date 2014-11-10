@@ -98,7 +98,6 @@ function DetailedCharityCard(sub, isFeatured) {
 
 	/*
 	this.isFeatured = isFeatured;
-
 	this.pluralDonors = this.donorCount !== 1;
 	this.donorString = this.pluralDonors ? ' individual donors' : ' individual donor';
 	this.donationsCount = sub.global_balances.endowment_donations_count;
