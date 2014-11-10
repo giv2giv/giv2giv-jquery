@@ -1,4 +1,5 @@
 // Google Maps functionality
+// This uses leaflet.js with  Google Maps tile plugin
 
 // Signal Hook
 var MapsUI = {
@@ -16,12 +17,15 @@ L.Icon.Default.imagePath = "../css/images/";
 // Listeners
 MapsUI.start.add(onStart);
 
-function codeAddress(name, address) {
+function codeAddress(name, slug, address) {
+  log(name);
+  log(slug);
+  log(address);
   geocoder.geocode( { 'address': address }, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
     	var location = new L.latLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
     	locations.push(location);
-    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<b>"+name+"</b><br>"+address);
+    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+slug+"><b>"+name+"</b><br>"+address+"</a>");
   	  oms.addMarker(marker);
     	var bounds = new L.LatLngBounds(locations);
 			map.fitBounds(bounds);
@@ -30,7 +34,6 @@ function codeAddress(name, address) {
     }
   });
 }
-
 
 // Initialize
 function onStart(charities) {
@@ -44,10 +47,20 @@ function onStart(charities) {
 
 	if (charities.length > 0) {
 		for (var i = 0; i < charities.length; i++) {
-			mapAddress = charities[i].charity.address + ', ';
-			mapAddress += charities[i].charity.city + ', ';
-			mapAddress += charities[i].charity.state;
-			codeAddress(charities[i].charity.name, mapAddress);
+			mapAddress = charities[i].address + ', ';
+			mapAddress += charities[i].city + ', ';
+			mapAddress += charities[i].state;
+			if (typeof charities[i].latitude !== 'undefined') {
+				var location = new L.latLng(charities[i].latitude, charities[i].longitude);
+	    	locations.push(location);
+	    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+charities[i].slug+"><b>"+charities[i].name+"</b><br>"+charities[i].address+"</a>");
+	  	  oms.addMarker(marker);
+	    	var bounds = new L.LatLngBounds(locations);
+				map.fitBounds(bounds);
+			}
+			else  {
+				codeAddress(charities[i].name, charities[i].slug, mapAddress);
+			}
 		}
 	}
 

@@ -57,7 +57,7 @@ function fetchFeaturedEndowments(callback) {
 		handleFeaturedEndowments(data);
 	}).fail(function(data) {
 		log(data);
-		growlError('An error occured while loading the Featured Endowments.');
+		growlError('An error occurred while loading the Featured Endowments.');
 	}).always(function() {
 		callback();
 	});
@@ -99,7 +99,7 @@ function fetchSubscribedEndowments(callback) {
 		handleSubscribedEndowments(data);
 	}).fail(function(data) {
 		log(data);
-		growlError('An error occured while loading your Subscribed Endowments.');
+		growlError('An error occurred while loading your Subscribed Endowments.');
 	}).always(function(data) {
 		// Callbacks
 		if(typeof callback === 'function') {
@@ -181,11 +181,11 @@ function endowmentSelectors() {
 				// Loop Through Charities & build Results
 				var results = [];
 				if(data.message === undefined) {
-					$.each(data, function(k, v) {
-						log(v.charity);
+					$.each(data.charities, function(k, v) {
+						log(v);
 						var charity = {};
-						charity.id = v.charity.id;
-						charity.text = v.charity.name + ' (' + v.charity.city + ', ' + v.charity.state + ')';
+						charity.id = v.id;
+						charity.text = v.name.titleize() + ' (' + v.city.titleize() + ', ' + v.state + ')';
 						results.push(charity);
 					});
 				}
@@ -226,11 +226,11 @@ function endowmentSelectors() {
 			dataType: 'json'
 		}).done(function(data) {
 			$('#add-endowment-modal').modal('hide');
-			hasher.setHash('endowment/'+data.endowment.id);
+			hasher.setHash('endowment/'+data.endowment.slug);
 			growlSuccess('Successfully created your endowment. Now subscribe, and share your endowment to maximize your impact!');
 		}).fail(function(data) {
 			log(data);
-			growlError('An error occured while adding this endowment.');
+			growlError('An error occurred while adding this endowment.');
 		});
 	});
 
@@ -302,7 +302,7 @@ function endowmentSelectors() {
 	$('.endowment-details-btn').off();
 	$('.endowment-details-btn').on('click', function(e) {
 		e.preventDefault();
-		hasher.setHash('endowment/' + $(this).attr('data-slug'));
+		hasher.setHash('endowment/' + $(this).attr('data-id'));
 	});
 }
 
@@ -359,7 +359,7 @@ function DetailedCard(sub, isFeatured) {
 			this.cardTitle+
 		'</div><p><em>'+
 			this.cardBody+
-		'</p></em>'+
+		'</em></p>'+
 
 		div('desc')+'<strong>'+
 			this.donorCount+'</strong>'+this.donorString+
@@ -499,6 +499,7 @@ function onDetails(endowment) {
 	$('#endowment-details-grants').html('$'+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
 	if (endowment.my_balances) {
+	    
 		$('#endowment-details-my-balance').html('$'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 		$('#endowment-details-my-donations-count').html(endowment.my_balances.my_donations_count);
 		$('#endowment-details-my-grants-amount').html('$'+endowment.my_balances.my_grants_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -513,7 +514,6 @@ function onDetails(endowment) {
 
 	balanceGraph(endowment.global_balances, $('#projectedBalance'), 'Projected Global Impact',
 		'projected_balance', 'balance');
-
 	MapsUI.start.dispatch(endowment.charities);
 }
 
@@ -539,6 +539,7 @@ function fetchEndowmentDonations(id, callback) {
 }
 
 function handleEndowmentDonations(data) {
+	log(data);
 	if(data.message === undefined) {
 		$.each(data.donations, function(k, v) {
 			var date = new Date(v.created_at);

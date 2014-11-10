@@ -347,11 +347,9 @@ var WebUI = function() {
 			url: GLOBAL.SERVER_URL + "/api/endowment.json?page=1&per_page=5&query=%QUERY",
 			filter: function (response) {
 				var results = [];
-				log(response);
 				if (response.message === undefined) {
 					$.each(response.endowments, function (key, value) {
 						var endowment = {};
-						log(value);
 						endowment.id = value.slug;
 						endowment.value = value.name;
 						endowment.desc = value.description;
@@ -505,6 +503,7 @@ var WebUI = function() {
 			contentType: "application/json",
 			dataType: "json"
 		}).done(function (data) {
+			log(data);
 			$.ajaxSetup({
 				beforeSend: function (xhr, settings) {
 					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
@@ -513,7 +512,7 @@ var WebUI = function() {
 			// Set Cookie
 			$.cookie("session", data.session.token);
 			startApplication();
-			$btn.button("reset");
+			$btn.historybutton("reset");
 		}).fail(function (data) {
 			$btn.button("reset");
 			var res = JSON.parse(data.responseText);
@@ -714,6 +713,37 @@ var WebUI = function() {
 			});
 		}
 
+	});
+
+	crossroads.addRoute("/charities", function() {
+		var navTab = activeSession() ? $("#charities-nav") : $("#pub-charities-nav");
+		loadPage("/ui/charities.html", function() {
+			$("#app-container").attr("data-page-id", "charities");
+			setPageMetadata(!activeSession(), navTab, "giv2giv - Charities");
+			CharitiesUI.start.dispatch(); // Load JS
+		});
+	});
+
+
+	// Charity Details Route
+	crossroads.addRoute("/charity/{id}", function (id) {
+		// Load Endowment Details First
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/charity/" + id + ".json",
+			type: "GET",
+			contentType: "application/json",
+			dataType: "json"
+		}).done(function (data) {
+			loadPage("/ui/charity_details.html", function() {
+				$("#app-container").attr("data-page-id", "charity-details");
+				setPageMetadata(!activeSession(), null, "giv2giv - " + data.charity.name + " Details");
+				// Load JS
+				log(data.charity);
+				CharitiesUI.details.dispatch(data.charity);
+			});
+		}).fail(function (data) {
+			growlError("There was an error loading the Endowment Details.");
+		});
 	});
 
 	// Donor Route

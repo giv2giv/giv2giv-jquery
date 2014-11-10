@@ -454,21 +454,21 @@ nav.navbar {
 		min-height: 100%;
 	}
 	.primary-description {
-		margin-top: 150px;
+		margin-top: 75px;
 		font-weight: bold;
 		font-family: 'PT Sans', Helvetica, Arial, sans-serif;
-		font-size: 4em;
+		font-size: 5em;
 		line-height: 115%;
 	}
-		.primary-description span {
-			display: block;
-			font-weight: normal;
-			font-style: italic;
-			font-size: 0.75em;
-		}
+	.primary-description span {
+		display: block;
+		font-weight: normal;
+		font-style: italic;
+		font-size: 0.75em;
+	}
 	.secondary-description {
 			margin-top: 50px;
-			font-size: 2em;
+			font-size: 3em;
 	}
 	.landing-lights {
 		display: block;
