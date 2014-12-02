@@ -462,6 +462,7 @@ var WebUI = function() {
 				$btn.button("reset");
 			}).fail(function (data) {
 				var res = JSON.parse(data.responseText);
+
 				$btn.button("reset");
 				if (res.message == "unauthorized") {
 					growlError("Could not login with that email or password");
@@ -517,7 +518,7 @@ var WebUI = function() {
 			$btn.button("reset");
 			var res = JSON.parse(data.responseText);
 			if (res.message == "unauthorized") {
-				$("#signin-message").html("Could not login with that email or password");
+				growlError("Invalid Username or Password");
 			} else {
 				log("WebUI: Signin Error - " + res.message);
 			}

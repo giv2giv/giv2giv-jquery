@@ -164,6 +164,7 @@ function DetailedCharityCard(sub, isFeatured) {
 
 // (Re)Start Charities Detail UI
 function onCharityDetails(charity) {
+
 	// Subscription Info
 	/*if(WebUI.activeSession()) {
 		fetchEndowmentDonations(endowment.id);
@@ -254,21 +255,40 @@ function onCharityDetails(charity) {
 
 	// Header
 	$('#charity-details-header').html(charity.name.titleize());
-	$.each(charity.tags, function (k, tag) {
-		$('#charity-tags').append('<li>'+tag + '</li>');
-	});
-	$.each(charity.endowments, function (k, endowment) {
-		$('#supporting-endowments').append('<li>'+endowment.name + '</li>');
-	});
+
+	if(charity.tags.length > 0) {
+		$.each(charity.tags, function (k, tag) {
+			$('#charity-tags').append('<li>'+tag + '</li>');
+		});
+	}
+	else {
+		$('#charity-tags').append('<li>None</li>');
+	}
+
+	if(charity.supporting_endowments.length > 0) {
+		$.each(charity.supporting_endowments, function (k, endowment) {
+			$('#supporting-endowments').append("<li><a href='/#endowment/"+endowment.slug+"''>"+endowment.name + "</a></li>");
+		});
+	}
+	else {
+		$('#supporting-endowments').append('<li>None</li>');
+	}
 
 	// Lead Description
 	//$('#charity-details-description').html(charity.description);
-  $('#charity-details-logo').attr('src', GLOBAL.SERVER_URL + '/api/logos/'+charity.slug+'.png');
+
+  $('#charity-details-logo').attr('src', GLOBAL.SERVER_URL + '/logos/nologo.png');
+
+  $('#charity-logo-upload').html("");
+				
 
 	$('#charity-details-address').html(charity.address + "<br>" + charity.city + ", " + charity.state + " " + charity.zip);
 	$('#charity-details-donor-count').html(charity.donor_count);
 	$('#charity-details-pending-grants').html('$'+charity.pending_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$('#charity-details-delivered-grants').html('$'+charity.delivered_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+
+	MapsUI.start.dispatch([ charity ]);
+
 /*
 	if (charity.my_balances) {
 		$('#charity-details-my-balance').html('$'+charity.my_balances.my_charity_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -285,8 +305,9 @@ function onCharityDetails(charity) {
 
 	balanceGraph(charity.global_balances, $('#projectedBalance'), 'Projected Global Impact', 'projected_balance', 'balance');
 */
-log(charity)
-	MapsUI.start.dispatch(charity.charities);
+
+	
+
 }
 
 function initCharitySocialShare() {
@@ -322,8 +343,7 @@ function initCharitySocialShare() {
 
 // Reload jQuery Selectors
 function charitySelectors() {
-	log('EndowmentsUI: Selectors');
-
+	log('CharitiesUI: Selectors');
 	$('#refresh-featured-charities').off('click');
 	$('#refresh-featured-charities').on('click', function(e) {
 		$(this).addClass('fa-spin');
@@ -338,7 +358,7 @@ function charitySelectors() {
 	$('.charity-details-btn').off();
 	$('.charity-details-btn').on('click', function(e) {
 		e.preventDefault();
-		hasher.setHash('charity/' + $(this).attr('data-id'));
+		hasher.setHash('charity/' + $(this).attr('data-slug'));
 	});
 
 }

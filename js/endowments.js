@@ -405,6 +405,8 @@ function DetailedCard(sub, isFeatured) {
 
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
+
+
 	// Subscription Info
 	if(WebUI.activeSession()) {
 		fetchEndowmentDonations(endowment.id);
@@ -442,7 +444,6 @@ function onDetails(endowment) {
 	// Subscribe Button
 	$('.endowment-details-subscribe').off('click');
 	$('.endowment-details-subscribe').on('click', function(e) {
-
 		// Now Get Endowment Details
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/endowment/' + $(this).attr('data-id') + '.json',
@@ -491,12 +492,23 @@ function onDetails(endowment) {
 
 	unsubscribeSelectors();
 
+			
+
+
 	// Header
 	$('#endowment-details-header').html(endowment.name);
 	// Lead Description
 	$('#endowment-details-description').html(endowment.description);
 	$('#endowment-details-donor-count').html(endowment.global_balances.endowment_donor_count);
 	$('#endowment-details-grants').html('$'+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+
+
+	var $charity_div = $('#charity_list');
+	$charity_div.html('<ul>');
+	$.each(endowment.charities, function(index, charity) {
+		$charity_div.append('<li>' + charity.name+'</li>');
+	});
+	$charity_div.append('</ul>');
 
 	if (endowment.my_balances) {
 		$('#endowment-details-my-balance').html('$'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));

@@ -48,6 +48,12 @@ footer {
 .text-muted {
 	font-size: 14px;
 }
+.text-medium {
+	font-size: 20px;
+}
+.text-medium {
+	font-size: 24px;
+}
 
 code {
 	font-size: 80%;
@@ -732,6 +738,66 @@ nav.navbar {
 	100% {opacity: 0.8;}
 }
 
+/* file-upload */
+
+@charset "UTF-8";
+/*
+ * jQuery File Upload UI Plugin CSS 8.0
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+.container {
+  max-width:400px;
+  margin-top:15px;
+  margin-left:10px;
+}
+
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  font-size: 23px;
+  direction: ltr;
+  cursor: pointer;
+}
+.fileupload-buttonbar .btn,
+.fileupload-buttonbar .toggle {
+  margin-bottom: 5px;
+}
+.progress-animated .bar {
+  background: url(../images/progressbar.gif) !important;
+  filter: none;
+}
+.fileupload-loading {
+  float: right;
+  width: 32px;
+  height: 32px;
+  background: url(../images/loading.gif) center no-repeat;
+  background-size: contain;
+  display: none;
+}
+.fileupload-processing .fileupload-loading {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  
+}
+
 /* Responsiveness */
 @media (min-width: 1200px) {
 	.dropdown-toggle {
@@ -766,6 +832,7 @@ nav.navbar {
 		padding-top: 15px;
 		padding-bottom: 15px;
 	}
+	.fileupload-buttonbar .toggle,
 }
 @media (max-width: 767px) {
 	#signup-nav a, #signin-nav a {

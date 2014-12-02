@@ -10,9 +10,13 @@
 				<h2>Details</h2>
 				<p id="endowment-details-description"></p>
 				<p>Number of donors: &nbsp;<span id="endowment-details-donor-count"></span></p>
+				<p>Benefit Charities:
+					<div id="charity_list" class="text-left">
+						<i class="fa fa-leaf fa-spin"></i>&nbsp;Loading Data&hellip;
+					</div>
+				</p>
 			</div>
 			<div class="col-sm-6">
-				<h2>Donations</h2>
 				<div id="no-subscription" class="hide text-center">
 					<p>Donate to this endowment!</p>
 					<p><a class="btn btn-success endowment-details-subscribe" id="endowment-details-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
@@ -29,7 +33,7 @@
 					<p><a class="btn btn-danger endowment-unsubscribe-btn" id="endowment-details-unsubscribe" href="#unsubscribe-endowment-modal" data-toggle="modal">Unsubscribe</a></p>
 				</div>
 				<div id="subscription-signup" class="hide text-center">
-					<a href="#signin"><button class="btn btn-success">Sign In</button></a>
+					<a href="#signin"><button class="btn btn-success">Sign In to Donate</button></a>
 				</div>
 			</div>
 		</div>
@@ -94,12 +98,7 @@
 		</div>
 		<div class="row first-content">
 			<div class="col-xs-12">
-				<h2>Benefit Charities</h2>
-
-<!--				<div id="impact-link" class="text-center">
-					<i class="fa fa-leaf fa-spin"></i>&nbsp;Loading Data&hellip;
-				</div>
--->
+				<h2>Area of Impact</h2>
 				<div id="map">
 				 	<i class="fa fa-leaf fa-spin"></i>&nbsp;Loading Data&hellip;
 				 </div>

@@ -23,7 +23,8 @@ function codeAddress(name, slug, address) {
     if (status == google.maps.GeocoderStatus.OK) {
     	var location = new L.latLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
     	locations.push(location);
-    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+slug+"><b>"+name+"</b><br>"+address+"</a>");
+    	//var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+slug+"><b>"+name+"</b><br>"+address+"</a>");
+    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<b>"+name+"</b><br>"+address);
   	  oms.addMarker(marker);
     	var bounds = new L.LatLngBounds(locations);
 			map.fitBounds(bounds);
@@ -48,10 +49,11 @@ function onStart(charities) {
 			mapAddress = charities[i].address + ', ';
 			mapAddress += charities[i].city + ', ';
 			mapAddress += charities[i].state;
-			if (typeof charities[i].latitude !== 'undefined') {
+			if (typeof charities[i].latitude == null) { 
 				var location = new L.latLng(charities[i].latitude, charities[i].longitude);
 	    	locations.push(location);
-	    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+charities[i].slug+"><b>"+charities[i].name+"</b><br>"+charities[i].address+"</a>");
+	    	//var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+charities[i].slug+"><b>"+charities[i].name+"</b><br>"+charities[i].address+"</a>");
+	    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<b>"+charities[i].name+"</b><br>"+charities[i].address);
 	  	  oms.addMarker(marker);
 	    	var bounds = new L.LatLngBounds(locations);
 				map.fitBounds(bounds);
@@ -60,7 +62,10 @@ function onStart(charities) {
 				codeAddress(charities[i].name, charities[i].slug, mapAddress);
 			}
 		}
+		if (charities.length==1)
+			map.setZoom(9);
 	}
+	
 
 /*
 		//$('#impact-link').html('<img src="' + mapURL + '" alt="" id="impact-map" />');
