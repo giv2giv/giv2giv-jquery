@@ -49,7 +49,8 @@ function onStart(charities) {
 			mapAddress = charities[i].address + ', ';
 			mapAddress += charities[i].city + ', ';
 			mapAddress += charities[i].state;
-			if (typeof charities[i].latitude == null) { 
+
+			if (typeof charities[i].latitude != null) { 
 				var location = new L.latLng(charities[i].latitude, charities[i].longitude);
 	    	locations.push(location);
 	    	//var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+charities[i].slug+"><b>"+charities[i].name+"</b><br>"+charities[i].address+"</a>");
