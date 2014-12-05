@@ -13,18 +13,16 @@
 			</div>
 			<div class="col-sm-6">
 				<div id="no-subscription" class="hide text-center">
-					<p>Donate to this endowment!</p>
+					<p>Help Support This Fund!</p>
 					<p><a class="btn btn-success endowment-details-subscribe" id="endowment-details-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
 				</div>
 				<div id="subscription-balance" class="hide text-center">
-					<p>Your current balance is: </p>
 					<p id="endowment-details-my-balance"></p>
-					<p><a class="btn btn-success endowment-details-subscribe" id="endowment-details-balance-subscribe" data-toggle="modal" href="#">Donate Now</a></p>
+					<p><a class="btn btn-success endowment-details-subscribe" id="endowment-details-balance-subscribe" data-toggle="modal" href="#">Donate Again!</a></p>
 				</div>
 				<div id="subscription-details" class="hide text-center">
 					<p>You are subscribed to this endowment.</p>
-					<p>Your current balance is: </p>
-					<p id="endowment-details-my-balance"></p>
+					<p id="endowment-details-my-balance-subscribed"></p>
 					<p><a class="btn btn-danger endowment-unsubscribe-btn" id="endowment-details-unsubscribe" href="#unsubscribe-endowment-modal" data-toggle="modal">Unsubscribe</a></p>
 				</div>
 				<div id="subscription-signup" class="hide text-center">
@@ -35,6 +33,7 @@
 		<div class="row first-content">
 			<div class="col-xs-12">
 				<h2>Quick stats</h2>
+				<p>Total Fund balance: &nbsp;<span id="endowment-details-fund-balance"></span></p>
 				<p>Number of donors: &nbsp;<span id="endowment-details-donor-count"></span></p>
 				<p>Benefit Charities:
 					<div id="charity_list" class="text-left">

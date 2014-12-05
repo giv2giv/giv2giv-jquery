@@ -87,6 +87,8 @@ function fetchDonorData() {
 				}
 				
 			});
+			
+			$("#benefit_charities").html((d.length>0 ? d.length : "0") + " Benefit Charities");
 
 			MapsUI.start.dispatch(d);
 

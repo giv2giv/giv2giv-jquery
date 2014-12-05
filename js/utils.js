@@ -6,8 +6,8 @@
 // GLOBAL CONSTANTS
 var GLOBAL = {};
 GLOBAL.MIN_DONATION = 5; // $5.00 minimum donation
-GLOBAL.SERVER_URL = "https://api.giv2giv.org";
- 
+GLOBAL.SERVER_URL = "https://apitest.giv2giv.org";
+
 // Setup Stripe
 GLOBAL.STRIPE_PUB_KEY = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";
 Stripe.setPublishableKey(GLOBAL.STRIPE_PUB_KEY);
@@ -136,7 +136,7 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 						balance = '<br/>Balance: $' + this.point.y.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 					}
 					var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-					var month = months[this.point.x.getMonth() - 1];
+					var month = months[this.point.x.getMonth()];
 					return month + ' ' + this.point.x.getDate() + ', ' + this.point.x.getFullYear() + donations + grants + fees + balance;
 				}
 			},

@@ -49,7 +49,7 @@ function fetchFeaturedEndowments(callback) {
 		method: 'GET',
 		data: {
 			page: '1',
-			per_page: '4'
+			per_page: '12'
 		},
 		dataType: 'json',
 		contentType: 'application/json'
@@ -142,7 +142,6 @@ function handleSubscribedEndowments(data) {
 // Reload jQuery Selectors
 function endowmentSelectors() {
 	log('EndowmentsUI: Selectors');
-
 	$('#refresh-featured-endowments').off('click');
 	$('#refresh-featured-endowments').on('click', function(e) {
 		$(this).addClass('fa-spin');
@@ -499,27 +498,33 @@ function onDetails(endowment) {
 	$('#endowment-details-header').html(endowment.name);
 	// Lead Description
 	$('#endowment-details-description').html(endowment.description);
+	$('#endowment-details-fund-balance').html('$'+endowment.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$('#endowment-details-donor-count').html(endowment.global_balances.endowment_donor_count);
 	$('#endowment-details-grants').html('$'+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-
-
-	var $charity_div = $('#charity_list');
-	$charity_div.html('<ul>');
-	$.each(endowment.charities, function(index, charity) {
-		$charity_div.append('<li>' + charity.name+'</li>');
-	});
-	$charity_div.append('</ul>');
-
+log(endowment);
 	if (endowment.my_balances) {
-		$('#endowment-details-my-balance').html('$'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+
+		if (endowment.my_balances.is_subscribed)
+		  $('#endowment-details-my-balance-subscribed').html('My Current Balance: $'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+		else
+			$('#endowment-details-my-balance').html('My Current Balance: $'+endowment.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+
 		$('#endowment-details-my-donations-count').html(endowment.my_balances.my_donations_count);
 		$('#endowment-details-my-grants-amount').html('$'+endowment.my_balances.my_grants_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	}
 	else {
-		$('#endowment-details-my-balance').html('$0.00');
+		$('#endowment-details-my-balance').html('My Current Balance: $0.00');
 		$('#endowment-details-my-donations-count').html('0');
 		$('#endowment-details-my-grants-amount').html('$0.00');
 	}
+
+	var $charity_div = $('#charity_list');
+	$charity_div.html('<ul>');
+	$.each(endowment.charities, function(index, charity) {
+		$charity_div.append('<li>' + charity.name+' in '+charity.city+', '+charity.state+'</li>');
+	});
+	$charity_div.append('</ul>');
+
 	balanceGraph(endowment.global_balances, $('#balanceHistory'), 'Global Balance History',
 		'endowment_balance_history', 'balance');
 
