@@ -640,8 +640,10 @@ function unsubscribeSelectors() {
 		e.preventDefault();
 		// Take ID and get Endowment Details
 		var endowmentId = $(this).attr('data-id') || $('#endowment-details-subscribe').attr('data-id');
+
 		// Set Subscribe Button
-		$('#confirm-unsubscribe-endowment').attr('data-id', endowmentId);
+//		$('#confirm-unsubscribe-endowment').attr('data-id', endowmentId);
+
 		// Now Get Endowment Details
 		$.ajax({
 			url: GLOBAL.SERVER_URL + '/api/endowment/' + endowmentId + '.json',
