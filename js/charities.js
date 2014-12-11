@@ -27,12 +27,22 @@ function onStart() {
 // Get Featured Charities
 function fetchFeaturedCharities(callback) {
 	// Clear Old Data
-	log('Fetching featured charities');
+	if ($.cookie('latitude')) {
+		latitude=$.cookie('latitude');
+		longitude=$.cookie('longitude');
+	}
+	else {
+		latitude=0;
+		longitude=0;
+	}
+	log('Fetching featured charities with lat/long ' + latitude + "/" + longitude);
 	$.ajax({
 		url: GLOBAL.SERVER_URL + '/api/charity/near.json',
 		method: 'GET',
 		data: {
-			radius: '25'
+			radius: '25',
+			latitude: latitude,
+			longitude: longitude
 		},
 		dataType: 'json',
 		contentType: 'application/json'
@@ -144,12 +154,7 @@ function DetailedCharityCard(sub, isFeatured) {
 	*/
 
 	div('bottom')+
-		'<button data-id="'+this.slug+'" class="btn btn-primary charity-details-btn">More Details</button> ';
-/*			if (this.isSubscribed) {
-				html+='<button data-id="'+this.id+'" class="btn btn-danger endowment-unsubscribe-btn">Unsubscribe</button>';
-			} else {
-				html+='<button data-id="'+this.id+'" class="btn btn-success endowment-subscribe-btn">Subscribe</button>';
-			}*/html+=
+		'<button data-id="'+this.slug+'" class="btn btn-primary charity-details-btn">More Details</button> '+
 	'</div>';
 
 	this.getHTML = function() {
@@ -277,7 +282,8 @@ function onCharityDetails(charity) {
 	// Lead Description
 	//$('#charity-details-description').html(charity.description);
 
-  $('#charity-details-logo').attr('src', GLOBAL.SERVER_URL + '/logos/nologo.png');
+	$('#charity-details-logo').attr('src', GLOBAL.SERVER_URL + '/logos/' + charity.slug +'.png').height(200).width(200);;
+  
 
   $('#charity-logo-upload').html("");
 				
@@ -358,7 +364,7 @@ function charitySelectors() {
 	$('.charity-details-btn').off();
 	$('.charity-details-btn').on('click', function(e) {
 		e.preventDefault();
-		hasher.setHash('charity/' + $(this).attr('data-slug'));
+		hasher.setHash('charity/' + $(this).attr('data-id'));
 	});
 
 }

@@ -521,7 +521,8 @@ log(endowment);
 	var $charity_div = $('#charity_list');
 	$charity_div.html('<ul>');
 	$.each(endowment.charities, function(index, charity) {
-		$charity_div.append('<li>' + charity.name+' in '+charity.city+', '+charity.state+'</li>');
+		//$charity_div.append('<li>' + charity.name+' in '+charity.city+', '+charity.state+'</li>');
+		$charity_div.append("<li><a href='/#charity/" + charity.slug+ "'>" + charity.name+' in '+charity.city+', '+charity.state+'</a></li>');
 	});
 	$charity_div.append('</ul>');
 

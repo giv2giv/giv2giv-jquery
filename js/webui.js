@@ -3,39 +3,6 @@
 // AND ROUTING HANDLER //
 // =================== //
 
-// Facebook Bits
-window.fbAsyncInit = function() {
-	FB.init({
-		appId      : '453893384741267',
-		cookie     : true,  // enable cookies to allow the server to access 
-												// the session
-		xfbml      : true,  // parse social plugins on this page
-		version    : 'v2.1' // use version 2.1
-	});
-
-	FB.getLoginStatus(function(response) {
-		if(response.status == 'connected') {
-			FB.api('/me', function(response) {
-				// Enable Button
-				$("#facebook-signin").prop('disabled', false);
-				$("#facebook-signin").html('<i class="fa fa-facebook"></i> Sign In as ' + response.name);
-			});
-		} else {
-			// Enable Button
-			$("#facebook-signin").prop('disabled', false);
-			$("#facebook-signin").html('<i class="fa fa-facebook"></i> Sign Up with Facebook');
-		}
-	});
-};
-
-// Load the SDK asynchronously
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=453893384741267&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
 
 var WebUI = function() {
 	var isFacebookAuthorized = false;
@@ -163,44 +130,45 @@ var WebUI = function() {
 
 	function handleFacebookLogin(authResponse, accepted_terms) {
 
-	// send token to server, receive g2g session ID back
-	console.log(authResponse.authResponse.accessToken);
+		// send token to server, receive g2g session ID back
+		console.log(authResponse.authResponse.accessToken);
 
-	FB.api('/me', function(response) {
-		var payload = JSON.stringify({
-			"token": authResponse.authResponse.accessToken,
-			"accepted_terms": accepted_terms
-		});
+		FB.api('/me', function(response) {
+			var payload = JSON.stringify({
+				"token": authResponse.authResponse.accessToken,
+				"accepted_terms": accepted_terms
+			});
 
-		$.ajax({
-			url: GLOBAL.SERVER_URL + "/api/sessions/create_facebook.json",
-			type: "POST",
-			data: payload,
-			contentType: "application/json",
-			dataType: "json"
-		}).done(function (data) {
-			$.ajaxSetup({
-				beforeSend: function (xhr, settings) {
-					xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
+			$.ajax({
+				url: GLOBAL.SERVER_URL + "/api/sessions/create_facebook.json",
+				type: "POST",
+				data: payload,
+				contentType: "application/json",
+				dataType: "json"
+			}).done(function (data) {
+				$.ajaxSetup({
+					beforeSend: function (xhr, settings) {
+						xhr.setRequestHeader("Authorization", "Token token=" + data.session.token);
+					}
+				});
+				// Set Cookie
+				$.cookie("session", data.session.token);
+				WebUI.startApplication();
+			}).fail(function (data) {
+				var res = JSON.parse(data.responseText);
+				if (res.message == "unauthorized") {
+					growlError("Could not authorize using that Facebook token");
+				} else {
+					log("WebUI: Signin Error - " + res.message);
 				}
 			});
-			// Set Cookie
-			$.cookie("session", data.session.token);
-			WebUI.startApplication();
-		}).fail(function (data) {
-			var res = JSON.parse(data.responseText);
-			if (res.message == "unauthorized") {
-				growlError("Could not authorize using that Facebook token");
-			} else {
-				log("WebUI: Signin Error - " + res.message);
-			}
-		});
-	}); // FB.api end
-} // hendleFacebookLogin END
+		}); // FB.api end
+	} // hendleFacebookLogin END
 
 	// Start Application
 	// This is only loaded on full page refresh or first visit
 	function startApplication(callback) {
+
 		log("WebUI: Starting Application");
 		if (activeSession()) {
 			// Get Donor Info
