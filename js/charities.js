@@ -282,11 +282,11 @@ function onCharityDetails(charity) {
 	// Lead Description
 	//$('#charity-details-description').html(charity.description);
 
-	$('#charity-details-logo').attr('src', GLOBAL.SERVER_URL + '/logos/' + charity.slug +'.png').height(200).width(200);;
+	$('#charity-details-logo').attr('src', GLOBAL.SERVER_URL + '/logos/' + charity.slug +'.png');
+	$('#charity-details-logo').css({"max-height":"100%","max-width":"100%"});
   
-
   $('#charity-logo-upload').html("");
-				
+			
 
 	$('#charity-details-address').html(charity.address + "<br>" + charity.city + ", " + charity.state + " " + charity.zip);
 	$('#charity-details-donor-count').html(charity.donor_count);
