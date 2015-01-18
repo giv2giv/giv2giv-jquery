@@ -270,18 +270,16 @@ function endowmentSelectors() {
 					$('#subscribe-endowment-payment-accounts').append('<option>No Payment Accounts</option>');
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {
-					$.each(data, function(k, v) {
-						// @TODO: Warning: Magic
-						var i = v[0];
-						var ii = Object.keys(i);
-						var iii = i[ii[0]];
-						var c = iii.cards[0];
-						var cc = c[0];
-						var ccc = Object.keys(cc);
-						var card = cc[ccc[0]];
-						// Create Option
+
+					$.each(data, function(k, payment_account) {
+
 						var $select = $('#subscribe-endowment-payment-accounts');
-						$select.append('<option value="'+ii+'">'+card.type+' - '+card.last4+' ('+card.exp_month+'/'+card.exp_year+')</option>');
+						if (payment_account.processor=='stripe') {
+							$select.append('<option value="'+payment_account.id+'">'+payment_account.card_info.type+' - '+payment_account.card_info.last4+' ('+payment_account.card_info.exp_month+'/'+payment_account.card_info.exp_year+')</option>');
+						}
+						else if (payment_account.processor=='knox') {
+							$select.append('<option value="'+payment_account.id+'">Bank Account connected via Knox Payments</option>');
+						}
 					});
 					// Show Modal
 					$('#subscribe-endowment-modal').modal('show');
@@ -405,7 +403,6 @@ function DetailedCard(sub, isFeatured) {
 // (Re)Start Endowments Detail UI
 function onDetails(endowment) {
 
-
 	// Subscription Info
 	if(WebUI.activeSession()) {
 		fetchEndowmentDonations(endowment.id);
@@ -430,15 +427,8 @@ function onDetails(endowment) {
 		$('#subscription-signup').removeClass('hide');
 	}
 
-	// Add social sharing text
-	$('.twitter-share').attr('data-text', "Join me at giv2giv and support my endowment \"" + endowment.name + "\" #impinv #socint");
-	$('.facebook-like').attr('href', "https://www.facebook.com/sharer.php?s=100p[url]=https://giv2giv.org/#endowment/"+endowment.slug+"&p[title]=Joinmeatgiv2giv.org&p[summary]=Joinmeathttps://giv2giv.org/#endowment/" + endowment.slug + "Supportmyendowment" + endowment.name + "Thanks");
-	$('.facebook-like').attr('data-href', "https://giv2giv.org/#endowment/"+endowment.slug);
-	$('.linkedin-share').attr('href', "https://www.linkedin.com/shareArticle?mini=true&amp;url=https://giv2giv.org/#endowment/"+endowment.slug+"&amp;title=giv2giv.org");
-	$('.linkedin-share').attr('data-url', "https://giv2giv.org/#endowment/"+endowment.slug);
-
 	subscribeSelectors();
-	initSocialShare();
+	initSocialShare(endowment);
 
 	// Subscribe Button
 	$('.endowment-details-subscribe').off('click');
@@ -466,19 +456,18 @@ function onDetails(endowment) {
 					$('#subscribe-endowment-payment-accounts').append('<option>No Payment Accounts</option>');
 					$('#subscribe-endowment-payment-accounts').attr('disabled', 'disabled');
 				} else {
-					$.each(data, function(k, v) {
-						// for the love of god man make this prettier!
-						var i = v[0];
-						var ii = Object.keys(i);
-						var iii = i[ii[0]];
-						var c = iii.cards[0];
-						var cc = c[0];
-						var ccc = Object.keys(cc);
-						var card = cc[ccc[0]];
-						// Create Option
+					
+					$.each(data, function(k, payment_account) {
+
 						var $select = $('#subscribe-endowment-payment-accounts');
-						$select.append('<option value='+ii+'>'+card.type+' - '+card.last4+' ('+card.exp_month+'/'+card.exp_year+')</option>');
+						if (payment_account.processor=='stripe') {
+							$select.append('<option value="'+payment_account.id+'">'+payment_account.card_info.type+' - '+payment_account.card_info.last4+' ('+payment_account.card_info.exp_month+'/'+payment_account.card_info.exp_year+')</option>');
+						}
+						else if (payment_account.processor=='knox') {
+							$select.append('<option value="'+payment_account.id+'">Bank Account connected via Knox Payments</option>');
+						}
 					});
+
 					// Show Modal
 					$('#subscribe-endowment-modal').modal('show');
 				}
@@ -620,7 +609,8 @@ function subscribeSelectors() {
 					}
 					$('#subscribe-endowment-modal').modal('hide');
 					$('#social-share-modal').modal('show');
-					initSocialShare();
+					var endowment = {name:self.attr('data-name'), slug:self.attr('data-slug'), description:'fun'}
+					initSocialShare(endowment);
 					$('#share-buttons div').attr('data-url', 'https://www.giv2giv.org/#endowment/'+self.attr('data-slug'));
 					$('#share-buttons div').attr('data-text', "Join me at giv2giv and support my endowment \"" + self.attr('data-name') + "\"");
 				});
@@ -693,9 +683,24 @@ function unsubscribeSelectors() {
 	});
 }
 
-function initSocialShare() {
+function initSocialShare(endowment) {
 
-	Socialite.load('.social-buttons');
+	$('#facebook-share').on('click', function(e) {
+		FB.ui({
+			method: 'feed',
+			link: GLOBAL.WEB_URL + '/#endowment/' + endowment.slug,
+			caption: "Funds at giv2giv sustain charities for generations: " + endowment.name,
+			description: endowment.description
+		}, function(response){});
+	});
+
+	$('#facebook-modal-share').on('click', function(e) {
+		FB.ui({
+			method: 'feed',
+			link: GLOBAL.WEB_URL + '/#endowment/' + endowment.slug,
+			caption: "Funds at giv2giv sustain charities for generations: " + endowment.name
+		}, function(response){});
+	});
 
 	$('#share-via-email').on('click', function(e) {
 		e.preventDefault();
@@ -722,4 +727,5 @@ function initSocialShare() {
 			self.button('reset');
 		});
 	});
+
 }

@@ -44,24 +44,23 @@ function fetchPaymentAccounts(callback) {
 			$("#no-payment-accounts-card").removeClass("hide");
 		} else {
 			// Loop through accounts & create payment accounts table
-			$.each(data, function(k, v) {
-				// for the love of god man make this prettier!
-				var i = v[0];
-				var ii = Object.keys(i);
-				var iii = i[ii[0]];
-				var c = iii.cards[0];
-				var cc = c[0];
-				var ccc = Object.keys(cc);
-				var card = cc[ccc[0]];
-				// Create table row & append
+			$.each(data, function(k, payment_account) {
+
 				var $row = $("#payment-accounts-table").find('tbody:last').append('<tr></tr>');
-				$row.append("<td>"+card.type+"</td>");
-				$row.append("<td>"+card.last4+"</td>");
-				$row.append("<td>"+card.exp_month+"/"+card.exp_year+"</td>");
-				// Actions
-				// var actions = "<button data-id='' class='btn btn-primary'>Edit</button>";
-				var actions = "<button data-id='"+ii+"' data-last-four='"+card.last4+"' class='btn btn-danger remove-account-btn'>Remove</button>";
+				if (payment_account.processor=='stripe') {
+					$row.append("<td>"+payment_account.card_info.type+"</td>");
+					$row.append("<td>"+payment_account.card_info.last4+"</td>");
+					$row.append("<td>"+payment_account.card_info.exp_month+"/"+payment_account.card_info.exp_year+"</td>");
+					// Actions
+					// var actions = "<button data-id='' class='btn btn-primary'>Edit</button>";
+					var actions = "<button data-id='"+payment_account.id+"' data-last-four='"+payment_account.card_info.last4+"' class='btn btn-danger remove-account-btn'>Remove</button>";
+				}
+				else if (payment_account.processor=='knox') {
+					$row.append("<td colspan=3>Bank Account connected via Knox Payments.</td>");
+					var actions = "<button data-id='"+payment_account.id+"' data-last-four='Bank-Account' class='btn btn-danger remove-account-btn'>Remove</button>";
+				}
 				$row.append("<td>"+actions+"</td>");
+
 			});
 
 			$("#payment-accounts-card").removeClass("hide");

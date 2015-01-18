@@ -22,6 +22,13 @@ function onStart() {
 		charitySelectors(); //need to work on this for 'refresh list'
 	});
 	initCharitySocialShare();
+
+	$('.create-endowment-btn').on('click', function(e) {
+		e.preventDefault();
+		hasher.setHash('/');
+		EndowmentsUI.newModal.dispatch();
+	});
+
 }
 
 // Get Featured Charities
@@ -203,8 +210,7 @@ function onCharityDetails(charity) {
 
 //	subscribeSelectors();
 	initCharitySocialShare();
-*/
-/*
+	
 	// Subscribe Button
 	$('.endowment-details-subscribe').off('click');
 	$('.endowment-details-subscribe').on('click', function(e) {
@@ -276,7 +282,8 @@ function onCharityDetails(charity) {
 		});
 	}
 	else {
-		$('#supporting-endowments').append('<li>None</li>');
+	//TODO show pre-filled create modal
+		$('#supporting-endowments').append('<li>None yet - <a href id=new_endowment>You should create one!</a></li>');
 	}
 
 	// Lead Description
@@ -292,6 +299,13 @@ function onCharityDetails(charity) {
 	$('#charity-details-donor-count').html(charity.donor_count);
 	$('#charity-details-pending-grants').html('$'+charity.pending_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$('#charity-details-delivered-grants').html('$'+charity.delivered_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	tagline_missing_text = "No tagline yet. <a href='mailto:hello@giv2giv?subject=Charity Tagline Suggestion' target=_blank>Suggest one!</a>"
+  description_missing_text = "No description yet. <a href='mailto:hello@giv2giv?subject=Charity Description Suggestion' target=_blank>Suggest one!</a>"
+
+	$('#charity-tagline').html(!charity.tagline ? tagline_missing_text : charity.tagline);
+	$('#charity-description').html(!charity.description ? description_missing_text : charity.description);
+
+
 
 	MapsUI.start.dispatch([ charity ]);
 
