@@ -75,7 +75,6 @@ function handleFeaturedCharities(data) {
 		$('#featured-charities').append(card.getHTML());
 	} else {
 		// Parse Results Here
-		log(data)
 		var charities = data.charities;
 		for (var i = 0; i < charities.length; i++) {
 			card = new DetailedCharityCard(charities[i], true);
@@ -111,10 +110,13 @@ function DetailedCharityCard(sub, isFeatured) {
 	this.slug = sub.slug;
 	this.cardTitle = sub.name.titleize();
 	this.donorCount = sub.donor_count;
-	if (typeof sub.tagline !== 'undefined')
+
+	if (sub.tagline)
 		this.cardBody = sub.tagline;
 	else
 		this.cardBody = '';
+	
+		
 
 	/*
 	this.isFeatured = isFeatured;
@@ -334,8 +336,6 @@ function onCharityDetails(charity) {
 }
 
 function initCharitySocialShare() {
-
-	Socialite.load('.social-buttons');
 
 	$('#share-via-email').on('click', function(e) {
 		e.preventDefault();
