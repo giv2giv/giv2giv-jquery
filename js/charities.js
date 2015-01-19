@@ -111,7 +111,10 @@ function DetailedCharityCard(sub, isFeatured) {
 	this.slug = sub.slug;
 	this.cardTitle = sub.name.titleize();
 	this.donorCount = sub.donor_count;
-	this.cardBody = sub.name;
+	if (typeof sub.tagline !== 'undefined')
+		this.cardBody = sub.tagline;
+	else
+		this.cardBody = '';
 
 	/*
 	this.isFeatured = isFeatured;
