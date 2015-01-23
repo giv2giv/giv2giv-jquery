@@ -647,42 +647,22 @@ var WebUI = function() {
 
 	// Endowment Details Route
 	crossroads.addRoute("/endowment/{id}", function (id) {
-		if (activeSession()) {
-			// Load Endowment Details First
-			$.ajax({
-				url: GLOBAL.SERVER_URL + "/api/endowment/" + id + ".json",
-				type: "GET",
-				contentType: "application/json",
-				dataType: "json"
-			}).done(function (data) {
-				loadPage("/ui/endowment_details.html", function() {
-					$("#app-container").attr("data-page-id", "endowment-details");
-					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
-					// Load JS
-					EndowmentsUI.details.dispatch(data.endowment);
-				});
-			}).fail(function (data) {
-				growlError("There was an error loading the Endowment Details.");
+		// Load 
+		$.ajax({
+			url: GLOBAL.SERVER_URL + "/api/endowment/" + id + ".json",
+			type: "GET",
+			contentType: "application/json",
+			dataType: "json"
+		}).done(function (data) {
+			loadPage("/ui/endowment_details.html", function() {
+				$("#app-container").attr("data-page-id", "endowment-details");
+				setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
+				// Load JS
+				EndowmentsUI.details.dispatch(data.endowment);
 			});
-		} else {
-			// Load Endowment Details First
-			$.ajax({
-				url: GLOBAL.SERVER_URL + "/api/endowment/" + id + ".json",
-				type: "GET",
-				contentType: "application/json",
-				dataType: "json"
-			}).done(function (data) {
-				loadPage("/ui/endowment_details.html", function() {
-					$("#app-container").attr("data-page-id", "endowment-details");
-					setPageMetadata(!activeSession(), null, "giv2giv - " + data.endowment.name + " Details");
-					// Load JS
-					EndowmentsUI.details.dispatch(data.endowment);
-				});
-			}).fail(function (data) {
-				growlError("There was an error loading the Endowment Details.");
-			});
-		}
-
+		}).fail(function (data) {
+			growlError("There was an error loading the Endowment Details.");
+		});
 	});
 
 	crossroads.addRoute("/charities", function() {
@@ -696,7 +676,7 @@ var WebUI = function() {
 
 	// Charity Details Route
 	crossroads.addRoute("/charity/{id}", function (id) {
-		// Load Endowment Details First
+		// Load
 		$.ajax({
 			url: GLOBAL.SERVER_URL + "/api/charity/" + id + ".json",
 			type: "GET",
@@ -707,7 +687,6 @@ var WebUI = function() {
 				$("#app-container").attr("data-page-id", "charity-details");
 				setPageMetadata(!activeSession(), null, "giv2giv - " + data.charity.name + " Details");
 				// Load JS
-				log(data.charity);
 				CharitiesUI.details.dispatch(data.charity);
 			});
 		}).fail(function (data) {
@@ -738,6 +717,15 @@ var WebUI = function() {
 			setPageMetadata(!activeSession(), navTab, "giv2giv - Numbers");
 			// Load JS
 			NumbersUI.start.dispatch();
+		});
+	});
+
+	// Numbers Route
+	crossroads.addRoute("/about", function() {
+		var navTab = activeSession() ? $("#about-nav") : $("#pub-about-nav");
+		loadPage("/ui/about.html", function() {
+			$("#app-container").attr("data-page-id", "about");
+			setPageMetadata(!activeSession(), navTab, "giv2giv - About Us");
 		});
 	});
 
