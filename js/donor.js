@@ -261,8 +261,6 @@ function loadUI() {
 	// Statement Rendering Handlers
 	$("#donor-statement-button").on("click", function(e) {
 
-//    {"donor":{"address":null,"city":null,"country":null,"created_at":"2013-09-24T04:34:59Z","email":"email@domain.com","facebook_id":null,"id":1,"name":"donor name","phone_number":null,"state":null,"updated_at":"2013-09-24T04:34:59Z","zip":null}}
-
 		// Get statement HTML
 		var popup = window.open();
 		$.get('ui/statement.html', function(data) {
@@ -282,20 +280,47 @@ function loadUI() {
 					// Close Window
 					popup.close();
 					growlError('There was an error loading your Statement.');
-			 });
+			 	});
 			 
-			 var year = parseInt($('#donor-statement-year').val());
-       var startDate = new Date(year, 0, 1);
-       var endDate = new Date(year, 11, 31);
+				var year = parseInt($('#donor-statement-year').val());
+
+       	var startDate = new Date(year, 0, 1);
+		    var startDay= startDate.getDate();
+    		var startMonth = startDate.getMonth()+1; //January is 0!
+    		var startYear = startDate.getFullYear();
+
+    		if(startDay<10){
+        	startDay='0'+startDay;
+    		} 
+    		if(startMonth<10){
+	        startMonth='0'+startMonth;
+    		} 
+    		var startDateString = startYear+'-'+startMonth+'-'+startDay;
+
+        var endDate = new Date(year, 11, 31);
+		    var endDay= endDate.getDate();
+    		var endMonth = endDate.getMonth()+1; //January is 0!
+    		var endYear = endDate.getFullYear();
+
+    		if(endDay<10){
+        	endDay='0'+endDay;
+    		} 
+    		if(endMonth<10){
+	        endMonth='0'+endMonth;
+    		} 
+    		var endDateString = endYear+'-'+endMonth+'-'+endDay;
 
 			// Get donation info
 			$.ajax({
 				url: GLOBAL.SERVER_URL + '/api/donors/donations.json',
 				method: 'GET',
-				data: {"start_date":startDate, "end_date":endDate },
+				data: {"start_date":startDateString, "end_date":endDateString},
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
-					if ( response.donations.length != 0 ) {
+					log(response);
+					log(response.total);
+					log(response.total==0)
+					if ( response.total != 0 ) {
 						$.each(response.donations, function(k, donation) {
 							var $row = $statement.find('tbody:last').append('<tr></tr>');		
 							// And stamp each bit for our row
