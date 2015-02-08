@@ -12,7 +12,7 @@ DonorUI.start.add(onStart);
 function onStart() {
 
 	// Set token for verify_knox account
-	$("#knox_payments_script").attr("response_url", GLOBAL.SERVER_URL+"/api/donors/payment_accounts/verify_knox.json?token="+$.cookie("session"));
+	//$("#knox_payments_script").attr("response_url", GLOBAL.SERVER_URL+"/api/donors/payment_accounts/verify_knox.json?token="+$.cookie("session"));
 	
 	// Load Donor Profile
 	fetchDonorProfile(function() {
@@ -276,35 +276,47 @@ function loadUI() {
 				method: 'GET',
 				contentType: "application/json",
 				dataType:"json"}).success(function(response) {
-					var donor_info = "Donor: <br />" + response.donor.name + "(" + response.donor.email + ")<br />" + response.donor.address + "<br />" + response.donor.city + "<br />" + response.donor.zip;
+					var donor_info = "Donor: <br />" + response.donor.name + "(" + response.donor.email + ")<br />" + (response.donor.address||"") + "<br />" + (response.donor.city||"") + "<br />" + (response.donor.zip||"");
 					$statement.find('#statement-donor-info').html(donor_info);
 				}).fail(function(data) {
 					// Close Window
 					popup.close();
 					growlError('There was an error loading your Statement.');
 			 });
+			 
+			 var year = parseInt($('#donor-statement-year').val());
+       var startDate = new Date(year, 0, 1);
+       var endDate = new Date(year, 11, 31);
 
 			// Get donation info
 			$.ajax({
 				url: GLOBAL.SERVER_URL + '/api/donors/donations.json',
 				method: 'GET',
-				data: {"start_date" : "2014-01-01", "end_date" : "2014-12-31" },
+				data: {"start_date":startDate, "end_date":endDate },
 				contentType: "application/json",
-				dataType:"json"}).success(function(response) {		    	 	
-					$.each(response.donations, function(k, donation) {
+				dataType:"json"}).success(function(response) {
+					if ( response.donations.length != 0 ) {
+						$.each(response.donations, function(k, donation) {
+							var $row = $statement.find('tbody:last').append('<tr></tr>');		
+							// And stamp each bit for our row
+							timestamp = new Date(donation.created_at);
+							var $col = $statement.find('tr:last');
+							$col.append('<td>' + timestamp.toString() + '</td>');
+							$col.append('<td>Endowment Name: ' + donation.endowment_name + '</td>');
+							$col.append('<td>$' + donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + '</td>');
+						});
+					}
+					else {
 						var $row = $statement.find('tbody:last').append('<tr></tr>');		
-						// And stamp each bit for our row
-						timestamp = new Date(donation.created_at);
 						var $col = $statement.find('tr:last');
-						$col.append('<td>' + timestamp.toString() + '</td>');
-						$col.append('<td>Endowment Name: ' + donation.endowment_name + '</td>');
-						$col.append('<td>$' + donation.gross_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + '</td>');
-					});
-
+						$col.append('<td colspan=3>No donations</td>');
+					}
 					$statement.find('#statement-total').html("<span>Total: $" + response.total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span>");
 					ugly_statement_timestamp = new Date(response.timestamp * 1000);
 					pretty_statement_timestamp = prettify_timestamp(ugly_statement_timestamp);
-					$statement.find('#statement-date-insert').html(pretty_statement_timestamp);
+					dateHtml = pretty_statement_timestamp + "<br>Statement Date Range:<br>"+startDate.toDateString()+" - "+endDate.toDateString();
+					$statement.find('#statement-date-insert').html(dateHtml);
+
 					// Open in new Window
 					var html = $('<html>').append($statement).html();
 					popup.document.write(html);

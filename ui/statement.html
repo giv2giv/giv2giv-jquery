@@ -55,26 +55,10 @@
 
 	<section id="main">
 		<div id="main-content">
-			<div id="statement-toolbar" class="btn-toolbar">
-				<div class="control-group">
-					<label class="control-label" for="donor_statement_year">Statement Year</label>
-					<div class="controls">
-						<select id="donor_statement_year">
-							<option value="2014" selected="selected">2014</option> 
-						</select>
-					</div>
-				</div>
-				<div class="btn-group">
-					<button type="button" id="statement-print" class="btn" onClick="window.print();">
-						<i class="icol-printer"></i> Print statement
-					</button>
-				</div>
-			</div>
-
 			<div class="statement paper-stack">
 				<div class="statement-header clearfix">
 					<div class="statement-logo">
-						<img src="/images/giv2giv.org.png" alt="">
+						<img src="/images/giv2giv.org.png">
 					</div>
 					<div class="statement-company">
 						giv2giv, Incorporated<br>
@@ -85,13 +69,10 @@
 				<div class="statement-sub clearfix">
 					<div class="statement-to">
 						<span id = "statement-donor-info" class="statement-caption">Donor:</span>
-
 					</div>
 					<div class="statement-info">
 						<span class="statement-caption">Print Date</span>
-						<ul>
-							<li><span id="statement-date-insert"></span></li>
-						</ul>
+						<span id="statement-date-insert"></span>
 					</div>
 				</div>
 
