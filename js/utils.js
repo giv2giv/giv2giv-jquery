@@ -6,8 +6,8 @@
 // GLOBAL CONSTANTS
 var GLOBAL = {};
 GLOBAL.MIN_DONATION = 5; // $5.00 minimum donation
-GLOBAL.SERVER_URL = "https://apitest.giv2giv.org";
-GLOBAL.WEB_URL = "https://wwwtest.giv2giv.org"
+GLOBAL.WEB_URL = "http://test.giv2giv.org"
+GLOBAL.SERVER_URL = "http://apitest.giv2giv.org";
 
 // Setup Stripe
 GLOBAL.STRIPE_PUB_KEY = "pk_test_d678rStKUyF2lNTZ3MfuOoHy";

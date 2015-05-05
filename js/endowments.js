@@ -20,7 +20,7 @@ function onModal() {
 		endowmentSelectors();
 		cleanAndShowModal();
 		});
-	initSocialShare();
+	//initSocialShare();
 }
 
 // (Re)Start Endowments UI
@@ -30,14 +30,14 @@ function onStart() {
 		endowmentSelectors();
 		
 	});
-	initSocialShare();
+	//initSocialShare();
 }
 
 function onSubscriptions() {
 	fetchSubscribedEndowments(function() {
 		endowmentSelectors();
 	});
-	initSocialShare();
+	//initSocialShare();
 }
 
 // Get Featured Endowments
@@ -480,9 +480,6 @@ function onDetails(endowment) {
 
 	unsubscribeSelectors();
 
-			
-
-
 	// Header
 	$('#endowment-details-header').html(endowment.name);
 	// Lead Description
@@ -490,7 +487,7 @@ function onDetails(endowment) {
 	$('#endowment-details-fund-balance').html('$'+endowment.global_balances.endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$('#endowment-details-donor-count').html(endowment.global_balances.endowment_donor_count);
 	$('#endowment-details-grants').html('$'+endowment.global_balances.endowment_grants.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-log(endowment);
+
 	if (endowment.my_balances) {
 
 		if (endowment.my_balances.is_subscribed)
@@ -545,7 +542,6 @@ function fetchEndowmentDonations(id, callback) {
 }
 
 function handleEndowmentDonations(data) {
-	log(data);
 	if(data.message === undefined) {
 		$.each(data.donations, function(k, v) {
 			var date = new Date(v.created_at);
@@ -610,9 +606,10 @@ function subscribeSelectors() {
 					$('#subscribe-endowment-modal').modal('hide');
 					$('#social-share-modal').modal('show');
 					var endowment = {name:self.attr('data-name'), slug:self.attr('data-slug'), description:'fun'}
+					//TODO should we grab endowment details for the endowment we just donated to, just to show?
 					initSocialShare(endowment);
-					$('#share-buttons div').attr('data-url', 'https://www.giv2giv.org/#endowment/'+self.attr('data-slug'));
-					$('#share-buttons div').attr('data-text', "Join me at giv2giv and support my endowment \"" + self.attr('data-name') + "\"");
+					//$('#share-buttons div').attr('data-url', 'https://www.giv2giv.org/#endowment/'+self.attr('data-slug'));
+					//$('#share-buttons div').attr('data-text', "Join me at giv2giv and support my endowment \"" + self.attr('data-name') + "\"");
 				});
 			});
 		}).fail(function(data) {
@@ -684,24 +681,37 @@ function unsubscribeSelectors() {
 }
 
 function initSocialShare(endowment) {
+	var shareURL = GLOBAL.WEB_URL + '/#endowment/' + endowment.slug;
 
-	$('#facebook-share').on('click', function(e) {
+	// Twitter
+	// TODO - figure out why data-counturl won't work with slug/hashtag
+	$(".twitter-share-button").attr("data-text", "Make a difference today.");
+	$(".twitter-share-button").attr("data-url", shareURL);
+	$(".twitter-share-button").attr("data-counturl", GLOBAL.WEB_URL);
+	$(".twitter-share-button").attr("data-hashtags", "giv2giv");
+	$(".twitter-share-button").attr("data-related", "giv2giv");
+
+	twttr.widgets.load();
+
+	// Facebook
+	$('.facebook-share').on('click', function(e) {
 		FB.ui({
 			method: 'feed',
-			link: GLOBAL.WEB_URL + '/#endowment/' + endowment.slug,
+			link: shareURL,
 			caption: "Funds at giv2giv sustain charities for generations: " + endowment.name,
 			description: endowment.description
 		}, function(response){});
 	});
 
-	$('#facebook-modal-share').on('click', function(e) {
-		FB.ui({
-			method: 'feed',
-			link: GLOBAL.WEB_URL + '/#endowment/' + endowment.slug,
-			caption: "Funds at giv2giv sustain charities for generations: " + endowment.name
-		}, function(response){});
-	});
+	// LinkedIn (building URL)
+	var title = "See my fund: " + endowment.name;
+	var shortDescription = endowment.description.substring(0, 256);
+	var linkedinURL = encodeURI("http://www.linkedin.com/shareArticle?mini=true&url="+shareURL+"&title="+title+"&summary="+shortDescription+"&source=giv2giv");
 
+	$("#linkedin-share").attr("href", linkedinURL);
+
+	// Reddit
+	//$("#reddit-share").html('<script type="text/javascript" src="//www.reddit.com/buttonlite.js?i=0"></script>');
 	$('#share-via-email').on('click', function(e) {
 		e.preventDefault();
 		var self = $(this);

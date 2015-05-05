@@ -11,7 +11,20 @@
         <div id="share-buttons">
           <ul class="social-buttons cf">
             <li>
-              <img id="facebook-modal-share" src="images/facebook-logo.png" height=50 width=50 alt='Share on Facebook'>
+              <a class="twitter-share-button"
+               href="https://twitter.com/share"
+               data-url=""
+               data-counturl=""
+               data-via=""
+               data-count="vertical">
+                Tweet
+              </a>
+            </li>
+            <li>
+              <img id="facebook-modal-share" class="facebook-share" src="images/facebook-logo.png" height=50 width=50 alt='Share on Facebook'>
+            </li>
+            <li>
+              <script id="linkedin-share" type="IN/Share" data-counter="top"></script>
             </li>
           </ul>
         </div>
@@ -138,7 +151,7 @@
       </div>
       <div class="modal-footer">
         <a href="#" data-dismiss="modal" class="btn btn-danger">Cancel</a>
-        <a href="#" id="confirm-subscribe-endowment" data-name="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Confirm Donation</a>
+        <a href="#" id="confirm-subscribe-endowment" data-slug="" data-name="" data-loading-text="<i class='fa fa-leaf fa-spin'></i> Please Wait" class="btn btn-success">Confirm Donation</a>
       </div>
     </form>
   </div>

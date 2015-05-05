@@ -298,11 +298,30 @@ var WebUI = function() {
 		});
 	}
 
+	// Setup Twitter
+	function setupTwitter() {
+		window.twttr = (function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0],
+				t = window.twttr || {};
+			if (d.getElementById(id)) return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "https://platform.twitter.com/widgets.js";
+			fjs.parentNode.insertBefore(js, fjs);
+
+			t._e = [];
+			t.ready = function(f) {
+				t._e.push(f);
+			};
+
+			return t;
+		} (document, "script", "twitter-wjs"));
+	}
+
 	// Functions that are deffered until after the WebUI is initialized
 	function deferredFunctions() {
 		loadModals();
 	}
-
 
 // ======================= //
 //        SELECTORS        //
@@ -756,7 +775,6 @@ var WebUI = function() {
 	hasher.initialized.add(parseHash);
 	hasher.changed.add(parseHash);
 	hasher.init();
-	hasher.prependHash = "";
 
 	if (typeof callback === "function") {
 		callback();
