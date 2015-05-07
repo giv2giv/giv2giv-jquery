@@ -429,6 +429,8 @@ function onDetails(endowment) {
 
 	subscribeSelectors();
 	initSocialShare(endowment);
+alert('hi');
+	$('#qrcode').qrcode({width: 64,height: 64,text: window.location.href});
 
 	// Subscribe Button
 	$('.endowment-details-subscribe').off('click');
@@ -691,7 +693,7 @@ function initSocialShare(endowment) {
 	$(".twitter-share-button").attr("data-hashtags", "giv2giv");
 	$(".twitter-share-button").attr("data-related", "giv2giv");
 
-	twttr.widgets.load();
+	//twttr.widgets.load();
 
 	// Facebook
 	$('.facebook-share').on('click', function(e) {
