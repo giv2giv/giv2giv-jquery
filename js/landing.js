@@ -10,8 +10,8 @@ LandingUI.start.add(onStart);
 
 // (Re)Start Donor UI
 function onStart() {
-	expandHeader();
-	interactiveAnimation();
+	//expandHeader();
+	//interactiveAnimation();
 }
 
 /**************************

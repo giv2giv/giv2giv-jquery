@@ -59,14 +59,16 @@ function fetchDonorData() {
 
 			endowmentsPie(data, $('#currentEndowments'), 'Endowments',
 				function(ed, subs){
-					for (var i = 0; i < subs.endowments.length; i++) {
-						ed[i] = {};
-						ed[i].id = subs.endowments[i].slug;
-						ed[i].name = subs.endowments[i].name;
-						ed[i].y = subs.endowments[i].my_balances.my_endowment_balance;
-						$.each(subs.endowments[i].charities, function (index, charity) {
-							supported_charities.push(charity);
-						});
+					if (subs.length > 0) {
+						for (var i = 0; i < subs.endowments.length; i++) {
+							ed[i] = {};
+							ed[i].id = subs.endowments[i].slug;
+							ed[i].name = subs.endowments[i].name;
+							ed[i].y = subs.endowments[i].my_balances.my_endowment_balance;
+							$.each(subs.endowments[i].charities, function (index, charity) {
+								supported_charities.push(charity);
+							});
+						}
 					}
 				}, totalBalance);
 		})

@@ -429,7 +429,7 @@ function onDetails(endowment) {
 
 	subscribeSelectors();
 	initSocialShare(endowment);
-alert('hi');
+
 	$('#qrcode').qrcode({width: 64,height: 64,text: window.location.href});
 
 	// Subscribe Button

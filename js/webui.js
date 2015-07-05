@@ -327,6 +327,7 @@ var WebUI = function() {
 //        SELECTORS        //
 // ======================= //
 
+/*
 	// Endowment Search
 	$("#endowment-search").typeahead({
 		remote: {
@@ -357,6 +358,47 @@ var WebUI = function() {
 		// Go to Endowment
 		hasher.setHash("endowment/" + datum.id);
 	});
+*/
+
+  var endowment_bloodhound = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: ['dog', 'pig', 'moose'],
+    //prefetch: GLOBAL.SERVER_URL + '/api/endowment/near.json',
+    remote: {
+    	url: GLOBAL.SERVER_URL + '/api/endowment/autocomplete.json?q=%QUERY',
+    	wildcard: '%QUERY'
+    }
+//    dupDetector: function(remoteMatch, localMatch) {
+      //return remoteMatch.value === localMatch.value;
+    //}
+  });
+   
+  endowment_bloodhound.initialize();
+   
+  $('.typeahead').typeahead(null, {
+    name: 'endowment-search',
+    display: 'value',
+    source: endowment_bloodhound
+  });
+
+  $('.typeahead').on('typeahead:selected', function (e, datum) {
+  			hasher.setHash("endowment/" + datum.id);
+//    goToCampaign(datum); // onclick
+  }).on('typeahead:autocompleted', function (e, datum) {
+  			hasher.setHash("endowment/" + datum.id);
+    //goToCampaign(datum); // ontab
+  });
+
+  $('.typeahead').each(function() {
+   if ($(this).hasClass('input-lg'))
+        $(this).prev('.tt-hint').addClass('hint-lg');
+   
+   if ($(this).hasClass('input-sm'))
+        $(this).prev('.tt-hint').addClass('hint-sm');
+});
+
+
 
 	// Terms Button
 	$("#terms-btn").on("click", function (e) {
