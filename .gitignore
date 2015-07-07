@@ -25,3 +25,6 @@ Icon
 
 # My nginx config
 giv2giv-nginx.conf
+
+#intelliJ crap
+.idea
