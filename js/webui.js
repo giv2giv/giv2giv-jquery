@@ -379,7 +379,10 @@ var WebUI = function() {
   $('.typeahead').typeahead(null, {
     name: 'endowment-search',
     display: 'value',
-    source: endowment_bloodhound
+    source: endowment_bloodhound,
+		templates: {
+			empty: '<div class="empty-message">Unable to find any endowments by that name.</div>'
+		}
   });
 
   $('.typeahead').on('typeahead:selected', function (e, datum) {
