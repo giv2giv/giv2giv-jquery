@@ -82,14 +82,19 @@ function balanceGraph(data, DOMnode, titleText, series, label) {
 		);
 	} else {
 		var content = data[series];
-		for (var i = 0; i < content.length; i++) {
-			balance[i] = {};
-			balance[i].x = new Date(content[i].date);
-			balance[i].y = content[i][label];
-			balance[i].donations = content[i].total_donations || null;
-			balance[i].fees = content[i].total_fees || null;
-			balance[i].grants = content[i].total_grants || null;
-		}
+    if (content != null) {
+		  for (var i = 0; i < content.length; i++) {
+			  balance[i] = {};
+			  balance[i].x = new Date(content[i].date);
+			  balance[i].y = content[i][label];
+			  balance[i].donations = content[i].total_donations || null;
+			  balance[i].fees = content[i].total_fees || null;
+			  balance[i].grants = content[i].total_grants || null;
+		  }
+    }
+    else {
+      balance[0] = {};
+    }
 
 		DOMnode.highcharts({
 			chart: {
