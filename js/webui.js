@@ -399,7 +399,7 @@ var WebUI = function() {
    
    if ($(this).hasClass('input-sm'))
         $(this).prev('.tt-hint').addClass('hint-sm');
-});
+	});
 
 
 
@@ -546,7 +546,7 @@ var WebUI = function() {
 			// Set Cookie
 			$.cookie("session", data.session.token);
 			startApplication();
-			$btn.historybutton("reset");
+			$btn.button("reset");
 		}).fail(function (data) {
 			$btn.button("reset");
 			var res = JSON.parse(data.responseText);
