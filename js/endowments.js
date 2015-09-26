@@ -155,39 +155,32 @@ function endowmentSelectors() {
 		e.preventDefault();
 	});
 
+
 	if($(this).data('select2')) {
 		$('#add-endowment-charities').select2('destroy');
 	}
+
 
 	$('#add-endowment-charities').select2({
 		placeholder: 'Search for a charity',
 		multiple: true,
 		minimumInputLength: 3,
 		ajax: {
-			url: GLOBAL.SERVER_URL + '/api/charity.json',
+			url: GLOBAL.SERVER_URL + '/api/charity/autocomplete.json',
 			dataType: 'json',
 			quietMillis: 500,
 			data: function (term, page) { // page is the one-based page number tracked by Select2
 				var payload = {};
-				payload.page = page;
-				payload.per_page = 10;
-				payload.query = term;
-				if($('#charity-city').val().length > 0) {
-					payload.city = $('#charity-city').val();
-				}
+				payload.q = term + " " + $('#charity-city').val();
 				return payload;
 			},
-			results: function (data, page) {
-				// var more = (page * 10) < data.total;
-				// notice we return the value of more so Select2 knows if more results can be loaded
-				// Loop Through Charities & build Results
+			results: function (data) {
 				var results = [];
 				if(data.message === undefined) {
-					$.each(data.charities, function(k, v) {
-						log(v);
+					$.each(data, function(k, v) {
 						var charity = {};
 						charity.id = v.id;
-						charity.text = v.name.titleize() + ' (' + v.city.titleize() + ', ' + v.state + ')';
+						charity.text = v.value + ' (' + v.city + ', ' + v.state + ')';
 						results.push(charity);
 					});
 				}
