@@ -181,7 +181,7 @@ var WebUI = function() {
 				log("WebUI: Loading Donor information.");
 				// Load Current URL
 				log(window.location.hash);
-				if (window.location.hash === "#signin" || window.location.hash === "#signup" || window.location.hash === "" || window.location.hash === "#/") {
+				if (window.location.hash === "#signin" || window.location.hash === "#signup" || window.location.hash === "#/signin" || window.location.hash === "#/signup" || window.location.hash === "" || window.location.hash === "#/") {
 					// If the user's dashboard is empty, send them to the featured endowments page
 					// Otherwise, send them to the dashboard
 					var donations = 0;
@@ -232,7 +232,6 @@ var WebUI = function() {
 			hasher.setHash(window.location.hash);
 		}
 		if (typeof callback === "function") {
-			
 			callback();
 		}
 	}
@@ -264,6 +263,41 @@ var WebUI = function() {
 		}
 		return status;
 	}
+
+	
+
+	function activePaymentAccount(callback) {
+		log("WebUI: Checking active payment account.");
+		var isActive = false;
+
+		if ($.cookie("session")) {
+			// Now Get Payment Accounts
+			$.ajax({
+				url: GLOBAL.SERVER_URL + '/api/donors/payment_accounts.json',
+				method: 'GET'
+			}).done(function(data) {
+				if(data.length > 0) {
+					$.each(data, function(k, payment_account) {
+						d = new Date();
+						var thisYear = d.getFullYear();
+						var thisMonth = d.getMonth() + 1; // Javascript says January = 0
+						if (payment_account.card_info.exp_year > thisYear) {
+							isActive = true;
+						}
+						else if (payment_account.card_info.exp_year == thisYear && payment_account.card_info.exp_month > thisMonth) {
+							isActive = true;
+						}
+
+					});
+				}
+				if (typeof callback === "function") {
+					callback(isActive);		
+				}
+			});
+		} // end if cookie("session")
+
+	}
+
 	
 	// Load HTML Page
 	function loadPage(url, callback) {
@@ -580,6 +614,7 @@ var WebUI = function() {
 	// Handle Logout Button
 	$("#logout-btn").on("click", function (e) {
 		e.preventDefault();
+		$.removeCookie("session");
 		log("WebUI: Logout.");
 		$.ajax({
 			url: GLOBAL.SERVER_URL + "/api/sessions/destroy.json",
@@ -588,17 +623,19 @@ var WebUI = function() {
 			dataType: "json"
 		}).done(function (data) {
 			// Delete Cookie
-			$.removeCookie("session");
+			
 			// Delete Facebook token
 			// FB.logout(function(response) {
 		// 		// user is now logged out
 			// });
 			growlSuccess("You have successfully signed out of giv2giv");
+			
+			/*EndowmentsUI.start.halt();
+			EndowmentsUI.details.halt();
+			EndowmentsUI.subscriptions.halt();
+			DashboardUI.start.halt();
+			*/
 			hasher.setHash("/");
-			// EndowmentsUI.start.halt();
-			// EndowmentsUI.details.halt();
-			// EndowmentsUI.subscriptions.halt();
-			// DashboardUI.start.halt();
 		});
 	});
 
@@ -809,7 +846,7 @@ var WebUI = function() {
 	crossroads.bypassed.add(function (request) {
 		log("WebUI: Route not found.");
 		log(request);
-		crossroads.parse("/dashboard");
+		crossroads.parse("/");
 	});
 
 	// Setup Hasher

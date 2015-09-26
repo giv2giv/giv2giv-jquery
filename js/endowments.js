@@ -80,6 +80,9 @@ function handleFeaturedEndowments(data) {
 			card = new DetailedCard(endowments[i], true);
 			$('#featured-endowments').append(card.getHTML());
 		}
+		$('.truncate').succinct({
+      size: 128
+    });
 	}
 }
 
@@ -243,6 +246,8 @@ function endowmentSelectors() {
 
 	subscribeSelectors();
 
+
+
 	// Subscribe Button
 	$('.endowment-subscribe-btn').off('click');
 	$('.endowment-subscribe-btn').on('click', function(e) {
@@ -292,6 +297,7 @@ function endowmentSelectors() {
 			log(data);
 		});
 	});
+
 
 	unsubscribeSelectors();
 
@@ -354,9 +360,10 @@ function DetailedCard(sub, isFeatured) {
 	div('info')+
 		div('title')+
 			this.cardTitle+
-		'</div><p><em>'+
+		'</div>'+
+		div('truncate') + '<p><em>'+
 			this.cardBody+
-		'</em></p>'+
+		'</em></p></div>'+
 
 		div('desc')+'<strong>'+
 			this.donorCount+'</strong>'+this.donorString+
@@ -407,12 +414,12 @@ function onDetails(endowment) {
 	if(WebUI.activeSession()) {
 		fetchEndowmentDonations(endowment.id);
 
-		if (endowment.my_balances.is_subscribed) {
+		if (endowment.my_balances && endowment.my_balances.is_subscribed) {
 			// Subscribed
 			$('#endowment-details-unsubscribe').attr('data-id', endowment.id);
 			$('#subscription-details').removeClass('hide');  
 		}
-		else if (endowment.my_balances.my_donations_amount > 0) {
+		else if (endowment.my_balances && endowment.my_balances.my_donations_amount > 0) {
 			// Balance but not subscribed
 			$('#subscription-balance').removeClass('hide');
 			$('#endowment-details-balance-subscribe').attr('data-id', endowment.id);
@@ -430,7 +437,7 @@ function onDetails(endowment) {
 	subscribeSelectors();
 	initSocialShare(endowment);
 
-	$('#qrcode').qrcode({width: 64,height: 64,text: window.location.href});
+	$('#qrcode').qrcode({width: 128,height: 128,text: window.location.href});
 
 	// Subscribe Button
 	$('.endowment-details-subscribe').off('click');
@@ -640,7 +647,7 @@ function unsubscribeSelectors() {
 		}).done(function(data) {
 			log(data);
 			// Clean & Prep Modal
-			$('#unsubscribe-endowment-header').html('Unsubscribe to ' + data.endowment.name);
+			$('#unsubscribe-endowment-header').html('Unsubscribe from ' + data.endowment.name);
 			// Set Confirm Button
 			$('#confirm-unsubscribe-endowment').attr('data-id', data.endowment.my_balances.my_subscription_id);
 			// Now Show Modal

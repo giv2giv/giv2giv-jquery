@@ -272,6 +272,26 @@ function onCharityDetails(charity) {
 	// Header
 	$('#charity-details-header').html(charity.name.titleize());
 
+	var scriptTag = document.createElement('script');
+  scriptTag.setAttribute("type", "text/javascript");
+  scriptTag.setAttribute("id", "giv2giv-script");
+  scriptTag.setAttribute("data-charity-id", charity.id);
+  scriptTag.setAttribute("data-theme", charity.theme);
+  scriptTag.setAttribute("data-minimum-amount", charity.minimum_amount);
+  scriptTag.setAttribute("data-minimum-passthru-percentage", charity.minimum_passthru_percentage);
+  scriptTag.setAttribute("data-maximum_amount", charity.maximum_amount);
+  scriptTag.setAttribute("data-maximum-passthru-percentage", charity.maximum_passthru_percentage);
+  scriptTag.setAttribute("data-initial-amount", charity.initial_amount);
+  scriptTag.setAttribute("data-initial-passthru", charity.initial_passthru);
+  scriptTag.setAttribute("data-donor-add-fees", charity.donor_add_fees);
+  scriptTag.setAttribute("src", "/widget/widget.js");
+
+
+
+	// Finally, insert the script element into the div
+	document.getElementById("giv2giv-script-div").appendChild(scriptTag);
+
+
 	if(charity.tags.length > 0) {
 		$.each(charity.tags, function (k, tag) {
 			$('#charity-tags').append('<li>'+tag + '</li>');

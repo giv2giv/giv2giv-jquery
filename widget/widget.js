@@ -2,12 +2,13 @@
 
 var jQuery, $; // Localize jQuery variables
 
-var HOST = 'http://localhost/widget/'; // also set host in widget_example.html
+var HOST = 'http://test.giv2giv.org/widget/'; // also set host in widget_example.html
 var APIHOST = 'http://apitest.giv2giv.org/api';
 var STRIPE_KEY = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 
 
 function loadScript(url, callback) {
+
   /* Load script from url and calls callback once it's loaded */
   var scriptTag = document.createElement('script');
   scriptTag.setAttribute("type", "text/javascript");
@@ -31,6 +32,7 @@ function loadScript(url, callback) {
 
 function main() {
 
+
 //    $(function() {
 
       /* The main logic of our widget is here */
@@ -47,6 +49,7 @@ function main() {
         inc: script.data('incremenent'),
         initial_amount: script.data('initial-amount'),
         initial_passthru: script.data('initial-passthru'),
+        theme: script.data('theme'),
         add_fees: script.data('donor-add-fees')
       },
       div = $('#giv2giv-button'),
@@ -68,23 +71,21 @@ function main() {
         inc: 1.00,
         initial_amount: 25,
         initial_passthru: 50,
+        theme: "flick",
         add_fees: true
-      }, charity_preferences);      
+      }, charity_preferences);
 
 
       // Themes from jQueryUI http://jqueryui.com/themeroller/
       // ui-lightness, ui-darkness, smoothness, start, redmond, sunny, overcast, le-frog,
       // flick, pepper-grinder, eggplant, dark-hive, cupertino, south-street, blitzer, humanity
       // hot-sneaks, excite-bike, vader, dot-luv, mint-choc, black-tie, trontastic, swanky-purse
-      var giv2givTheme = script.data('theme');
-      
-      if ( giv2givTheme == '' ) giv2givTheme = 'flick';
       
       var giv2givHead  = document.getElementsByTagName('head')[0];
       var giv2givLink  = document.createElement('link');
       giv2givLink.rel  = 'stylesheet';
       giv2givLink.type = 'text/css';
-      giv2givLink.href = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/' + giv2givTheme + '/jquery-ui.css';
+      giv2givLink.href = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/' + charityPrefs.theme + '/jquery-ui.css';
       giv2givLink.media = 'all';
       giv2givHead.appendChild(giv2givLink);
     
@@ -116,9 +117,6 @@ function main() {
           donationDetails.empty().append(returnFormattedDonationDetails(amount, passthru, addFees));
         }
       });
-
-
-
 
 
       var json_url = APIHOST + "/charity/"+charityPrefs.charity_id+"/widget_data.json";
@@ -244,7 +242,8 @@ function main() {
             if(e.type !== 'keyup') {
               // Parse and format amount
               var rawVal = parseStrToNum(amount.val()) || charityPrefs.minamt,
-                val = rawVal.formatMoney(2, '.', ',');
+                //val = rawVal.formatMoney(2, '.', ',');
+                val = formatMoney(rawVal);
         
               // Update input field
               amount.val('$' + val);
@@ -448,23 +447,23 @@ var returnFormattedDonationDetails = function (amount, passthru, addFees) {
   amount_invested = net_amount - amount_passthru;
 
   val = "<h3>Summary:</h3>";
-  val += "<li>$" + amount_passthru.formatMoney(2, '.', ',') + " will be immediately sent to the charity</li>";
-  val += "<li>$" + amount_invested.formatMoney(2, '.', ',') + " will be invested to sustain the charity over time</li>";
+  val += "<li>$" + formatMoney(amount_passthru) + " will be immediately sent to the charity</li>";
+  val += "<li>$" + formatMoney(amount_invested) + " will be invested to sustain the charity over time</li>";
   val += "</ul>";
-  val += "<br />Your total donation today is: $" + transactionAmount.formatMoney(2, '.', ',');
+  val += "<br />Your total donation today is: $" + formatMoney(transactionAmount);
   return val;
 }
 
 var returnFormattedAmountDetails = function (amount) {
   var fee = calculateFee(amount);
-  return "Add transaction fee of " + fee.formatMoney(2, '.', ',') +"?";
+  return "Add transaction fee of "; + formatMoney(fee) + "?";
 }
 
 
 var whichProcessor = function() {
-  if ($('#giv2giv-tabs').tabs('option','active')==0)
-    return "dwolla";
-  else if ($('#giv2giv-tabs').tabs('option','active')==1)
+  //if ($('#giv2giv-tabs').tabs('option','active')==0)
+//    return "dwolla";
+//  else if ($('#giv2giv-tabs').tabs('option','active')==1)
     return "stripe";
 }
 
@@ -514,6 +513,13 @@ var parseStrToNum = function(str) {
   //return val;
 }
 
+
+var formatMoney = function(n, c, d, t){
+  var n = isNaN(n = Math.abs(n)) ? 0 : n, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "." : d, t = t == undefined ? "," : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+
+  return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+}
+
 /**
  * Formats a number into currency standards
  *
@@ -524,25 +530,27 @@ var parseStrToNum = function(str) {
  * @name parseStrToNum
  * @param {string} string to parse
  * @return {number} parsed number
-*/
+
 Number.prototype.formatMoney = function(c, d, t){
   var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
 
   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 }
+*/
 
 
 /* Load jQuery */
 loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", function() {
+
   /* Restore $ and window.jQuery to their previous values and store the
      new jQuery in our local jQuery variables. */
   $ = jQuery = window.jQuery.noConflict(true);
 
   $('#giv2giv-button').load(HOST+'/button_contents.html');
 
-  loadScript("jquery-ui.min.js", function() { // load locally-modified JS
+  loadScript(HOST + "jquery-ui.min.js", function() { // load locally-modified JS
     initjQueryUIPlugin(jQuery);
-    loadScript("jquery.validate.min.js", function() {
+    loadScript(HOST + "jquery.validate.min.js", function() {
       initjQueryValidatePlugin(jQuery);
       main(); // call our main function
     });
