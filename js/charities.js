@@ -369,9 +369,9 @@ function charitySelectors() {
 	log('CharitiesUI: Selectors');
 	$('#refresh-featured-charities').off('click');
 	$('#refresh-featured-charities').on('click', function(e) {
-		$(this).addClass('fa-spin');
+		$(this).find('i').addClass('fa-spin');
 		fetchFeaturedCharities(function() {
-			$('#refresh-featured-charities').removeClass('fa-spin');
+			$('#refresh-featured-charities').find('i').removeClass('fa-spin');
 			charitySelectors();
 		});
 		e.preventDefault();
