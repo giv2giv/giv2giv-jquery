@@ -76,6 +76,7 @@ function main() {
       }, charity_preferences);
 
 
+
       // Themes from jQueryUI http://jqueryui.com/themeroller/
       // ui-lightness, ui-darkness, smoothness, start, redmond, sunny, overcast, le-frog,
       // flick, pepper-grinder, eggplant, dark-hive, cupertino, south-street, blitzer, humanity
@@ -88,7 +89,17 @@ function main() {
       giv2givLink.href = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/' + charityPrefs.theme + '/jquery-ui.css';
       giv2givLink.media = 'all';
       giv2givHead.appendChild(giv2givLink);
-    
+ 
+
+      var giv2givHead  = document.getElementsByTagName('head')[0];
+      var giv2givLink  = document.createElement('link');
+      giv2givLink.rel  = 'stylesheet';
+      giv2givLink.type = 'text/css';
+      giv2givLink.href = HOST+'/fun.css';
+      giv2givLink.media = 'all';
+      giv2givHead.appendChild(giv2givLink);
+ 
+
       div.css(
         {
           'border':'3px solid black',
@@ -96,6 +107,7 @@ function main() {
           'width':125
         }
       );
+
 
       addFees.prop("checked", charityPrefs.add_fees==true);
 
@@ -170,9 +182,7 @@ function main() {
                       // Show the success on the form
                       $( "#giv2giv-results" ).dialog( "open" );
                     });
-
                   }
-
                 });
               }
             },
@@ -320,8 +330,8 @@ function main() {
         });
 
         // Validation
-        $('.validate_form').each(function() {
-           $(this).validate();
+        $('input').validateCreditCard(function(result) {
+          console.log(result);
         });
 
         // Forms
@@ -514,6 +524,16 @@ var parseStrToNum = function(str) {
 }
 
 
+ /**
+  * function to load a given css file 
+  */ 
+ var loadCSS = function(href) {
+     var cssLink = $("<link rel='stylesheet' type='text/css' href='"+href+"'>");
+     $("head").append(cssLink); 
+ };
+
+
+
 var formatMoney = function(n, c, d, t){
   var n = isNaN(n = Math.abs(n)) ? 0 : n, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "." : d, t = t == undefined ? "," : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
 
@@ -550,8 +570,9 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", functi
 
   loadScript(HOST + "jquery-ui.min.js", function() { // load locally-modified JS
     initjQueryUIPlugin(jQuery);
-    loadScript(HOST + "jquery.validate.min.js", function() {
+    loadScript(HOST + "package.js", function() {
       initjQueryValidatePlugin(jQuery);
+      initCreditCardValidator(jQuery);
       main(); // call our main function
     });
   });
