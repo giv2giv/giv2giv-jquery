@@ -117,8 +117,6 @@ function main() {
         return;
       }
 
-
-
       // tabify bank account / credit card tabs
       $( "#giv2giv-tabs" ).tabs({
         activate: function() {
@@ -129,7 +127,6 @@ function main() {
           donationDetails.empty().append(returnFormattedDonationDetails(amount, passthru, addFees));
         }
       });
-
 
       var json_url = APIHOST + "/charity/"+charityPrefs.charity_id+"/widget_data.json";
 
@@ -465,8 +462,7 @@ var returnFormattedDonationDetails = function (amount, passthru, addFees) {
 }
 
 var returnFormattedAmountDetails = function (amount) {
-  var fee = calculateFee(amount);
-  return "Add transaction fee of "; + formatMoney(fee) + "?";
+  return "Add transaction fee of "; + formatMoney(calculateFee(amount)) + "?";
 }
 
 
