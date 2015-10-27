@@ -141,6 +141,13 @@ function main() {
           buttons: {
             Submit: function( event ){
               event.preventDefault();
+
+
+              var expgroup = $("#giv2giv-expiry").val();
+              var expArray = expgroup.split( '/' );
+              var expmm = parseInt( expArray[ 0 ] );
+              var expyy = parseInt( expArray[ 1 ] );
+
               frm.find('button').prop('disabled', true);
 
               // increase amount if donor assuming fees
@@ -154,33 +161,38 @@ function main() {
               else if (whichProcessor()=='stripe') { // is stripe
                 // Disable the submit button to prevent repeated clicks
 
-                Stripe.card.createToken(frm, function(status, response) {
-                  if (response.error) {
-                    // Show the errors on the form
-                    $( "#giv2giv-results" ).text(response.error.message);
-                    $( "#giv2giv-results" ).dialog( "open" );
-                    frm.find('button').prop('disabled', false);
-                  } else {
-                    // charge success
-                    // response contains id, token and card, which contains additional card details like last4
-                    var token = response.id;
-
-                    // Insert the token into the form so it gets submitted to the server
-                    frm.append($('<input type="hidden" name="giv2giv-stripeToken" />').val(token));
-                    //convert the donation string $52.34 to a number
-                    amount.val(parseStrToNum(amount.val()));
-
-                    $.ajax({
-                      data: frm.serialize(),
-                      url: APIHOST + '/charity/' + charity.id + '/' + whichProcessor() + '.json',
-                      cache: false
-                    }).done(function (response) {
-                      console.log(response);
-                      // Show the success on the form
+                Stripe.card.createToken({
+                  number: $('#giv2giv-number').val(),
+                  exp_month: expmm,
+                  exp_year: expyy,
+                  cvc: $('#giv2giv-cvc').val()
+                  }, function(status, response) {
+                    if (response.error) {
+                      // Show the errors on the form
+                      $( "#giv2giv-results" ).text(response.error.message);
                       $( "#giv2giv-results" ).dialog( "open" );
-                    });
-                  }
-                });
+                      frm.find('button').prop('disabled', false);
+                    } else {
+                      // charge success
+                      // response contains id, token and card, which contains additional card details like last4
+                      var token = response.id;
+
+                      // Insert the token into the form so it gets submitted to the server
+                      frm.append($('<input type="hidden" name="giv2giv-stripeToken" />').val(token));
+                      //convert the donation string $52.34 to a number
+                      amount.val(parseStrToNum(amount.val()));
+
+                      $.ajax({
+                        data: frm.serialize(),
+                        url: APIHOST + '/charity/' + charity.id + '/' + whichProcessor() + '.json',
+                        cache: false
+                      }).done(function (response) {
+                        console.log(response);
+                        // Show the success on the form
+                        $( "#giv2giv-results" ).dialog( "open" );
+                      });
+                    }
+                  });
               }
             },
             Cancel: function() {
@@ -326,9 +338,28 @@ function main() {
           passthru.trigger('update'); // Update tooltips
         });
 
-        // Validation
-        $('input').validateCreditCard(function(result) {
-          console.log(result);
+        $('form').card({
+            // a selector or DOM element for the container
+            // where you want the card to appear
+            container: '.card-wrapper', // *required*
+            formSelectors: {
+                numberInput: '#giv2giv-number', // optional — default input[name="number"]
+                expiryInput: '#giv2giv-expiry', // optional — default input[name="expiry"]
+                cvcInput: '#giv2giv-cvc', // optional — default input[name="cvc"]
+                nameInput: '#giv2giv-name' // optional - defaults input[name="name"]
+            },
+
+            width: 200, // optional — default 350px
+            formatting: true, // optional - default true
+
+            // Strings for translation - optional
+            messages: {
+                validDate: 'valid\ndate', // optional - default 'valid\nthru'
+                monthYear: 'mm/yyyy', // optional - default 'month/year'
+            },
+            // if true, will log helpful messages for setting up Card
+            debug: true // optional - default false
+
         });
 
         // Forms
@@ -567,8 +598,7 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", functi
   loadScript(HOST + "jquery-ui.min.js", function() { // load locally-modified JS
     initjQueryUIPlugin(jQuery);
     loadScript(HOST + "package.js", function() {
-      initjQueryValidatePlugin(jQuery);
-      initCreditCardValidator(jQuery);
+      initPlugins(jQuery);
       main(); // call our main function
     });
   });
