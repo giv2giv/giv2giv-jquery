@@ -1,135 +1,234 @@
 Donate Now!
 
-    <div id="giv2giv-dialog" class="section">
-      <form method="GET" action="#" id="giv2giv-form">
-        <div id="giv2giv-tabs">
-          <ul>
-            <!--<li style="font-size: 16px;"><a href="#giv2giv-bank-tab">Use Bank</a></li>-->
-            <li style="font-size: 16px;"><a href="#giv2giv-credit-tab">Use Credit Card</a></li>
-          </ul>
+<div id="giv2giv-dialog" class="section">
+	<form method="GET" action="#" id="giv2giv-form">
+		<div id="giv2giv-tabs">
+			<ul class="">
+				<!--<li style="font-size: 16px;"><a href="#giv2giv-bank-tab">Use Bank</a></li>-->
+				<li style="font-size: 16px;" class="tabli-use-credit"><a href="#giv2giv-credit-tab">Use Credit Card</a></li>
+			</ul>
 
-<!--          <div id="giv2giv-bank-tab"></div>
--->
+			<!--          <div id="giv2giv-bank-tab"></div>
+			-->
 
-          <div class="demo-container">
-              <div class="card-wrapper"></div>
-              <div class="form-container active">
-                <input placeholder="Card number" type="text" name="giv2giv-number" id="giv2giv-number">
-                <input placeholder="Cardholder Name" type="text" name="giv2giv-name" id = "giv2giv-name">
-                <input placeholder="MM/YYYY" type="text" name="giv2giv-expiry" id="giv2giv-expiry">
-                <input placeholder="CVC" type="text" name="giv2giv-cvc" id="giv2giv-cvc">
-              </div>
-          </div>
+			<div class="demo-container">
+				<div class="card-wrapper"></div>
+				<div class="form-container active">
+					<input placeholder="Card number" type="text" name="giv2giv-number" id="giv2giv-number">
+					<input placeholder="Cardholder Name" type="text" name="giv2giv-name" id = "giv2giv-name">
+					<input placeholder="MM/YYYY" type="text" name="giv2giv-expiry" id="giv2giv-expiry">
+					<input placeholder="CVC" type="text" name="giv2giv-cvc" id="giv2giv-cvc">
+				</div>
+			
 
-          <label for="giv2giv-amount-slider">
-            Donation Amount?
-          </label>
+				<label for="giv2giv-amount-slider">
+					Donation Amount?
+				</label>
           
-          <div style="padding-bottom:20px;">
-            <input style="float:left;" type="text" size="7" id="giv2giv-amount" name="giv2giv-amount">
-            <div style="float:left; width: 300px; height: 40px;">
-              <div style="margin-top: 20px; margin-left: 20px;" id="giv2giv-amount-slider"></div>
-            </div>
-            <br style="clear:both;" />
-          </div>
+				<div style="padding-bottom:20px;">
+					<input style="float:left;" type="text" size="7" id="giv2giv-amount" name="giv2giv-amount">
+					<div style="float:left; width: 300px; height: 40px;">
+						<div style="margin-top: 20px; margin-left: 20px;" id="giv2giv-amount-slider"></div>
+					</div>
+					<br style="clear:both;" />
+				</div>
 
-<!--
-            <div class="form-row">
-              <label>
-                <span>Card Number</span>
-                <input type="text" size="20" data-stripe="number" value="4242424242424242"/>
-              </label>
-            </div>
-            <div class="form-row">
-              <label>
-                <span>Expiration (MM/YYYY)</span>
-                <input type="text" size="2" data-stripe="exp-month" value="12" />
-              </label>
-              <span> / </span>
-              <input type="text" size="4" data-stripe="exp-year" value="2015" />
-            </div>
-            <div class="form-row">
-               <label>
-                 <span>CVV</span>
-                 <input type="text" size="4" data-stripe="cvc" value="123"/>
-               </label>
-            </div>
--->
+				<!--
+				<div class="form-row">
+				<label>
+				<span>Card Number</span>
+				<input type="text" size="20" data-stripe="number" value="4242424242424242"/>
+				</label>
+				</div>
+				<div class="form-row">
+				<label>
+				<span>Expiration (MM/YYYY)</span>
+				<input type="text" size="2" data-stripe="exp-month" value="12" />
+				</label>
+				<span> / </span>
+				<input type="text" size="4" data-stripe="exp-year" value="2015" />
+				</div>
+				<div class="form-row">
+				<label>
+				<span>CVV</span>
+				<input type="text" size="4" data-stripe="cvc" value="123"/>
+				</label>
+				</div>
+				-->
 
 
-            <div class="form-row">
-              <label>
-                <span>Email address to send receipt</span>
-                <input type="text" size="20" id="giv2giv-email" name="giv2giv-email">
-              </label>
-            </div>
-            <div class="fee_add">
-              <input type="checkbox" name="giv2giv-add-fees" id="giv2giv-add-fees" value="1" />
-              <label for="giv2giv-add-fees" id="giv2giv-add-fees-label"></label>
-            </div>
-          </div>
-          <label for "giv2giv-passthru-slider">
-            Send how much to charity now? The remainder will be invested.
-          </label>
-          <div style="padding-bottom:20px;">
-            <input style="float:left;" type="text" size="3" id="giv2giv-passthru-percent" name="giv2giv-passthru-percent" />
-            <div style="float:left; width: 300px; height: 40px;">
-              <div style="margin-top: 20px; margin-left: 20px;" id="giv2giv-passthru-slider"></div>
-            </div>
-            <br style="clear:both;" />
-          </div>
+				<div class="form-row">
+					<label>
+						<span>Email address to send receipt</span>
+						<input type="text" size="20" id="giv2giv-email" name="giv2giv-email">
+					</label>
+			 
+					<div class="fee_add">
+						<input type="checkbox" name="giv2giv-add-fees" id="giv2giv-add-fees" value="1" />
+						<label for="giv2giv-add-fees" id="giv2giv-add-fees-label"></label>
+					</div>
+				</div>
+				<label for "giv2giv-passthru-slider">
+					Send how much to charity now? The remainder will be invested.
+				</label>
+				<div style="padding-bottom:20px;">
+					<input style="float:left;" type="text" size="3" id="giv2giv-passthru-percent" name="giv2giv-passthru-percent" />
+					<div style="float:left; width: 300px; height: 40px;">
+						<div style="margin-top: 20px; margin-left: 20px;" id="giv2giv-passthru-slider"></div>
+					</div>
+					<br style="clear:both;" />
+				</div>
           
-          <div class="recurring">
-            <label for="giv2giv-recurring" id="giv2giv-recurring-label"></label>
-            <select id="giv2giv-recurring" name="giv2giv-recurring">
-              <option value="per-month" SELECTED>Donate Monthly
-              <option value="single_donation">One-time donation
-            </select>
-          </div>
+				<div class="recurring">
+					<label for="giv2giv-recurring" id="giv2giv-recurring-label"></label>
+					<select id="giv2giv-recurring" name="giv2giv-recurring">
+						<option value="per-month" SELECTED>Donate Monthly
+						<option value="single_donation">One-time donation
+					</select>
+				</div>
 
-          <div class="small" id="giv2giv-donation-details"></div>
-          <div class="small">
-            By clicking on 'Submit' you agree to giv2giv's <a target="_blank" href='https://docs.google.com/document/d/1nNLNSxqFxyp3c7r_oQjB7n2QkI7QlxMyNWRTi3R3EqM/edit?usp=sharing'>Terms and Conditions</a></div>
-          </div>
-        </div>
+				<div class="small" id="giv2giv-donation-details"></div>
+				<div class="small">
+					By clicking on 'Submit' you agree to giv2giv's <a target="_blank" href='https://docs.google.com/document/d/1nNLNSxqFxyp3c7r_oQjB7n2QkI7QlxMyNWRTi3R3EqM/edit?usp=sharing'>Terms and Conditions</a></div>
+          
 
-      </form>
+   
       
-      <style>
+				<style>
       
-        *:focus {
-          outline: 0 !important;
-        }
+		
+					*:focus {
+						outline: 0 !important;
+					}
         
-        .ui-dialog-title { white-space: normal !important; }
+					.ui-dialog-title { 
+						white-space: normal !important;}
         
-        #giv2giv-dialog {
-          padding: 5px 0 !important;
-        }
+					#giv2giv-dialog {
+						padding: 5px 0 !important;
+					}
         
-        #giv2giv-tabs {
-          padding: 10px !important;
-        }
+					#giv2giv-tabs .demo-container
+					{     
+						background: #333;
+						padding: 8px 10px;
+						border-radius: 7px;
+						color: #fff;
+						font-size: 12px;
+						font-family: arial,sans-serif;
+					}
+					#giv2giv-tabs {
+						border: none;
+						padding: 10px !important;
+					}
         
-        #giv2giv-dialog input[type=text] { 
-          display: block;
-          min-width: 100px;
-          padding: 10px 5px; margin: 10px 0;
-          text-align: right;
-        }
-      </style>
-    </div>
+					#giv2giv-dialog input[type=text] { 
+						    display: block;
+    min-width: 100px;
+    padding: 6px 5px;
+    margin: 10px 0;
+    text-align: right;
+    box-sizing: border-box;
+    border-radius: 7px;
+    border: none;
+    font-size: 85%;
+					}
+					#giv2giv-recurring
+					{
+						height: 25px;
+						line-height: 25px;
+					}
+					.ui-widget-header
+					{
+		
+					}
+					#giv2giv-number
+					{
+						float: left;
+						width: 49%;
+					}
+					#giv2giv-name
+					{
+						float: left;
+						width: 49%;
+						margin-left: 2% !important;
+					}
+					#giv2giv-expiry
+					{
+						float: left;
+						width: 49%;
+					}
+					#giv2giv-cvc
+					{
+						float: left;
+						width: 49%;
+						margin-left: 2% !important;
+					}
+					.tabli-use-credit > a
+					{
+						color: #fff !important;
+						font-weight: normal;
+						text-transform: uppercase;
+						font-size: 11px;
+						font-family: arial;
+						letter-spacing: 2px;
+					}
+					.tabli-use-credit
+					{
+						background: #333 !important;
+						border-radius: 7px 7px 0px 0px;
+					}
+				
+					.ui-dialog.ui-widget.ui-widget-content{
+						border-radius: 15px;
+					}
+					.ui-dialog .ui-dialog-titlebar
+					{
+					    background: #294C29;
+    color: #FFF;
+    border-radius: 10px;
+    border: none;
+					}
+		
+					#giv2giv-tabs > ul
+					{
+						background: none;
+						border: none;    
+						padding-left: 1em;
+					}
+					#giv2giv-tabs > ul > li
+					{
+						border: none;
+					}
+					.ui-dialog.ui-widget.ui-widget-content[aria-describedby='giv2giv-dialog'],
+					.ui-dialog.ui-widget.ui-widget-content[aria-describedby='giv2giv-dialog'] .ui-widget-content
+					{
+					    background: #7FA97F;
+    color: #FFF;
+    border-radius: 10px;
+    border: none;
+    }
+					.ui-dialog.ui-widget.ui-widget-content[aria-describedby='giv2giv-dialog'] .ui-widget-content a
+					{
+						color: #76A978;
+					}
+				</style>
+     
 
-    <div id="giv2giv-results" title="Donation success!">
-      <p>
-        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-        You have successfully donated.
-      </p>
-      <p>Share about your donation!</p>
-      <p>
-          <div id='fb-share' style='cursor: pointer'><img src="https://giv2giv.org/images/facebook-logo.png" width='50' height='50'></img></div>
-          <a id='twitter-share' class="twitter-share-button"><img src="https://giv2giv.org/images/twitter-logo.jpg" width='50' height='50'></img></a>
+				<div id="giv2giv-results" title="Donation success!">
+					<p>
+						<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+						You have successfully donated.
+					</p>
+					<p>Share about your donation!</p>
+					<p>
+						<div id='fb-share' style='cursor: pointer'><img src="https://giv2giv.org/images/facebook-logo.png" width='50' height='50'></img></div>
+						<a id='twitter-share' class="twitter-share-button"><img src="https://giv2giv.org/images/twitter-logo.jpg" width='50' height='50'></img></a>
 
-      </p>
-    </div>
-    </span>
+					</p>
+				</div>
+			</div>
+	
+		</div>
+	</form>
+</div>
