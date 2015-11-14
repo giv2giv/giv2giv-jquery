@@ -2,7 +2,7 @@
 
 		var jQuery, $; // Localize jQuery variables
 
-		var HOST = 'http://giv2giv.sundaysea.com/widget/'; // also set host in widget_example.html
+		var HOST = 'http://test.giv2giv.org/widget/'; // also set host in widget_example.html
 		var APIHOST = 'http://apitest.giv2giv.org/api';
 		var STRIPE_KEY = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 
@@ -28,12 +28,7 @@
 			(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(scriptTag);
 		}
 
-
-
 		function main() {
-
-
-			//    $(function() {
 
 			/* The main logic of our widget is here */
 			/* We should have fully loaded jquery, jquery-ui and all plugins */
@@ -50,7 +45,7 @@
 				initial_amount: script.data('initial-amount'),
 				initial_passthru: script.data('initial-passthru'),
 				theme: script.data('theme'),
-				add_fees: script.data('donor-add-fees')
+				add_fees: script.data('donor-add-fees'),
 			},
 			div = $('#giv2giv-button'),
 			frm = $('#giv2giv-form'),
@@ -72,10 +67,9 @@
 					initial_amount: 25,
 					initial_passthru: 25,
 					theme: "flick",
-					add_fees: true
+					add_fees: true,
+					share_email: true,
 				}, charity_preferences);
-
-
 
 			// Themes from jQueryUI http://jqueryui.com/themeroller/
 			// ui-lightness, ui-darkness, smoothness, start, redmond, sunny, overcast, le-frog,
@@ -109,7 +103,9 @@
 			);
 
 
-			addFees.prop("checked", charityPrefs.add_fees==true);
+			/*addFees.prop("checked", charityPrefs.add_fees==true);*/
+			//$("giv2giv-share-email-label1").prop("checked", true);
+			//$("giv2giv-recurring-label1").prop("checked", true);
 
 			if (charityPrefs.charity_id == null) {
 				var div_html = "script tag missing data-charity-id=YOURCHARITYID";
@@ -120,18 +116,17 @@
 			// tabify bank account / credit card tabs
 			$( "#giv2giv-tabs" ).tabs({
 					activate: function() {
-						donationDetails.empty().append(returnFormattedDonationDetails(amount, passthru, addFees));
-						addFeesLabel.html(returnFormattedAmountDetails(amount));
+						//donationDetails.empty().append(returnFormattedDonationDetails(amount, passthru, addFees));
+						//addFeesLabel.html(returnFormattedAmountDetails(amount));
 					},
 					create: function() {
-						donationDetails.empty().append(returnFormattedDonationDetails(amount, passthru, addFees));
+						//donationDetails.empty().append(returnFormattedDonationDetails(amount, passthru, addFees));
 					}
 				});
 
 			var json_url = APIHOST + "/charity/"+charityPrefs.charity_id+"/widget_data.json";
 
 			$.getJSON(json_url, function(charity) {
-				console.log(charity);
 					charity_glob = charity.name;
 					var dialog = $( "#giv2giv-dialog" ).dialog({
 							autoOpen: false,
@@ -143,7 +138,6 @@
 							buttons: {
 								'Donate Now!': function( event ){
 									event.preventDefault();
-									
 
 									var expgroup = $("#giv2giv-expiry").val();
 									var expArray = expgroup.split( '/' );
@@ -153,7 +147,7 @@
 									frm.find('button').prop('disabled', true);
 
 									// increase amount if donor assuming fees
-									charityPrefs.add_fees==true ? amount.val(parseStrToNum(amount.val())+calculateFee(amount)) : "";
+									//charityPrefs.add_fees==true ? amount.val(parseStrToNum(amount.val())+calculateFee(amount)) : "";
 
 									if (whichProcessor()=='dwolla') {
 										frm
@@ -179,15 +173,27 @@
 													// response contains id, token and card, which contains additional card details like last4
 													var token = response.id;
 
+
 													// Insert the token into the form so it gets submitted to the server
 													frm.append($('<input type="hidden" name="giv2giv-stripeToken" />').val(token));
+
+													// Don't send CC number to giv2giv
+													$('#giv2giv-number').val('0');
+
 													//convert the donation string $52.34 to a number
 													amount.val(parseStrToNum(amount.val()));
 													var frmserialize  = frm.serialize();
+
 													if ($('#giv2giv-recurring-label1').is(':checked'))
 													{
 													 
 														frmserialize = frmserialize.replace('giv2giv-recurring=nil&','');
+												 
+													}
+													if ($('#giv2giv-share-email-label1').is(':checked'))
+													{
+													 
+														frmserialize = frmserialize.replace('giv2giv-share-email=nil&','');
 												 
 													}
 													 
@@ -197,6 +203,12 @@
 															cache: false
 														}).done(function (response) {
 															console.log(response);
+															console.log(response.message);
+															// Clear out the form
+
+															frm.trigger('reset');
+															$('#giv2giv-amount').val("$"+charityPrefs.initial_amount).trigger('update');
+
 															// Show the success on the form
 															$( "#giv2giv-results" ).dialog( "open" );
 														});
@@ -221,7 +233,6 @@
 					// Init the amount slider
 					amountSlider.slider({
 							animate: true,
-							value: charityPrefs.initial_amount,
 							min: charityPrefs.minamt,
 							max: charityPrefs.maxamt,
 							step: charityPrefs.inc,
@@ -229,7 +240,11 @@
 								amount
 								.val("$" + ui.value) // Update donation amount
 								.trigger('update'); // Parse, format, update
-							}
+							},
+							create: function(event, ui){
+        				$(this).slider('value', charityPrefs.initial_amount);
+        				$('#giv2giv-amount').val("$"+charityPrefs.initial_amount).trigger('update');
+    					}
 						});
 
 					// Init the passthru slider
@@ -247,7 +262,13 @@
 								$('#makeimpact-percent').text(ui.value+'%');
 								var remainningPercent = 100-parseInt( ui.value );
 								$('#sustainamission-percent').text(remainningPercent+'%');
-							}
+							},
+							create: function(event, ui){
+        				$(this).slider('value', charityPrefs.initial_passthru);
+        				$('#makeimpact-percent').text(charityPrefs.initial_passthru+'%');
+								var remainningPercent = 100-parseInt( charityPrefs.initial_passthru );
+								$('#sustainamission-percent').text(remainningPercent+'%');
+    					}
 						});
 
 					// set Stripe key
@@ -255,6 +276,9 @@
 					$.getScript("https://js.stripe.com/v2/", function() {
 							Stripe.setPublishableKey(STRIPE_KEY);
 						});
+					$.getScript("http://w.sharethis.com/button/buttons.js", function() {
+							
+					});
 
 					// Attach listeners to the amount input fields to update the slider when amount is changed
 					amount
@@ -279,11 +303,15 @@
         
 								// Update input field
 								amount.val('$' + val);
+
+								if (charityPrefs.add_fees==true) {
+									$("#totaldonation-value").text('Total Donation: $' + val);
+								}
 							}
 
 							// Update details
 							donationDetails.html(returnFormattedDonationDetails(amount, passthru, addFees));
-							addFeesLabel.html(returnFormattedAmountDetails(amount));
+							//addFeesLabel.html(returnFormattedAmountDetails(amount));
 							
 							updateShareText(amount);
 							
@@ -295,6 +323,30 @@
 							.focus()
 							.select();
 						});
+
+					$('#giv2giv-amount').val("$" + charityPrefs.initial_amount).trigger('update');
+
+
+					var rel = charityPrefs.initial_amount;
+					$('.choose-donate-amount li').removeClass('active');
+					$(".choose-donate-amount li[rel='"+rel+"']").addClass('active');
+
+					$('.choose-donate-amount li').click(function(){
+						$('.choose-donate-amount li').removeClass('active');
+						$(this).addClass('active');
+						var vval = $(this).attr('rel');
+						if ($(this).hasClass('other-input'))
+						{  
+							$('.giv2giv-amount-slider-wrapper,#giv2giv-amount').show('fast');
+						}
+						else
+						{
+							$('.giv2giv-amount-slider-wrapper,#giv2giv-amount').hide('fast');
+						}
+						$('#giv2giv-amount').val("$"+vval).trigger('update');
+					});
+					$('.st_linkedin_large,.st_twitter_large,.st_pinterest_large,.st_googleplus_large,.st_reddit_large,.st_email_large,.st_facebook_large').attr('st_url',window.location.href );
+					
 
 					// Attach listeners to the amount input fields to update the slider when amount is changed
 					passthru
@@ -343,7 +395,7 @@
 					passthru
 					.val(passthruSlider.slider("value")+'%')
 					.trigger('update');
-
+/*
 					// Fee assumption toggle button
 					addFees.change(function() {
 							var el = $(this);
@@ -353,7 +405,7 @@
 							amount.trigger('update'); // Update tooltips
 							passthru.trigger('update'); // Update tooltips
 						});
-
+*/
 					$('form').card({
 							// a selector or DOM element for the container
 							// where you want the card to appear
@@ -448,7 +500,7 @@
 
 
 
-
+/*
 					//    Share on facebook code
 					$('#fb-share').click(function() {
 							FB.ui({
@@ -460,7 +512,7 @@
 						})
 
 					$('#twitter-share').attr("href", "https://twitter.com/intent/tweet?text=" + "I donated to a charity using Giv2Giv! Check it out here!&url=https://giv2giv.org/#charity/" + $('#giv2giv-script').attr('data-charity-id'))
-
+*/
 					/*
 					// Bind form enter key
 					$("form").not('#frm-feedback').find("input").last().keydown(function(e) {
@@ -497,7 +549,7 @@
 		var returnFormattedDonationDetails = function (amount, passthru, addFees) {
 			var val, transactionAmount, amount_passthru, percent_passthru, amount_invested, net_amount=0, fee=0;
 			
-				
+/*
 			if (addFees.is(':checked')) {
 				transactionAmount = parseStrToNum(amount.val()) + calculateFee(amount);
 			}
@@ -505,10 +557,13 @@
 				transactionAmount = parseStrToNum(amount.val());
 				fee = calculateFee(amount);
 			}
+			*/
+			transactionAmount = parseStrToNum(amount.val());
 			net_amount = transactionAmount - fee;
 
 			percent_passthru = parseStrToNum(passthru.val()) / 100; // convert int to percent e.g. 50 to .5
-			amount_passthru = net_amount * percent_passthru;
+			
+			amount_passthru = (Math.ceil(net_amount * percent_passthru * 100)/100).toFixed(2);
 			amount_invested = net_amount - amount_passthru;
 
 			val = "<h3>Summary:</h3>";
@@ -521,6 +576,7 @@
 			var textSum2 = "$" + formatMoney(amount_invested) +" will be invested to sustain the mission of "+charity_glob+" by making grants over time";
 			$('#makeimpact-badge').attr('data-tooltip',textSum1);
 			$('#sustainamission-badge').attr('data-tooltip',textSum2);
+
 			$('#makeimpact-value').text("$" + formatMoney(amount_passthru) + "");
 			$('#sustainamission-value').text("$" + formatMoney(amount_invested) + "");
 			return val;
@@ -529,9 +585,7 @@
 		var returnFormattedAmountDetails = function (amount) {
 			// console.log(amount.val());
 			var tmpfee =  formatMoney(calculateFee(amount));
-			console.log(tmpfee);
-			 return "Add transaction fee of $" +tmpfee + "?";
-			//return "Add transaction fee ?";
+			return "Add transaction fee of $" +tmpfee + "?";
 		}
 
 
@@ -595,7 +649,7 @@
 
 		var updateShareText = function(amount){
 			
-			var returntext = "I'm building a sustainable fund for "+charity_glob+" through giv2giv.org. Help your community make a difference at "+window.location.href +" !";
+			var returntext = "I give to a sustainable fund for "+charity_glob+" through giv2giv.org. Help make a difference at "+window.location.href +" !";
 			$('.st_linkedin_large,.st_twitter_large,.st_pinterest_large,.st_googleplus_large,.st_reddit_large,.st_email_large,.st_facebook_large').attr('st_title',returntext );
 		}
 		
@@ -655,23 +709,7 @@
 				jQuery(window).load(function() {
 						// executes when complete page is fully loaded, including all frames, objects and images
 						jQuery(function($){
-								$('#giv2giv-amount').val("$25.00").trigger('update');
-								$('.choose-donate-amount li').click(function(){
-										$('.choose-donate-amount li').removeClass('active');
-										$(this).addClass('active');
-										var vval = $(this).attr('rel');
-										if ($(this).hasClass('other-input'))
-										{  
-											$('.giv2giv-amount-slider-wrapper,#giv2giv-amount').show('fast');
-										}
-										else
-										{
-											$('.giv2giv-amount-slider-wrapper,#giv2giv-amount').hide('fast');
-										}
-								$('#giv2giv-amount').val("$"+vval).trigger('update');
-									});
-									$('.st_linkedin_large,.st_twitter_large,.st_pinterest_large,.st_googleplus_large,.st_reddit_large,.st_email_large,.st_facebook_large').attr('st_url',window.location.href );
-									
+								
 							});
 					});
 
