@@ -35,6 +35,7 @@
 
 			var script = $('#giv2giv-script'),
 
+
 			charity_preferences = {
 				charity_id: script.data('charity-id'),
 				minamt: script.data('minimum-amount'),
@@ -71,6 +72,8 @@
 					share_email: true,
 				}, charity_preferences);
 
+
+
 			// Themes from jQueryUI http://jqueryui.com/themeroller/
 			// ui-lightness, ui-darkness, smoothness, start, redmond, sunny, overcast, le-frog,
 			// flick, pepper-grinder, eggplant, dark-hive, cupertino, south-street, blitzer, humanity
@@ -84,7 +87,7 @@
 			giv2givLink.media = 'all';
 			giv2givHead.appendChild(giv2givLink);
  
-
+/*
 			var giv2givHead  = document.getElementsByTagName('head')[0];
 			var giv2givLink  = document.createElement('link');
 			giv2givLink.rel  = 'stylesheet';
@@ -92,10 +95,11 @@
 			giv2givLink.href = HOST+'/fun.css';
 			giv2givLink.media = 'all';
 			giv2givHead.appendChild(giv2givLink);
- 
+ */
 
 			div.css(
 				{
+					'display':'block',
 					'border':'3px solid black',
 					'height':50,
 					'width':125
@@ -157,6 +161,8 @@
 									else if (whichProcessor()=='stripe') { // is stripe
 										// Disable the submit button to prevent repeated clicks
 
+										$('.pleasewait').css( { 'display':'block'});
+
 										Stripe.card.createToken({
 												number: $('#giv2giv-number').val(),
 												exp_month: expmm,
@@ -165,17 +171,19 @@
 											}, function(status, response) {
 												if (response.error) {
 													// Show the errors on the form
+													$('.pleasewait').css( { 'display':'none'});
 													$( "#giv2giv-resultsfail" ).text(response.error.message);
 													$( "#giv2giv-resultsfail" ).dialog( "open" );
 													frm.find('button').prop('disabled', false);
 												} else {
+
 													// charge success
 													// response contains id, token and card, which contains additional card details like last4
 													var token = response.id;
 
 
 													// Insert the token into the form so it gets submitted to the server
-													frm.append($('<input type="hidden" name="giv2giv-stripeToken" />').val(token));
+													frm.append($('<input type="hidden" name="giv2giv-stripeToken" id="giv2giv-stripeToken" />').val(token));
 
 													// Don't send CC number to giv2giv
 													$('#giv2giv-number').val('0');
@@ -200,13 +208,14 @@
 													$.ajax({
 															data: frmserialize,
 															url: APIHOST + '/charity/' + charity.id + '/' + whichProcessor() + '.json',
+															beforeSend: function() { $('.pleasewait').show(); },
+        											complete: function() { $('.pleasewait').hide(); },
 															cache: false
 														}).done(function (response) {
-															console.log(response);
-															console.log(response.message);
 															// Clear out the form
-
+															$('.pleasewait').css( { 'display':'none'});
 															frm.trigger('reset');
+															$('#giv2giv-stripeToken').remove();
 															$('#giv2giv-amount').val("$"+charityPrefs.initial_amount).trigger('update');
 
 															// Show the success on the form

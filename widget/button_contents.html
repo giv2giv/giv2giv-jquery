@@ -151,13 +151,27 @@ Donate Now!
 				<div class="small" id="giv2giv-donation-details"></div>
 				<div class="small">
 					By clicking on 'Submit' you agree to giv2giv's <a target="_blank" href='https://docs.google.com/document/d/1nNLNSxqFxyp3c7r_oQjB7n2QkI7QlxMyNWRTi3R3EqM/edit?usp=sharing'>Terms and Conditions</a></div>
-          
 
-   
+				<div class="pleasewait"></div>
       
 				<style>
-      
-		
+
+					.pleasewait {
+				    display:    none;
+				    position:   fixed;
+				    opacity: 0.5;
+				    z-index:    1000;
+				    top:        0;
+				    left:       0;
+				    height:     100%;
+				    width:      100%;
+				    background: rgba( 255, 255, 255, .8 ) 
+				                url('http://test.giv2giv.org/images/pleasewait.gif') 
+				                50% 50% 
+				                no-repeat;
+				    background-size: 80px 60px;
+					}
+
 					*:focus {
 						outline: 0 !important;
 					}
