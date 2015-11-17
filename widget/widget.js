@@ -38,14 +38,14 @@
 			charity_preferences = {
 				charity_id: script.data('charity-id'),
 				minamt: script.data('minimum-amount'),
-				maxamt: script.data('maximum-amount'),
-				minpct: script.data('minimum-passthru-percentage'),
-				maxpct: script.data('maximum-passthru-percentage'),
+				maxamt: script.data('maximum-amount')
 				inc: script.data('incremenent'),
 				initial_amount: script.data('initial-amount'),
 				initial_passthru: script.data('initial-passthru'),
 				theme: script.data('theme'),
 				add_fees: script.data('donor-add-fees'),
+				share_info: script.data('donor-share-info'),
+				mode: script.data('mode'),
 			},
 			div = $('#giv2giv-button'),
 			frm = $('#giv2giv-form'),
@@ -61,15 +61,18 @@
 					charity_id: null,
 					minamt: 5.00,
 					maxamt: 10000,
-					minpct: 0,
-					maxpct: 100,
 					inc: 1.00,
 					initial_amount: 25,
 					initial_passthru: 25,
 					theme: "flick",
 					add_fees: true,
-					share_email: true,
+					share_info: true,
+					mode: "test",
 				}, charity_preferences);
+
+			if (charityPrefs.mode != 'live');
+				charityPrefs.mode = 'test';
+
 
 
 			// Themes from jQueryUI http://jqueryui.com/themeroller/
@@ -140,6 +143,10 @@
 
 									// increase amount if donor assuming fees
 									//charityPrefs.add_fees==true ? amount.val(parseStrToNum(amount.val())+calculateFee(amount)) : "";
+									if (charityPrefs.mode=='test') {
+										$( "#giv2giv-results" ).dialog( "open" );
+										return;
+									}
 
 									if (whichProcessor()=='dwolla') {
 										frm
