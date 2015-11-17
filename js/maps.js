@@ -54,7 +54,6 @@ function onStart(charities) {
 				var location = new L.latLng(charities[i].latitude, charities[i].longitude);
 	    	locations.push(location);
 	    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<a href=/#charity/"+charities[i].slug+"><b>"+charities[i].name+"</b><br>"+charities[i].address+"</a>");
-//	    	var marker = L.marker(location, {title:name}).addTo(map).bindPopup("<b>"+charities[i].name+"</b><br>"+charities[i].address);
 	  	  oms.addMarker(marker);
 	    	var bounds = new L.LatLngBounds(locations);
 				map.fitBounds(bounds);
@@ -66,22 +65,5 @@ function onStart(charities) {
 		if (charities.length==1)
 			map.setZoom(9);
 	}
-	
 
-/*
-		//$('#impact-link').html('<img src="' + mapURL + '" alt="" id="impact-map" />');
-
-	} else {
-		$('#impact-link').html(
-			'<p>You haven\'t subscribed to any endowments yet.</p>' +
-			'<p><a href="/" class="btn btn-primary find-endowment-btn">Find an Endowment</a></p>');
-	}
-*/
-	
-	// Check if user allows geo-location
-	// if (navigator.geolocation) {
-	// 	navigator.geolocation.getCurrentPosition(function(position) {
-	// 		makeMap(position.coords.latitude, position.coords.longitude, 'Your GPS Location');
-	// 	});
-	// }
 }

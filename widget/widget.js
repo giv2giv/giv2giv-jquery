@@ -2,8 +2,8 @@
 
 		var jQuery, $; // Localize jQuery variables
 
-		var HOST = 'http://test.giv2giv.org/widget/'; // also set host in widget_example.html
-		var APIHOST = 'http://apitest.giv2giv.org/api';
+		var HOST = 'https://giv2giv.org/widget/'; // also set host in widget_example.html
+		var APIHOST = 'https://api.giv2giv.org/api';
 		var STRIPE_KEY = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 
 		var charity_glob = '';
@@ -34,7 +34,6 @@
 			/* We should have fully loaded jquery, jquery-ui and all plugins */
 
 			var script = $('#giv2giv-script'),
-
 
 			charity_preferences = {
 				charity_id: script.data('charity-id'),
@@ -73,7 +72,6 @@
 				}, charity_preferences);
 
 
-
 			// Themes from jQueryUI http://jqueryui.com/themeroller/
 			// ui-lightness, ui-darkness, smoothness, start, redmond, sunny, overcast, le-frog,
 			// flick, pepper-grinder, eggplant, dark-hive, cupertino, south-street, blitzer, humanity
@@ -86,16 +84,6 @@
 			giv2givLink.href = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/' + charityPrefs.theme + '/jquery-ui.css';
 			giv2givLink.media = 'all';
 			giv2givHead.appendChild(giv2givLink);
- 
-/*
-			var giv2givHead  = document.getElementsByTagName('head')[0];
-			var giv2givLink  = document.createElement('link');
-			giv2givLink.rel  = 'stylesheet';
-			giv2givLink.type = 'text/css';
-			giv2givLink.href = HOST+'/fun.css';
-			giv2givLink.media = 'all';
-			giv2givHead.appendChild(giv2givLink);
- */
 
 			div.css(
 				{
@@ -285,7 +273,7 @@
 					$.getScript("https://js.stripe.com/v2/", function() {
 							Stripe.setPublishableKey(STRIPE_KEY);
 						});
-					$.getScript("http://w.sharethis.com/button/buttons.js", function() {
+					$.getScript("https://ws.sharethis.com/button/buttons.js", function() {
 							
 					});
 
@@ -415,7 +403,7 @@
 							passthru.trigger('update'); // Update tooltips
 						});
 */
-					$('form').card({
+					$('#giv2giv-form').card({
 							// a selector or DOM element for the container
 							// where you want the card to appear
 							container: '.card-wrapper', // *required*
@@ -697,7 +685,6 @@
 		}
 		*/
 
-
 		/* Load jQuery */
 		loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", function() {
 
@@ -715,17 +702,7 @@
 							});
 					});
 
-				jQuery(window).load(function() {
-						// executes when complete page is fully loaded, including all frames, objects and images
-						jQuery(function($){
-								
-							});
-					});
-
-
-
 			});
-
 
 	}(window, document)); /* end IIFE */
 

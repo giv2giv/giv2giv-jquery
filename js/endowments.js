@@ -687,7 +687,7 @@ function initSocialShare(endowment) {
 
 	// Twitter
 	// TODO - figure out why data-counturl won't work with slug/hashtag
-	$(".twitter-share-button").attr("data-text", "Make a difference today.");
+	$(".twitter-share-button").attr("data-text", "I give to "+endowment.name+" through @giv2giv. Please give too!");
 	$(".twitter-share-button").attr("data-url", shareURL);
 	$(".twitter-share-button").attr("data-counturl", GLOBAL.WEB_URL);
 	$(".twitter-share-button").attr("data-hashtags", "giv2giv");
