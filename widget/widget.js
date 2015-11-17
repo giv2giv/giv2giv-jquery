@@ -2,8 +2,8 @@
 
 		var jQuery, $; // Localize jQuery variables
 
-		var HOST = 'http://test.giv2giv.org/widget/'; // also set host in widget_example.html
-		var APIHOST = 'http://apitest.giv2giv.org/api';
+		var HOST = 'https://giv2giv.org/widget/'; // also set host in widget_example.html
+		var APIHOST = 'https://api.giv2giv.org/api';
 		var STRIPE_KEY = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 
 		var charity_glob = '';
