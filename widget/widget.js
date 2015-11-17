@@ -2,8 +2,8 @@
 
 		var jQuery, $; // Localize jQuery variables
 
-		var HOST = 'https://giv2giv.org/widget/'; // also set host in widget_example.html
-		var APIHOST = 'https://api.giv2giv.org/api';
+		var HOST = 'http://test.giv2giv.org/widget/'; // also set host in widget_example.html
+		var APIHOST = 'http://apitest.giv2giv.org/api';
 		var STRIPE_KEY = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 
 		var charity_glob = '';
@@ -38,7 +38,7 @@
 			charity_preferences = {
 				charity_id: script.data('charity-id'),
 				minamt: script.data('minimum-amount'),
-				maxamt: script.data('maximum-amount')
+				maxamt: script.data('maximum-amount'),
 				inc: script.data('incremenent'),
 				initial_amount: script.data('initial-amount'),
 				initial_passthru: script.data('initial-passthru'),
@@ -63,7 +63,7 @@
 					maxamt: 10000,
 					inc: 1.00,
 					initial_amount: 25,
-					initial_passthru: 25,
+					initial_passthru: 50,
 					theme: "flick",
 					add_fees: true,
 					share_info: true,
@@ -123,6 +123,7 @@
 
 			$.getJSON(json_url, function(charity) {
 					charity_glob = charity.name;
+					$("#giv2giv-share-info-label").text('Share my info with ' + charity.name + '?');
 					var dialog = $( "#giv2giv-dialog" ).dialog({
 							autoOpen: false,
 							title: "Donate to " + charity.name + " through giv2giv.org",
@@ -141,12 +142,9 @@
 
 									frm.find('button').prop('disabled', true);
 
+
 									// increase amount if donor assuming fees
 									//charityPrefs.add_fees==true ? amount.val(parseStrToNum(amount.val())+calculateFee(amount)) : "";
-									if (charityPrefs.mode=='test') {
-										$( "#giv2giv-results" ).dialog( "open" );
-										return;
-									}
 
 									if (whichProcessor()=='dwolla') {
 										frm
@@ -172,16 +170,15 @@
 													frm.find('button').prop('disabled', false);
 												} else {
 
-													// charge success
 													// response contains id, token and card, which contains additional card details like last4
 													var token = response.id;
 
-
 													// Insert the token into the form so it gets submitted to the server
 													frm.append($('<input type="hidden" name="giv2giv-stripeToken" id="giv2giv-stripeToken" />').val(token));
+													frm.append($('<input type="hidden" name="giv2giv-mode" id="giv2giv-mode" />').val(charityPrefs.mode));
 
 													// Don't send CC number to giv2giv
-													$('#giv2giv-number').val('0');
+													$('#giv2giv-number').val('');
 
 													//convert the donation string $52.34 to a number
 													amount.val(parseStrToNum(amount.val()));
@@ -193,10 +190,10 @@
 														frmserialize = frmserialize.replace('giv2giv-recurring=nil&','');
 												 
 													}
-													if ($('#giv2giv-share-email-label1').is(':checked'))
+													if ($('#giv2giv-share-info-label1').is(':checked'))
 													{
 													 
-														frmserialize = frmserialize.replace('giv2giv-share-email=nil&','');
+														frmserialize = frmserialize.replace('giv2giv-share-info=nil&','');
 												 
 													}
 													 
@@ -211,6 +208,7 @@
 															$('.pleasewait').css( { 'display':'none'});
 															frm.trigger('reset');
 															$('#giv2giv-stripeToken').remove();
+															$('#giv2giv-mode').remove();
 															$('#giv2giv-amount').val("$"+charityPrefs.initial_amount).trigger('update');
 
 															// Show the success on the form
@@ -280,9 +278,9 @@
 					$.getScript("https://js.stripe.com/v2/", function() {
 							Stripe.setPublishableKey(STRIPE_KEY);
 						});
-					$.getScript("https://ws.sharethis.com/button/buttons.js", function() {
+					//$.getScript("https://ws.sharethis.com/button/buttons.js", function() {
 							
-					});
+					//});
 
 					// Attach listeners to the amount input fields to update the slider when amount is changed
 					amount
@@ -706,6 +704,8 @@
 						loadScript(HOST + "package.js", function() {
 								initPlugins(jQuery);
 								main(); // call our main function
+								var switchTo5x=true;
+								stLight.options({publisher: "c8d282c1-3c5a-4364-bd98-2edde663f4ee",shorten: false});
 							});
 					});
 

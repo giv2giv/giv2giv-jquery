@@ -271,7 +271,7 @@ function onCharityDetails(charity) {
 
 	// Header
 	$('#charity-details-header').html(charity.name.titleize());
-
+/*
 	var scriptTag = document.createElement('script');
   scriptTag.setAttribute("type", "text/javascript");
   scriptTag.setAttribute("id", "giv2giv-script");
@@ -290,7 +290,7 @@ function onCharityDetails(charity) {
 
 	// Finally, insert the script element into the div
 	document.getElementById("giv2giv-script-div").appendChild(scriptTag);
-
+*/
 
 	if(charity.tags.length > 0) {
 		$.each(charity.tags, function (k, tag) {

@@ -580,6 +580,7 @@ function subscribeSelectors() {
 
 		var payload = {};
 		payload.amount = amount;
+		payload.mode = GLOBAL.MODE
 		payload.frequency = frequency;
 		payload.endowment_id = self.attr('data-id');
 		var request_payload = JSON.stringify(payload);
