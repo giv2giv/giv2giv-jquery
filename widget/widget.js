@@ -606,8 +606,7 @@
 			var thisAmount = parseStrToNum(amount.val());
 			switch (whichProcessor()) {
 				case "stripe":
-				fee = 0.3 + parseFloat((.029 * thisAmount).toFixed(2));
-				
+				fee = 0.3 + parseFloat((.022 * thisAmount).toFixed(2));
 				 
 				break;
 				case "dwolla":
@@ -622,8 +621,6 @@
 			return fee;
 		}
 
-
-
 		/**
 		* Parses a string into a number
 		*
@@ -634,8 +631,6 @@
 		* @param {string} string to parse
 		* @return {number} parsed number
 		*/
-		
-		
 
 		var parseStrToNum = function(str) {
 			var num = +str.replace(/[^0-9\.]+/g, '');
@@ -664,8 +659,6 @@
 			$("head").append(cssLink); 
 		};
 
-
-
 		var formatMoney = function(n, c, d, t){
 			var n = isNaN(n = Math.abs(n)) ? 0 : n, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "." : d, t = t == undefined ? "," : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
 
@@ -691,7 +684,7 @@
 		*/
 
 		/* Load jQuery */
-		loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", function() {
+		loadScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js", function() {
 
 				/* Restore $ and window.jQuery to their previous values and store the
 				new jQuery in our local jQuery variables. */
@@ -712,5 +705,3 @@
 			});
 
 	}(window, document)); /* end IIFE */
-
-
