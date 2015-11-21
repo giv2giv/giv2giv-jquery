@@ -1833,8 +1833,8 @@ restrictExpiry = function(e) {
     return;
   }
   value = QJ.val(target) + digit;
-  value = value.replace(/\D/g, '');
-  if (value.length > 6) {
+  //value = valuereplace(/\D/g, '');
+  if (value.length. > 6) {
     return e.preventDefault();
   }
 };
@@ -1997,6 +1997,10 @@ Payment = (function() {
     QJ.on(el, 'keypress', formatExpiry);
     QJ.on(el, 'keypress', formatForwardSlash);
     QJ.on(el, 'keypress', formatForwardExpiry);
+    QJ.on(el, 'keyup', restrictExpiry);
+    QJ.on(el, 'keyup', formatExpiry);
+    QJ.on(el, 'keyup', formatForwardSlash);
+    QJ.on(el, 'keyup', formatForwardExpiry);
     QJ.on(el, 'keydown', formatBackExpiry);
     return el;
   };
@@ -2005,6 +2009,8 @@ Payment = (function() {
     Payment.restrictNumeric(el);
     QJ.on(el, 'keypress', restrictCardNumber);
     QJ.on(el, 'keypress', formatCardNumber);
+    QJ.on(el, 'keyup', restrictCardNumber);
+    QJ.on(el, 'keyup', formatCardNumber);
     QJ.on(el, 'keydown', formatBackCardNumber);
     QJ.on(el, 'keyup', setCardType);
     QJ.on(el, 'paste', reFormatCardNumber);
