@@ -1833,8 +1833,8 @@ restrictExpiry = function(e) {
     return;
   }
   value = QJ.val(target) + digit;
-  //value = valuereplace(/\D/g, '');
-  if (value.length. > 6) {
+  value = valuereplace(/\D/g, '');
+  if (value.length > 6) {
     return e.preventDefault();
   }
 };
