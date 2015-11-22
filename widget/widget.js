@@ -119,6 +119,8 @@
                 }
             });
 
+            frm.validate();
+
             var json_url = APIHOST + "/charity/" + charityPrefs.charity_id + "/widget_data.json";
 
             $.getJSON(json_url, function(charity) {
@@ -174,6 +176,14 @@
                                     'display': 'block'
                                 });
 
+                                /*if (parseStrToNum(amount.val()) > 499 &&  $('#giv2giv-email')
+                                $('.pleasewait').css({
+                                  'display': 'none'
+                                });
+                                $("#giv2giv-resultsfail").text(response.error.message);
+                                $("#giv2giv-resultsfail").dialog("open");
+                                frm.find('button').prop('disabled', false);
+*/
                                 Stripe.card.createToken({
                                     number: $('#giv2giv-number').val(),
                                     exp_month: expmm,
