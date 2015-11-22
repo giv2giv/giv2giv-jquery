@@ -126,6 +126,7 @@
                 $("#giv2giv-share-info-label").text('Share my info with ' + charity.name + '?');
                 var dialog = $("#giv2giv-dialog").dialog({
                     autoOpen: false,
+                    draggable : false,
                     title: "Donate to " + charity.name + " through giv2giv.org",
                     height: 'auto',
                     width: '450px',
