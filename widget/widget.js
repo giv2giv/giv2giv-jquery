@@ -136,10 +136,26 @@
                             event.preventDefault();
 
                             var expgroup = $("#giv2giv-expiry").val();
-                            var expArray = expgroup.split('/');
-                            var expmm = parseInt(expArray[0]);
+                            if(expgroup.indexOf("\/") >= 0){
+                            var expArray = expgroup.split(' / ');
+                            var expmm = parseInt(expArray[0], 10);
                             var expyy = parseInt(expArray[1]);
+                            }
+                            else{
+                            expgroup = expgroup.replace(/\s/g, "");
+                            if(typeof expgroup !== "string"){
+                                expgroup = expgroup.toString();
+                            }                                 
+                            var monthExp = expgroup[0] + expgroup[1];
+                            var expmm = +monthExp;
+                            if(expgroup.length>=6){
+                               var yearExp = expgroup[2] + expgroup[3]+ expgroup[4] + expgroup[5];
+                                } else{
+                                var yearExp = expgroup[2] + expgroup[3];
+                            }
+                            var expyy = +yearExp;
 
+                            }
                             frm.find('button').prop('disabled', true);
 
 
