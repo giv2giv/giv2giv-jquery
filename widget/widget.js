@@ -3,8 +3,8 @@
 
     var jQuery, $; // Localize jQuery variables
 
-    var HOST = 'https://giv2giv.org/widget/'; // also set host in widget_example.html
-    var APIHOST = 'https://api.giv2giv.org/api';
+    var HOST = 'http://test.giv2giv.org/widget/'; // also set host in widget_example.html
+    var APIHOST = 'http://apitest.giv2giv.org/api';
     var STRIPE_KEY = 'pk_test_d678rStKUyF2lNTZ3MfuOoHy';
 
     var charity_glob = '';
@@ -119,7 +119,7 @@
                 }
             });
 
-            frm.validate();
+            var validator = frm.validate();
 
             var json_url = APIHOST + "/charity/" + charityPrefs.charity_id + "/widget_data.json";
 
@@ -161,7 +161,12 @@
                             }
                             frm.find('button').prop('disabled', true);
 
-
+                            if (!frm.valid()) {
+                              $("#giv2giv-resultsfail").text("Email is required for donations over $500");
+                              $("#giv2giv-resultsfail").dialog("open");
+                              frm.find('button').prop('disabled', false);
+                              return;
+                            }
                             // increase amount if donor assuming fees
                             //charityPrefs.add_fees==true ? amount.val(parseStrToNum(amount.val())+calculateFee(amount)) : "";
 
@@ -176,14 +181,6 @@
                                     'display': 'block'
                                 });
 
-                                /*if (parseStrToNum(amount.val()) > 499 &&  $('#giv2giv-email')
-                                $('.pleasewait').css({
-                                  'display': 'none'
-                                });
-                                $("#giv2giv-resultsfail").text(response.error.message);
-                                $("#giv2giv-resultsfail").dialog("open");
-                                frm.find('button').prop('disabled', false);
-*/
                                 Stripe.card.createToken({
                                     number: $('#giv2giv-number').val(),
                                     exp_month: expmm,
@@ -276,6 +273,7 @@
                         amount
                             .val("$" + ui.value) // Update donation amount
                             .trigger('update'); // Parse, format, update
+
                     },
                     create: function(event, ui) {
                         $(this).slider('value', charityPrefs.initial_amount);
@@ -321,6 +319,8 @@
                     .on('keyup blur update', function(e) {
                         // Parse input field
                         var rawVal = parseStrToNum(amount.val());
+
+                        (rawVal >=500) ? $("#giv2giv-email").rules("add", "required") : $("#giv2giv-email").rules("remove", "required");
 
                         // Update slider amount, but only
                         // if the update didn't originate 
@@ -459,7 +459,7 @@
                         monthYear: 'mm/yyyy', // optional - default 'month/year'
                     },
                     // if true, will log helpful messages for setting up Card
-                    debug: true // optional - default false
+                    debug: false // optional - default false
 
                 });
 
@@ -738,7 +738,7 @@
             //load touchpunch.js file which provides touch events to work with JQuery UI components like slider, drandrop etc
             loadScript(HOST + "touchpunch.js", function() {
                 initTouchPunchPlugin(jQuery);
-                loadScript(HOST + "package.js", function() {
+                loadScript(HOST + "package.js.min", function() {
                     initPlugins(jQuery);
 
                     main(); // call our main function

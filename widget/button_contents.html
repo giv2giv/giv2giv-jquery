@@ -33,7 +33,7 @@ Donate Now!
                     <br style="clear:both;" />
                 </div>
 
-                <div style="padding-bottom:20px;padding-top: 20px;">
+                <div style="padding-bottom:10px;padding-top: 10px;">
                     <div id="makeimpact-badge" data-tooltip="" class="tooltip-right" style="float: left;background: url('https://giv2giv.org/images/Badgesmakesus.png') no-repeat;width: 53px;height: 72px;padding-top: 19px;padding-left: 17px;color: #174B7B;text-align: center;padding-right: 18px;font-size: 1.2em;font-weight: bold;cursor: pointer;margin-bottom: 10px;">Make
                         <br>an
                         <br>Impact
@@ -49,7 +49,7 @@ Donate Now!
 					    margin-top: 5px;
 					    width: 35px;
 					" id="makeimpact-percent">50%</span>
-                        <div style="float:left; width: 144px;    margin-top: 7px; ">
+                        <div style="float:left; width: 144px; margin-top: 7px; ">
                             <div style=" " id="giv2giv-passthru-slider"></div>
                         </div>
                         <span style="
@@ -113,6 +113,8 @@ Donate Now!
                             <span>Email address for receipt:</span>
                             <input type="email" size="20" id="giv2giv-email" style='width:50%' placeholder="Enter email address" name="giv2giv-email">
                         </label>
+                    </div>
+                    <div class="form-row">
                         <input type='hidden' name='giv2giv-share-info' value='nil' />
                         <input style="width: auto" type="checkbox" id="giv2giv-share-info-label1" name="giv2giv-share-info" value="true" checked/>
                         <label style="cursor: pointer; font-weight: bold;" id="giv2giv-share-info-label" for="giv2giv-share-info-label1"></label>
@@ -298,6 +300,7 @@ Donate Now!
                     .tooltip {
                         position: relative;
                         cursor: pointer;
+                        z-index:10001;
                     }
                     /* Base styles for the entire tooltip */
                     
@@ -352,7 +355,7 @@ Donate Now!
                         background-color: rgba(0, 0, 0, 0.75);
                         color: #fff;
                         content: attr(data-tooltip);
-                        font-size: 9px !IMPORTANT;
+                        font-size: 12px !IMPORTANT;
                         line-height: 1.2;
                     }
                     /* Directions */
