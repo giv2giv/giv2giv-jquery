@@ -284,7 +284,7 @@ function endowmentSelectors() {
 				}
 
 			}).fail(function(){
-				growlError("You can't subscribe until you set up a method of payment. <a href='https://wwwtest.giv2giv.org/#donor'>Add a card</a> to get started");
+				growlError("You can't subscribe until you set up a method of payment. <a href='" + WEB_URL + "/#donor'>Add a card</a> to get started");
 			});
 		}).fail(function(data) {
 			log(data);

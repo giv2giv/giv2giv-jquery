@@ -129,7 +129,7 @@
                 var dialog = $("#giv2giv-dialog").dialog({
                     autoOpen: false,
                     draggable : false,
-                    title: "Donate to " + charity.name + " through giv2giv.org",
+                    title: "Make a secure donation to " + charity.name + " through giv2giv.org",
                     height: 'auto',
                     width: '450px',
                     modal: true,
@@ -556,9 +556,6 @@
                     $(this).parents('form').submit();
                     }
                     });
-
-
-
 
                     // Generate and update tooltips
                     var rawVal = parseStrToNum(amount.val()) || gatewayOpts.min
