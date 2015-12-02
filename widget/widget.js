@@ -72,10 +72,8 @@
                     mode: "test",
                 }, charity_preferences);
 
-            if (charityPrefs.mode != 'live');
-            charityPrefs.mode = 'test';
-
-
+            if (charityPrefs.mode.toString() != 'live')
+              charityPrefs.mode = 'test';
 
             // Themes from jQueryUI http://jqueryui.com/themeroller/
             // ui-lightness, ui-darkness, smoothness, start, redmond, sunny, overcast, le-frog,
