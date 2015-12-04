@@ -97,8 +97,6 @@
 
 
             /*addFees.prop("checked", charityPrefs.add_fees==true);*/
-            //$("giv2giv-share-email-label1").prop("checked", true);
-            //$("giv2giv-recurring-label1").prop("checked", true);
 
             if (charityPrefs.charity_id == null) {
                 var div_html = "script tag missing data-charity-id=YOURCHARITYID";
@@ -160,7 +158,7 @@
                             frm.find('button').prop('disabled', true);
 
                             if (!frm.valid()) {
-                              $("#giv2giv-resultsfail").text("Email is required for donations over $500");
+                              $("#giv2giv-resultsfail").text("Email is required for recurring donations or single donations over $500");
                               $("#giv2giv-resultsfail").dialog("open");
                               frm.find('button').prop('disabled', false);
                               return;
@@ -210,14 +208,10 @@
                                         var frmserialize = frm.serialize();
 
                                         if ($('#giv2giv-recurring-label1').is(':checked')) {
-
-                                            frmserialize = frmserialize.replace('giv2giv-recurring=nil&', '');
-
+                                          frmserialize = frmserialize.replace('giv2giv-recurring=nil&', '');
                                         }
                                         if ($('#giv2giv-share-info-label1').is(':checked')) {
-
-                                            frmserialize = frmserialize.replace('giv2giv-share-info=nil&', '');
-
+                                          frmserialize = frmserialize.replace('giv2giv-share-info=nil&', '');
                                         }
 
                                         $.ajax({
@@ -259,6 +253,15 @@
                 // Show widget when button clicked
                 div.button().on("click", function() {
                     dialog.dialog("open");
+                });
+
+                $('#giv2giv-recurring-label1').change( function () {
+                  if ( $(this).is(':checked') ) {
+                    $("#giv2giv-email").rules("add", "required");
+                  }
+                  else {
+                    $("#giv2giv-email").rules("remove", "required");
+                  }
                 });
 
                 // Init the amount slider
@@ -318,7 +321,12 @@
                         // Parse input field
                         var rawVal = parseStrToNum(amount.val());
 
-                        (rawVal >=500) ? $("#giv2giv-email").rules("add", "required") : $("#giv2giv-email").rules("remove", "required");
+                        if (rawVal >=500 || $('#giv2giv-recurring-label1').is(':checked')) {
+                          $("#giv2giv-email").rules("add", "required");
+                        }
+                        else {
+                          $("#giv2giv-email").rules("remove", "required");
+                        }
 
                         // Update slider amount, but only
                         // if the update didn't originate 
