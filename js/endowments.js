@@ -571,7 +571,7 @@ function subscribeSelectors() {
 		}
 
 		var frequency = $('#subscribe-endowment-frequency').val();
-		if (frequency == 'per-month') {
+		if (frequency == 'per_month') {
 			endpoint = '/api/donors/payment_accounts/'+$('#subscribe-endowment-payment-accounts').val()+'/donate_subscription.json'	
 		}
 		else {
@@ -600,7 +600,7 @@ function subscribeSelectors() {
 					endowmentSelectors();
 					self.button('reset');
 					$('#no-subscription').addClass('hide');
-					if (frequency=='per-month') {
+					if (frequency=='per_month') {
 					  $('#subscription-details').removeClass('hide');
 					}
 					else {
