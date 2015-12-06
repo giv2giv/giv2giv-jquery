@@ -127,7 +127,7 @@
                     draggable : false,
                     title: "Make a secure donation to " + charity.name + " through giv2giv.org",
                     height: 'auto',
-                    width: '450px',
+                    width: '500px',
                     modal: true,
                     fluid: true,
                     buttons: {
