@@ -335,24 +335,11 @@
                             amountSlider.slider("value", rawVal);
                         }
 
-                        // No need to format the amount
-                        // on every keystroke
-                        if (e.type !== 'keyup') {
-                            // Parse and format amount
-                            var rawVal = parseStrToNum(amount.val()) || charityPrefs.minamt,
-                                //val = rawVal.formatMoney(2, '.', ',');
-                                val = formatMoney(rawVal);
-
-                            // Update input field
-                            amount.val('$' + val);
-
-                            if (charityPrefs.add_fees == true) {
-                                $("#totaldonation-value").text('Total Donation: $' + val);
-                            }
-                        }
-
                         // Update details
-                        donationDetails.html(returnFormattedDonationDetails(amount, passthru, addFees));
+                        var formattedDetails = returnFormattedDonationDetails(amount, passthru, addFees);
+                        console.log(formattedDetails);
+                        donationDetails.html(formattedDetails);
+
                         //addFeesLabel.html(returnFormattedAmountDetails(amount));
 
                         updateShareText(amount);
@@ -606,14 +593,14 @@
         amount_passthru = (Math.ceil(net_amount * percent_passthru * 100) / 100).toFixed(2);
         amount_invested = net_amount - amount_passthru;
 
-        val = "<h3>Summary:</h3>";
-        val += "<li>$" + formatMoney(amount_passthru) + " will be immediately sent to " + charity_glob + " the charity</li>";
-        val += "<li>$" + formatMoney(amount_invested) + " will be invested to sustain  the charity over time</li>";
+        val = "Summary:";
+        val += "<ul><li>$" + formatMoney(amount_passthru) + " will be quickly sent to " + charity_glob + "</li>";
+        val += "<li>$" + formatMoney(amount_invested) + " will be invested to sustain the charity over time</li>";
         val += "</ul>";
-        val += "<br />Your total donation today is: $" + formatMoney(transactionAmount);
+        val += "Your total donation today is: $" + formatMoney(transactionAmount);
 
         var textSum1 = "$" + formatMoney(amount_passthru) + " will be sent directly to " + charity_glob + " for an immediate impact";
-        var textSum2 = "$" + formatMoney(amount_invested) + " will be invested to sustain the mission of " + charity_glob + " by making grants over time";
+        var textSum2 = "$" + formatMoney(amount_invested) + " will be invested in a fund designated for " + charity_glob + " providing grants over time";
         $('#makeimpact-badge').attr('data-tooltip', textSum1);
         $('#sustainamission-badge').attr('data-tooltip', textSum2);
 
