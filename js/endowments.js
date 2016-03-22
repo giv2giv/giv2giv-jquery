@@ -171,7 +171,7 @@ function endowmentSelectors() {
 			quietMillis: 500,
 			data: function (term, page) { // page is the one-based page number tracked by Select2
 				var payload = {};
-				payload.q = term + " " + $('#charity-city').val();
+				payload.q = term;
 				return payload;
 			},
 			results: function (data) {
@@ -192,6 +192,14 @@ function endowmentSelectors() {
 	// Go to Charity List
 	$('#add-endowment-modal-save').off('click');
 	$('#add-endowment-modal-save').on('click', function(e) {
+    if (!$('#endowment-name').val()) {
+      growlError("Give your endowment a descriptive name that includes searchable terms.");
+      return;
+    }
+    if (!$('#add-endowment-charities').val()) { 
+      growlError("Add at least one charity, and then save!");
+      return;
+    }
 		e.preventDefault();
 		// Payload
 		var payload = {};

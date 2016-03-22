@@ -73,6 +73,8 @@ function fetchDonorData() {
 				}, totalBalance);
 
 			// Third ajax call
+      // TODO split this like http://stackoverflow.com/questions/22233650/jquery-nested-ajax-calls-formatting
+      
 			$.ajax({
 				url: GLOBAL.SERVER_URL + '/api/donors/subscriptions.json',
 				type: 'GET',
@@ -84,33 +86,39 @@ function fetchDonorData() {
 			})
 			.done(function(data) {
 
-				$("#current-subscriptions-table").find('tbody').empty().append("<tr><td align=left>No subscriptions yet!</td></tr>");
+				$("#current-subscriptions-table").find('tbody')
 
 				var $row = $("#current-subscriptions-table").find('tbody');
+        $row.empty();
+
+        if (!data) { 
+          $row.append("<tr><td align=left>No subscriptions yet!</td></tr>");
+          return;
+        }
 				
 				$.each(data, function(index, val) {
-
 					// add charity data to google map
 					$.each(val.charities, function(index2, val2) {
 						supported_charities.push(val2);
 					});
-
 					
-					$row.append("<tr><td align=left><a href="+GLOBAL.WEB_URL+"/#endowment/"+val.slug+">"+val.name+"</a></td>");
-					$row.append("<td align=left>$"+val.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>");
-
-
+					var $row_contents = "<tr>";
+					$row_contents += "<td align=left><a href="+GLOBAL.WEB_URL+"/#endowment/"+val.slug+">"+val.name+"</a></td>";
+					$row_contents += "<td align=left>$"+val.my_balances.my_endowment_balance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+"</td>";
+          
 					if (typeof val.canceled_at != 'null') {
 						ugly_statement_timestamp = new Date(val.canceled_timestamp * 1000);
 						pretty_statement_timestamp = prettify_timestamp(ugly_statement_timestamp);
-						$row.append("<td align=left>Canceled "+pretty_statement_timestamp+"</td></tr>");	
+            $row_contents += "<td align=left>"+pretty_statement_timestamp+"</td>";
 					}
 					else {
-						$row.append("<td align=left>Donating $"+val.my_balances.my_subscription_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" per month</td></tr>");	
+						$row_contents += "<td align=left>Donating $"+val.my_balances.my_subscription_amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')+" per month</td>";
 					}
+          $row_contents += "</tr>";
+					$row.append($row_contents);	
 				});
 
-
+log($row.html());
 				// Seed with no text
 				$("#benefit_charities").html("Loading");
 
@@ -122,7 +130,7 @@ function fetchDonorData() {
 					$("#benefit_charities").html("No charities supported! Time to make a donation.");
 				}
 				if (!current_subscription) {
-					var $row = $("#current-subscriptions-table").find('tbody').empty().append('<tr></tr>');
+					var $row = $("#current-subscriptions-table").find('tbody').empty().append('<tr><td>No active subscriptions</td></tr>');
 				}
 
 			})
@@ -160,7 +168,6 @@ function endowmentsPie(subs, DOMnode, titleText, extractData, totalBalance) {
 			'<p><a href="/" class="btn btn-primary find-endowment-btn">Find an Endowment</a></p>');
 	} else {
 		extractData(endowmentData, subs);
-
 
 		DOMnode.highcharts({
 			chart: {
